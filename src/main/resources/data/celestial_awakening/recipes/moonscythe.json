@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IM ",
+    "MS ",
+    " S "
+  ],
+  "key": {
+    "M": {
+      "item": "celestial_awakening:moonstone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:moon_scythe",
+    "count": 1
+
+  }
+}

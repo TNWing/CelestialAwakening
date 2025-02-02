@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "C C",
+    "C C"
+  ],
+  "key": {
+    "C": {
+      "item": "celestial_awakening:dying_light_essence"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:remnant_boots",
+    "count": 1
+
+  }
+}

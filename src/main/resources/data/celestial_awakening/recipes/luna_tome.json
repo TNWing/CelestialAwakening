@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "M M",
+    "PPP",
+    " F "
+  ],
+  "key": {
+    "M": {
+      "item": "celestial_awakening:moonstone"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "F": {
+      "item": "celestial_awakening:ebony_fur"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:luna_tome",
+    "count": 1
+
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "C C",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "celestial_awakening:sunstone"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:radiant_chestplate",
+    "count": 1
+
+  }
+}

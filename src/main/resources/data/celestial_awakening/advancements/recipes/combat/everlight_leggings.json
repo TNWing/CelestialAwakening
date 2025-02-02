@@ -1,0 +1,35 @@
+{
+  "parent":  "minecraft:recipes/root",
+  "criteria": {
+    "has_mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "celestial_awakening:sunstone",
+              "celestial_awakening:remnant_leggings"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "celestial_awakening:everlight_leggings"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_mat",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "celestial_awakening:everlight_leggings"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CSC",
+    "SAS"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "celestial_awakening:sunstone"
+    },
+    "A": {
+      "item": "celestial_awakening:remnant_helmet"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:everlight_helmet",
+    "count": 1
+
+  }
+}

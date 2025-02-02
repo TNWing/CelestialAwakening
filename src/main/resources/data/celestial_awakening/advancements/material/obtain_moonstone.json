@@ -1,0 +1,34 @@
+{
+  "parent": "celestial_awakening:root",
+  "criteria": {
+    "mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "celestial_awakening:moonstone"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.celestial_awakening.obtain_moonstone.description"
+    },
+    "icon": {
+      "item": "celestial_awakening:moonstone"
+    },
+    "title": {
+      "translate": "advancement.celestial_awakening.obtain_moonstone.title"
+    }
+  },
+  "requirements": [
+    [
+      "mat"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "CCC",
+    "CAC",
+    "S S"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "celestial_awakening:sunstone"
+    },
+    "A": {
+      "item": "celestial_awakening:remnant_leggings"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:everlight_leggings",
+    "count": 1
+
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "item.celestial_awakening.moonstone": "Moonstone",
+  "item.celestial_awakening.moon_scythe": "Moon Scythe",
+  "item.celestial_awakening.moonstone_helmet": "Lunar Helmet",
+  "item.celestial_awakening.moonstone_chestplate": "Lunar Chestplate",
+  "item.celestial_awakening.moonstone_leggings": "Lunar Leggings",
+  "item.celestial_awakening.moonstone_boots": "Lunar Boots",
+  "item.celestial_awakening.lunar_dial": "Lunar Dial",
+
+  "item.celestial_awakening.sunstone": "Sunstone",
+  "item.celestial_awakening.radiant_helmet": "Radiant Helmet",
+  "item.celestial_awakening.radiant_chestplate": "Radiant Chestplate",
+  "item.celestial_awakening.radiant_leggings": "Radiant Leggings",
+  "item.celestial_awakening.radiant_boots": "Radiant Boots",
+
+  "item.celestial_awakening.ebony_fur": "Ebony Fur",
+  "item.celestial_awakening.umbra_helmet": "Umbra Cap",
+  "item.celestial_awakening.umbra_chestplate": "Umbra Cloak",
+  "item.celestial_awakening.umbra_leggings": "Umbra Pants",
+  "item.celestial_awakening.umbra_boots": "Umbra Slippers",
+
+  "item.celestial_awakening.dying_light_essence": "Dying Light Essence",
+  "item.celestial_awakening.remnant_helmet": "Remnant Helmet",
+  "item.celestial_awakening.remnant_chestplate": "Remnant Chestplate",
+  "item.celestial_awakening.remnant_leggings": "Remnant Leggings",
+  "item.celestial_awakening.remnant_boots": "Remnant Boots",
+
+  "item.celestial_awakening.everlight_helmet": "Everlight Helmet",
+  "item.celestial_awakening.everlight_chestplate": "Everlight Chestplate",
+  "item.celestial_awakening.everlight_leggings": "Everlight Leggings",
+  "item.celestial_awakening.everlight_boots": "Everlight Boots",
+
+  "item.celestial_awakening.pulsating_darkness": "Pulsating Darkness",
+  "item.celestial_awakening.shade_helmet": "Shade Cap",
+  "item.celestial_awakening.shade_chestplate": "Shade Cloak",
+  "item.celestial_awakening.shade_leggings": "Shade Pants",
+  "item.celestial_awakening.shade_boots": "Shade Slippers",
+
+  "item.celestial_awakening.midnight_iron_ingot": "Midnight Iron Ingot",
+  "item.celestial_awakening.midnight_iron_sword": "Midnight Iron Sword",
+  "item.celestial_awakening.midnight_iron_pickaxe": "Midnight Iron Pickaxe",
+  "item.celestial_awakening.midnight_iron_axe": "Midnight Iron Axe",
+  "item.celestial_awakening.midnight_iron_shovel": "Midnight Iron Shovel",
+  "item.celestial_awakening.midnight_iron_hoe": "Midnight Iron Hoe",
+
+  "effect.celestial_awakening.exposing_light": "Exposing Light",
+  "effect.celestial_awakening.purging_light": "Purging Light",
+  "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
+
+  "entity.celestial_awakening.transcendent_asteron": "Asteron",
+  "entity.celestial_awakening.transcendent_astralite": "Astralite",
+  "entity.celestial_awakening.night_prowler": "Night Prowler",
+  "entity.celestial_awakening.pk_crescencia": "Crescencia",
+
+  "advancement.celestial_awakening.root.title":"Celestial Awakening",
+  "advancement.celestial_awakening.root.description":"",
+
+  "advancement.celestial_awakening.obtain_moonstone.title":"Magic of the Moon",
+  "advancement.celestial_awakening.obtain_moonstone.description":"Follow the guidance of the moon and uncover a precious material",
+  "advancement.celestial_awakening.obtain_sunstone.title":"Brilliant Light",
+  "advancement.celestial_awakening.obtain_sunstone.description":"Find a fragment of solar energy concealed in vegetation",
+  "advancement.celestial_awakening.obtain_ebony_fur.title":"Cursed Wildlife",
+  "advancement.celestial_awakening.obtain_ebony_fur.description":"Relieve a predator of its powerful hide",
+  "advancement.celestial_awakening.obtain_dying_light_essence.title":"Event Horizon",
+  "advancement.celestial_awakening.obtain_dying_light_essence.description":"Rescue the remnants of a star from its captor",
+
+  "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
+  "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity"
+}

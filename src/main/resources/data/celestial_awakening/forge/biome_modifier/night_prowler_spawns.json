@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:plains"
+  ],
+  "spawners": {
+    "type": "celestial_awakening:night_prowler",
+    "weight": 15,
+    "minCount": 3,
+    "maxCount": 5
+  }
+}

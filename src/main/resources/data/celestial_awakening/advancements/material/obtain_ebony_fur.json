@@ -1,0 +1,34 @@
+{
+  "parent": "celestial_awakening:root",
+  "criteria": {
+    "mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "celestial_awakening:ebony_fur"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.celestial_awakening.obtain_ebony_fur.description"
+    },
+    "icon": {
+      "item": "celestial_awakening:ebony_fur"
+    },
+    "title": {
+      "translate": "advancement.celestial_awakening.obtain_ebony_fur.title"
+    }
+  },
+  "requirements": [
+    [
+      "mat"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

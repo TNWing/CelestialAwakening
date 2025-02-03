@@ -41,6 +41,7 @@ the flip is adjusting the verticalvar
         this.rotFunction=rotFunc;
         this.rotOperation=rotOp;
     }
+
     public enum modOperation {
         ADD,
         SET,
@@ -93,7 +94,23 @@ the flip is adjusting the verticalvar
         return this.vertAngMod;
     }
 
+    public modFunction getRotFunction(){
+        return this.rotFunction;
+    }
 
+    public modOperation getRotOperation(){
+        return this.rotOperation;
+    }
+
+    public float getHRot(){
+        return this.horiRotMod;
+    }
+
+
+    public float getVRot(){
+        return this.vertRotMod;
+    }
+    
     private int delayTicks;
     private int remainingTicks;
     private int initialTicks;

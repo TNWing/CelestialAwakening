@@ -22,35 +22,34 @@ the flip is adjusting the verticalvar
         this.initialTicks=duration;
         this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
     }
+
+    public MovementModifier(modFunction spdFunc, modOperation spdOp, modFunction angFunc,
+                            modOperation angOp, modFunction rotFunc, modOperation rotOp,float spd, float hA, float vA, float hRot, float vRot,int delay, int duration){
+        this.spdFunction=spdFunc;
+        this.spdOperation=spdOp;
+        this.spdMod=spd;
+        this.angFunction=angFunc;
+        this.angOperation=angOp;
+        this.horiAngMod=hA;
+        this.vertAngMod=vA;
+        this.delayTicks=delay;
+        this.remainingTicks=duration;
+        this.initialTicks=duration;
+        this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
+        this.horiRotMod=hRot;
+        this.vertRotMod=vRot;
+        this.rotFunction=rotFunc;
+        this.rotOperation=rotOp;
+    }
     public enum modOperation {
         ADD,
         SET,
         MULT,
     };
-    /*
-should instead be
-spd mod
-horAng mod
-vertAng mod
-     */
     public enum modFunction {
         NUM,
         TRIG,
     }
-
-    /*
-    MM types
-    flat spd mod (dm+spdMod) (trig or numeric)
-    acc spd mod (dm*spdMod)(trig or numeric)
-    flat angle mod (ang+a) (numeric)
-    trig angle mod (ang+sin(a)) (trig)
-
-    so i will need
-    modFunction (NUMERIC OR TRIG)
-    modOperation (ADD,MULT,ETC)
-
-    and i need 2 of each, one for spd, one for angle
-     */
 
 
     private modFunction spdFunction;
@@ -61,6 +60,11 @@ vertAng mod
     private float vertAngMod;
     private modFunction angFunction;
     private modOperation angOperation;
+
+    private float horiRotMod;
+    private float vertRotMod;
+    private modFunction rotFunction;
+    private modOperation rotOperation;
 
     public modFunction getSpdFunction(){
         return this.spdFunction;

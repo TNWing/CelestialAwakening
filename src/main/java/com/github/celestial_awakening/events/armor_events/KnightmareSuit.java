@@ -53,6 +53,9 @@ public class KnightmareSuit extends ArmorEffect{
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
+        ToolTipBuilder.addFullSetName(event,"Sword & Shield",boldColor);
+        ToolTipBuilder.addFullSetName(event,"Honor Duel",boldColor);
+        ToolTipBuilder.addPieceBonusName(event,"Infamy",boldColor);
     }
 
     @Override

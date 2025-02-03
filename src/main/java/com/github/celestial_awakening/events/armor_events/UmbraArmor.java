@@ -47,13 +47,10 @@ Reduces CD by 1/2/3/4 sec on kill
  */
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Pursuit",boldColor,
-                "Gain speed upon hitting weak enemies",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Cursed Light",boldColor,
-                "Apply weakness to attackers",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Dread",boldColor,
-                String.format("Deal bonus damage to full HP enemies", dreadVals[cnt-1],dreadCD[cnt-1]/20,dreadCDReduction[cnt-1]/20)
-                ,infoColor);
+        ToolTipBuilder.addShiftInfo(event);
+        ToolTipBuilder.addFullSetName(event,"Pursuit",boldColor);
+        ToolTipBuilder.addFullSetName(event,"Cursed Light",boldColor);
+        ToolTipBuilder.addPieceBonusName(event,"Dread",boldColor);
     }
 
     @Override

@@ -90,6 +90,7 @@ public class RemnantArmor extends ArmorEffect {
         if (cap!=null && cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,5,1));
             player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,1,false,false,false));
+            cap.insertIntoAbilityMap(abilityFLCD,20*120);
         }
 
     }

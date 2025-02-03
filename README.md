@@ -1,6 +1,6 @@
 # Celestial Awakening
-## Cosmic energy has started to seep into the Overworld, changing the landscape forever.
-## Content is spread throughout the game so that there is an opportunity to interact with the mod at any stage of the game.
+Cosmic energy has started to seep into the Overworld, changing the landscape forever.
+This mod adds a variety of content spread throughout the game, providing opportunities to engage with the mod at any stage of the game.
 
 #FEATURES
 

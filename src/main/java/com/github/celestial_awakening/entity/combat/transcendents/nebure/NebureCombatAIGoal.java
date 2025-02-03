@@ -5,7 +5,11 @@ import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class NebureCombatAIGoal extends GenericCombatAIGoal {
-    protected NebureCombatAIGoal(AbstractCALivingEntity mob) {
+    NebureBasicAttack basicAttack;
+    NebureLightEntanglement lightEntanglement;
+    NebureScorchingRays scorchingRays;
+    NebureSolarExpansion solarExpansion;
+    public NebureCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);
     }
     public void tick(){

@@ -48,7 +48,7 @@ public class DivinerDataCommand{
         ,,,then if...them else if
          */
         dispatcher.register(Commands.literal("celawake").requires(user->user.hasPermission(permLvl))
-                .then(Commands.literal("solcult")
+                .then(Commands.literal("transcendents")
                         .then(Commands.literal("diviner")
                                 .then(Commands.literal("query")
                                         .executes(context -> queryDiv(context.getSource()))

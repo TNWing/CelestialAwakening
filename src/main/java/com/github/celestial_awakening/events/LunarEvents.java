@@ -1,7 +1,10 @@
 package com.github.celestial_awakening.events;
+
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
+import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
@@ -32,32 +35,45 @@ import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
 public class LunarEvents {
 
-    public boolean attemptPKSpawn(Level level){
-        int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-        if (MathFuncs.isInRange(time,0,0)){
-            switch (level.getMoonPhase()) {
-                case 3://half
-                case 7:
-                {
-                    break;
-                }
-                case 2://gibb
-                case 8:
-                {
-                    break;
-                }
-                case 4://crescent
-                case 6:{
-                    if (level.getDayTime()%24000L>Config.pkCrescenciaMinDay){
-                        //perform rng roll
-
+    public void refreshPKSpawnAttempts(LevelCapability cap){
+        cap.pkRemainingSpawnAttempts=Config.pkSpawnCap;
+    }
+    //.then(Commands.literal("day").executes((p_288689_) -> {
+    //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
+    public boolean attemptPKSpawn(ServerLevel level){
+        if (validDim(level, Config.solCultDimensionTypes)){
+            int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
+            if (MathFuncs.isInRange(time,18000,300)){
+                Random rand=new Random();
+                switch (level.getMoonPhase()) {
+                    case 3://half
+                    case 7:
+                    {
+                        break;
                     }
-                    break;
-                }
-                case 5:{//new moon
-                    break;
+                    case 2://gibb
+                    case 8:
+                    {
+                        break;
+                    }
+                    case 4://crescent
+                    case 6:{
+                        if (level.getDayTime()%24000L>Config.pkCrescenciaMinDay){
+                            //perform rng roll
+                            if (rand.nextInt(10)>6){//30% chance
+                                level.addFreshEntity(new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level));
+                                return true;
+                            }
+
+                        }
+                        break;
+                    }
+                    case 5:{//new moon
+                        break;
+                    }
                 }
             }
+
         }
 
         return false;
@@ -70,7 +86,7 @@ public class LunarEvents {
         for (Player player:level.players()){
             Vec3 view = player.getViewVector(1.0f);
             if (angBtwnVec(view,sun)<7D){
-                System.out.println("LOOKING AT CELESTIAL BODY  " + isSun);
+                //System.out.println("LOOKING AT CELESTIAL BODY  " + isSun);
             }
         }
     }
@@ -151,16 +167,13 @@ public class LunarEvents {
 
     public void midnightIronTransformation(Level level){
         if (!level.isClientSide()&& validDim(level,Config.lunarMatDimensionTypes)){
-            int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-            if (time%18000==0){
-                WorldBorder border=level.getWorldBorder();
-                AABB worldBox = new AABB(
-                        border.getMinX(), level.getMinBuildHeight(),border.getMinZ(),
-                        border.getMaxX(), level.getMaxBuildHeight(), border.getMaxZ());
-                for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class,worldBox)) {
-                    if (itemEntity.getItem().getItem() == Items.IRON_INGOT) {
-                        itemEntity.setItem(new ItemStack(ItemInit.MIDNIGHT_IRON_INGOT.get(), itemEntity.getItem().getCount()));
-                    }
+            WorldBorder border=level.getWorldBorder();
+            AABB worldBox = new AABB(
+                    border.getMinX(), level.getMinBuildHeight(),border.getMinZ(),
+                    border.getMaxX(), level.getMaxBuildHeight(), border.getMaxZ());
+            for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class,worldBox)) {
+                if (itemEntity.getItem().getItem() == Items.IRON_INGOT) {
+                    itemEntity.setItem(new ItemStack(ItemInit.MIDNIGHT_IRON_INGOT.get(), itemEntity.getItem().getCount()));
                 }
             }
 

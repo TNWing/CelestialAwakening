@@ -98,6 +98,8 @@ public class EventManager {
 
     private static ParticleManager particleManager=ParticleManager.createParticleManager();
 
+    private static int currentDay;
+
 
     @SubscribeEvent
     public void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
@@ -303,13 +305,24 @@ public class EventManager {
             }
         }
     }
+    /*
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) throws NoSuchFieldException, IllegalAccessException {
+        if (event.phase== TickEvent.Phase.START){
+
+        }
+    }
+
+     */
 
     @SubscribeEvent
     public void onServerLevelTick(TickEvent.LevelTickEvent event) throws NoSuchFieldException, IllegalAccessException {
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             ServerLevel level = (ServerLevel) event.level;
+            level.isDay();
             DelayedFunctionManager.delayedFunctionManager.tickLevelMap(level);//this is called twice
             LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            int time= (int) (level.getDayTime()%24000L);
             if (cap!=null){
                 if (cap.divinerEyeFromState>-1){
                     solarEvents.detectPlayers(level,cap);
@@ -318,8 +331,6 @@ public class EventManager {
                     solarEvents.canCreateDivinerEye(event);
                 }
             }
-
-            int time= (int) (level.getDayTime()%24000L);
             if (time>12000){
                 int phase=level.getMoonPhase();
                 switch(phase){
@@ -332,7 +343,11 @@ public class EventManager {
                     }
                 }
                 lunarEvents.detectIfLookingAtCelestialBody(level,-1);
-                lunarEvents.midnightIronTransformation(level);
+                if (time==18000){
+                    lunarEvents.midnightIronTransformation(level);
+                    boolean didSpawnPK=lunarEvents.attemptPKSpawn(level);
+                }
+
             }
 
             particleManager.generateParticles(level);

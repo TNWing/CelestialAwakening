@@ -40,7 +40,8 @@ public class LevelCapability{
     public int divinerEyeFromState;
     public int divinerEyeToState;
     public int divinerEyeCurrentChangeDelay;
-    public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0`
+    public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
+    public int pkRemainingSpawnAttempts;
     /*
     -2: not active
     -1: eye closed

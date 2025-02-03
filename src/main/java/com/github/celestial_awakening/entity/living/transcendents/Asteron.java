@@ -96,7 +96,5 @@ public class Asteron extends AbstractTranscendent {
 
     }
 
-    //so yes, even vanilla mc would prevent movement if too close
-
 
 }

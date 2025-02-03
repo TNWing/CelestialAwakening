@@ -37,6 +37,10 @@ public class Config
 
 
      */
+    //private static final ForgeConfigSpec.ConfigValue<Integer> UPDATE_TICK_DELAY=BUILDER.comment("Represents how many ticks the Server waits for before performing a manual update on various mod components.\nWould recommend not touching this unless game\nDefault 2400 ticks(2 realtime minutes)").defineInRange("sol_cult_init_delay",2400,600,24000);
+
+
+
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> SOL_CULT_DIMENSIONS=BUILDER.comment("Dimensions that the Sol Cult's diviner and scout are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("sol_cult_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
 
     private static final ForgeConfigSpec.ConfigValue<Boolean> SOL_CULT_MULTIPLE_DIVINER=BUILDER.comment("If the Sol Cult's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault false").define("sol_cult_diviner_shared_dim",false);
@@ -51,6 +55,9 @@ public class Config
 
     //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS=BUILDER.comment("Dimensions that Phantom Knights are allowed to spawn in. Default minecraft:overworld").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY=BUILDER.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
+
+    private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP=BUILDER.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,Integer.MAX_VALUE);
+
 
     //private static ForgeConfigSpec.Builder b=BUILDER.comment("The lines below are used to modify the text and colors of item descriptions.");
 
@@ -73,7 +80,8 @@ public class Config
     public static int solCultDivMaxCD;
     public static Set<ResourceKey<EntityType<?>>> solCultTargets;
 
-
+    public static int pkSpawnCap;
+    public static int pkSpawnDayCD;
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
@@ -112,6 +120,8 @@ public class Config
         //pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
 
         pkCrescenciaMinDay=PK_CRESCENCIA_MIN_DAY.get()-1;
+
+        pkSpawnCap=PK_SPAWN_CAP.get();
 
 
         /*

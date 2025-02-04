@@ -40,7 +40,7 @@ public class ProjCapabilityProvider implements ICapabilityProvider, INBTSerializ
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt=new CompoundTag();
-        createCap().saveNBTData(nbt,projectile.getMovementModifiers());
+        createCap().saveNBTData(nbt,projectile.getCurrentMovementModifier());
 
         return nbt;
     }

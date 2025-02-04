@@ -22,7 +22,6 @@ public class ProjCapS2CPacket {
         this.cap=cap;
     }
     public ProjCapS2CPacket(FriendlyByteBuf buf){
-        System.out.println("Receiving on client");
         this.entityID=buf.readInt();
         cap=new ProjCapability(entityID);
 
@@ -50,10 +49,8 @@ public class ProjCapS2CPacket {
                 long currentTime= Minecraft.getInstance().level.getGameTime();
                 long timeDiff=currentTime-sTime;
                 if (timeDiff>0){
-                    long tempTD=timeDiff;
                     int tempDelay=d;
                     tempDelay-=timeDiff;
-                    tempTD-=d;
                     if (tempDelay<0){
                         d=0;
                     }

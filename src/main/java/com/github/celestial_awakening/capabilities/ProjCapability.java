@@ -1,12 +1,14 @@
 package com.github.celestial_awakening.capabilities;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 import static com.github.celestial_awakening.capabilities.MovementModifierNBTNames.*;
 
 
@@ -16,11 +18,28 @@ public class ProjCapability {
     public ProjCapability(int id){
         this.entityID=id;
     }
-    void saveNBTData(CompoundTag nbt,List<MovementModifier> movementModificationList){
+    void saveNBTData(CompoundTag nbt,MovementModifier mod){
+        ListTag listTag=new ListTag();
+        if (mod!=null){
+            listTag.add(mmToNBT(mod));
+        }
 
+        for (MovementModifier modifier:movementModificationList) {
+            CompoundTag modTag=mmToNBT(modifier);
+            listTag.add(modTag);
+        }
+        nbt.put(movementMods,listTag);
     }
     void loadNBTData(CompoundTag nbt){
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        ListTag mmList= (ListTag) nbt.get(movementMods);
+        if (mmList!=null){
+            for (int i = 0; i < mmList.size(); ++i) {
+                CompoundTag compoundtag = mmList.getCompound(i);
+                MovementModifier mod=nbtToMod(compoundtag);
+                movementModificationList.add(mod);
+            }
+        }
     }
     CompoundTag mmToNBT(MovementModifier mod){
         CompoundTag nbt=new CompoundTag();

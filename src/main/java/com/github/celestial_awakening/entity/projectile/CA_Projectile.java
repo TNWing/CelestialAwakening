@@ -40,7 +40,6 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Float> DMG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
-    List<MovementModifier> movementModifiers;
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,int lt) {
         super(p_37248_, p_37249_);
         this.setLifetime(lt);
@@ -179,6 +178,9 @@ public class CA_Projectile extends Projectile {
 
     }
 
+    public MovementModifier getCurrentMovementModifier(){
+        return this.currentMovementModifier;
+    }
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
@@ -432,10 +434,6 @@ public class CA_Projectile extends Projectile {
                 }
             }
         }
-    }
-
-    public List<MovementModifier> getMovementModifiers(){
-        return this.movementModifiers;
     }
 
 }

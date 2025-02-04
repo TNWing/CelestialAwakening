@@ -23,6 +23,10 @@ the flip is adjusting the verticalvar
         this.remainingTicks=duration;
         this.initialTicks=duration;
         this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
+
+        this.zRMod=0;
+        this.rotOperation=modOperation.SET;
+        this.rotFunction=modFunction.NUM;
     }
 
     public MovementModifier(modFunction spdFunc, modOperation spdOp, modFunction angFunc,
@@ -39,6 +43,7 @@ the flip is adjusting the verticalvar
         this.remainingTicks=duration;
         this.initialTicks=duration;
         this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
+
         this.zRMod=zR;
         this.rotFunction=rotFunc;
         this.rotOperation=rotOp;

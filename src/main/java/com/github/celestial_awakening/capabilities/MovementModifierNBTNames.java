@@ -19,4 +19,6 @@ public class MovementModifierNBTNames {
     public static String remainingTicks="Timer";
     public static String initialTicks="ITicks";
     public static String serverTime="ST";
+
+    public static String movementMods="MM";
 }

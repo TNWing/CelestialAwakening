@@ -28,9 +28,9 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
         else{
             currentAbility=basicAttack;
             if (crescentWhirlwind.getCurrentCD()==0){
-                //currentAbility=crescentWhirlwind;
+                currentAbility=crescentWhirlwind;
             }
-            if (strikethrough.getCurrentCD()==0){
+            else if (strikethrough.getCurrentCD()==0){
                currentAbility=strikethrough;
             }
             else if (dualCrescentSlash.getCurrentCD()==0){

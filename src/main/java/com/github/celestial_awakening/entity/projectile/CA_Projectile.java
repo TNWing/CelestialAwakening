@@ -184,12 +184,15 @@ public class CA_Projectile extends Projectile {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
+        //is this only called at the start ?
+        System.out.println("GET DIMS for id " + this.getId());
         float zRads= (float) Math.toRadians(this.getZRot());
-        EntityDimensions dims=EntityDimensions.scalable(this.getWidth(), this.getHeight());
-        if (this.getZRot()==90){
-            //is it this?
-            dims=EntityDimensions.scalable(this.getHeight(), this.getWidth());
-        }
+        double sinZ=Math.sin(zRads);
+        double cosZ=Math.cos(zRads);
+        EntityDimensions dims=EntityDimensions.scalable((float) (this.getWidth()*cosZ+this.getHeight()*sinZ), (float) (this.getHeight()*cosZ+this.getWidth()*sinZ));
+        System.out.println("ID " + this.getId() + " ARE " + dims.toString());
+        //dims is updating but the hitboxes look like they dont change?
+        //maybe it just doesnt visually change
         return dims;
     }
     public void setZRot(float fa){

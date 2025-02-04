@@ -50,7 +50,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
                     float dmg=crescentDmgVals[diffMod];
                     for (int i=-2;i<=2;i++){
-                        float ang=baseAng+i*25;
+                        float ang=baseAng+i*16;
                         Vec3 startPos=this.mob.position().add(dir.scale(0.2f));
                         summonCrescent(serverLevel,ang,dmg,startPos);
                     }
@@ -86,7 +86,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
                     1,
                     0,0,
-                    180,
+                    100,
                     0,200);
             cap.putInBackOfList(modifier);
         }

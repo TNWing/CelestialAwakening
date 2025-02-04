@@ -37,7 +37,6 @@ public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<Luna
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
         poseStack.scale(entity.getXRScale(),entity.getYRScale(),entity.getZRScale());
         double zRads=Math.toRadians(entity.getZRot());
-        System.out.println(zRads);
         //TODO: have the below translation change depending on ZROT
         poseStack.translate(0,-1.5f,0);
         poseStack.translate(Math.sin(zRads)*0.7f,0,0);

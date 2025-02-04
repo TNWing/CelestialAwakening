@@ -30,13 +30,13 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
         else{
             currentAbility=basicAttack;
             if (crescentWhirlwind.getCurrentCD()==0){
-                //currentAbility=crescentWhirlwind;
+                currentAbility=crescentWhirlwind;
             }
-            if (moonCutter.getCurrentCD()==0){
+            else if (moonCutter.getCurrentCD()==0){
                 currentAbility=moonCutter;
             }
             else if (strikethrough.getCurrentCD()==0){
-               //currentAbility=strikethrough;
+               currentAbility=strikethrough;
             }
             else if (dualCrescentSlash.getCurrentCD()==0){
                 //currentAbility=dualCrescentSlash;

@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class PK_Crescencia_CrescentWhirlwind extends GenericAbility {
+public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     float currentStartAngle;//angle of first crescent of each burst
     int repsRemaining;//# of crescent bursts
     float horiDiff=1.5f;
@@ -32,7 +32,7 @@ public class PK_Crescencia_CrescentWhirlwind extends GenericAbility {
     float height=0.2f;
     float depth=0.4f;
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
-    public PK_Crescencia_CrescentWhirlwind(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaCrescentWhirlwind(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Crescent Whirlwind";
     }

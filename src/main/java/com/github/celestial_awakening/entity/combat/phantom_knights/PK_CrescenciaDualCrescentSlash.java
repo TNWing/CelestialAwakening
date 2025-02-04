@@ -8,8 +8,8 @@ import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPac
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.world.entity.LivingEntity;
 
-public class PK_Crescencia_DualCrescentSlash extends GenericAbility {
-    public PK_Crescencia_DualCrescentSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+public class PK_CrescenciaDualCrescentSlash extends GenericAbility {
+    public PK_CrescenciaDualCrescentSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Dual Crescent Slash";
     }

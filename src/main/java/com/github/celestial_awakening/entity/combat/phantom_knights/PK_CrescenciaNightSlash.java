@@ -10,12 +10,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
-public class PK_Crescencia_NightSlash extends GenericAbility {
+public class PK_CrescenciaNightSlash extends GenericAbility {
     float bigCrescentDmgVals[]={5f,5.8f,7f};
     float smallCrescentDmgVals[]={3,3.75f,4.5f};
     float ang=0;
     Vec3 dir=Vec3.ZERO;
-    public PK_Crescencia_NightSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaNightSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     @Override
@@ -25,7 +25,7 @@ public class PK_Crescencia_NightSlash extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            this.mob.setActionId(4);
+            //this.mob.setActionId(4);
         }
 
     }

@@ -24,7 +24,8 @@ the flip is adjusting the verticalvar
     }
 
     public MovementModifier(modFunction spdFunc, modOperation spdOp, modFunction angFunc,
-                            modOperation angOp, modFunction rotFunc, modOperation rotOp,float spd, float hA, float vA, float hRot, float vRot,int delay, int duration){
+                            modOperation angOp, modFunction rotFunc, modOperation rotOp,
+                            float spd, float hA, float vA, float zR,int delay, int duration){
         this.spdFunction=spdFunc;
         this.spdOperation=spdOp;
         this.spdMod=spd;
@@ -36,8 +37,7 @@ the flip is adjusting the verticalvar
         this.remainingTicks=duration;
         this.initialTicks=duration;
         this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
-        this.horiRotMod=hRot;
-        this.vertRotMod=vRot;
+        this.zRMod=zR;
         this.rotFunction=rotFunc;
         this.rotOperation=rotOp;
     }
@@ -62,8 +62,8 @@ the flip is adjusting the verticalvar
     private modFunction angFunction;
     private modOperation angOperation;
 
-    private float horiRotMod;
-    private float vertRotMod;
+    private float zRMod;
+
     private modFunction rotFunction;
     private modOperation rotOperation;
 
@@ -102,15 +102,11 @@ the flip is adjusting the verticalvar
         return this.rotOperation;
     }
 
-    public float getHRot(){
-        return this.horiRotMod;
+    public float getZRot(){
+        return this.zRMod;
     }
 
 
-    public float getVRot(){
-        return this.vertRotMod;
-    }
-    
     private int delayTicks;
     private int remainingTicks;
     private int initialTicks;

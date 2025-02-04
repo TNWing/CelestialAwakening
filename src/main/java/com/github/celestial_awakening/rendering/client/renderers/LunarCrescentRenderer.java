@@ -36,7 +36,7 @@ public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<Luna
         poseStack.mulPose(Axis.XP.rotationDegrees(-entity.getVAng()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
         poseStack.scale(entity.getXRScale(),entity.getYRScale(),entity.getZRScale());
-        poseStack.translate(0f,-1.5f,0);
+        poseStack.translate(0f,-1.1f,0);
         this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
     }

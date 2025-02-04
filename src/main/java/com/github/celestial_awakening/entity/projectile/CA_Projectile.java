@@ -8,8 +8,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -34,12 +36,15 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Float> SPD = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> H_ANG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> V_ANG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> ZROT = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> DMG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     List<MovementModifier> movementModifiers;
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,int lt) {
         super(p_37248_, p_37249_);
         this.setLifetime(lt);
+
 
     }
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,float spd, float hA,float vA,int lt) {
@@ -47,7 +52,12 @@ public class CA_Projectile extends Projectile {
         setMoveValues(spd,hA,vA);
         this.setLifetime(lt);
     }
-
+    protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,float spd, float hA,float vA,float zR,int lt) {
+        super(p_37248_, p_37249_);
+        setMoveValues(spd,hA,vA);
+        this.setZRot(zR);
+        this.setLifetime(lt);
+    }
 
 
     public LazyOptional<ProjCapability> getProjCap() {
@@ -57,6 +67,7 @@ public class CA_Projectile extends Projectile {
     protected void defineSynchedData() {
         this.entityData.define(H_ANG,0f);
         this.entityData.define(V_ANG,0f);
+        this.entityData.define(ZROT,0f);
         this.entityData.define(SPD,1f);
         this.entityData.define(LIFETIME,70);
         this.entityData.define(DMG,2f);
@@ -94,10 +105,12 @@ public class CA_Projectile extends Projectile {
         this.setLifetime(tag.getInt("Lifetime"));
         this.setDmg(tag.getFloat("Dmg"));
         this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
+        this.setZRot(tag.getFloat("ZRot"));
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putFloat("ZRot",this.getZRot());
         tag.putFloat("Spd", this.getSpd());
         tag.putFloat("HAng", this.getHAng());
         tag.putFloat("VAng",this.getVAng());
@@ -127,6 +140,9 @@ public class CA_Projectile extends Projectile {
     }
     public float getVAng(){
         return this.entityData.get(V_ANG);
+    }
+    public float getZRot(){
+        return this.entityData.get(ZROT);
     }
     public int getLifeTime(){
         return this.entityData.get(LIFETIME);
@@ -161,6 +177,40 @@ public class CA_Projectile extends Projectile {
     public void setHAng(float h){
         this.entityData.set(H_ANG,h);
 
+    }
+
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        float zRads= (float) Math.toRadians(this.getZRot());
+        EntityDimensions dims=EntityDimensions.scalable(this.getWidth(), this.getHeight());
+        if (this.getZRot()==90){
+            //is it this?
+            dims=EntityDimensions.scalable(this.getHeight(), this.getWidth());
+        }
+        return dims;
+    }
+    public void setZRot(float fa){
+        float f=0;
+        float width=this.getWidth();
+        float height=this.getHeight();
+        float depth=this.getDepth();
+
+        this.entityData.set(ZROT,fa);
+
+        double sin = Math.sin(Math.toRadians(f));
+        double cos = Math.cos(Math.toRadians(f));
+        double newWidth = Math.abs(width * cos) + Math.abs(height * sin);
+        double newHeight = Math.abs(width * sin) + Math.abs(height * cos);
+        this.setBoundingBox(new AABB(
+                this.getX() - newWidth / 2,
+                this.getY()-newHeight/2,
+                this.getZ() - depth / 2,
+                this.getX() + newWidth / 2,
+                this.getY() + newHeight/2,
+                this.getZ() + depth / 2
+        ));
+        this.refreshDimensions();
     }
     public void setHAng(float h,boolean doSet){
         if (doSet){
@@ -229,8 +279,6 @@ public class CA_Projectile extends Projectile {
         }
         Vec3 pos=this.position();
         LivingEntity entity=level.getNearestEntity(LivingEntity.class,conds,livingEntity,pos.x,pos.y,pos.z,aabb);
-        //List<LivingEntity> entities=level.getNeaEntitiesOfClass(LivingEntity.class,aabb,pred);
-        //return entities;
         return entity;
     }
     public LivingEntity findNearestEntity(TargetingConditions conds,AABB aabb){
@@ -264,7 +312,7 @@ public class CA_Projectile extends Projectile {
                 float spdVal=currentMovementModifier.getSpd();
                 float hAng=currentMovementModifier.getHAng();
                 float vAng=currentMovementModifier.getVAng();
-
+                float zRot=currentMovementModifier.getZRot();
 
                 if (spdVal!=0){
                     MovementModifier.modOperation spdOp=currentMovementModifier.getSpdOperation();
@@ -344,7 +392,40 @@ public class CA_Projectile extends Projectile {
                         }
                     }
                 }
+                if (zRot!=0){
+                    MovementModifier.modOperation rotOp=currentMovementModifier.getRotOperation();
+                    MovementModifier.modFunction rotFunc=currentMovementModifier.getRotFunction();
+                    float zMod=0;
+                    switch(rotFunc){
+                        case NUM -> {
+                            zMod=zRot;
+                            break;
+                        }
+                        case TRIG -> {
+                            zMod= (float) Math.sin(Math.toRadians(zMod));
+                            break;
+                        }
+                    }
+                    switch(rotOp){
+                        case SET -> {
 
+                            this.setZRot( zMod);
+                            break;
+                        }
+                        case ADD -> {
+                            this.setZRot((this.getZRot()+zMod/20f));
+                            break;
+                        }
+                        case MULT -> {
+                            float mult= (float) MathFuncs.findBaseFromExponentAndResult(20D,zRot);
+                            if (mult<zeroThreshold){
+                                mult=0;
+                            }
+                            this.setZRot(this.getZRot()*mult);
+                            break;
+                        }
+                    }
+                }
 
                 if (currentMovementModifier.decrementTicks()){
                     currentMovementModifier=null;

@@ -110,6 +110,9 @@ public class LunarCrescent extends CA_Projectile {
         tag.putIntArray("Entities Hit",this.entityIDs);
     }
     public void tick() {
+        if (level().isClientSide){
+            //System.out.println("before lc runs " + this.position()+ "   WITH ZR " + this.getZRot());
+        }
         Entity owner = this.getOwner();
         if (this.level().isClientSide || (owner == null || !owner.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
@@ -136,6 +139,9 @@ public class LunarCrescent extends CA_Projectile {
 
 
             this.life++;
+            if (level().isClientSide){
+                //System.out.println("after lc done " + this.position()+ "   WITH ZR " + this.getZRot());
+            }
             if (this.life>=this.getLifeTime()){
                 this.discard();
             }

@@ -178,21 +178,21 @@ public class CA_Projectile extends Projectile {
 
     }
 
+    @Override
+    public void setPos(double p_20210_, double p_20211_, double p_20212_) {
+        super.setPos(p_20210_,p_20211_,p_20212_);
+    }
+
     public MovementModifier getCurrentMovementModifier(){
         return this.currentMovementModifier;
     }
-
+    Double prevY=null;
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        //is this only called at the start ?
-        System.out.println("GET DIMS for id " + this.getId());
         float zRads= (float) Math.toRadians(this.getZRot());
         double sinZ=Math.sin(zRads);
         double cosZ=Math.cos(zRads);
         EntityDimensions dims=EntityDimensions.scalable((float) (this.getWidth()*cosZ+this.getHeight()*sinZ), (float) (this.getHeight()*cosZ+this.getWidth()*sinZ));
-        System.out.println("ID " + this.getId() + " ARE " + dims.toString());
-        //dims is updating but the hitboxes look like they dont change?
-        //maybe it just doesnt visually change
         return dims;
     }
     public void setZRot(float fa){
@@ -200,9 +200,7 @@ public class CA_Projectile extends Projectile {
         float width=this.getWidth();
         float height=this.getHeight();
         float depth=this.getDepth();
-
         this.entityData.set(ZROT,fa);
-
         double sin = Math.sin(Math.toRadians(f));
         double cos = Math.cos(Math.toRadians(f));
         double newWidth = Math.abs(width * cos) + Math.abs(height * sin);
@@ -215,7 +213,21 @@ public class CA_Projectile extends Projectile {
                 this.getY() + newHeight/2,
                 this.getZ() + depth / 2
         ));
+
         this.refreshDimensions();
+    }
+    @Override
+    public void refreshDimensions(){
+        EntityDimensions entitydimensions1 = this.getDimensions(null);
+        boolean flag = (double)entitydimensions1.width <= 4.0D && (double)entitydimensions1.height <= 4.0D;
+        boolean resetFlag=!this.level().isClientSide && !this.firstTick && !this.noPhysics && flag && (entitydimensions1.width > this.getBbWidth() || entitydimensions1.height > this.getBbHeight());
+        if (resetFlag) {
+            prevY=this.position().y;
+        }
+        super.refreshDimensions();
+        if (resetFlag) {
+            this.setPos(this.position().x,prevY,this.position().z);
+        }
     }
     public void setHAng(float h,boolean doSet){
         if (doSet){
@@ -240,16 +252,27 @@ public class CA_Projectile extends Projectile {
     }
     double zeroThreshold=1e-7;
     public void tick(){
+        if (prevY!=null){
+            //this.setPos(this.position().x,prevY,this.position().z);
+        }
+        //something outside this code is changing the position, before and after match values
+        /*
+        It does have something to do withh zrot, not sure what but if its not 0 it changes
+        NOTE:
+        zrot value impacts the pos for some odd reason
+        eg: when zrot=440, its at a diff y pos than if it was kept at zrot=0
+         */
+
+
         super.tick();
+
         ProjCapability cap=getProjCap().orElse(null);
 
         if (currentMovementModifier==null && cap!=null){
             currentMovementModifier=cap.popFromList();
         }
         //this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
-
         updateMovementFactors(cap);
-
         Vec3 dir=calculateMoveVec();
         this.setDeltaMovement(dir);
         Vec3 dm=this.getDeltaMovement();
@@ -260,8 +283,6 @@ public class CA_Projectile extends Projectile {
         double d2 = this.getZ() + dm.z;
 
         this.setPos(d0, d1, d2);
-        //System.out.println(this.getId()+  " AT NEW POS " + this.position());
-
     }
     //TODO: need to have v_ang affect the dir of horizontal move
     public Vec3 calculateMoveVec(){
@@ -311,6 +332,7 @@ public class CA_Projectile extends Projectile {
 
 
     public void updateMovementFactors(ProjCapability cap){
+        this.refreshDimensions();
         if (currentMovementModifier!=null){
 
             if(currentMovementModifier.decrementDelay()){
@@ -397,6 +419,7 @@ public class CA_Projectile extends Projectile {
                         }
                     }
                 }
+
                 if (zRot!=0){
                     MovementModifier.modOperation rotOp=currentMovementModifier.getRotOperation();
                     MovementModifier.modFunction rotFunc=currentMovementModifier.getRotFunction();
@@ -431,7 +454,9 @@ public class CA_Projectile extends Projectile {
                         }
                     }
                 }
+                if (zRot!=0 || hAng!=0 || vAng!=0){
 
+                }
                 if (currentMovementModifier.decrementTicks()){
                     currentMovementModifier=null;
                 }

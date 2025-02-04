@@ -17,6 +17,16 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
     /*
     Summons a row of rotating crescents.
      */
+    /*
+    /teleport Dev -239.4 90 -232.4
+    /teleport Dev -239.4 90 -233.0
+
+    /teleport Dev -237.9 90 -232.4
+    /teleport Dev -237.9 90 -233.0
+
+        /teleport Dev -242.0 90 -232.4
+    /teleport Dev -242.0 90 -233.0
+     */
     float crescentDmgVals[]={4f,5.5f,7f};
     public PK_CrescenciaMoonCutter(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
@@ -49,9 +59,10 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     float baseAng= MathFuncs.getAngFrom2DVec(dir);
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
                     float dmg=crescentDmgVals[diffMod];
+                    Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                     for (int i=-2;i<=2;i++){
-                        float ang=baseAng+i*16;
-                        Vec3 startPos=this.mob.position().add(dir.scale(0.2f));
+                        float ang=baseAng+i*12;
+
                         summonCrescent(serverLevel,ang,dmg,startPos);
                     }
                     break;
@@ -69,15 +80,15 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             }
         }
     }
-
+///summon celestial_awakening:pk_crescencia -228.5 90 -232.5
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 9;
+        return 12;
     }
 
     void summonCrescent(ServerLevel lvl,float ang,float dmg,Vec3 startPos){
 
-        LunarCrescent crescent=new LunarCrescent(lvl,dmg,200,3.5f,ang,0,0,1f,0.25f,1f,1f);
+        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,0,0,1f,0.25f,1f,1f);
         ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
         if (cap!=null){
             MovementModifier modifier=new MovementModifier(
@@ -87,7 +98,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     1,
                     0,0,
                     100,
-                    0,200);
+                    0,120);
             cap.putInBackOfList(modifier);
         }
         int id=crescent.getId();

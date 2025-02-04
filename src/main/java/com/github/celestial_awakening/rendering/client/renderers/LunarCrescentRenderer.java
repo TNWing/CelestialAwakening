@@ -39,7 +39,7 @@ public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<Luna
         double zRads=Math.toRadians(entity.getZRot());
         //TODO: have the below translation change depending on ZROT
         poseStack.translate(0,-1.5f,0);
-        poseStack.translate(Math.sin(zRads)*0.7f,0,0);
+        //poseStack.translate(Math.sin(zRads)*0.7f,0,0);
         this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
     }

@@ -17,6 +17,8 @@ the flip is adjusting the verticalvar
         this.angOperation=angOp;
         this.horiAngMod=hA;
         this.vertAngMod=vA;
+        this.zRMod=0;
+
         this.delayTicks=delay;
         this.remainingTicks=duration;
         this.initialTicks=duration;
@@ -41,7 +43,24 @@ the flip is adjusting the verticalvar
         this.rotFunction=rotFunc;
         this.rotOperation=rotOp;
     }
-
+    public MovementModifier(modFunction spdFunc, modOperation spdOp, modFunction angFunc,
+                            modOperation angOp, modFunction rotFunc, modOperation rotOp,
+                            float spd, float hA, float vA, float zR,int delay, int duration,long tc, int remainingTicks){
+        this.spdFunction=spdFunc;
+        this.spdOperation=spdOp;
+        this.spdMod=spd;
+        this.angFunction=angFunc;
+        this.angOperation=angOp;
+        this.horiAngMod=hA;
+        this.vertAngMod=vA;
+        this.delayTicks=delay;
+        this.remainingTicks=remainingTicks;
+        this.initialTicks=duration;
+        this.timeOfCreation= tc;
+        this.zRMod=zR;
+        this.rotFunction=rotFunc;
+        this.rotOperation=rotOp;
+    }
     public enum modOperation {
         ADD,
         SET,

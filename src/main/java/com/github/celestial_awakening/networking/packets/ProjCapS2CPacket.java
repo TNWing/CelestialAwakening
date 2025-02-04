@@ -13,6 +13,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static com.github.celestial_awakening.capabilities.MovementModifierNBTNames.*;
 public class ProjCapS2CPacket {
     private final int entityID;
     private final ProjCapability cap;
@@ -28,33 +29,39 @@ public class ProjCapS2CPacket {
         while(buf.isReadable()){
             CompoundTag tag=buf.readNbt();
             if (tag!=null){
-                long serverTime=tag.getLong("ServerTime");
-                float spd=tag.getFloat("spd");
-                MovementModifier.modFunction spdFunc=MovementModifier.modFunction.values()[tag.getInt("spdFunc")];
-                MovementModifier.modOperation spdOp=MovementModifier.modOperation.values()[tag.getInt("spdOp")];
+                float spdMod=tag.getFloat(spd);
+                MovementModifier.modFunction sFunc=MovementModifier.modFunction.values()[tag.getInt(spdFunc)];
+                MovementModifier.modOperation sOp=MovementModifier.modOperation.values()[tag.getInt(spdOp)];
 
-                float hAng=tag.getFloat("hAng");
-                float vAng=tag.getFloat("vAng");
-                MovementModifier.modFunction angFunc=MovementModifier.modFunction.values()[tag.getInt("angFunc")];
-                MovementModifier.modOperation angOp=MovementModifier.modOperation.values()[tag.getInt("angOp")];
+                float hA=tag.getFloat(hAng);
+                float vA=tag.getFloat(vAng);
+                MovementModifier.modFunction aFunc=MovementModifier.modFunction.values()[tag.getInt(angFunc)];
+                MovementModifier.modOperation aOp=MovementModifier.modOperation.values()[tag.getInt(angOp)];
 
-                int delay=tag.getInt("Delay");
-                int timer=tag.getInt("Timer");
+                float zR=tag.getFloat(rot);
+                MovementModifier.modFunction rFunc=MovementModifier.modFunction.values()[tag.getInt(rotFunc)];
+                MovementModifier.modOperation rOp=MovementModifier.modOperation.values()[tag.getInt(rotOp)];
+
+                int d=tag.getInt(delay);
+                int timer=tag.getInt(remainingTicks);
+                int i=tag.getInt(initialTicks);
+                long sTime=tag.getLong(serverTime);
+
                 long currentTime= Minecraft.getInstance().level.getGameTime();
-                long timeDiff=currentTime-serverTime;
+                long timeDiff=currentTime-sTime;
                 if (timeDiff>0){
                     long tempTD=timeDiff;
-                    int tempDelay=delay;
+                    int tempDelay=d;
                     tempDelay-=timeDiff;
-                    tempTD-=delay;
+                    tempTD-=d;
                     if (tempDelay<0){
-                        delay=0;
+                        d=0;
                     }
                     else{
-                        delay=tempDelay;
+                        d=tempDelay;
                     }
                 }
-                MovementModifier mod=new MovementModifier(spdFunc,spdOp,angFunc,angOp,spd,hAng,vAng,delay,timer);
+                MovementModifier mod=new MovementModifier(sFunc,sOp,aFunc,aOp,rFunc,rOp,spdMod,hA,vA,zR,d,i,sTime,timer);
                 cap.putInBackOfList(mod);
             }
         }
@@ -69,23 +76,24 @@ public class ProjCapS2CPacket {
             float spdChange=mod.getSpd();
             float hChange=mod.getHAng();
             float vChange=mod.getVAng();
-            int spdFunc=mod.getSpdFunction().ordinal();
-            int spdOp=mod.getSpdOperation().ordinal();
-            int angFunc=mod.getAngFunction().ordinal();
-            int angOp=mod.getAngOperation().ordinal();
+            int sFunc=mod.getSpdFunction().ordinal();
+            int sOp=mod.getSpdOperation().ordinal();
+            int aFunc=mod.getAngFunction().ordinal();
+            int aOp=mod.getAngOperation().ordinal();
 
-            tag.putFloat("spd",spdChange);
-            tag.putInt("spdFunc",spdFunc);
-            tag.putInt("spdOp",spdOp);
+            tag.putFloat(spd,spdChange);
+            tag.putInt(spdFunc,sFunc);
+            tag.putInt(spdOp,sOp);
 
-            tag.putFloat("hAng",hChange);
-            tag.putFloat("vAng",vChange);
-            tag.putInt("angFunc",angFunc);
-            tag.putInt("angOp",angOp);
+            tag.putFloat(hAng,hChange);
+            tag.putFloat(vAng,vChange);
+            tag.putInt(angFunc,aFunc);
+            tag.putInt(angOp,aOp);
 
-            tag.putInt("Delay",mod.getDelay());
-            tag.putInt("Timer",mod.getRemainingTicks());
-            tag.putLong("ServerTime",mod.getServerTime());
+            tag.putInt(delay,mod.getDelay());
+            tag.putInt(remainingTicks,mod.getRemainingTicks());
+            tag.putLong(serverTime,mod.getServerTime());
+            tag.putInt(initialTicks,mod.getStartingTicks());
             buf.writeNbt(tag);
         }
     }

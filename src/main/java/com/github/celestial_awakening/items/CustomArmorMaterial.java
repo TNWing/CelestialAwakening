@@ -24,7 +24,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     DYING_LIGHT_ESSENCE("remnant",18,new int[]{2,5,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
-    CONCENTRATED_LIGHT_ESSENCE("concentrated_light_essence",18,new int[]{2,5,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
+    CONCENTRATED_LIGHT_ESSENCE("concentrated_light_essence",18,new int[]{2,6,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
 

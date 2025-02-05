@@ -91,7 +91,7 @@ public class EventManager {
             .put(lunarArmor).put(shadeArmor).put(radiantArmor).put(remnantArmor).put(umbraArmor).put(knightmareSuit).build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamage=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(shadeArmor).put(radiantArmor).put(stellarRobes).put(lunarArmor).put(remnantArmor).build();
+            .put(shadeArmor).put(radiantArmor).put(stellarRobes).put(lunarArmor).put(remnantArmor).put(everlightArmor).build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDeath=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
             .put(stellarRobes).put(radiantArmor).put(umbraArmor).put(knightmareSuit).build();

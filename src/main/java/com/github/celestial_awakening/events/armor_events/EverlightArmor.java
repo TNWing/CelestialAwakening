@@ -103,10 +103,12 @@ public class EverlightArmor extends ArmorEffect{
         conds.selector(getGlowing);
         conds.range(6);
         int glowingEnemies=player.level().getNearbyEntities(LivingEntity.class, conds,player,bounds).size();
-        dmgMult-=glowingEnemies*0.04f;
+        dmgMult-=glowingEnemies*0.05f;
         if (dmgMult<0.5f){
             dmgMult=0.5f;
         }
+        System.out.println("EVERLIGHT preReduce dmg: " + event.getAmount());
         event.setAmount(event.getAmount()*dmgMult);
+        System.out.println("EVERLIGHT postReduce dmg: " + event.getAmount());
     }
 }

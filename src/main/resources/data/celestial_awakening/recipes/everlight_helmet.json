@@ -2,12 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "CSC",
+    "CNC",
     "SAS"
   ],
   "key": {
     "C": {
       "item": "minecraft:diamond"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
     },
     "S": {
       "item": "celestial_awakening:sunstone"

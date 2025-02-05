@@ -148,6 +148,7 @@ public class EventManager {
                     crescent=new LunarCrescent(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
                     crescent.setPos(event.getSpawnpoint());
                     crescent.setYRot(owner.getYRot());
+                    crescent.setOwner(event.getOwner());
                     serverLevel.addFreshEntity(crescent);
                     ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
                     cap.changeWaveCD(100);

@@ -11,7 +11,7 @@ public class ItemInit {
     public static final DeferredRegister<Item> ITEMS=DeferredRegister.create(ForgeRegistries.ITEMS, CelestialAwakening.MODID);
 
     public static final RegistryObject<Item> MOONSTONE = ITEMS.register("moonstone", () ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MOON_SCYTHE=ITEMS.register("moon_scythe",()->new MoonScythe(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> MOON_SCYTHE=ITEMS.register("moon_scythe",()->new MoonScythe(new Item.Properties().stacksTo(1).durability(500)));
     public static final RegistryObject<Item> MOONSTONE_HELMET = ITEMS.register("moonstone_helmet",
             () -> new CustomArmorItem(CustomArmorMaterial.MOONSTONE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> MOONSTONE_CHESTPLATE = ITEMS.register("moonstone_chestplate",
@@ -34,7 +34,7 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> SUNSTONE = ITEMS.register("sunstone", () ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> FLUORESCENT_BOW=ITEMS.register("fluorescent_bow",()->new FluorescentBow(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> FLUORESCENT_BOW=ITEMS.register("fluorescent_bow",()->new FluorescentBow(new Item.Properties().stacksTo(1).durability(448)));
     public static final RegistryObject<Item> RADIANT_HELMET = ITEMS.register("radiant_helmet",
             () -> new CustomArmorItem(CustomArmorMaterial.SUNSTONE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> RADIANT_CHESTPLATE = ITEMS.register("radiant_chestplate",

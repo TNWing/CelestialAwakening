@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " MS",
+    "M S",
+    " MS"
+  ],
+  "key": {
+    "M": {
+      "item": "celestial_awakening:sunstone"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+  },
+  "result": {
+    "item": "celestial_awakening:fluorescent_bow",
+    "count": 1
+
+  }
+}

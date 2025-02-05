@@ -26,6 +26,8 @@ public class ClientModEventBusManager {
         EntityRenderers.register(EntityInit.NIGHT_PROWLER.get(), NightProwlerRenderer::new);
 
         EntityRenderers.register(EntityInit.PK_CRESCENCIA.get(), PKCrescenciaRenderer::new);
+
+        CA_ItemProperties.addProperties();
     }
 
     @SubscribeEvent

@@ -1,0 +1,6 @@
+{
+  "parent": "celestial_awakening:item/fluorescent_bow",
+  "textures": {
+    "layer0": "celestial_awakening:item/fluorescent_bow_pulling_2"
+  }
+}

@@ -38,7 +38,6 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            //this.mob.setActionId(4);
         }
 
     }
@@ -80,7 +79,6 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             }
         }
     }
-///summon celestial_awakening:pk_crescencia -228.5 90 -232.5
     @Override
     protected double getAbilityRange(LivingEntity target) {
         return 12;

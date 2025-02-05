@@ -5,6 +5,7 @@ import com.github.celestial_awakening.entity.living.NightProwler;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
+import com.github.celestial_awakening.entity.living.transcendents.Nebure;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +17,8 @@ public class ModEventBusManager {
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(EntityInit.ASTERON.get(), Asteron.createAttributes().build());
         event.put(EntityInit.ASTRALITE.get(), Astralite.createAttributes().build());
+        event.put(EntityInit.NEBURE.get(), Nebure.createAttributes().build());
+
         event.put(EntityInit.NIGHT_PROWLER.get(), NightProwler.createAttributes().build());
         event.put(EntityInit.PK_CRESCENCIA.get(), PhantomKnight_Crescencia.createAttributes().build());
     }

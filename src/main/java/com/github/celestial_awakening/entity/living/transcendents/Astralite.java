@@ -28,7 +28,7 @@ public class Astralite extends AbstractTranscendent {
 
     public static AttributeSupplier.Builder createAttributes() {//TODO
         return Monster.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.KNOCKBACK_RESISTANCE,0.15D)
                 .add(Attributes.MAX_HEALTH, baseHP)
                 .add(Attributes.ARMOR, baseArmor)

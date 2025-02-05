@@ -19,6 +19,8 @@ public class ClientModEventBusManager {
     public static void onClientSetup(FMLCommonSetupEvent event){
         EntityRenderers.register(EntityInit.ASTERON.get(), TranscendentAsteronRenderer::new);
         EntityRenderers.register(EntityInit.ASTRALITE.get(), TranscendentAstraliteRenderer::new);
+        EntityRenderers.register(EntityInit.NEBURE.get(), TranscendentNebureRenderer::new);
+
         EntityRenderers.register(EntityInit.LIGHT_RAY.get(), LightRayRenderer::new);
         EntityRenderers.register(EntityInit.SHINING_ORB.get(), ShiningOrbRenderer::new);
         EntityRenderers.register(EntityInit.LUNAR_CRESCENT.get(), LunarCrescentRenderer::new);

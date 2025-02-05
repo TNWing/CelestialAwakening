@@ -3,8 +3,9 @@ package com.github.celestial_awakening.init;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.NightProwler;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
-import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
+import com.github.celestial_awakening.entity.living.transcendents.Astralite;
+import com.github.celestial_awakening.entity.living.transcendents.Nebure;
 import com.github.celestial_awakening.entity.projectile.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -20,6 +21,9 @@ public class EntityInit {
 
     public static final RegistryObject<EntityType<Astralite>> ASTRALITE =ENTITY_TYPES.register("transcendent_astralite",
             ()->EntityType.Builder.of(Astralite::new,MobCategory.MONSTER).sized(1f,1f).build("transcendent_astralite"));
+
+    public static final RegistryObject<EntityType<Nebure>> NEBURE=ENTITY_TYPES.register("transcendent_nebure",
+            ()->EntityType.Builder.of(Nebure::new,MobCategory.MONSTER).sized(1.5f,3f).build("transcendent_nebure"));
 
     public static final RegistryObject<EntityType<NightProwler>> NIGHT_PROWLER=ENTITY_TYPES.register("night_prowler",
             ()->EntityType.Builder.of(NightProwler::new,MobCategory.MONSTER).sized(1.3f,0.7f).build("night_prowler"));

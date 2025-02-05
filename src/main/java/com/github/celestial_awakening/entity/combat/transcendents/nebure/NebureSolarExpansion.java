@@ -25,13 +25,67 @@ public class NebureSolarExpansion extends GenericAbility {
     float particleSpd=0;
     Vec3 centerPos;
     List<Vec3> particlePos;
+    float donutAreaIncrement=1.5f;
+    float innerRad=0;
+    float outerRad=donutAreaIncrement;
+
+    int donutAreaInterval=25;
+
     public NebureSolarExpansion(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
 
     @Override
-    public void executeAbility(LivingEntity target) {
+    public void startAbility(LivingEntity target,double dist) {
+        double abilityRange= Math.pow(this.getAbilityRange(target),2);
+        if (abilityRange>=dist){
+            this.mob.getDirection();
+            this.mob.canMove=false;
+            super.startAbility(target,dist);
+            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            calculateWhereToDraw(outerRad,innerRad);
+        }
 
+    }
+    @Override
+    public void executeAbility(LivingEntity target) {
+        if (state==1){
+            drawParticles((ServerLevel) this.mob.level());
+            if (this.currentStateTimer%donutAreaInterval==0){
+                damageArea(outerRad,innerRad);
+                innerRad+=donutAreaIncrement;
+                outerRad+=donutAreaIncrement;
+                calculateWhereToDraw(outerRad,innerRad);
+                drawParticles((ServerLevel) this.mob.level());
+            }
+            else if (this.currentStateTimer%(donutAreaInterval/5)==0){
+                drawParticles((ServerLevel) this.mob.level());
+            }
+        }
+        else if (state==0 && this.currentStateTimer<=donutAreaInterval && this.currentStateTimer%(donutAreaInterval/5)==0){
+            drawParticles((ServerLevel) this.mob.level());
+        }
+        this.currentStateTimer--;
+
+        if (currentStateTimer<=0){
+            switch (state){
+                case 0:{
+                    state++;
+                    currentStateTimer=abilityExecuteTime;
+                    break;
+                }
+                case 1:{
+                    state++;
+                    currentStateTimer=abilityRecoveryTime;
+                    break;
+                }
+                case 2:{
+                    state=0;
+                    liftRestrictions();
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -40,12 +94,21 @@ public class NebureSolarExpansion extends GenericAbility {
     }
 
     void calculateWhereToDraw(float oRad,float iRad){
-
+        particlePos.clear();
+        for (int ang=0;ang<360;ang+=15){
+            Vec3 offset=MathFuncs.get2DVecFromAngle(ang);
+            Vec3 pos1=centerPos.add(offset.scale(0.3+oRad-donutAreaIncrement));
+            Vec3 pos2=centerPos.add(offset.scale(0.6+oRad-donutAreaIncrement));
+            Vec3 pos3=centerPos.add(offset.scale(0.9+oRad-donutAreaIncrement));
+            particlePos.add(pos1);
+            particlePos.add(pos2);
+            particlePos.add(pos3);
+        }
     }
 
     void drawParticles(ServerLevel lvl){
         for (Vec3 pos:particlePos) {
-            lvl.sendParticles(particleType,pos.x,pos.y,pos.z,particleCnt,0,0,0,particleSpd);
+            lvl.sendParticles(particleType,pos.x,pos.y+1,pos.z,particleCnt,0,0,0,particleSpd);
         }
     }
 

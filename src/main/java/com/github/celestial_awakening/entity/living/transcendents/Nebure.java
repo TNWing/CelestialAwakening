@@ -3,6 +3,8 @@ package com.github.celestial_awakening.entity.living.transcendents;
 import com.github.celestial_awakening.entity.combat.transcendents.nebure.NebureCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -15,9 +17,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class Nebure extends AbstractTranscendent{
-    protected Nebure(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+    public Nebure(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
     }
+
+    static double baseHP=60.0D;
+    static double baseDmg=5.75D;
+    static double baseArmor=5D;
+    static double baseTough=3D;
 
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -41,6 +48,16 @@ public class Nebure extends AbstractTranscendent{
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
+    public static AttributeSupplier.Builder createAttributes() {//TODO
+        return Monster.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.KNOCKBACK_RESISTANCE,0.5D)
+                .add(Attributes.MAX_HEALTH, baseHP)
+                .add(Attributes.ARMOR, baseArmor)
+                .add(Attributes.ARMOR_TOUGHNESS, baseTough)
+                .add(Attributes.FOLLOW_RANGE,48D)
+                .add(Attributes.ATTACK_DAMAGE, baseDmg);
+    }
 
 
     @Override

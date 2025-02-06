@@ -27,6 +27,8 @@ public class MoonScythe extends Item {
     private final float attackDamage;
     private final float waveDamage;
     private final float strikeDamage;
+    private final float attackSpd;
+    private final int cd;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public MoonScythe(Properties p_41383_) {
@@ -34,20 +36,24 @@ public class MoonScythe extends Item {
         this.attackDamage=5.5f;
         this.waveDamage=2.5f;
         this.strikeDamage=4.5f;
+        this.attackSpd=-2.8f;
+        this.cd=100;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.8f, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpd, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
 
-    public MoonScythe(Properties p_41383_,float atk,float wave,float strike) {
+    public MoonScythe(Properties p_41383_,float atk,float wave,float strike,float asp,int coolDown) {
         super(p_41383_);
         this.attackDamage=atk;
         this.waveDamage=wave;
         this.strikeDamage=strike;
+        this.attackSpd=asp;
+        this.cd=coolDown;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double)-3.0f, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double)asp, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
 
@@ -97,7 +103,7 @@ public class MoonScythe extends Item {
                 dmg=strikeDamage;
             }
             if (isFullyCharged){
-                MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng));
+                MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
             }
         }
 

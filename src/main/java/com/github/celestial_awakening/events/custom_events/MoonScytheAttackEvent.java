@@ -15,7 +15,8 @@ public class MoonScytheAttackEvent extends Event {
     private LivingEntity owner;
     private float hAng;
     private float dmg;
-    public MoonScytheAttackEvent(ItemStack itemStack, boolean isCrit, Level level,Vec3 deltaMove,Vec3 spt,LivingEntity owner,float dmg,float hA){
+    private int cd;
+    public MoonScytheAttackEvent(ItemStack itemStack, boolean isCrit, Level level,Vec3 deltaMove,Vec3 spt,LivingEntity owner,float dmg,float hA,int cd){
         this.itemStack=itemStack;
         this.hAng=hA;
         this.isCrit=isCrit;
@@ -24,6 +25,7 @@ public class MoonScytheAttackEvent extends Event {
         this.spt=spt;
         this.owner=owner;
         this.dmg=dmg;
+        this.cd=cd;
     }
     public ItemStack getItemStack(){
         return this.itemStack;

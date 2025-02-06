@@ -29,11 +29,11 @@ public abstract class GenericCombatAIGoal extends Goal {
      */
 
     protected GenericCombatAIGoal(AbstractCALivingEntity mob) {
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.mob = mob;
     }
     protected GenericCombatAIGoal(AbstractCALivingEntity mob, int diff) {
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.mob = mob;
         this.difficulty=diff;
     }

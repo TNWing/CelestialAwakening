@@ -4,6 +4,7 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
+import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.particles.ParticleOptions;
@@ -11,6 +12,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -25,7 +27,6 @@ public class NebureSolarExpansion extends GenericAbility {
 
     ParticleOptions particleTypeD = ParticleTypes.FLASH;
 
-    int particleCnt=4;
     float particleSpd=0;
     Vec3 centerPos;
     List<Vec3> particlePosWarning =new ArrayList<>();
@@ -44,10 +45,9 @@ public class NebureSolarExpansion extends GenericAbility {
     public void startAbility(LivingEntity target,double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
-            this.mob.canMove=false;//whhy still moving
+            this.mob.canMove=false;
             innerRad=0;
             outerRad=donutAreaIncrement;
-
             centerPos=this.mob.position();
             super.startAbility(target,dist);
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
@@ -104,9 +104,7 @@ public class NebureSolarExpansion extends GenericAbility {
     void calculateWhereToDraw(float oRad,float iRad){
         particlePosWarning.clear();
         particlePosDamage.clear();
-        //TODO: maybe have the ang increment decrease as oRad increases
         float angInc=16-((oRad/donutAreaIncrement)-1)*2f;
-        System.out.println(angInc + " IS OUR AINC");
         for (int ang=0;ang<360;ang+=angInc){
             Vec3 offset=MathFuncs.get2DVecFromAngle(ang);
 
@@ -136,6 +134,8 @@ public class NebureSolarExpansion extends GenericAbility {
         List<LivingEntity> entityList= MathFuncs.getEntitiesIn2DDonutArea(LivingEntity.class,centerPos,this.mob.level(),oRad,iRad,2,pred);
         for (LivingEntity entity :entityList) {
             entity.hurt(source,4f);
+            MobEffectInstance purgingLight=new MobEffectInstance(MobEffectInit.PURGING_LIGHT.get(),140,1);
+            entity.addEffect(purgingLight);
         }
     }
 }

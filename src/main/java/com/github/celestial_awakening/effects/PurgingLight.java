@@ -43,7 +43,7 @@ public class PurgingLight extends MobEffect {
             debuffCnt++;
         }
         if (debuffCnt>0){
-            livingEntity.hurt(livingEntity.damageSources().magic(),debuffCnt);
+            livingEntity.hurt(livingEntity.damageSources().magic(),debuffCnt*(1+amplifier/(amplifier+1)));
         }
         if (!buffs.isEmpty()){
             int index=rand.nextInt(buffs.size());

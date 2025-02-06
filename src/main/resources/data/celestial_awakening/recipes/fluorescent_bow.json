@@ -12,7 +12,7 @@
     },
     "S": {
       "item": "minecraft:string"
-    },
+    }
   },
   "result": {
     "item": "celestial_awakening:fluorescent_bow",

@@ -6,6 +6,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -95,13 +96,17 @@ public class MathFuncs {
                 center.x+outerRad,
                 center.y+height,
                 center.z+outerRad);
-        List<T> entitiyList=level.getEntitiesOfClass(eClass,aabb,pred);
-        for (Entity entity:entitiyList) {
-            if (Math.sqrt(entity.distanceToSqr(center))<=innerRad){
-                entitiyList.remove(entity);
+        List<T> entityList=level.getEntitiesOfClass(eClass,aabb,pred);
+        Iterator<T> iterator = entityList.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+            if (Math.sqrt(entity.distanceToSqr(center)) <= innerRad) {
+                iterator.remove();
             }
         }
-        return entitiyList;
+
+            return entityList;
     }
 
 }

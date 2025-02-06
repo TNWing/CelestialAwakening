@@ -124,7 +124,6 @@ public class MoonScythe extends Item implements IForgeItem {
     }
     @Override
     public int getEnchantmentValue() {
-        System.out.println("LUNA TOME enchant");
         return 12;
     }
     @Override

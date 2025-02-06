@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.rendering.client.renderers;
 
+import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.transcendents.Nebure;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.TranscendentAstraliteModel;
@@ -16,7 +17,7 @@ public class TranscendentNebureRenderer extends MobRenderer<Nebure, Transcendent
 
     @Override
     public ResourceLocation getTextureLocation(Nebure p_114482_) {
-        return null;
+        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/transcendent_asteron.png");
     }
 
     @Override

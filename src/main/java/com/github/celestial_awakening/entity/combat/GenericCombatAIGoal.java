@@ -5,6 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
 
+import java.util.EnumSet;
+
 public abstract class GenericCombatAIGoal extends Goal {
 
     protected final AbstractCALivingEntity mob;
@@ -27,9 +29,11 @@ public abstract class GenericCombatAIGoal extends Goal {
      */
 
     protected GenericCombatAIGoal(AbstractCALivingEntity mob) {
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         this.mob = mob;
     }
     protected GenericCombatAIGoal(AbstractCALivingEntity mob, int diff) {
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         this.mob = mob;
         this.difficulty=diff;
     }
@@ -82,6 +86,9 @@ public abstract class GenericCombatAIGoal extends Goal {
                 }
             }
 
+        }
+        else{
+            this.mob.getNavigation().stop();
         }
 
     }

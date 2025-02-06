@@ -1,7 +1,6 @@
 package com.github.celestial_awakening.datagen;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.init.ItemInit;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -38,8 +37,9 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
 
     @Override
     protected void registerModels() {
-        simpleItem(ItemInit.MOONSTONE);
-        heldItem(ItemInit.MOON_SCYTHE);
+        //simpleItem(ItemInit.MOONSTONE);
+        //heldItem(ItemInit.MOON_SCYTHE);
+
         /*
         trimmedArmorItem(ItemInit.MOONSTONE_HELMET);
         trimmedArmorItem(ItemInit.MOONSTONE_CHESTPLATE);

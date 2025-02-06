@@ -18,12 +18,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeItem;
 
-public class MoonScythe extends Item {
+import static net.minecraftforge.common.ToolActions.SWORD_SWEEP;
+
+public class MoonScythe extends Item implements IForgeItem {
     private final float attackDamage;
     private final float waveDamage;
     private final float strikeDamage;
@@ -46,18 +51,19 @@ public class MoonScythe extends Item {
 
     public MoonScythe(Properties p_41383_,float atk,float wave,float strike,float asp,int coolDown) {
         super(p_41383_);
+
         this.attackDamage=atk;
         this.waveDamage=wave;
         this.strikeDamage=strike;
         this.attackSpd=asp;
         this.cd=coolDown;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double)asp, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", asp, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
 
-    public boolean canAttackBlock(BlockState p_43409_, Level p_43410_, BlockPos p_43411_, Player p_43412_) {
+    public boolean canAttackBlock(BlockState blockState, Level p_43410_, BlockPos p_43411_, Player p_43412_) {
         return !p_43412_.isCreative();
     }
     public UseAnim getUseAnimation(ItemStack p_43417_) {
@@ -96,7 +102,7 @@ public class MoonScythe extends Item {
             Vec3 targetPos=target.position().add(0,1,0);
             Vec3 dir=targetPos.subtract(player.position()).normalize();
 
-            dir.multiply(1,0,1);//TODO: replace later
+            dir.multiply(1,0,1);//TODO: replace later (maybe)
             float hAng= MathFuncs.getAngFrom2DVec(dir);
             float dmg=waveDamage;
             if (isCrit){
@@ -106,20 +112,27 @@ public class MoonScythe extends Item {
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
             }
         }
-
         return true;
     }
 
     public boolean mineBlock(ItemStack itemStack, Level p_43400_, BlockState p_43401_, BlockPos p_43402_, LivingEntity p_43403_) {
         if ((double)p_43401_.getDestroySpeed(p_43400_, p_43402_) != 0.0D) {
-            itemStack.hurtAndBreak(2, p_43403_, (p_43385_) -> {
-                p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
+            itemStack.hurtAndBreak(2, p_43403_, (p_43385_) -> p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
 
         return true;
     }
+    @Override
+    public int getEnchantmentValue() {
+        System.out.println("LUNA TOME enchant");
+        return 12;
+    }
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+    {
+        return enchantment.category== EnchantmentCategory.WEAPON;
 
+    }
 
     public float getDamage() {
         return this.attackDamage;
@@ -128,5 +141,8 @@ public class MoonScythe extends Item {
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_43274_) {
         return p_43274_ == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_43274_);
     }
-
+    @Override
+    public boolean canPerformAction(ItemStack stack, net.minecraftforge.common.ToolAction toolAction) {
+        return toolAction.equals(SWORD_SWEEP);
+    }
 }

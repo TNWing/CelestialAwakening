@@ -59,10 +59,12 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
                     float dmg=crescentDmgVals[diffMod];
                     Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
+                    float vAng=MathFuncs.getVertAngFromVec(dir);
+                    System.out.println("VANG MC IS " + vAng);
                     for (int i=-2;i<=2;i++){
                         float ang=baseAng+i*12;
 
-                        summonCrescent(serverLevel,ang,dmg,startPos);
+                        summonCrescent(serverLevel,ang,vAng,dmg,startPos);
                     }
                     break;
                 }
@@ -84,9 +86,9 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
         return 12;
     }
 
-    void summonCrescent(ServerLevel lvl,float ang,float dmg,Vec3 startPos){
+    void summonCrescent(ServerLevel lvl,float ang,float vAng,float dmg,Vec3 startPos){
 
-        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,0,0,1f,0.25f,1f,1f);
+        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f,1f);
         ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
         if (cap!=null){
             MovementModifier modifier=new MovementModifier(

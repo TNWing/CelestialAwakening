@@ -61,12 +61,14 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                 ServerLevel serverLevel= (ServerLevel) this.mob.level();
                 Random rand=new Random();
                 int r=rand.nextInt(2);
-                float dir= MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(this.mob.position(),target.position()));
+                Vec3 vec=MathFuncs.getDirVec(this.mob.position(),target.position());
+                float dir= MathFuncs.getAngFrom2DVec(vec);
+                float vAng=MathFuncs.getVertAngFromVec(vec);
                 float diffAng=50f;
                 float leftDir=dir-diffAng;
                 float rightDir=dir+diffAng;
-                leftCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],200,7f,leftDir,0,0,2f,0.5f,1f,2f);
-                rightCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],200,7f,rightDir,0,0,2f,0.5f,1f,2f);
+                leftCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],180,5.5f,leftDir,vAng,0,2f,0.5f,1f,2f);
+                rightCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],1880,5.5f,rightDir,vAng,0,2f,0.5f,1f,2f);
                 leftCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(leftDir).scale(0.2f)));
                 leftCrescent.setOwner(this.mob);
                 rightCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(rightDir).scale(0.2f)));
@@ -84,19 +86,25 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
             }
             else if (this.currentStateTimer==20){
                 if (leftTP){
+                    Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
                     pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
                     float rightDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
+                    float vAng=MathFuncs.getVertAngFromVec(vec);
                     rightCrescent.setHAng(rightDir);
+                    rightCrescent.setVAng(vAng);
                     rightCrescent.setSpd(8.5f);
                     this.mob.setPos(leftCrescent.position());
                     leftCrescent.discard();
                 }
                 else{
-                    float leftDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
+                    Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
                     pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
+                    float leftDir=MathFuncs.getAngFrom2DVec(vec);
+                    float vAng=MathFuncs.getVertAngFromVec(vec);
+                    leftCrescent.setVAng(vAng);
                     leftCrescent.setHAng(leftDir);
-                    this.mob.setPos(rightCrescent.position());
                     leftCrescent.setSpd(9.5f);
+                    this.mob.setPos(rightCrescent.position());
                     rightCrescent.discard();
                 }
             }

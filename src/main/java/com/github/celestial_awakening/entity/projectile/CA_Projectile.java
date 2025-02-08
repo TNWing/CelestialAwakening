@@ -99,8 +99,8 @@ public class CA_Projectile extends Projectile {
         super.readAdditionalSaveData(tag);
         this.setDims(tag.getFloat("Width"),tag.getFloat("Height"),tag.getFloat("Depth"));
         this.setSpd(tag.getFloat("Spd"));
-        this.setHAng(tag.getFloat("HAng"),true);
-        this.setVAng(tag.getFloat("VAng"),true);
+        this.setHAng(tag.getFloat("HAng"));
+        this.setVAng(tag.getFloat("VAng"));
         this.setLifetime(tag.getInt("Lifetime"));
         this.setDmg(tag.getFloat("Dmg"));
         this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
@@ -229,16 +229,8 @@ public class CA_Projectile extends Projectile {
             this.setPos(this.position().x,prevY,this.position().z);
         }
     }
-    public void setHAng(float h,boolean doSet){
-        if (doSet){
-            this.entityData.set(H_ANG,h);
-        }
-
-    }
-    public void setVAng(float v,boolean doSet){
-        if (doSet){
-            this.entityData.set(V_ANG,v);
-        }
+    public void setVAng(float v){
+        this.entityData.set(V_ANG,v);
 
     }
     public void setMoveValues(float s,float h, float v){
@@ -395,13 +387,21 @@ public class CA_Projectile extends Projectile {
 
                     switch(angOp){
                         case SET -> {
-                            this.setHAng(hMod,hAng!=0);
-                            this.setVAng(vMod,vAng!=0);
+                            if (hAng!=0){
+                                this.setHAng(hMod);
+                            }
+                            if (vAng!=0){
+                                this.setVAng(vMod);
+                            }
                             break;
                         }
                         case ADD -> {
-                            this.setHAng(this.getHAng()+hMod/20f,hAng!=0);
-                            this.setVAng(this.getVAng()+vMod/20f,vAng!=0);
+                            if (hAng!=0){
+                                this.setHAng(this.getHAng()+hMod/20f);
+                            }
+                            if (vAng!=0){
+                                this.setVAng(this.getVAng()+vMod/20f);
+                            }
                             break;
                         }
                         case MULT -> {
@@ -413,8 +413,12 @@ public class CA_Projectile extends Projectile {
                             if (vMult<zeroThreshold){
                                 vMult=0;
                             }
-                            this.setHAng(this.getHAng()*hMult,hAng!=0);
-                            this.setVAng(this.getVAng()*vMult,vAng!=0);
+                            if (hAng!=0){
+                                this.setHAng(this.getHAng()*hMult);
+                            }
+                            if (vAng!=0){
+                                this.setVAng(this.getVAng()*vMult);
+                            }
                             break;
                         }
                     }

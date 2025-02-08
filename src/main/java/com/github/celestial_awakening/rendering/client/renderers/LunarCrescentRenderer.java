@@ -32,9 +32,10 @@ public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<Luna
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getYRot()));
+        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getHAng()));
         poseStack.mulPose(Axis.XP.rotationDegrees(-entity.getVAng()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
+        //System.out.println("OUR ROT VALS ARE Y: " + entity.getYRot() + "   VANG  " + entity.getVAng() + "   ZR " + entity.getZRot()  + "  AND HANG "+ entity.getHAng());
         poseStack.scale(entity.getXRScale(),entity.getYRScale(),entity.getZRScale());
         double zRads=Math.toRadians(entity.getZRot());
         //TODO: have the below translation change depending on ZROT

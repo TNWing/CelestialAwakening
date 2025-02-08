@@ -25,6 +25,6 @@ public class NightProwlerRenderer extends MobRenderer<NightProwler, NightProwler
 
     @Override
     public ResourceLocation getTextureLocation(NightProwler p_114482_) {
-        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/transcendent_asteron.png");
+        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/night_prowler.png");
     }
 }

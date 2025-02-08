@@ -19,7 +19,6 @@ public class AsteronCombatAIGoal extends GenericCombatAIGoal {
         piercingRays.decreaseCD(1);
         basicAttack.decreaseCD(1);
         if (this.mob.isActing){
-            System.out.println("EXEC ABILITY " + currentAbility);
             currentAbility.executeAbility(this.mob.getTarget());
         }
         else{

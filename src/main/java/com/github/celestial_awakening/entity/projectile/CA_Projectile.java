@@ -161,6 +161,9 @@ public class CA_Projectile extends Projectile {
     public boolean isReal(){
         return this.entityData.get(REAL);
     }
+
+    public void setWidth(float w){this.entityData.set(WIDTH,w);}
+    public void setHeight(float h){this.entityData.set(HEIGHT,h);}
     public void setDmg(float f){
         this.entityData.set(DMG,f);
     }

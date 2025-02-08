@@ -29,6 +29,20 @@ import java.util.Optional;
 
 //need to make a capability for this to store persistent nbt data like dmg and stuff
 public class LightRay extends CA_Projectile {
+    //TODO:
+    /*
+    Now the ray doesnt seem to match anymore
+    Calc directions are fucked in general maybe? maybe not
+    TESTING
+    Asteron start pt:-30,-64
+    standing point for player / end pos
+    -30,-67: towards -z
+    -33,-64: towards -x
+    -27,-64: looks fine, moves towards +x
+    -30,-61: looks fine, moves towards +z
+     */
+
+    //So the issue is w/ rendering, not the calcs
     //BeaconBlockEntity.BeaconBeamSection
     float damage=2f;
     int tickLiveTime=20;
@@ -77,11 +91,11 @@ public class LightRay extends CA_Projectile {
 
 ///summon celestial_awakening:light_ray ~3 ~ ~
 ///summon celestial_awakening:light_ray ~1.7 ~2 ~
-    private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
+    //private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
+    //private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
 
+    //private static final EntityDataAccessor<Float> ZROT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> XPR= SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> ZROT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
 
 
     public LightRay(EntityType<LightRay> entityType, Level level) {
@@ -115,9 +129,6 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(WIDTH, 1f);
-        this.entityData.define(HEIGHT, 1f);
-        this.entityData.define(ZROT,0f);
         this.entityData.define(XPR,0f);
     }
 
@@ -144,26 +155,26 @@ public class LightRay extends CA_Projectile {
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.damage=tag.getFloat("Damage");
-        this.entityData.set(WIDTH,tag.getFloat("Width"));
-        this.entityData.set(HEIGHT,tag.getFloat("Height"));
+        this.setWidth(tag.getFloat("Width"));
+        this.setHeight(tag.getFloat("Height"));
         this.entityData.set(XPR,tag.getFloat("XPR"));
-        this.entityData.set(ZROT,tag.getFloat("ZRot"));
+        this.setZRot(tag.getFloat("ZRot"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putFloat("Damage",damage);
-        tag.putFloat("Width",this.entityData.get(WIDTH));
-        tag.putFloat("Height",this.entityData.get(HEIGHT));
+        tag.putFloat("Width",this.getWidth());
+        tag.putFloat("Height",this.getHeight());
         tag.putFloat("XPR",this.entityData.get(XPR));
-        tag.putFloat("ZRot",this.entityData.get(ZROT));
+        tag.putFloat("ZRot",this.getZRot());
 
     }
 
     public void setSize(float w,float h){
-        this.entityData.set(WIDTH, w);
-        this.entityData.set(HEIGHT, h);
+        this.setWidth(w);
+        this.setHeight(h);
         //System.out.println("SET SIZE TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
         //this.refreshDimensions();
         //this.setBoundingBox(this.updateAABB(this.position()));
@@ -179,16 +190,10 @@ public class LightRay extends CA_Projectile {
     public float getXPR(){
         return this.entityData.get(XPR);
     }
-    public float getZRot(){
-        return this.entityData.get(ZROT);
-    }
     public void setXPR(float r){
         this.entityData.set(XPR,r);
     }
 
-    public void setZR(float r){
-        this.entityData.set(ZROT,r);
-    }
 
     public AABB updateAABB(Vec3 p_20394_) {
         return this.updateAABB(p_20394_.x, p_20394_.y, p_20394_.z);
@@ -201,8 +206,8 @@ public class LightRay extends CA_Projectile {
     }
 
     public void initDims(float w,float h,float minW,float minH,float maxW,float maxH,float wChange,float hChange){
-        this.entityData.set(WIDTH, w);
-        this.entityData.set(HEIGHT, h);
+        this.setWidth(w);
+        this.setHeight(h);
         width=w;
         height=h;
         maxWidth=maxW;
@@ -211,18 +216,12 @@ public class LightRay extends CA_Projectile {
         minHeight=minH;
         widthRateOfChange=wChange;
         heightRateOfChange=hChange;
-        System.out.println("INIT DIMS TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
+        //System.out.println("INIT DIMS TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
         this.refreshDimensions();
         this.setBoundingBox(this.updateAABB(this.position()));
 
     }
 
-    public float getWidth() {
-        return this.entityData.get(WIDTH);
-    }
-    public float getHeight() {
-        return this.entityData.get(HEIGHT);
-    }
 
     protected void hitLivingEntity(LivingEntity entity) {
         Entity entity1 = this.getOwner();
@@ -260,9 +259,6 @@ public class LightRay extends CA_Projectile {
         }
         else {
             entity.setRemainingFireTicks(k);
-            this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
-            this.setYRot(this.getYRot() + 180.0F);
-            this.yRotO += 180.0F;
         }
     }
 
@@ -304,9 +300,6 @@ public class LightRay extends CA_Projectile {
         }
         else {
             entity.setRemainingFireTicks(k);
-            this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
-            this.setYRot(this.getYRot() + 180.0F);
-            this.yRotO += 180.0F;
         }
         this.discard();
     }
@@ -347,7 +340,8 @@ public class LightRay extends CA_Projectile {
         //z is no longer used
 
         //current xz:Math.toRadians((-1*this.getYRot())-90)
-        double xz=Math.toRadians((-1*this.getYRot())+90);//yaw, TEST +90
+        System.out.println("OUR YROT IS " + this.getYRot() + " on side client? " + this.level().isClientSide);
+        double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
         double y=Math.toRadians(this.getXPR());
         //the values above are not the correct sign (pos/neg), at least for collision.
         //my guess is that its due to how the XPR works, since it rotates over 180 so it flips stuff
@@ -369,9 +363,10 @@ public class LightRay extends CA_Projectile {
 
         System.out.println("DIR IS " + dir);
         */
+        System.out.println("ID " + this.getId() + " POS " + this.position());
         Vec3 end=this.position();
         end=end.add(dir.scale(this.getHeight()));
-
+        System.out.println("ID " + this.getId() + "  END " + end);
         ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
         BlockHitResult result= this.level().clip(clipContext);
 
@@ -423,21 +418,22 @@ public class LightRay extends CA_Projectile {
 
 
     public void tick() {
-        super.tick();
+        //super.tick();
         if (!this.level().isClientSide) {
-            float tW=this.entityData.get(WIDTH);
-            float tH=this.entityData.get(HEIGHT);
+            float tW=this.getWidth();
+            float tH=this.getHeight();
             width= MathFuncs.clamp(tW+widthRateOfChange,minWidth,maxWidth);
             height=MathFuncs.clamp(tH+heightRateOfChange,minHeight,maxHeight);
-            this.entityData.set(WIDTH,width);
-            this.entityData.set(HEIGHT,height);
+            this.setWidth(width);
+            this.setHeight(height);
         }
 
 
-        this.setSize(this.entityData.get(WIDTH),this.entityData.get(HEIGHT));
+        this.setSize(this.getWidth(),this.getHeight());
         if (this.tickLiveTime>=0){
             this.tickLiveTime--;
             if (tickLiveTime<=0){
+                System.out.println("DISCARD TIME");
                 this.discard();
             }
         }
@@ -450,7 +446,7 @@ public class LightRay extends CA_Projectile {
         }
         else {
             if(this.isAlive()) {
-                raycast();
+                raycast();/*
                 vec3 = this.getDeltaMovement();
                 double d5 = vec3.x;
                 double d6 = vec3.y;
@@ -461,6 +457,7 @@ public class LightRay extends CA_Projectile {
                 double d3 = this.getZ() + d1;
                 double d4 = vec3.horizontalDistance();
                 this.setPos(d7, d2, d3);
+                */
                 this.checkInsideBlocks();
             }
 

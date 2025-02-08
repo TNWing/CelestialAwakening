@@ -45,8 +45,8 @@ public class AsteronPiercingRays extends GenericAbility {
                         spt=spt.add(dir.scale(i));
                         LightRay ray=new LightRay(level,70);
                         ray.setOwner(this.mob);
-                        ray.initDims(0.2f,0,0.2f,0,0.2f,3.4f,0,1.1f);
-                        ray.setYRot(yaw);
+                        ray.initDims(0.2f,0,0.2f,0,0.2f,3.4f,0,1.8f);
+                        ray.setHAng(yaw);
                         ray.setXPR(200);//test w/ 70, prod should be 200
                         ray.setPos(spt);
                         level.addFreshEntity(ray);

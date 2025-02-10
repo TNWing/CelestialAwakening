@@ -89,7 +89,6 @@ public class RadiantArmor extends ArmorEffect {
                 else{
                     itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
                 }
-
                 level.addFreshEntity(itemEntity);
             }
         }
@@ -102,7 +101,8 @@ public class RadiantArmor extends ArmorEffect {
             for (int x=-3;x<=3;x++){
                 for (int z=-3;z<=3;z++){
                     for (int y=-3;y<=3;y++){
-                        BlockPos blockPos=new BlockPos(x,y,z);
+                        BlockPos blockPos=player.blockPosition();
+                        blockPos=blockPos.offset(x,y,z);
                         BlockState blockState=serverLevel.getBlockState(blockPos);
                         Block block=blockState.getBlock();
                         if (block instanceof CropBlock||

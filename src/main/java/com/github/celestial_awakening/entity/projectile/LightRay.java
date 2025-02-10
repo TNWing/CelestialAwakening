@@ -29,20 +29,7 @@ import java.util.Optional;
 
 //need to make a capability for this to store persistent nbt data like dmg and stuff
 public class LightRay extends CA_Projectile {
-    //TODO:
-    /*
-    Now the ray doesnt seem to match anymore
-    Calc directions are fucked in general maybe? maybe not
-    TESTING
-    Asteron start pt:-30,-64
-    standing point for player / end pos
-    -30,-67: towards -z
-    -33,-64: towards -x
-    -27,-64: looks fine, moves towards +x
-    -30,-61: looks fine, moves towards +z
-     */
 
-    //So the issue is w/ rendering, not the calcs
     //BeaconBlockEntity.BeaconBeamSection
     float damage=2f;
     int tickLiveTime=20;
@@ -88,13 +75,11 @@ public class LightRay extends CA_Projectile {
 
     public Vec3 moveDir;
 
-
-///summon celestial_awakening:light_ray ~3 ~ ~
-///summon celestial_awakening:light_ray ~1.7 ~2 ~
-    //private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
-    //private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
-
-    //private static final EntityDataAccessor<Float> ZROT = SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
+    //TODO:
+    /*
+    Replace XPR with VAng
+    Utilize currentlife instead of ticklivetime
+     */
     private static final EntityDataAccessor<Float> XPR= SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
 
 
@@ -105,18 +90,7 @@ public class LightRay extends CA_Projectile {
         this.widthProgress=1f;
         this.heightProgress=1f;
         this.setNoGravity(true);
-        //this.setSize(0.2f,1.5f);
-        //when thea bove is commented out, the hitbox stays as 1f,1f
-        //can hitbox not change dynamically
     }
-
-    /*
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-     */
 
 
     public LightRay(Level level,int tickLiveTime) {
@@ -175,16 +149,6 @@ public class LightRay extends CA_Projectile {
     public void setSize(float w,float h){
         this.setWidth(w);
         this.setHeight(h);
-        //System.out.println("SET SIZE TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
-        //this.refreshDimensions();
-        //this.setBoundingBox(this.updateAABB(this.position()));
-        if (!this.level().isClientSide){
-            //System.out.println("NEED TO SEND A PACKET TO SYNC SIZE CHANGE");
-            //send a packet
-        }
-        else{
-            //System.out.println("SET SIZE WAS CALLED CLIENT SIDE");
-        }
 
     }
     public float getXPR(){
@@ -340,33 +304,14 @@ public class LightRay extends CA_Projectile {
         //z is no longer used
 
         //current xz:Math.toRadians((-1*this.getYRot())-90)
-        System.out.println("OUR YROT IS " + this.getYRot() + " on side client? " + this.level().isClientSide);
         double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
         double y=Math.toRadians(this.getXPR());
-        //the values above are not the correct sign (pos/neg), at least for collision.
-        //my guess is that its due to how the XPR works, since it rotates over 180 so it flips stuff
-        //might be yaw as well, since i add 90 to the yaw
-        //yaw=-(Math.toDegrees(Math.atan2(dir.z,dir.x))+90f);
         if (this.getXPR()>=180){
         }
-        //so Math.toRadians((-1*this.getYRot())+90) seems to be fine, except collision is not working now
-        //okay so now it seems like the dir values for x and z are inverted (pos/neg)
-        //but it sometimes still detects player, maybe too close to player and thats why
 
         Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
-                /*
-        System.out.println("CURRENT HEIGHT " + this.getHeight());
-        System.out.println(xz);
-        System.out.println(this.getYRot());
-        System.out.println(y);
-
-
-        System.out.println("DIR IS " + dir);
-        */
-        System.out.println("ID " + this.getId() + " POS " + this.position());
         Vec3 end=this.position();
         end=end.add(dir.scale(this.getHeight()));
-        System.out.println("ID " + this.getId() + "  END " + end);
         ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
         BlockHitResult result= this.level().clip(clipContext);
 

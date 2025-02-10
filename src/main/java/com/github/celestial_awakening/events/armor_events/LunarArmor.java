@@ -39,6 +39,9 @@ public class LunarArmor extends ArmorEffect {
     -trade
     -fish
     -block break
+
+
+    also, should use loottables instead of modifying these events
  */
 
     @Override
@@ -71,9 +74,22 @@ public class LunarArmor extends ArmorEffect {
 
     public void onFishEvent(ItemFishedEvent event,int cnt){
         Random rand=new Random();
+        System.out.println("CHECKING FISHY");
         if (rand.nextInt(0,100)<cnt*12){
+            System.out.println("ROLLED!");
             Player player=event.getEntity();
-            ItemEntity itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
+            int roll=rand.nextInt(0,10);
+            ItemEntity itemEntity;
+            if (roll<5){
+                 itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
+            }
+            else{
+                itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.LUNAR_SCALE.get()));
+            }
+            player.level().addFreshEntity(itemEntity);
+        }
+        else{
+            System.out.println("FAILED ROLL, chance to succeed was " + cnt*12);
         }
     }
 

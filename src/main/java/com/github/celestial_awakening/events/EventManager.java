@@ -35,6 +35,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
@@ -161,6 +162,26 @@ public class EventManager {
 
     }
 
+
+    @SubscribeEvent
+    public void onItemFished(ItemFishedEvent event){
+        int cnt=0;
+        Player player=event.getEntity();
+        if (player!=null){
+
+            for (ItemStack armorStack : player.getInventory().armor) {
+                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
+                    ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                    if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                        cnt++;
+                    }
+                }
+            }
+        }
+        if (cnt>0){
+            lunarArmor.getValue().performActions(player,cnt,event);
+        }
+    }
 
     @SubscribeEvent
     public void onEquipmentChange(LivingEquipmentChangeEvent event){

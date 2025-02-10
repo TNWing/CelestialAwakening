@@ -11,6 +11,8 @@ public class ItemInit {
     public static final DeferredRegister<Item> ITEMS=DeferredRegister.create(ForgeRegistries.ITEMS, CelestialAwakening.MODID);
 
     public static final RegistryObject<Item> MOONSTONE = ITEMS.register("moonstone", () ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> LUNAR_SCALE = ITEMS.register("lunar_scale", () ->new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> MOON_SCYTHE=ITEMS.register("moon_scythe",()->new MoonScythe(new Item.Properties().stacksTo(1).durability(640)));
     public static final RegistryObject<Item> MOONLIGHT_REAPER=ITEMS.register("moonlight_reaper",()->new MoonlightReaper(new Item.Properties().stacksTo(1).durability(2560)));
     public static final RegistryObject<Item> MOONSTONE_HELMET = ITEMS.register("moonstone_helmet",

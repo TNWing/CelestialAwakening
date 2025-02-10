@@ -47,12 +47,6 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         Matrix3f matrix3f = posestack$pose.normal();
         float width=entity.getWidth()/2;
         float height=entity.getHeight();
-        System.out.println(entity.getYRot() + " IS THE YROT and is on side client? " + entity.level().isClientSide);
-        /*
-        YROT SEEMS TO BE STUCK
-         */
-        //i may need to rotate it depending on its base dir
-        //bc rn, depending on the trig angle btwn the attacker and target, the angle of the ray can be correct or wrong
         poseStack.mulPose(Axis.YP.rotationDegrees(entity.getHAng()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXPR()));//can probs replace with vang
@@ -60,7 +54,6 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         //bottom face
         drawFace(poseStack,matrix4f,matrix3f,vertexconsumer,packedLight,width,0,width);
         //top face
-        //System.out.println("TOP FACE");
         drawFace(poseStack,matrix4f,matrix3f,vertexconsumer,packedLight,width,height,width);
         vertexconsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(SIDE_FACE_TEXTURE));
         //front face

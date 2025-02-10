@@ -3,10 +3,7 @@ package com.github.celestial_awakening;
 import com.github.celestial_awakening.events.AttachCapabilities;
 import com.github.celestial_awakening.events.ClientEventsManager;
 import com.github.celestial_awakening.events.EventManager;
-import com.github.celestial_awakening.init.EntityInit;
-import com.github.celestial_awakening.init.ItemInit;
-import com.github.celestial_awakening.init.LootInit;
-import com.github.celestial_awakening.init.MobEffectInit;
+import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomTiers;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.mojang.logging.LogUtils;
@@ -62,7 +59,11 @@ public class CelestialAwakening
         LootInit.LOOT_SERIALIZER.register(modEventBus);
         EntityInit.ENTITY_TYPES.register(modEventBus);
         LootInit.registerLootConditions();
+        RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
+
+
+
         MinecraftForge.EVENT_BUS.register(new EventManager());
         MinecraftForge.EVENT_BUS.register(new AttachCapabilities());
         MinecraftForge.EVENT_BUS.register(new ClientEventsManager());

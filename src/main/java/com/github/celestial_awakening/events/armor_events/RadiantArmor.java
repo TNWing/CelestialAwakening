@@ -79,7 +79,16 @@ public class RadiantArmor extends ArmorEffect {
             if (random.nextInt(100)<cnt*4.5f){
                 Level level=animal.level();
                 BlockPos blockPos=animal.blockPosition();
-                ItemEntity itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
+                ItemEntity itemEntity;
+                int rollNum=random.nextInt(0,10);
+                if (rollNum<5){
+                    int amt=random.nextInt(1,4);
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get(),amt));
+                }
+                else{
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
+                }
+
                 level.addFreshEntity(itemEntity);
             }
         }

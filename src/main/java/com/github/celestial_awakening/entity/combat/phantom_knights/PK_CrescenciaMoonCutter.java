@@ -26,6 +26,9 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
 
         /teleport Dev -242.0 90 -232.4
     /teleport Dev -242.0 90 -233.0
+
+            /teleport Dev -245.0 90 -232.4
+    /teleport Dev -245.0 90 -233.0
      */
     float crescentDmgVals[]={4f,5.5f,7f};
     public PK_CrescenciaMoonCutter(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
@@ -60,7 +63,6 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     float dmg=crescentDmgVals[diffMod];
                     Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                     float vAng=MathFuncs.getVertAngFromVec(dir);
-                    System.out.println("VANG MC IS " + vAng);
                     for (int i=-2;i<=2;i++){
                         float ang=baseAng+i*12;
 
@@ -88,7 +90,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
 
     void summonCrescent(ServerLevel lvl,float ang,float vAng,float dmg,Vec3 startPos){
 
-        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f,1f);
+        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f);
         ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
         if (cap!=null){
             MovementModifier modifier=new MovementModifier(

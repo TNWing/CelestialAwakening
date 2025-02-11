@@ -8,6 +8,21 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CA_Predicates {
+    public static Predicate sameTeamPredicate(LivingEntity attacker){
+        Predicate predicate= o -> {
+            LivingEntity livingEntity= (LivingEntity) o;
+            Team team=livingEntity.getTeam();
+            Team ownerTeam=attacker.getTeam();
+            if (o.equals(attacker)){
+                return true;
+            }
+            if (team==null || ownerTeam==null){
+                return false;
+            }
+            return ownerTeam.equals(team);
+        };
+        return predicate;
+    }
     public static Predicate opposingTeamsPredicate(LivingEntity attacker){
         Predicate predicate= o -> {
             LivingEntity livingEntity= (LivingEntity) o;

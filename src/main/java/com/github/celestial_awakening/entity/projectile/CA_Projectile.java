@@ -32,7 +32,6 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Float> RENDERER_ZSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> DEPTH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> SPD = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> H_ANG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> V_ANG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
@@ -72,7 +71,6 @@ public class CA_Projectile extends Projectile {
         this.entityData.define(DMG,2f);
         this.entityData.define(WIDTH,1f);
         this.entityData.define(HEIGHT,1f);
-        this.entityData.define(DEPTH,1f);
         this.entityData.define(RENDERER_XSCALING,1f);
         this.entityData.define(RENDERER_YSCALING,1f);
         this.entityData.define(RENDERER_ZSCALING,1f);
@@ -89,20 +87,20 @@ public class CA_Projectile extends Projectile {
         this.entityData.set(RENDERER_ZSCALING,z);
     }
 
-    protected void setDims(float w,float h,float d){
+    protected void setDims(float w,float h){
         this.entityData.set(WIDTH,w);
         this.entityData.set(HEIGHT,h);
-        this.entityData.set(DEPTH,d);
     }
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setDims(tag.getFloat("Width"),tag.getFloat("Height"),tag.getFloat("Depth"));
+        this.setDims(tag.getFloat("Width"),tag.getFloat("Height"));
         this.setSpd(tag.getFloat("Spd"));
         this.setHAng(tag.getFloat("HAng"));
         this.setVAng(tag.getFloat("VAng"));
         this.setLifetime(tag.getInt("Lifetime"));
         this.setDmg(tag.getFloat("Dmg"));
+        this.setZRot(tag.getFloat("ZRot"));
         this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
         this.setZRot(tag.getFloat("ZRot"));
     }
@@ -117,7 +115,6 @@ public class CA_Projectile extends Projectile {
         tag.putFloat("Dmg",this.getDmg());
         tag.putFloat("Width",this.getWidth());
         tag.putFloat("Height",this.getHeight());
-        tag.putFloat("Depth",this.getDepth());
         tag.putFloat("X_RScale",this.getXRScale());
         tag.putFloat("Y_RScale",this.getYRScale());
         tag.putFloat("Z_RScale",this.getZRScale());
@@ -127,9 +124,6 @@ public class CA_Projectile extends Projectile {
     }
     public float getHeight(){
         return this.entityData.get(HEIGHT);
-    }
-    public float getDepth(){
-        return this.entityData.get(DEPTH);
     }
     public float getSpd(){
         return this.entityData.get(SPD);
@@ -180,7 +174,6 @@ public class CA_Projectile extends Projectile {
         this.entityData.set(H_ANG,h);
 
     }
-
     @Override
     public void setPos(double p_20210_, double p_20211_, double p_20212_) {
         super.setPos(p_20210_,p_20211_,p_20212_);
@@ -199,24 +192,7 @@ public class CA_Projectile extends Projectile {
         return dims;
     }
     public void setZRot(float fa){
-        float f=0;
-        float width=this.getWidth();
-        float height=this.getHeight();
-        float depth=this.getDepth();
         this.entityData.set(ZROT,fa);
-        double sin = Math.sin(Math.toRadians(f));
-        double cos = Math.cos(Math.toRadians(f));
-        double newWidth = Math.abs(width * cos) + Math.abs(height * sin);
-        double newHeight = Math.abs(width * sin) + Math.abs(height * cos);
-        this.setBoundingBox(new AABB(
-                this.getX() - newWidth / 2,
-                this.getY()-newHeight/2,
-                this.getZ() - depth / 2,
-                this.getX() + newWidth / 2,
-                this.getY() + newHeight/2,
-                this.getZ() + depth / 2
-        ));
-
         this.refreshDimensions();
     }
     @Override

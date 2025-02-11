@@ -48,17 +48,17 @@ public class LunarCrescent extends CA_Projectile {
         super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
         life=0;
         this.setDmg(damage);
-        this.setDims(1f,0.2f,0.4f);
+        this.setDims(1f,0.2f);
         this.setZRot(zR);
 
         this.setDeltaMovement(calculateMoveVec());
     }
-    public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float depth,float rs) {
+    public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs) {
         super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
         life=0;
         this.setDmg(damage);
         this.setRScales(rs);
-        this.setDims(width,height,depth);
+        this.setDims(width,height);
         this.setDeltaMovement(calculateMoveVec());
     }
     @Override

@@ -67,8 +67,8 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                 float diffAng=50f;
                 float leftDir=dir-diffAng;
                 float rightDir=dir+diffAng;
-                leftCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],180,5.5f,leftDir,vAng,0,2f,0.5f,1f,2f);
-                rightCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],1880,5.5f,rightDir,vAng,0,2f,0.5f,1f,2f);
+                leftCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],180,5.5f,leftDir,vAng,0,2f,0.5f,2f);
+                rightCrescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],1880,5.5f,rightDir,vAng,0,2f,0.5f,2f);
                 leftCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(leftDir).scale(0.2f)));
                 leftCrescent.setOwner(this.mob);
                 rightCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(rightDir).scale(0.2f)));

@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.entity.living;
 
 import com.github.celestial_awakening.Config;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +23,8 @@ import java.util.function.Predicate;
 //move the code in pathtotarget goal into targetting abilitygoal.
 public abstract class AbstractCALivingEntity extends Monster {
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
+    //may not need action frame to be dataaccessor?
+    protected Integer ACTION_FRAME;
     public int animTime;
     public int currentAction;
 
@@ -66,6 +69,14 @@ public abstract class AbstractCALivingEntity extends Monster {
         this.entityData.define(ACTION_ID,(byte)0);
     }
 
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+    }
+
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+    }
+
     @Override
     public void tick() {
         float yRot=this.getYRot();
@@ -102,6 +113,17 @@ public abstract class AbstractCALivingEntity extends Monster {
     }
     public int getActionId() {
         return this.entityData.get(ACTION_ID);
+    }
+
+    public void setActionFrame(int i) {
+        ACTION_FRAME=i;
+    }
+    public int getActionFrame() {
+        return ACTION_FRAME;
+    }
+
+    public void incrementActionFrame() {
+        ACTION_FRAME+=1;
     }
     protected void registerGoals(){
         super.registerGoals();

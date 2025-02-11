@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, TranscendentAstraliteModel<Astralite>> {
+
     public TranscendentAstraliteRenderer(EntityRendererProvider.Context context) {
         super(context, new TranscendentAstraliteModel<>(context.bakeLayer(ModelLayerInit.ASTRALITE_LAYER)),2);
     }

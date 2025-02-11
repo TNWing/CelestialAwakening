@@ -22,9 +22,44 @@ public class PKCrescenciaRenderer extends MobRenderer<PhantomKnight_Crescencia, 
     public void render(PhantomKnight_Crescencia entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
     }
+/*
+@Override
+public void render(YourEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+    if (entity.isAnimationC()) {
+        int frameX = entity.currentFrame * FRAME_WIDTH;
+        float uMin = (float) frameX / (float) (FRAME_WIDTH * FRAME_COUNT);
+        float uMax = (float) (frameX + FRAME_WIDTH) / (float) (FRAME_WIDTH * FRAME_COUNT);
 
+        // Bind the sprite sheet texture
+        Minecraft.getInstance().getTextureManager().bindTexture(ANIMATED_TEXTURE);
+
+        // Render your model part with the updated UV coordinates
+        // This example assumes a simple quad part
+        IVertexBuilder vertexBuilder = buffer.getBuffer(RenderType.getEntityCutout(ANIMATED_TEXTURE));
+        matrixStack.push();
+
+        // Replace this with your model part's vertices and apply the UV coordinates
+        vertexBuilder.pos(matrixStack.getLast().getMatrix(), -0.5F, 0.0F, -0.5F).tex(uMin, 1.0F).endVertex();
+        vertexBuilder.pos(matrixStack.getLast().getMatrix(), 0.5F, 0.0F, -0.5F).tex(uMax, 1.0F).endVertex();
+        vertexBuilder.pos(matrixStack.getLast().getMatrix(), 0.5F, 1.0F, -0.5F).tex(uMax, 0.0F).endVertex();
+        vertexBuilder.pos(matrixStack.getLast().getMatrix(), -0.5F, 1.0F, -0.5F).tex(uMin, 0.0F).endVertex();
+
+        matrixStack.pop();
+    } else {
+        // Bind and render the static texture
+        Minecraft.getInstance().getTextureManager().bindTexture(STATIC_TEXTURE);
+        // Render your model part normally
+    }
+
+    // Render the entity
+    super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+}
+
+ */
     @Override
-    public ResourceLocation getTextureLocation(PhantomKnight_Crescencia p_114482_) {
+    public ResourceLocation getTextureLocation(PhantomKnight_Crescencia entity) {
+        if (entity.getActionId()==0){
+        }
         return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/pk_cres.png");
     }
 }

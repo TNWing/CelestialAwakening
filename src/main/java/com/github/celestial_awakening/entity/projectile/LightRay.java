@@ -31,7 +31,6 @@ import java.util.Optional;
 public class LightRay extends CA_Projectile {
 
     //BeaconBlockEntity.BeaconBeamSection
-    float damage=2f;
     int tickLiveTime=20;
     //may not need this w/ the RoC vars
     float widthProgress;
@@ -64,17 +63,7 @@ public class LightRay extends CA_Projectile {
     float maxWidth;
     float maxHeight;
 
-
-    float width;
-    float height;
-
     Vec3 rotDir;//represents the direction of movement and expansion
-    public float zRot=0;
-    public float xR;
-    public float yR;
-
-    public Vec3 moveDir;
-
     //TODO:
     /*
     Replace XPR with VAng
@@ -85,7 +74,7 @@ public class LightRay extends CA_Projectile {
 
     public LightRay(EntityType<LightRay> entityType, Level level) {
         super(entityType,level,20);
-        this.damage=2f;
+        this.setDmg(2f);
         this.tickLiveTime=20;
         this.widthProgress=1f;
         this.heightProgress=1f;
@@ -128,21 +117,13 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.damage=tag.getFloat("Damage");
-        this.setWidth(tag.getFloat("Width"));
-        this.setHeight(tag.getFloat("Height"));
         this.entityData.set(XPR,tag.getFloat("XPR"));
-        this.setZRot(tag.getFloat("ZRot"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putFloat("Damage",damage);
-        tag.putFloat("Width",this.getWidth());
-        tag.putFloat("Height",this.getHeight());
         tag.putFloat("XPR",this.entityData.get(XPR));
-        tag.putFloat("ZRot",this.getZRot());
 
     }
 
@@ -164,16 +145,14 @@ public class LightRay extends CA_Projectile {
     }
 
     public AABB updateAABB(double p_20385_, double p_20386_, double p_20387_) {
-        float f = this.width / 2.0F;
-        float f1 = this.height;
+        float f = this.getWidth() / 2.0F;
+        float f1 = this.getHeight();
         return new AABB(p_20385_ - (double)f, p_20386_, p_20387_ - (double)f, p_20385_ + (double)f, p_20386_ + (double)f1, p_20387_ + (double)f);
     }
 
     public void initDims(float w,float h,float minW,float minH,float maxW,float maxH,float wChange,float hChange){
         this.setWidth(w);
         this.setHeight(h);
-        width=w;
-        height=h;
         maxWidth=maxW;
         maxHeight=maxH;
         minWidth=minW;
@@ -202,7 +181,7 @@ public class LightRay extends CA_Projectile {
         }
 
         int k = entity.getRemainingFireTicks();
-        if (entity.hurt(damagesource, this.damage)) {
+        if (entity.hurt(damagesource, this.getDmg())) {
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity;
 /*
@@ -243,7 +222,7 @@ public class LightRay extends CA_Projectile {
         }
 
         int k = entity.getRemainingFireTicks();
-        if (entity.hurt(damagesource, this.damage)) {
+        if (entity.hurt(damagesource, this.getDmg())) {
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity;
 /*
@@ -367,10 +346,8 @@ public class LightRay extends CA_Projectile {
         if (!this.level().isClientSide) {
             float tW=this.getWidth();
             float tH=this.getHeight();
-            width= MathFuncs.clamp(tW+widthRateOfChange,minWidth,maxWidth);
-            height=MathFuncs.clamp(tH+heightRateOfChange,minHeight,maxHeight);
-            this.setWidth(width);
-            this.setHeight(height);
+            this.setWidth(MathFuncs.clamp(tW+widthRateOfChange,minWidth,maxWidth));
+            this.setHeight(MathFuncs.clamp(tH+heightRateOfChange,minHeight,maxHeight));
         }
 
 

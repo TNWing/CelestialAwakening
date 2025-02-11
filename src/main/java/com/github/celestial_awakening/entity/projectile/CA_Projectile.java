@@ -99,6 +99,7 @@ public class CA_Projectile extends Projectile {
         this.setHAng(tag.getFloat("HAng"));
         this.setVAng(tag.getFloat("VAng"));
         this.setLifetime(tag.getInt("Lifetime"));
+        this.setCurrentLifetime(tag.getInt("Current_Life"));
         this.setDmg(tag.getFloat("Dmg"));
         this.setZRot(tag.getFloat("ZRot"));
         this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
@@ -112,6 +113,7 @@ public class CA_Projectile extends Projectile {
         tag.putFloat("HAng", this.getHAng());
         tag.putFloat("VAng",this.getVAng());
         tag.putInt("Lifetime",this.getLifeTime());
+        tag.putInt("Current_Life",0);
         tag.putFloat("Dmg",this.getDmg());
         tag.putFloat("Width",this.getWidth());
         tag.putFloat("Height",this.getHeight());
@@ -140,6 +142,9 @@ public class CA_Projectile extends Projectile {
     public int getLifeTime(){
         return this.entityData.get(LIFETIME);
     }
+    public int getCurrentLifeTime(){
+        return this.entityData.get(CURRENT_LIFE);
+    }
     public float getDmg(){
         return this.entityData.get(DMG);
     }
@@ -163,6 +168,9 @@ public class CA_Projectile extends Projectile {
     }
     public void setLifetime(int i){
         this.entityData.set(LIFETIME,i);
+    }
+    public void setCurrentLifetime(int i){
+        this.entityData.set(CURRENT_LIFE,i);
     }
     public void setSpd(float s){
         this.entityData.set(SPD,s);

@@ -68,6 +68,7 @@ public class CA_Projectile extends Projectile {
         this.entityData.define(ZROT,0f);
         this.entityData.define(SPD,1f);
         this.entityData.define(LIFETIME,70);
+        this.entityData.define(CURRENT_LIFE,0);
         this.entityData.define(DMG,2f);
         this.entityData.define(WIDTH,1f);
         this.entityData.define(HEIGHT,1f);

@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -75,12 +76,11 @@ public class LunarScaleRepair extends CustomRecipe {
         }
         Item itemToRepair=stackToRepair.getItem();
         int repairAmt=repairAmt(stackToRepair.getMaxDamage(),lunarScaleCnt);
-        System.out.println("OUR REPAIR AMT IS " + repairAmt);
-        System.out.println("MAX DURA IS " + stackToRepair.getMaxDamage() + " WITH DAMAGEVAL " + stackToRepair.getDamageValue());
         int newDura=Math.min(stackToRepair.getMaxDamage(),
                 stackToRepair.getMaxDamage()-stackToRepair.getDamageValue() + repairAmt);
-        System.out.println("NEW DURA IS "+newDura);
         ItemStack stackToReturn=new ItemStack(itemToRepair);
+        
+        EnchantmentHelper.setEnchantments(stackToRepair.getAllEnchantments(),stackToReturn);
         stackToReturn.setDamageValue(stackToReturn.getMaxDamage()-newDura);
         return stackToReturn;
     }

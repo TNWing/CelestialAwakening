@@ -37,6 +37,7 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> SUNSTONE = ITEMS.register("sunstone", () ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> LIFE_FRAG = ITEMS.register("life_fragment", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLUORESCENT_BOW=ITEMS.register("fluorescent_bow",()->new FluorescentBow(new Item.Properties().stacksTo(1).durability(448)));
     public static final RegistryObject<Item> RADIANT_HELMET = ITEMS.register("radiant_helmet",
             () -> new CustomArmorItem(CustomArmorMaterial.SUNSTONE, ArmorItem.Type.HELMET, new Item.Properties()));

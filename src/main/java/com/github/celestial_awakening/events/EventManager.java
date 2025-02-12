@@ -35,10 +35,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -208,6 +205,16 @@ public class EventManager {
                 }
 
             }
+        }
+
+    }
+    @SubscribeEvent
+    public void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
+        ItemStack itemStack=event.getItem();
+        LivingEntity player=event.getEntity();
+        if (player instanceof Player && itemStack.getFoodProperties(null)!=null && itemStack.hasTag() && itemStack.getTag().contains("LifeFragHeal")){
+            float heal=itemStack.getTag().getFloat("LifeFragHeal");
+            player.heal(heal);
         }
 
     }

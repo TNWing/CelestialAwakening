@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.recipes;
 
 import com.github.celestial_awakening.init.ItemInit;
+import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
 import com.google.common.collect.Lists;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -20,10 +21,6 @@ public class LunarScaleRepair extends CustomRecipe {
         super(p_252125_, p_249010_);
     }
 
-    //match process
-    /*
-     must keep record of which item index is the item to be repaired
-     */
     @Override
     public boolean matches(CraftingContainer craftingContainer, Level level) {
         List<ItemStack> list = Lists.newArrayList();
@@ -79,7 +76,7 @@ public class LunarScaleRepair extends CustomRecipe {
         int newDura=Math.min(stackToRepair.getMaxDamage(),
                 stackToRepair.getMaxDamage()-stackToRepair.getDamageValue() + repairAmt);
         ItemStack stackToReturn=new ItemStack(itemToRepair);
-        
+
         EnchantmentHelper.setEnchantments(stackToRepair.getAllEnchantments(),stackToReturn);
         stackToReturn.setDamageValue(stackToReturn.getMaxDamage()-newDura);
         return stackToReturn;
@@ -93,11 +90,11 @@ public class LunarScaleRepair extends CustomRecipe {
 
     @Override
     public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
-        return false;
+        return true;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return LunarScaleRepairSerializer.INSTANCE;
     }
 }

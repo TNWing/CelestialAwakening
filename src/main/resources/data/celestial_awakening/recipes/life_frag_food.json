@@ -1,0 +1,21 @@
+{
+  "type": "celestial_awakening:life_frag_food",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "CFC",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "celestial_awakening:life_fragment"
+    },
+    "F": {
+      "tag": "minecraft:foods"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:life_fragment",
+    "count": 1
+  }
+}

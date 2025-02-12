@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class LunarScaleRepairSerializer implements RecipeSerializer<LunarScaleRepair> {
+    public static final LunarScaleRepairSerializer INSTANCE=new LunarScaleRepairSerializer();
     @Override
     public LunarScaleRepair fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
         CraftingBookCategory craftingbookcategory = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(jsonObject, "category", (String)null), CraftingBookCategory.MISC);

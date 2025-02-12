@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import com.github.celestial_awakening.recipes.serializers.LifeFragFoodSerializer;
 import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
@@ -11,5 +12,7 @@ public class RecipeInit {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER_DEFERRED_REGISTER = DeferredRegister.create( ForgeRegistries.RECIPE_SERIALIZERS, CelestialAwakening.MODID);
     //why does the deferred register cause issues?
     public static final RegistryObject<RecipeSerializer> LUNAR_SCALE_REPAIR_SERIALIZER = RECIPE_SERIALIZER_DEFERRED_REGISTER.register("lunar_scale_repair", ()->new LunarScaleRepairSerializer());
+
+    public static final RegistryObject<RecipeSerializer> LIFE_FRAG_FOOD_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("life_frag_food", ()->new LifeFragFoodSerializer());
 
 }

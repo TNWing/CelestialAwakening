@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -29,6 +30,7 @@ public class RadiantArmor extends ArmorEffect {
     Random random=new Random();
     int boldColor=0x006700;
     int infoColor=0x00b300;
+    static Item[] seedArray={Items.BEETROOT_SEEDS,Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.PUMPKIN_SEEDS};
     @Override
     public void performActions(Player player, int cnt, Event event) {
         if (event instanceof BlockEvent.BreakEvent){
@@ -37,7 +39,7 @@ public class RadiantArmor extends ArmorEffect {
         else if (event instanceof LivingDeathEvent){
             pieceEffect_Death((LivingDeathEvent) event,cnt);
         }
-        else if (event instanceof TickEvent.PlayerTickEvent){
+        else if (cnt==4 && event instanceof TickEvent.PlayerTickEvent){
             excitedParticles((TickEvent.PlayerTickEvent) event);
             rejuvenatingWave((TickEvent.PlayerTickEvent) event);
         }
@@ -68,7 +70,16 @@ public class RadiantArmor extends ArmorEffect {
                 Player player=event.getPlayer();
                 Level level=player.level();
                 BlockPos blockPos=player.blockPosition();
-                ItemEntity itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
+                int rollNum=random.nextInt(0,11);
+                ItemEntity itemEntity;
+                if (rollNum<5){
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
+                }
+                else{
+                    int seedIndex=random.nextInt(4);
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(seedArray[seedIndex]));
+                }
+
                 level.addFreshEntity(itemEntity);
             }
 
@@ -81,13 +92,16 @@ public class RadiantArmor extends ArmorEffect {
                 Level level=animal.level();
                 BlockPos blockPos=animal.blockPosition();
                 ItemEntity itemEntity;
-                int rollNum=random.nextInt(0,10);
-                if (rollNum<5){
+                int rollNum=random.nextInt(0,11);
+                if (rollNum<3){
                     int amt=random.nextInt(1,4);
                     itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(Items.BONE,amt));
                 }
-                else{
+                else if (rollNum<8){
                     itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
+                }
+                else{
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.LIFE_FRAG.get()));
                 }
                 level.addFreshEntity(itemEntity);
             }

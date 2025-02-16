@@ -1,10 +1,7 @@
 package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.effects.CelestialBeacon;
-import com.github.celestial_awakening.effects.CustomEffect;
-import com.github.celestial_awakening.effects.PurgingLight;
-import com.github.celestial_awakening.effects.ExposingLight;
+import com.github.celestial_awakening.effects.*;
 import com.github.celestial_awakening.util.CA_UUIDs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -28,6 +25,9 @@ public class MobEffectInit {
             .addAttributeModifier(Attributes.ATTACK_DAMAGE, String.valueOf(CA_UUIDs.remnantFinalLightID),0.2f,AttributeModifier.Operation.MULTIPLY_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_SPEED, String.valueOf(CA_UUIDs.remnantFinalLightID),0.2f,AttributeModifier.Operation.MULTIPLY_TOTAL)
     );
+
+    public static final RegistryObject<MobEffect> PHOTOSYNTHESIS=MOB_EFFECTS.register("photosynthesis",()->
+            new Photosynthesis(MobEffectCategory.BENEFICIAL,16750848));
 
 }
 

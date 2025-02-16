@@ -80,7 +80,6 @@ public class CelestialBeacon extends MobEffect {
                         }
                     }
                 }
-
             }
         }
         if (applicableBlocks.size()>0){

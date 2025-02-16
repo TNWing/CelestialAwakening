@@ -29,7 +29,7 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
         this.stage=stage;
     }
     @Override
-    public void applyEffect(LivingEntity livingEntity) {//not even triggerin g
+    public void applyEffect(LivingEntity livingEntity) {
         if (this.startDuration!=this.getDuration() && this.hasRemainingDuration()) {
             ((CelestialBeacon) this.getEffect()).applyEffectTick(livingEntity, this.getAmplifier(),this.stage);
             stage++;

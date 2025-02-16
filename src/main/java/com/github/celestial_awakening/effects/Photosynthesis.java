@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class Photosynthesis extends MobEffect {
-    protected Photosynthesis(MobEffectCategory p_19451_, int p_19452_) {
+    public Photosynthesis(MobEffectCategory p_19451_, int p_19452_) {
         super(p_19451_, p_19452_);
     }
     /*

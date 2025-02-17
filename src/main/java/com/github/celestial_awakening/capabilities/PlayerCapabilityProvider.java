@@ -11,16 +11,17 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerCapabilityProvider  implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<LivingEntityCapability> playerCapability= CapabilityManager.get(new CapabilityToken<LivingEntityCapability>() {});
-    private LivingEntityCapability playerData=null;
-    private final LazyOptional<LivingEntityCapability> optional=LazyOptional.of(this::createPlayerCap);
+    public static Capability<PlayerCapability> playerCapability= CapabilityManager.get(new CapabilityToken<>() {
+    });
+    private PlayerCapability playerData=null;
+    private final LazyOptional<PlayerCapability> optional=LazyOptional.of(this::createPlayerCap);
     public PlayerCapabilityProvider(){
     }
-    private LivingEntityCapability createPlayerCap(){
+    private PlayerCapability createPlayerCap(){
         if (this.playerData==null){
-            this.playerData=new LivingEntityCapability();
+            this.playerData=new PlayerCapability();
         }
         return this.playerData;
     }

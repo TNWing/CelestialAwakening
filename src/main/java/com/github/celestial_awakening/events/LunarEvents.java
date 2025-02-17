@@ -41,9 +41,10 @@ public class LunarEvents {
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
     public boolean attemptPKSpawn(ServerLevel level){
+
         if (validDim(level, Config.solCultDimensionTypes)){
             int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-            if (MathFuncs.isInRange(time,18000,300)){
+            if (MathFuncs.isInRange(time,18000,0)){//for now, offset will be 0
                 Random rand=new Random();
                 switch (level.getMoonPhase()) {
                     case 3://half
@@ -58,7 +59,7 @@ public class LunarEvents {
                     }
                     case 4://crescent
                     case 6:{
-                        if (level.getDayTime()%24000L>Config.pkCrescenciaMinDay){
+                        if (level.getDayTime()/24000L % 2147483647L>Config.pkCrescenciaMinDay){//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
                             //perform rng roll
                             if (rand.nextInt(10)>6){//30% chance
                                 level.addFreshEntity(new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level));
@@ -95,6 +96,7 @@ public class LunarEvents {
 
     public void moonstoneMark(Level level){
         Random rand = new Random();
+
         LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
 
         if (cap!=null && !cap.currentMoonstonePos.isEmpty()){

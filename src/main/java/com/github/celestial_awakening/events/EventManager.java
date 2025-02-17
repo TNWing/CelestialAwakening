@@ -4,7 +4,6 @@ import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
-import com.github.celestial_awakening.effects.ExposingLightMobEffectInstance;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
@@ -19,9 +18,7 @@ import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPac
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -35,7 +32,10 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -259,17 +259,33 @@ public class EventManager {
     //@SubscribeEvent
     @SubscribeEvent
     public void onLivingDamage(LivingDamageEvent event){
-        if (!event.getEntity().level().isClientSide){
-            LivingEntity livingEntity=event.getEntity();
+        Entity directEntity=event.getSource().getDirectEntity();
+        LivingEntity livingEntity=event.getEntity();
+        if (!livingEntity.level().isClientSide){
+
             if (livingEntity instanceof Player){
                 Player player=(Player) livingEntity;
 
                 armorCheck(player,event,armorEffectLivingDamage);
+
+                if (directEntity instanceof Mob){
+                    Mob mob= (Mob) directEntity;
+                    if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
+                        if (!event.isCanceled()){
+                            mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
+                            PlayerCapability cap=livingEntity.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+                            if (cap!=null){
+                            }
+                        }
+                    }
+                }
             }
-            if(event.getSource().getDirectEntity() instanceof Player){
+
+            if(directEntity instanceof Player){
                 Player player=(Player) event.getSource().getDirectEntity();
                 armorCheck(player,event,armorEffectLivingDamage);
             }
+            /*
             if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
                 ExposingLightMobEffectInstance exposingLightInstance= (ExposingLightMobEffectInstance) livingEntity.getEffect(MobEffectInit.EXPOSING_LIGHT.get());
                 int stacks=exposingLightInstance.getStacks();
@@ -279,8 +295,14 @@ public class EventManager {
                 }
                 exposingLightInstance.increaseStacks(1);
             }
+
+
+             */
+
         }
     }
+
+
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event){
         if (!event.getEntity().level().isClientSide){
@@ -390,9 +412,9 @@ public class EventManager {
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
                 armorCheck(player,event,armorEffectTick);
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
-                cap.tickCDMap();
+                cap.tickAbilityMap();
             }
         }
 

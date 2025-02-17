@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -86,7 +86,7 @@ public class RemnantArmor extends ArmorEffect {
 
     }
     public void finalLight(Player player,float amt){
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null && cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,5,1));
             player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,1,false,false,false));
@@ -96,7 +96,7 @@ public class RemnantArmor extends ArmorEffect {
     }
 
     public void collapse(LivingHurtEvent event,Player player){
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null && cap.getAbilityCD(abilityCollapse) ==null && event.getSource().getDirectEntity()==player){//off CD
             Level level=event.getEntity().level();
             LivingEntity target=event.getEntity();

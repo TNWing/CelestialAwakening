@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.world.entity.player.Player;
@@ -69,7 +69,7 @@ public class KnightmareSuit extends ArmorEffect{
 
     private void infamy(Player player, LivingDeathEvent event,int cnt){
         if(event.getSource().getDirectEntity()==player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
                 Integer[] data=cap.getAbilityData("Knightmare_Infamy");
                 float mHp=event.getEntity().getMaxHealth();
@@ -88,7 +88,7 @@ public class KnightmareSuit extends ArmorEffect{
     }
     private void infamyBoost(LivingHurtEvent event,Player player){
         if(event.getSource().getDirectEntity()==player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
                 Integer[] data=cap.getAbilityData("Knightmare_Infamy");
                 if (data!=null){

@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.networking.packets;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.networking.client.ClientPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,13 +11,13 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class PlayerCapS2CPacket {
-    private final LivingEntityCapability cap;
+    private final PlayerCapability cap;
 
-    public PlayerCapS2CPacket(LivingEntityCapability cap) {
+    public PlayerCapS2CPacket(PlayerCapability cap) {
         this.cap = cap;
     }
     public PlayerCapS2CPacket(FriendlyByteBuf buf){
-        this.cap=new LivingEntityCapability();
+        this.cap=new PlayerCapability();
         CompoundTag tag=buf.readNbt();
         cap.loadNBTData(tag,false);
     }

@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -66,7 +66,7 @@ CD: 1.5 sec
     }
     public void impact(LivingHurtEvent event,Player player){
         if (event.getSource().getDirectEntity()==player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityImpact)==null){
                 AABB aabb=new AABB(player.position().subtract(new Vec3(1.2f,0,1.2f)),player.position().add(new Vec3(1.2f,0,1.2f)));
                 List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
@@ -84,7 +84,7 @@ CD: 1.5 sec
 
     public void livingMeteor(LivingHurtEvent event,Player player){
         if (event.getSource().is(DamageTypeTags.IS_FALL) && event.getEntity() == player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityMeteor)==null){
                 AABB aabb=new AABB(player.position().subtract(new Vec3(3.5f,0,3.5f)),player.position().add(new Vec3(3.5f,0,3.5f)));
                 List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));

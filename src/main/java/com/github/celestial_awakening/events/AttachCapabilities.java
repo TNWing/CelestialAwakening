@@ -46,7 +46,7 @@ public class AttachCapabilities {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         UUID playerID = player.getUUID();
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null){
             cap.setUUID(playerID);
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);

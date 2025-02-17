@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -67,7 +67,7 @@ Reduces CD by 1/2/3/4 sec on kill
         if (cnt>0){
             LivingEntity entity=event.getEntity();
             if (entity.getHealth()>=entity.getMaxHealth()){
-                LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+                PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
                 if (cap!=null && cap.getAbilityCD(abilityDread)==null){
                     event.setAmount(event.getAmount()+dreadVals[cnt-1]);
                     cap.insertIntoAbilityMap(abilityDread,dreadCD[cnt-1]);
@@ -83,7 +83,7 @@ hitting an enemy below 50% max HP will grant a speed boost to the player.
 CD of 15 seconds, resets on kill
  */
     public void cdModifier(LivingDeathEvent event,Player player, int cnt){
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null){
             if (cap.getAbilityCD(abilityDread)!=null){
                 cap.changeAbilityCD(abilityDread,-20*cnt);
@@ -95,7 +95,7 @@ CD of 15 seconds, resets on kill
     }
 
     public void pursuit(LivingHurtEvent event,Player player){
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         LivingEntity target=event.getEntity();
         if(cap!=null && cap.getAbilityCD(abilityPursuit)==null && event.getSource().getDirectEntity() == player){
             if (target.getHealth()-event.getAmount()<0.5f*target.getMaxHealth()){
@@ -113,7 +113,7 @@ CD of 8 seconds
     public void cursedLight(LivingHurtEvent event,Player player){
         Entity entity=event.getSource().getDirectEntity();
         if (entity instanceof LivingEntity && event.getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityCursedLight)==null){
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,2));
                 cap.insertIntoAbilityMap(abilityCursedLight,160);

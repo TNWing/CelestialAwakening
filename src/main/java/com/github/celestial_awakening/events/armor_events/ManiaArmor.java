@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
-import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -40,7 +40,7 @@ public class ManiaArmor extends ArmorEffect {
 
     }
     private void frenzy(Player player,Event event){
-        LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null){
 
         }
@@ -48,7 +48,7 @@ public class ManiaArmor extends ArmorEffect {
 
     private void hysteria(Player player, LivingDamageEvent event){
         if (event.getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
                 Predicate predicate = null;
                 //MobEffectInstance effects[]=player.getActiveEffects().stream().filter(predicate).toArray();

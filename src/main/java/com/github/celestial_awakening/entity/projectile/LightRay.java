@@ -306,10 +306,13 @@ public class LightRay extends CA_Projectile {
         else{
 
         }
+
+        System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
         AABB rayBox=new AABB(this.position(),end);
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox);
 
         ArrayList<LivingEntity> entitiesToHit=new ArrayList<>();
+        //my idea for better collision is to use 4 raycasts
         for (LivingEntity entity: livingEntityList) {
             //first 2 conds are used if the ray can buff or heal
             if (entity==this.getOwner()){
@@ -320,12 +323,25 @@ public class LightRay extends CA_Projectile {
             }
             else{//
                 AABB aabb=entity.getBoundingBox();
-                Optional<Vec3> clip = aabb.clip(this.position(), end);//does the entity intersect with the ray
-                if (clip.isPresent()){
-                    entitiesToHit.add(entity);
-                    if (!hitMultiple){
-                        break;
+                Vec3[] rayOffsets = new Vec3[] {
+                        new Vec3(-0 / 2, 0, 0),
+                        new Vec3(0/ 2, 0, 0),
+                        new Vec3(0, -0 / 2, 0),
+                        new Vec3(0, 0 / 2, 0)
+                };
+                for (int i=0;i<4;i++){
+
+                    Vec3 rayOffset=rayOffsets[i];
+                    Optional<Vec3> edgeRay= aabb.clip(this.position().add(rayOffset), end.add(rayOffset));//does the entity intersect with the ray;
+                    if (edgeRay.isPresent()){
+                        entitiesToHit.add(entity);
+                        if (!hitMultiple){
+                            break;
+                        }
                     }
+                }
+                if (!entitiesToHit.isEmpty() && !hitMultiple){
+                    break;
                 }
             }
         }

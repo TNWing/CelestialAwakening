@@ -32,6 +32,11 @@ public class TranscendentAsteronRenderer extends MobRenderer<Asteron, Transcende
 
     @Override
     public void render(Asteron entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        poseStack.pushPose();
+        //VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
+        poseStack.scale(0.75f,0.75f,0.75f);
+
         super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
+        poseStack.popPose();
     }
 }

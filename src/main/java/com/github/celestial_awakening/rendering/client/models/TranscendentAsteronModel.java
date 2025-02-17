@@ -3,17 +3,19 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 // Paste this class into your mod and generate all required imports
 
 
+import com.github.celestial_awakening.entity.animations.TranscendentAsteronAnimations;
+import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 
-public class TranscendentAsteronModel<T extends Entity> extends EntityModel<T> {
+public class TranscendentAsteronModel<T extends Entity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	private final ModelPart root;
+	private final ModelPart model;
 	private final ModelPart mainbody;
 	private final ModelPart leg2_y;
 	private final ModelPart leg2_z;
@@ -38,24 +40,24 @@ public class TranscendentAsteronModel<T extends Entity> extends EntityModel<T> {
 
 
 	public TranscendentAsteronModel(ModelPart mp_root) {
-		this.root = mp_root.getChild("root");
-		this.mainbody = this.root.getChild("mainbody");
-		this.leg2_y = this.root.getChild("leg2_y");
+		this.model = mp_root.getChild("root");
+		this.mainbody = this.model.getChild("mainbody");
+		this.leg2_y = this.model.getChild("leg2_y");
 		this.leg2_z = this.leg2_y.getChild("leg2_z");
 		this.seg2mid = this.leg2_z.getChild("seg2mid");
 		this.seg2top = this.leg2_z.getChild("seg2top");
 		this.seg2bot = this.leg2_z.getChild("seg2bot");
-		this.leg4_y = this.root.getChild("leg4_y");
+		this.leg4_y = this.model.getChild("leg4_y");
 		this.leg4_z = this.leg4_y.getChild("leg4_z");
 		this.seg4mid = this.leg4_z.getChild("seg4mid");
 		this.seg4top = this.leg4_z.getChild("seg4top");
 		this.seg4bot = this.leg4_z.getChild("seg4bot");
-		this.leg1_y = this.root.getChild("leg1_y");
+		this.leg1_y = this.model.getChild("leg1_y");
 		this.leg1_z = this.leg1_y.getChild("leg1_z");
 		this.seg1mid = this.leg1_z.getChild("seg1mid");
 		this.seg1top = this.leg1_z.getChild("seg1top");
 		this.seg1bot = this.leg1_z.getChild("seg1bot");
-		this.leg3_y = this.root.getChild("leg3_y");
+		this.leg3_y = this.model.getChild("leg3_y");
 		this.leg3_z = this.leg3_y.getChild("leg3_z");
 		this.seg3mid = this.leg3_z.getChild("seg3mid");
 		this.seg3top = this.leg3_z.getChild("seg3top");
@@ -133,16 +135,20 @@ public class TranscendentAsteronModel<T extends Entity> extends EntityModel<T> {
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+		this.model.getAllParts().forEach(ModelPart::resetPose);
+		this.animate(((Asteron)entity).idleAnimationState, TranscendentAsteronAnimations.idle,ageInTicks,1f);
+		this.animateWalk(TranscendentAsteronAnimations.idle,limbSwing,limbSwingAmount,1f,2f);
+		this.animate(((Asteron)entity).piercingRaysAnimationState, TranscendentAsteronAnimations.piercing_rays,ageInTicks,1f);
+		this.animate(((Asteron)entity).piercingRaysRecoveryAnimationState, TranscendentAsteronAnimations.piercing_rays_recover,ageInTicks,1f);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		model.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	public ModelPart root(){
-		return root;
+		return model;
 	}
 
 }

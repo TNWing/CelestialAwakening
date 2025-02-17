@@ -20,18 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
 public class Asteron extends AbstractTranscendent {
-    //maybe two separate abstract goals
-    /*
-    one where it gets blocked and blocks other goals
-    one that doesn't do that
-     */
-
-    /*
-    model and stuff
-    start of in a standard position (akin to player default pos)
-    when switching to combat stance. torso rotates 90 degrees, leg rotates and moves
-     */
-///summon celestial_awakening:asteron ~3 ~ ~
 
     static double baseHP=20.0D;
     static double baseDmg=4.5D;
@@ -56,10 +44,10 @@ public class Asteron extends AbstractTranscendent {
     }
 
     public final AnimationState idleAnimationState=new AnimationState();
-    public final AnimationState idleToAlertAnimationState=new AnimationState();
-    public final AnimationState alertToIdleAnimationState=new AnimationState();
+    public final AnimationState walkAnimationState=new AnimationState();
     public final AnimationState attackAnimationState=new AnimationState();
-    public final AnimationState combatIdleState=new AnimationState();
+    public final AnimationState piercingRaysAnimationState=new AnimationState();
+    public final AnimationState piercingRaysRecoveryAnimationState=new AnimationState();
     public static AttributeSupplier.Builder createAttributes() {//TODO
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)

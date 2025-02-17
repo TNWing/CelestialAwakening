@@ -17,7 +17,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -31,7 +30,7 @@ import java.util.Optional;
 public class LightRay extends CA_Projectile {
 
     //BeaconBlockEntity.BeaconBeamSection
-    int tickLiveTime=20;
+    int tickLiveTime=0;
     //may not need this w/ the RoC vars
     float widthProgress;
     float heightProgress;
@@ -68,26 +67,31 @@ public class LightRay extends CA_Projectile {
     /*
     Replace XPR with VAng
     Utilize currentlife instead of ticklivetime
+    FOR ALL ENTITIES, REMOVE ALL CONSTRUCTORS AND REPLACE WITH A STATIC CREATE METHOD
      */
     private static final EntityDataAccessor<Float> XPR= SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
 
 
+    //for some reason, server calls base ray while client calls asteron ray?
     public LightRay(EntityType<LightRay> entityType, Level level) {
         super(entityType,level,20);
+        System.out.println("base ray ON CLIENT? " + this.level().isClientSide);
         this.setDmg(2f);
-        this.tickLiveTime=20;
         this.widthProgress=1f;
         this.heightProgress=1f;
         this.setNoGravity(true);
     }
 
 
-    public LightRay(Level level,int tickLiveTime) {
-        super(EntityInit.LIGHT_RAY.get(),level,tickLiveTime);
-        this.tickLiveTime=tickLiveTime;
-        this.setNoGravity(true);
+    public static LightRay create(Level level, int tickLiveTime,float dmg) {
+        LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
+        entity.setLifetime(tickLiveTime);
+        entity.setDmg(dmg);
+        entity.widthProgress=1f;
+        entity.heightProgress=1f;
+        entity.setNoGravity(true);
+        return entity;
     }
-
 
     @Override
     protected void defineSynchedData() {
@@ -307,7 +311,7 @@ public class LightRay extends CA_Projectile {
 
         }
 
-        System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
+        //System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
         AABB rayBox=new AABB(this.position(),end);
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox);
 
@@ -351,9 +355,6 @@ public class LightRay extends CA_Projectile {
         if (!entitiesToHit.isEmpty() && destroyIfHitLiving){
             this.discard();
         }
-        //aabb.clip()
-        //ProjectileUtil.getEntityHitResult()
-
     }
 
 
@@ -368,38 +369,71 @@ public class LightRay extends CA_Projectile {
 
 
         this.setSize(this.getWidth(),this.getHeight());
+/*
+OG
         if (this.tickLiveTime>=0){
             this.tickLiveTime--;
             if (tickLiveTime<=0){
                 System.out.println("DISCARD TIME");
+                System.out.println("ON SIDE " + this.level().isClientSide);
                 this.discard();
             }
         }
-        Vec3 vec3 = this.getDeltaMovement();
-        BlockPos blockpos = this.blockPosition();
-        BlockState blockstate = this.level().getBlockState(blockpos);
+ */
+        System.out.println("TICKLIVETIME ON SIDE CLIENT? " + this.level().isClientSide + " IS " + this.tickLiveTime + "  AND LTIME IS  "  + this.getLifeTime());
+        this.tickLiveTime++;
+        if (tickLiveTime>=this.getLifeTime()){
+            System.out.println("DISCARD TIME");
+            System.out.println("ON SIDE " + this.level().isClientSide);
+            this.discard();
+        }
 
         if (this.inGround) {
 
         }
         else {
             if(this.isAlive()) {
-                raycast();/*
-                vec3 = this.getDeltaMovement();
-                double d5 = vec3.x;
-                double d6 = vec3.y;
-                double d1 = vec3.z;
-
-                double d7 = this.getX() + d5;
-                double d2 = this.getY() + d6;
-                double d3 = this.getZ() + d1;
-                double d4 = vec3.horizontalDistance();
-                this.setPos(d7, d2, d3);
-                */
-                this.checkInsideBlocks();
+                raycast();
             }
-
         }
 
     }
+//the code below breaks the placement of the thing
+        /*
+    planned tick
+        public void tick() {
+        //super.tick();
+        if (!this.level().isClientSide) {
+            float tW=this.getWidth();
+            float tH=this.getHeight();
+            this.setWidth(MathFuncs.clamp(tW+widthRateOfChange,minWidth,maxWidth));
+            this.setHeight(MathFuncs.clamp(tH+heightRateOfChange,minHeight,maxHeight));
+        }
+
+
+        this.setSize(this.getWidth(),this.getHeight());
+
+        if (this.tickLiveTime<=this.getLifeTime()){
+            this.tickLiveTime++;
+            System.out.println("OU+R LIFE IS " + this.tickLiveTime);
+            System.out.println("OUR POS IS " + this.position());
+        }
+        else{
+            System.out.println("DISCARD TIME");
+            System.out.println("ON SIDE " + this.level().isClientSide);
+            System.out.println("OUR CURRENT LIFE IS " + this.tickLiveTime);
+            this.discard();
+        }
+
+        if (this.inGround) {
+
+        }
+        else {
+            if(this.isAlive()) {
+                raycast();
+            }
+        }
+
+    }
+     */
 }

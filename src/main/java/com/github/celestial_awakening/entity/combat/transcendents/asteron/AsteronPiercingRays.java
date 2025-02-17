@@ -43,7 +43,7 @@ public class AsteronPiercingRays extends GenericAbility {
                         Vec3 spt=new Vec3(ownerPos.x,ownerPos.y+2.5f,ownerPos.z);
 
                         spt=spt.add(dir.scale(i));
-                        LightRay ray=new LightRay(level,70);
+                        LightRay ray=LightRay.create(level,70,3.5f);
                         ray.setOwner(this.mob);
                         ray.initDims(0.2f,0,0.2f,0,0.2f,3.4f,0,1.8f);
                         ray.setHAng(yaw);

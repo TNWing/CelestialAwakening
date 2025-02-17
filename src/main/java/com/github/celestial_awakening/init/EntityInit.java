@@ -59,4 +59,5 @@ public class EntityInit {
     public static final RegistryObject<EntityType<OrbiterProjectile>> ORBITER=ENTITY_TYPES.register("orbiter",
             ()->EntityType.Builder.<OrbiterProjectile>of(OrbiterProjectile::new,MobCategory.MISC).sized(0.3f,0.3f).build("orbiter"));
 
+
 }

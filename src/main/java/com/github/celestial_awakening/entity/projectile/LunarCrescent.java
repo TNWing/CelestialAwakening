@@ -33,6 +33,8 @@ public class LunarCrescent extends CA_Projectile {
     private HashMap<Integer,Integer> entityHitMap=new HashMap<>();
     public LunarCrescent(EntityType<LunarCrescent> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_,70);
+
+        System.out.println("base CREATED ON SIDE client" + this.level().isClientSide);
         life=0;
     }
 
@@ -56,6 +58,7 @@ public class LunarCrescent extends CA_Projectile {
     public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs) {
         super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
         life=0;
+        System.out.println("whirl CREATED ON SIDE client" + this.level().isClientSide);
         this.setDmg(damage);
         this.setRScales(rs);
         this.setDims(width,height);

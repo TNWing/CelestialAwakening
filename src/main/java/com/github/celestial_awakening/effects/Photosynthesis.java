@@ -14,7 +14,7 @@ public class Photosynthesis extends MobEffect {
      */
     @Override
     public boolean isDurationEffectTick(int ticks, int amplifier) {
-        int k=400>>amplifier;
+        int k=200>>amplifier;
         if (k>0){
             return ticks%k==1;
         }

@@ -53,77 +53,83 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
     @Override
     public void executeAbility(LivingEntity target) {
         if (state==1){
-            if (this.currentStateTimer==40){
-                int diffMod=this.mob.level().getDifficulty().getId();
-                if (diffMod>0){
-                    diffMod-=1;
-                }
-                ServerLevel serverLevel= (ServerLevel) this.mob.level();
-                Random rand=new Random();
-                int r=rand.nextInt(2);
-                Vec3 vec=MathFuncs.getDirVec(this.mob.position(),target.position());
-                float dir= MathFuncs.getAngFrom2DVec(vec);
-                float vAng=MathFuncs.getVertAngFromVec(vec);
-                float diffAng=50f;
-                float leftDir=dir-diffAng;
-                float rightDir=dir+diffAng;
-                leftCrescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],180,5.5f,leftDir,vAng,0,2f,0.5f,2f);
-                rightCrescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],1880,5.5f,rightDir,vAng,0,2f,0.5f,2f);
-                leftCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(leftDir).scale(0.2f)));
-                leftCrescent.setOwner(this.mob);
-                rightCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(rightDir).scale(0.2f)));
-                rightCrescent.setOwner(this.mob);
-                if (r==0){
-                    leftTP=true;
-                }
-                else{
-                    leftTP=false;
-                }
-                serverLevel.addFreshEntity(leftCrescent);
-                serverLevel.addFreshEntity(rightCrescent);
-                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(leftCrescent.getId()),serverLevel.dimension());
-                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(rightCrescent.getId()),serverLevel.dimension());
-            }
-            else if (this.currentStateTimer==20){
-                if (leftTP){
-                    Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
-                    pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
-                    float rightDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
-                    float vAng=MathFuncs.getVertAngFromVec(vec);
-                    rightCrescent.setHAng(rightDir);
-                    rightCrescent.setVAng(vAng);
-                    rightCrescent.setSpd(8.5f);
-                    this.mob.setPos(leftCrescent.position());
-                    leftCrescent.discard();
-                }
-                else{
-                    Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
-                    pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
-                    float leftDir=MathFuncs.getAngFrom2DVec(vec);
-                    float vAng=MathFuncs.getVertAngFromVec(vec);
-                    leftCrescent.setVAng(vAng);
-                    leftCrescent.setHAng(leftDir);
-                    leftCrescent.setSpd(9.5f);
-                    this.mob.setPos(rightCrescent.position());
-                    rightCrescent.discard();
-                }
-            }
-            else if (this.currentStateTimer==15){
-                Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
-                this.mob.setPos(target.position().subtract(dir.scale(0.4)));
-                List<LivingEntity> entityList=this.mob.findCollidedEntities(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob),1.4f);
-                if (!entityList.isEmpty()){
+            switch(this.currentStateTimer){
+                case 40:{
                     int diffMod=this.mob.level().getDifficulty().getId();
                     if (diffMod>0){
                         diffMod-=1;
                     }
-                    for (LivingEntity entity:entityList) {
-                        entity.hurt(dashSource,dashDmgVals[diffMod]);
+                    ServerLevel serverLevel= (ServerLevel) this.mob.level();
+                    Random rand=new Random();
+                    int r=rand.nextInt(2);
+                    Vec3 vec=MathFuncs.getDirVec(this.mob.position(),target.position());
+                    float dir= MathFuncs.getAngFrom2DVec(vec);
+                    float vAng=MathFuncs.getVertAngFromVec(vec);
+                    float diffAng=50f;
+                    float leftDir=dir-diffAng;
+                    float rightDir=dir+diffAng;
+                    leftCrescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],180,5.5f,leftDir,vAng,0,2f,0.5f,2f);
+                    rightCrescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],1880,5.5f,rightDir,vAng,0,2f,0.5f,2f);
+                    leftCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(leftDir).scale(0.2f)));
+                    leftCrescent.setOwner(this.mob);
+                    rightCrescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(rightDir).scale(0.2f)));
+                    rightCrescent.setOwner(this.mob);
+                    if (r==0){
+                        leftTP=true;
                     }
+                    else{
+                        leftTP=false;
+                    }
+                    serverLevel.addFreshEntity(leftCrescent);
+                    serverLevel.addFreshEntity(rightCrescent);
+                    ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(leftCrescent.getId()),serverLevel.dimension());
+                    ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(rightCrescent.getId()),serverLevel.dimension());
+                    break;
                 }
-
+                case 20:{
+                    if (leftTP){
+                        Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
+                        pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
+                        float rightDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
+                        float vAng=MathFuncs.getVertAngFromVec(vec);
+                        rightCrescent.setHAng(rightDir);
+                        rightCrescent.setVAng(vAng);
+                        rightCrescent.setSpd(8.5f);
+                        this.mob.setPos(leftCrescent.position());
+                        leftCrescent.discard();
+                    }
+                    else{
+                        Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
+                        pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(rightCrescent.position(),target.position()));
+                        float leftDir=MathFuncs.getAngFrom2DVec(vec);
+                        float vAng=MathFuncs.getVertAngFromVec(vec);
+                        leftCrescent.setVAng(vAng);
+                        leftCrescent.setHAng(leftDir);
+                        leftCrescent.setSpd(8.5f);
+                        this.mob.setPos(rightCrescent.position());
+                        rightCrescent.discard();
+                    }
+                    break;
+                }
+                case 15:{
+                    Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
+                    this.mob.setPos(target.position().subtract(dir.scale(0.4)));
+                    List<LivingEntity> entityList=this.mob.findCollidedEntities(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob),1.4f);
+                    if (!entityList.isEmpty()){
+                        int diffMod=this.mob.level().getDifficulty().getId();
+                        if (diffMod>0){
+                            diffMod-=1;
+                        }
+                        for (LivingEntity entity:entityList) {
+                            entity.hurt(dashSource,dashDmgVals[diffMod]);
+                        }
+                    }
+                    break;
+                }
+                default:{
+                    break;
+                }
             }
-
         }
         this.currentStateTimer--;
         if (currentStateTimer<=0) {

@@ -32,11 +32,6 @@ public abstract class GenericCombatAIGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.mob = mob;
     }
-    protected GenericCombatAIGoal(AbstractCALivingEntity mob, int diff) {
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        this.mob = mob;
-        this.difficulty=diff;
-    }
 
     @Override
     public boolean canUse() {
@@ -68,7 +63,7 @@ public abstract class GenericCombatAIGoal extends Goal {
             double maxDist=Math.pow(this.mob.maxRange,2);
 
             double dist = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
-            if (keepDist){//move towards maxDist
+            if (keepDist){//move towards maxDist (NOT IMPLEMENTED)
                 if (dist<maxDist && this.mob.canStillSenseTarget()){
                     //BlockPos pos=new BlockPos(0,0,0);
                     //this.mob.getNavigation().moveTo(this.mob.getNavigation().createPath(pos,0), this.mob.spdMod);

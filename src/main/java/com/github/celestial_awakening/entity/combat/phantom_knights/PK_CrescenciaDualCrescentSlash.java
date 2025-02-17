@@ -36,7 +36,7 @@ public class PK_CrescenciaDualCrescentSlash extends GenericAbility {
         if (state==1 && currentStateTimer==7){
 
             float ang=a;
-            LunarCrescent crescent=new LunarCrescent(this.mob.level(),crescentDmg[diffMod],120,cresSpd,ang,0,90,4,1,4);
+            LunarCrescent crescent=LunarCrescent.create(this.mob.level(),crescentDmg[diffMod],120,cresSpd,ang,0,90,4,1,4);
             crescent.setOwner(this.mob);
             crescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(ang).scale(0.2f)));
             crescent.refreshDimensions();
@@ -55,7 +55,7 @@ public class PK_CrescenciaDualCrescentSlash extends GenericAbility {
                     this.mob.fixedRot=true;
                     this.mob.fixedHeadRot=true;
                     float ang=a+180;
-                    LunarCrescent crescent=new LunarCrescent(this.mob.level(),crescentDmg[diffMod],120,cresSpd,ang,0,90,4,1,4);
+                    LunarCrescent crescent=LunarCrescent.create(this.mob.level(),crescentDmg[diffMod],120,cresSpd,ang,0,90,4,1,4);
                     crescent.setOwner(this.mob);
                     crescent.setPos(this.mob.position().add(MathFuncs.get2DVecFromAngle(ang).scale(0.2f)));
                     crescent.refreshDimensions();

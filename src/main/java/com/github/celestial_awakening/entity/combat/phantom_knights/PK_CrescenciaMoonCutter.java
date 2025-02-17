@@ -90,7 +90,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
 
     void summonCrescent(ServerLevel lvl,float ang,float vAng,float dmg,Vec3 startPos){
 
-        LunarCrescent crescent=new LunarCrescent(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f);
+        LunarCrescent crescent=LunarCrescent.create(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f);
         ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
         if (cap!=null){
             MovementModifier modifier=new MovementModifier(

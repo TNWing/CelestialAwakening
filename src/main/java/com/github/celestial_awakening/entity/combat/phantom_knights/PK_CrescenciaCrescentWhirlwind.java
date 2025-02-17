@@ -96,7 +96,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
         for (int i=0;i<4;i++){
             float ang=currentStartAngle+90*i;
-            LunarCrescent crescent=new LunarCrescent(serverLevel,crescentDmgVals[diffMod],100,7f,ang,0,0,1.75f,0.35f,1.75f);
+            LunarCrescent crescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],100,7f,ang,0,0,1.75f,0.35f,1.75f);
             int id=crescent.getId();
             ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
             if (cap!=null){

@@ -55,25 +55,6 @@ public class LunarCrescent extends CA_Projectile {
         crescent.setDeltaMovement(crescent.calculateMoveVec());
         return crescent;
     }
-    
-    public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR) {
-        super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
-        life=0;
-        this.setDmg(damage);
-        this.setDims(1f,0.2f);
-        this.setZRot(zR);
-
-        this.setDeltaMovement(calculateMoveVec());
-    }
-    public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs) {
-        super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
-        life=0;
-        System.out.println("whirl CREATED ON SIDE client" + this.level().isClientSide);
-        this.setDmg(damage);
-        this.setRScales(rs);
-        this.setDims(width,height);
-        this.setDeltaMovement(calculateMoveVec());
-    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

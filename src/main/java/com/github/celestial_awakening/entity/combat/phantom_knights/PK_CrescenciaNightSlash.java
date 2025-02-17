@@ -42,7 +42,7 @@ public class PK_CrescenciaNightSlash extends GenericAbility {
             if (currentStateTimer==110){
                 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
                 ang= MathFuncs.getAngFrom2DVec(dir);
-                LunarCrescent crescent=new LunarCrescent(serverLevel,bigCrescentDmgVals[diffMod],270,1f,ang,0,0,8f,2f,8f);
+                LunarCrescent crescent=LunarCrescent.create(serverLevel,bigCrescentDmgVals[diffMod],270,1f,ang,0,0,8f,2f,8f);
                 int id=crescent.getId();
 
                 crescent.setPos(this.mob.position().add(dir.scale(0.2f)));
@@ -51,7 +51,7 @@ public class PK_CrescenciaNightSlash extends GenericAbility {
                 ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),serverLevel.dimension());
             }
             else if (currentStateTimer%20==10){
-                LunarCrescent crescent=new LunarCrescent(serverLevel,smallCrescentDmgVals[diffMod],120,6f,ang,0,0,1f,0.25f,1f);
+                LunarCrescent crescent=LunarCrescent.create(serverLevel,smallCrescentDmgVals[diffMod],120,6f,ang,0,0,1f,0.25f,1f);
                 int id=crescent.getId();
                 crescent.setPos(this.mob.position().add(dir.scale(0.2f)));
                 crescent.setOwner(this.mob);

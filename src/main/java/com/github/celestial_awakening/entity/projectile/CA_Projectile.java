@@ -45,11 +45,6 @@ public class CA_Projectile extends Projectile {
 
 
     }
-    protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,float spd, float hA,float vA,int lt) {
-        super(p_37248_, p_37249_);
-        setMoveValues(spd,hA,vA);
-        this.setLifetime(lt);
-    }
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,float spd, float hA,float vA,float zR,int lt) {
         super(p_37248_, p_37249_);
         setMoveValues(spd,hA,vA);

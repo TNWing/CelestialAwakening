@@ -181,7 +181,7 @@ public class LunarArmor extends ArmorEffect {
         if (event.getEntity() == player && event.getSource().getDirectEntity() instanceof LivingEntity){
             LivingEntity livingEntity= (LivingEntity) event.getSource().getDirectEntity();
             event.setAmount(event.getAmount()*0.95f);
-            OrbiterProjectile orbiterProjectile=new OrbiterProjectile(player.level(),player,140);
+            OrbiterProjectile orbiterProjectile=OrbiterProjectile.create(player.level(),player,140);
             player.level().addFreshEntity(orbiterProjectile);
         }
     }

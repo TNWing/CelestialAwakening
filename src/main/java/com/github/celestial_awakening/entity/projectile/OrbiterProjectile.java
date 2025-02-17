@@ -32,7 +32,6 @@ public class OrbiterProjectile extends CA_Projectile {
     public OrbiterProjectile(EntityType<OrbiterProjectile> orbiterProjectileEntityType, Level level) {
         super(EntityInit.ORBITER.get(),level,100);
         this.setDmg(2.5f);
-
     }
     public OrbiterProjectile(Level level, LivingEntity owner,int timer) {
         super(EntityInit.ORBITER.get(), level,100);
@@ -45,6 +44,19 @@ public class OrbiterProjectile extends CA_Projectile {
         this.setPos(newPos);
         this.entityData.set(OWNER_PREV_POS,owner.position().toVector3f());
         this.entityData.set(RELEASETIMER,timer);
+    }
+    public static OrbiterProjectile create(Level level, LivingEntity owner,int timer) {
+        OrbiterProjectile entity=new OrbiterProjectile(EntityInit.ORBITER.get(),level);
+        entity.setOwner(owner);
+        entity.setDmg(2.5f);
+        Vec3 ownerPos=entity.getOwner().position();
+        double hRad=Math.toRadians(entity.getEntityData().get(H_ANGLE));
+        double vRad=Math.toRadians(entity.getEntityData().get(V_ANGLE));
+        Vec3 newPos=new Vec3(ownerPos.x + Math.sin(hRad)*1.4f,ownerPos.y + Math.sin(vRad)*0.6f,ownerPos.z+Math.cos(hRad)*1.4f);
+        entity.setPos(newPos);
+        entity.entityData.set(OWNER_PREV_POS,owner.position().toVector3f());
+        entity.entityData.set(RELEASETIMER,timer);
+        return entity;
     }
     @Override
     public void setOwner(Entity ent){

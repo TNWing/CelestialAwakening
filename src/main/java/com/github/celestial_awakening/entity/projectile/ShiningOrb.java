@@ -16,18 +16,23 @@ public class ShiningOrb extends CA_Projectile {
     private int life;
     DamageSource damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
     double explosionRadius =1.5D;
-    public ShiningOrb(Level level,int lt,float spd,float hA,float vA,float dmg) {
-        super(EntityInit.SHINING_ORB.get(), level,lt);
-        this.setNoGravity(true);
-        this.setMoveValues(spd,hA,vA);
-        this.setDmg(dmg);
-        life=0;
-    }
     public ShiningOrb(EntityType<ShiningOrb> shiningOrbEntityType, Level level) {
         super(shiningOrbEntityType,level,80);
 
         this.setNoGravity(true);
         life=0;
+    }
+
+
+    public static ShiningOrb create(Level level,int lt,float spd,float hA,float vA,float dmg) {
+        ShiningOrb entity = new ShiningOrb(EntityInit.SHINING_ORB.get(), level);
+        entity.setNoGravity(true);
+        entity.life=0;
+        entity.setLifetime(lt);
+
+        entity.setMoveValues(spd,hA,vA);
+        entity.setDmg(dmg);
+        return entity;
     }
     @Override
     public void setOwner(Entity e){

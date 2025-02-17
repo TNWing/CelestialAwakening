@@ -42,7 +42,7 @@ public class AstraliteBasicAttack extends GenericAbility {
                     Vec3 dir=targetPos.subtract(ownerPos).normalize();
                     float ang=MathFuncs.getAngFrom2DVec(dir);
                     Vec3 spt=new Vec3(ownerPos.x,ownerPos.y,ownerPos.z).add(dir.scale(1.1f));
-                    ShiningOrb orb=new ShiningOrb(level,100,5,ang,0,3);
+                    ShiningOrb orb=ShiningOrb.create(level,100,5,ang,0,3);
                     orb.setPos(spt);
                     orb.setOwner(this.mob);
                     level.addFreshEntity(orb);

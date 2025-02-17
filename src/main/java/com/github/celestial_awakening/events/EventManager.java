@@ -129,9 +129,10 @@ public class EventManager {
             ServerLevel serverLevel= (ServerLevel) level;
             LivingEntity owner=event.getOwner();
             float hAng=event.getHAng();
+            //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
             if (isCrit){
                 if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
-                    LunarCrescent crescent=new LunarCrescent(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
+                    LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
                     crescent.setPos(event.getSpawnpoint());
                     crescent.setYRot(owner.getYRot());
                     crescent.setOwner(event.getOwner());
@@ -142,8 +143,7 @@ public class EventManager {
             }
             else{
                 if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
-                    LunarCrescent crescent=new LunarCrescent(serverLevel,event.getDmg(),event.getMovement().scale(0.075f),0);
-                    crescent=new LunarCrescent(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
+                    LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
                     crescent.setPos(event.getSpawnpoint());
                     crescent.setYRot(owner.getYRot());
                     crescent.setOwner(event.getOwner());

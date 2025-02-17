@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,19 +32,30 @@ public class LunarCrescent extends CA_Projectile {
     private HashMap<Integer,Integer> entityHitMap=new HashMap<>();
     public LunarCrescent(EntityType<LunarCrescent> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_,70);
-
-        System.out.println("base CREATED ON SIDE client" + this.level().isClientSide);
         life=0;
     }
-
-    public LunarCrescent(Level level, float damage, Vec3 dm, int lifeVal) {
-        super(EntityInit.LUNAR_CRESCENT.get(), level,lifeVal);
-        life=0;
-        this.setDeltaMovement(dm);
-
-        this.setDmg(damage);
-        this.setZRot(0);
+    public static LunarCrescent create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR) {
+        LunarCrescent crescent=new LunarCrescent(EntityInit.LUNAR_CRESCENT.get(),level);
+        crescent.setMoveValues(spd,hAng,vAng);
+        crescent.setZRot(zR);
+        crescent.setLifetime(lifeVal);
+        crescent.setDmg(damage);
+        crescent.setDims(1f,0.2f);
+        crescent.setDeltaMovement(crescent.calculateMoveVec());
+        return crescent;
     }
+    public static LunarCrescent create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs) {
+        LunarCrescent crescent=new LunarCrescent(EntityInit.LUNAR_CRESCENT.get(),level);
+        crescent.setMoveValues(spd,hAng,vAng);
+        crescent.setZRot(zR);
+        crescent.setLifetime(lifeVal);
+        crescent.setDmg(damage);
+        crescent.setRScales(rs);
+        crescent.setDims(width,height);
+        crescent.setDeltaMovement(crescent.calculateMoveVec());
+        return crescent;
+    }
+    
     public LunarCrescent(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR) {
         super(EntityInit.LUNAR_CRESCENT.get(), level,spd,hAng,vAng,zR,lifeVal);
         life=0;

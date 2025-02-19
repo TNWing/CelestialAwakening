@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ParticleManager {
@@ -66,19 +68,27 @@ public class ParticleManager {
         LevelCapability cap=serverLevel.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
 
         if (cap!=null){
-            for (BlockPos blockPos:cap.currentMoonstonePos.keySet()) {
-                if (cap.currentMoonstonePos.get(blockPos)%10==0){
-                    double x = blockPos.getX();
-                    double y = blockPos.getY() + 0.5D;
-                    double z = blockPos.getZ();
+            Iterator<Map.Entry<BlockPos,Integer>> iterator = cap.currentMoonstonePos.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<BlockPos, Integer> entry = iterator.next();
+                BlockPos blockPos = entry.getKey();
+                int timeLeft =entry.getValue();
+                System.out.println("MOONSTONE IS AT " + blockPos + " with time left " + cap.currentMoonstonePos.get(blockPos) );
+                if (timeLeft%10==0){
+                    Vec3 pos=blockPos.getCenter();
+                    double x = pos.x;
+                    double y = pos.y + 0.75D;
+                    double z = pos.z;
                     int count = 15; // Number of particles
                     double speed = 0.12; // Speed of particles
-                    //System.out.println("RENDERING MOOSTONE AT POS " + x + " " + y + " " + z);
+                    System.out.println("RENDERING MOOSTONE AT POS " + x + " " + y + " " + z);
+                    System.out.println("CENTER POS IS "  + blockPos.getCenter());
                     serverLevel.sendParticles(particleType, x, y, z, count, 0, 0, 0, speed);
                 }
                 cap.currentMoonstonePos.put(blockPos,cap.currentMoonstonePos.get(blockPos)-1);
-                if (cap.currentMoonstonePos.get(blockPos)<=0){
-                    cap.currentMoonstonePos.remove(blockPos);
+                if (timeLeft<=0){
+                    System.out.println("MOONSTONE being removed AT " + blockPos );
+                    iterator.remove();
                 }
             }
 

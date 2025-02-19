@@ -153,9 +153,10 @@ public class LunarEvents {
                     }
                     //pick a random applicable block
                     if (applicableBlocks.size()>0){
-                        System.out.println("PLACING MOONSTONE");
+
                         BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
-                        cap.currentMoonstonePos.put(chosenSpot,4800);
+                        System.out.println("PLACING MOONSTONE at " + chosenSpot);
+                        cap.currentMoonstonePos.put(chosenSpot,1800);
                     }
 
                 }

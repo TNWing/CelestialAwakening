@@ -19,6 +19,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LevelCapability{
     public LevelCapability(Level level){
@@ -27,7 +28,7 @@ public class LevelCapability{
 
     private CompoundTag storedNBT;
 
-    public HashMap<BlockPos,Integer> currentMoonstonePos=new HashMap<>();
+    public ConcurrentHashMap<BlockPos,Integer> currentMoonstonePos=new ConcurrentHashMap<>();
 
     public ResourceKey<Level> levelResourceKey;
     //first 60 ticks will be the eye opening, last 60 ticks is closing, 40 ticks before closing, the eye resets to frame 0, players will not be detected during opening and closing

@@ -3,8 +3,8 @@ package com.github.celestial_awakening.events;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.NightProwler;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
-import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
+import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Nebure;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID,bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModEventBusManager {
+
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(EntityInit.ASTERON.get(), Asteron.createAttributes().build());
@@ -41,6 +42,6 @@ public class ModEventBusManager {
         });
     }
 
-     */
+*/
 
 }

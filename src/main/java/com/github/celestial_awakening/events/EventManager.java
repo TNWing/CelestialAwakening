@@ -99,9 +99,13 @@ public class EventManager {
     private static int currentDay;
 
 
+    //for some odd reason, this never fires, will have to manually spawn prowlers then since they are the only ones who can spawn naturally
     @SubscribeEvent
-    public void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
-        event.register(EntityInit.NIGHT_PROWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.AND);
+    public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
+
+        System.out.println("REGISTERING SPAWN PLACEMENTS");
+        event.register(EntityInit.NIGHT_PROWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        System.out.println("POST REGISTER SP");
     }
 
     @SubscribeEvent
@@ -155,6 +159,9 @@ public class EventManager {
 
         }
     }
+
+
+
     public void onLivingTick(LivingEvent.LivingTickEvent event){
 
     }
@@ -255,8 +262,6 @@ public class EventManager {
         }
     }
 
-
-    //@SubscribeEvent
     @SubscribeEvent
     public void onLivingDamage(LivingDamageEvent event){
         Entity directEntity=event.getSource().getDirectEntity();

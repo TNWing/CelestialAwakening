@@ -73,7 +73,7 @@ public class ParticleManager {
                 Map.Entry<BlockPos, Integer> entry = iterator.next();
                 BlockPos blockPos = entry.getKey();
                 int timeLeft =entry.getValue();
-                System.out.println("MOONSTONE IS AT " + blockPos + " with time left " + cap.currentMoonstonePos.get(blockPos) );
+                //System.out.println("MOONSTONE IS AT " + blockPos + " with time left " + cap.currentMoonstonePos.get(blockPos) );
                 if (timeLeft%10==0){
                     Vec3 pos=blockPos.getCenter();
                     double x = pos.x;
@@ -81,13 +81,10 @@ public class ParticleManager {
                     double z = pos.z;
                     int count = 15; // Number of particles
                     double speed = 0.12; // Speed of particles
-                    System.out.println("RENDERING MOOSTONE AT POS " + x + " " + y + " " + z);
-                    System.out.println("CENTER POS IS "  + blockPos.getCenter());
                     serverLevel.sendParticles(particleType, x, y, z, count, 0, 0, 0, speed);
                 }
                 cap.currentMoonstonePos.put(blockPos,cap.currentMoonstonePos.get(blockPos)-1);
                 if (timeLeft<=0){
-                    System.out.println("MOONSTONE being removed AT " + blockPos );
                     iterator.remove();
                 }
             }

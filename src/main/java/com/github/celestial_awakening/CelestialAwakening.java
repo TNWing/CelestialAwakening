@@ -9,7 +9,9 @@ import com.github.celestial_awakening.networking.ModNetwork;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -50,7 +52,11 @@ public class CelestialAwakening
 */
     public CelestialAwakening()
     {
+        if (false) {
+            return;
+        }
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         modEventBus.addListener(this::commonSetup);
 
         CREATIVE_MODE_TABS.register(modEventBus);
@@ -62,20 +68,24 @@ public class CelestialAwakening
         RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
 
-
-
+/*
+optimize eventmangager later, theres some stuff thats eating up performance
+ */
         MinecraftForge.EVENT_BUS.register(new EventManager());
         MinecraftForge.EVENT_BUS.register(new AttachCapabilities());
         MinecraftForge.EVENT_BUS.register(new ClientEventsManager());
 
         MinecraftForge.EVENT_BUS.register(this);
 
+
+
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        
+
 
     }
     public static ResourceLocation createResourceLocation(String str){

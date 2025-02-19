@@ -27,5 +27,15 @@ public abstract class ArmorEffect {
 
     abstract void longDesc(ItemTooltipEvent event,int cnt);
 
-    //abstract void onLivingHurt(LivingHurtEvent event,int cnt);
+    /*
+    abstract void omLivingDeath();
+
+    abstract void onLivingHurt();
+
+    abstract void onLivingDamage();
+
+    abstract void onBlockBreak();
+
+     */
+
 }

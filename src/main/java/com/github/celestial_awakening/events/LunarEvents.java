@@ -40,6 +40,14 @@ public class LunarEvents {
     }
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
+
+    public boolean attemptProwlerSpawn(ServerLevel level){
+        int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
+        if (MathFuncs.isInRange(time,18000,3000)) {
+
+        }
+        return false;
+    }
     public boolean attemptPKSpawn(ServerLevel level){
 
         if (validDim(level, Config.solCultDimensionTypes)){

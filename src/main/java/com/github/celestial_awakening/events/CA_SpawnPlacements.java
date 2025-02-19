@@ -19,7 +19,13 @@ public class CA_SpawnPlacements {
 
             BlockState blockStateBelow=serverLevelAccessor.getBlockState(blockPos.below());
             BlockState blockState=serverLevelAccessor.getBlockState(blockPos);
-            System.out.println("SKY "  + serverLevelAccessor.canSeeSky(blockPos));
+            System.out.println("TIME " +  (serverLevelAccessor.dayTime() % 24000L>12000));
+            System.out.println("BRIGHT " +  (serverLevelAccessor.getRawBrightness(blockPos,0)<5));
+            System.out.println("heigh " +  (serverLevelAccessor.getHeightmapPos(Heightmap.Types.WORLD_SURFACE,blockPos).equals(blockPos)));
+            System.out.println("AIR " + blockState.isAir());
+            boolean b=((blockStateBelow.is(BlockTags.DIRT) || blockStateBelow.is(BlockTags.BASE_STONE_OVERWORLD)));
+            System.out.println("BLOCK BELOW " + b);
+
             if (
                     serverLevelAccessor.getRawBrightness(blockPos,0)<5 &&
                     serverLevelAccessor.dayTime() % 24000L>12000 &&
@@ -28,6 +34,7 @@ public class CA_SpawnPlacements {
                     (blockStateBelow.is(BlockTags.DIRT) || blockStateBelow.is(BlockTags.BASE_STONE_OVERWORLD)) &&
                     blockState.isAir()
             ){
+                System.out.println("CN SPAWN");
                 return true;
             }
 

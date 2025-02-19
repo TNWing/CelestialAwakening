@@ -87,8 +87,4 @@ public abstract class GenericCombatAIGoal extends Goal {
         }
 
     }
-
-    public double getCurrentAbilityRange(){
-        return Math.pow(currentAbility.getAbilityRange(mob.getTarget()),2);
-    }
 }

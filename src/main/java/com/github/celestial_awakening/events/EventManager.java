@@ -100,13 +100,7 @@ public class EventManager {
 
 
     //for some odd reason, this never fires, will have to manually spawn prowlers then since they are the only ones who can spawn naturally
-    @SubscribeEvent
-    public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
 
-        System.out.println("REGISTERING SPAWN PLACEMENTS");
-        event.register(EntityInit.NIGHT_PROWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
-        System.out.println("POST REGISTER SP");
-    }
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event){

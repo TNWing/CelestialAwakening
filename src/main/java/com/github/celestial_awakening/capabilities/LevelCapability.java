@@ -1,5 +1,4 @@
 package com.github.celestial_awakening.capabilities;
-
 import com.github.celestial_awakening.events.CommandMapValue;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
 import com.github.celestial_awakening.events.GenericCommandPattern;
@@ -43,6 +42,7 @@ public class LevelCapability{
     public int divinerEyeCurrentChangeDelay;
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
     public int pkRemainingSpawnAttempts;
+    public int prowlerSpawnCD;
     /*
     -2: not active
     -1: eye closed
@@ -65,6 +65,7 @@ public class LevelCapability{
         this.divinerEyeCD=data.divinerEyeCD;
         this.currentMoonstonePos=data.currentMoonstonePos;
         this.levelResourceKey=data.levelResourceKey;
+        this.prowlerSpawnCD=data.prowlerSpawnCD;
     }
 
     void saveNBTData(CompoundTag nbt){

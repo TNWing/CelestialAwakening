@@ -6,8 +6,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public class CA_SpawnPlacements {
@@ -15,25 +17,33 @@ public class CA_SpawnPlacements {
         ///effect give @e[type=celestial_awakening:night_prowler] minecraft:glowing 1000000 0 true
         ///execute as Dev run tp @s @e[type=celestial_awakening:night_prowler,limit=1]
         @Override
-        public boolean test(EntityType entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource source) {
-
+        public boolean test(EntityType entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
             BlockState blockStateBelow=serverLevelAccessor.getBlockState(blockPos.below());
             BlockState blockState=serverLevelAccessor.getBlockState(blockPos);
-            System.out.println("TIME " +  (serverLevelAccessor.dayTime() % 24000L>12000));
-            System.out.println("BRIGHT " +  (serverLevelAccessor.getRawBrightness(blockPos,0)<5));
-            System.out.println("heigh " +  (serverLevelAccessor.getHeightmapPos(Heightmap.Types.WORLD_SURFACE,blockPos).equals(blockPos)));
-            System.out.println("AIR " + blockState.isAir());
+            DimensionType dimensiontype =serverLevelAccessor.dimensionType();
+            int i = dimensiontype.monsterSpawnBlockLightLimit();
+            boolean darkEnough=true;
+            if (i < 15 && serverLevelAccessor.getBrightness(LightLayer.BLOCK, blockPos) > i) {
+                return false;
+            } else {
+                int j = serverLevelAccessor.getLevel().isThundering() ? serverLevelAccessor.getMaxLocalRawBrightness(blockPos, 10) : serverLevelAccessor.getMaxLocalRawBrightness(blockPos);
+                darkEnough= j <= dimensiontype.monsterSpawnLightTest().sample(randomSource);
+            }
             boolean b=((blockStateBelow.is(BlockTags.DIRT) || blockStateBelow.is(BlockTags.BASE_STONE_OVERWORLD)));
-            System.out.println("BLOCK BELOW " + b);
-
+            for (int y = blockPos.getY(); y <= serverLevelAccessor.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, blockPos).getY(); y++) {
+                BlockState aboveBlockState = serverLevelAccessor.getBlockState(new BlockPos(blockPos.getX(), y, blockPos.getZ()));
+                if (!aboveBlockState.is(BlockTags.LEAVES) && !aboveBlockState.isAir()) {
+                    return false;//if the above block is not a leaf and is not an air block, then it is a solid block that the entity cant spawn on
+                }
+            }
+            long timeMod=serverLevelAccessor.dayTime()%24000L;
             if (
-                    serverLevelAccessor.getRawBrightness(blockPos,0)<5 &&
-                    serverLevelAccessor.dayTime() % 24000L>12000 &&
-                    serverLevelAccessor.getHeightmapPos(Heightmap.Types.WORLD_SURFACE,blockPos).equals(blockPos) &&
-                    //serverLevelAccessor.canSeeSky(blockPos) &&
+                    darkEnough &&
+                    timeMod >14000 && timeMod<23000 &&
                     (blockStateBelow.is(BlockTags.DIRT) || blockStateBelow.is(BlockTags.BASE_STONE_OVERWORLD)) &&
                     blockState.isAir()
-            ){
+            )
+            {
                 System.out.println("CN SPAWN");
                 return true;
             }

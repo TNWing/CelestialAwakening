@@ -3,7 +3,6 @@ package com.github.celestial_awakening;
 import com.github.celestial_awakening.events.AttachCapabilities;
 import com.github.celestial_awakening.events.ClientEventsManager;
 import com.github.celestial_awakening.events.EventManager;
-import com.github.celestial_awakening.events.ModEventManager;
 import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomTiers;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -75,7 +74,6 @@ optimize eventmangager later, theres some stuff thats eating up performance
         MinecraftForge.EVENT_BUS.register(new EventManager());
         MinecraftForge.EVENT_BUS.register(new AttachCapabilities());
         MinecraftForge.EVENT_BUS.register(new ClientEventsManager());
-        MinecraftForge.EVENT_BUS.register(new ModEventManager());
         MinecraftForge.EVENT_BUS.register(this);
 
 

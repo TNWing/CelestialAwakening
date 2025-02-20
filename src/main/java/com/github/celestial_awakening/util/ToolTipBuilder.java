@@ -38,13 +38,4 @@ public class ToolTipBuilder {
         event.getToolTip().add(component);
 
     }
-    public static void addWeaponComponent(ItemTooltipEvent event, String effectName, int nameColor, String effectDesc, int descColor,int cnt){
-
-        String desc=effectName;
-        Component component=Component.literal(desc).setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(nameColor)));
-        event.getToolTip().add(component);
-        component=Component.literal(effectDesc).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(descColor)));
-        event.getToolTip().add(component);
-
-    }
 }

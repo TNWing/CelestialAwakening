@@ -46,11 +46,6 @@ public class RadiantArmor extends ArmorEffect {
     }
 
     @Override
-    public void onItemTooltipEvent(ItemTooltipEvent event, int cnt) {
-
-
-    }
-    @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,"Excited Particles",boldColor);

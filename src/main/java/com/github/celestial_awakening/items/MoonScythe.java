@@ -7,6 +7,9 @@ import com.github.celestial_awakening.util.MathFuncs;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -25,6 +29,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeItem;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 import static net.minecraftforge.common.ToolActions.SWORD_SWEEP;
 
@@ -35,7 +42,7 @@ public class MoonScythe extends Item implements IForgeItem {
     private final float attackSpd;
     private final int cd;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-
+    int abilityNameColor=0xC0c0c0;
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
         this.attackDamage=5.5f;
@@ -61,6 +68,14 @@ public class MoonScythe extends Item implements IForgeItem {
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", asp, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
+    }
+
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
+        Component abilityName=Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
+        components.add(abilityName);
+        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc"));
+        super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
 
     public boolean canAttackBlock(BlockState blockState, Level p_43410_, BlockPos p_43411_, Player p_43412_) {

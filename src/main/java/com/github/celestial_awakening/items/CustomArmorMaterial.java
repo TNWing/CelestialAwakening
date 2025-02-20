@@ -14,7 +14,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     MOONSTONE("moonstone", 20, new int[]{ 2, 3, 3, 2}, 12,
         SoundEvents.ARMOR_EQUIP_GENERIC, 0, 0f, () -> Ingredient.of(ItemInit.MOONSTONE.get())),
 
-    SUNSTONE("sunstone", 20, new int[]{ 2, 2, 2, 1}, 14,
+    SUNSTONE("radiant", 20, new int[]{ 2, 2, 2, 1}, 14,
             SoundEvents.ARMOR_EQUIP_LEATHER, 1, 0f, () -> Ingredient.of(ItemInit.SUNSTONE.get())),
 
 

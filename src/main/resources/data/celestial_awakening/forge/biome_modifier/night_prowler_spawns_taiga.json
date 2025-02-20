@@ -6,7 +6,7 @@
 
   "spawners": {
     "type": "celestial_awakening:night_prowler",
-    "weight": 28,
+    "weight": 8,
     "minCount": 3,
     "maxCount": 5
   }

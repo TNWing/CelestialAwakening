@@ -44,7 +44,6 @@ public class CA_SpawnPlacements {
                     blockState.isAir()
             )
             {
-                System.out.println("CN SPAWN");
                 return true;
             }
 

@@ -14,21 +14,27 @@ import com.github.celestial_awakening.items.CustomArmorMaterial;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
+import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -44,6 +50,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
@@ -108,6 +115,7 @@ public class EventManager {
         ConfigCommand.register(event.getDispatcher());
 
     }
+
     //TODO: spawn multiple prowlers in here, base it off the cel beacon spawning
     @SubscribeEvent
     public static void onMobFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event){
@@ -120,7 +128,6 @@ public class EventManager {
         DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().clear();
         DelayedFunctionManager.delayedFunctionManager.getPlayerCommandMap().clear();
     }
-
 
     @SubscribeEvent
     public void onScytheAttack(MoonScytheAttackEvent event){
@@ -264,6 +271,7 @@ public class EventManager {
     @SubscribeEvent
     public void onLivingDamage(LivingDamageEvent event){
         Entity directEntity=event.getSource().getDirectEntity();
+        Entity causingEntity=event.getSource().getEntity();
         LivingEntity livingEntity=event.getEntity();
         if (!livingEntity.level().isClientSide){
 
@@ -285,8 +293,8 @@ public class EventManager {
                 }
             }
 
-            if(directEntity instanceof Player){
-                Player player=(Player) event.getSource().getDirectEntity();
+            if(causingEntity instanceof Player){
+                Player player=(Player) causingEntity;
                 armorCheck(player,event,armorEffectLivingDamage);
             }
             /*
@@ -310,9 +318,9 @@ public class EventManager {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event){
         if (!event.getEntity().level().isClientSide){
-            LivingEntity livingEntity=event.getEntity();
-            if(event.getSource().getDirectEntity() instanceof Player){
-                Player player=(Player) event.getSource().getDirectEntity();
+            LivingEntity deadEntity=event.getEntity();
+            if(event.getSource().getEntity() instanceof Player){
+                Player player=(Player) event.getSource().getEntity();
                 armorCheck(player,event,armorEffectLivingDeath);
             }
         }
@@ -327,17 +335,34 @@ public class EventManager {
     }
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event){
-        if (event.getSource() instanceof DamageSourceNoIFrames){
-            event.getEntity().invulnerableTime= ((DamageSourceNoIFrames) event.getSource()).invulTicks;
-        }
-        if (!event.getEntity().level().isClientSide){
-            if (event.getEntity() instanceof Player){
+        LivingEntity target=event.getEntity();
+        if (!target.level().isClientSide){
+            float amt=event.getAmount();
+            ServerLevel level= (ServerLevel) target.level();
+            Entity causingEntity=event.getSource().getEntity();
+            Entity directEntity=event.getSource().getDirectEntity();
+            if (event.getSource() instanceof DamageSourceNoIFrames){
+                target.invulnerableTime= ((DamageSourceNoIFrames) event.getSource()).invulTicks;
+            }
+            if (target instanceof Player){
                 Player player=(Player) event.getEntity();
                 armorCheck(player,event,armorEffectLivingHurt);
             }
-            if(event.getSource().getDirectEntity() instanceof Player){
-                Player player=(Player) event.getSource().getDirectEntity();
+            if(causingEntity instanceof Player){
+                Player player=(Player) event.getSource().getEntity();
                 armorCheck(player,event,armorEffectLivingHurt);
+            }
+            if (directEntity instanceof AbstractArrow){
+                AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
+                if (arrow.getTags().contains("CA_FluorescentBoost") && arrow.getOwner() instanceof LivingEntity){
+                    Vec3 offset=new Vec3(3,0.5f,3);
+                    AABB aabb=new AABB(target.position().subtract(offset),target.position().add(offset));
+                    List<LivingEntity> livingEntityList= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate((LivingEntity)arrow.getOwner()));
+                    for (LivingEntity livingEntity:livingEntityList) {
+                        livingEntity.hurt(level.damageSources().mobAttack((LivingEntity) arrow.getOwner()), amt*0.25f);
+                        livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 10, 0));
+                    }
+                }
             }
         }
     }

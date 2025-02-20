@@ -28,13 +28,16 @@ import java.util.Random;
 
 public class RadiantArmor extends ArmorEffect {
     Random random=new Random();
-    int boldColor=0x006700;
-    int infoColor=0x00b300;
+    int boldColor=0xe89a2c;
+    int infoColor=0xdaa458;//daa458
     static Item[] seedArray={Items.BEETROOT_SEEDS,Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.PUMPKIN_SEEDS};
     @Override
     public void performActions(Player player, int cnt, Event event) {
         if (event instanceof BlockEvent.BreakEvent){
             pieceEffect_Crop((BlockEvent.BreakEvent) event,cnt);
+        }
+        else if (event instanceof ItemTooltipEvent){
+            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
         }
         else if (event instanceof LivingDeathEvent){
             pieceEffect_Death((LivingDeathEvent) event,cnt);

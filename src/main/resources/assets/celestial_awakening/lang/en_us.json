@@ -75,5 +75,9 @@
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
-  "tooltip.celestial_awakening.fluorescent_bow.tooltip": "Dangersense\nUpon nocking an arrow, reveal all nearby enemies that aren't invisible."
+  "tooltip.celestial_awakening.fluorescent_bow.tooltip": "Dangersense\nUpon nocking an arrow, reveal all nearby enemies that aren't invisible.",
+  "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",
+  "tooltip.celestial_awakening.fluorescent_bow.dangersense_desc": "Upon nocking an arrow, reveal all nearby enemies that aren't invisible.",
+  "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name": "Revealing Shot",
+  "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target."
 }

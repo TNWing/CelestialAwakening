@@ -1,6 +1,8 @@
 package com.github.celestial_awakening.items;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -26,9 +28,16 @@ public class FluorescentBow extends BowItem {
     public FluorescentBow(Properties p_40660_) {
         super(p_40660_);
     }
+    int dangersenseNameColor=0xe7e82c;
+    int dangersenseDescColor=0xe2e2e1;
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
-        components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.tooltip"));
+        Component dangerSenseName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(dangersenseNameColor)));
+        components.add(dangerSenseName);
+        components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_desc"));
+        Component revealShotName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(dangersenseNameColor)));
+        components.add(revealShotName);
+        components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc"));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
 
@@ -59,6 +68,7 @@ public class FluorescentBow extends BowItem {
                         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
                         AbstractArrow abstractarrow = arrowitem.createArrow(level, itemstack, player);
                         abstractarrow = customArrow(abstractarrow);
+                        abstractarrow.addTag("CA_FluorescentBoost");
                         abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 2.0F, 1.0F);
                         abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()-0.25D);
                         if (f == 1.0F) {
@@ -127,7 +137,7 @@ public class FluorescentBow extends BowItem {
         Predicate pred= o -> o!=user && !((LivingEntity)o).hasEffect(MobEffects.INVISIBILITY);
         List<LivingEntity> entities=level.getEntitiesOfClass(LivingEntity.class,aabb,pred);
         for (LivingEntity entity:entities) {
-            MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.GLOWING, 70, 0);
+            MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.GLOWING, 80, 0);
             entity.addEffect(mobeffectinstance, user);
         }
     }

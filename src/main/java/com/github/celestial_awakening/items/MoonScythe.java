@@ -42,7 +42,8 @@ public class MoonScythe extends Item implements IForgeItem {
     private final float attackSpd;
     private final int cd;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-    int abilityNameColor=0xC0c0c0;
+    int abilityNameColor=0xbfbfbd;
+    int abilityDescColor=0xd8d7d5;
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
         this.attackDamage=5.5f;
@@ -74,7 +75,7 @@ public class MoonScythe extends Item implements IForgeItem {
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         Component abilityName=Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(abilityName);
-        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc"));
+        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
 

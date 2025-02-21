@@ -139,6 +139,19 @@ public class EventManager {
 
     }
 
+    //TODO: make sure this works
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event){
+        if (event.isWasDeath()){
+            //It seems that, if player dies, their capability doesn't work anymore. See why
+            //it seems to work now? maybe it was the onLivingEntityDeath thing i changed
+            //should reset capability data so maybe change this
+            event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
+                    oldStore->event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copy(oldStore)));
+        }
+
+    }
+
     @SubscribeEvent
     public static void onServerload(LevelEvent.Unload event) {
         // Clear the data in DelayedFunctionManager when a world is unloaded

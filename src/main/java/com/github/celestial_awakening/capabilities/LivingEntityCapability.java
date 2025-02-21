@@ -176,5 +176,11 @@ public class LivingEntityCapability {
         return nbt;
     }
 
+    public void copy(LivingEntityCapability data){
+        this.abilityDataMap=data.abilityDataMap;
+        this.insanityPts=data.insanityPts;
+        this.navigauge=data.navigauge;
+    }
+
 
 }

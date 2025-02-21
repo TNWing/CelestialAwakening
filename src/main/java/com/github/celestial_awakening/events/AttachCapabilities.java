@@ -7,7 +7,6 @@ import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.items.MoonScythe;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +26,7 @@ public class AttachCapabilities {
     public void onAttachLevelCap(AttachCapabilitiesEvent<Level> event){
         Level level=event.getObject();
         if (!event.getCapabilities().containsValue(LevelCapabilityProvider.LevelCap)){
-            event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"level_data"),new LevelCapabilityProvider(level));
+            event.addCapability(CelestialAwakening.createResourceLocation("level_data"),new LevelCapabilityProvider(level));
 
         }
     }
@@ -37,7 +36,7 @@ public class AttachCapabilities {
         ItemStack itemStack =event.getObject();
         if (itemStack.getItem() instanceof MoonScythe){
             if (!event.getCapabilities().containsValue(MoonScytheCapabilityProvider.ScytheCap)){
-                event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"scythe_data"),new MoonScytheCapabilityProvider());
+                event.addCapability(CelestialAwakening.createResourceLocation("scythe_data"),new MoonScytheCapabilityProvider());
             }
         }
     }
@@ -58,18 +57,18 @@ public class AttachCapabilities {
         if (entity instanceof CA_Projectile){
             if (entity instanceof LightRay){
                 if (!event.getCapabilities().containsValue(LightRayCapabilityProvider.cap)){
-                    event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"light_ray_data"),new LightRayCapabilityProvider());
+                    event.addCapability(CelestialAwakening.createResourceLocation("light_ray_data"),new LightRayCapabilityProvider());
 
                 }
             }
             if (!event.getCapabilities().containsValue(ProjCapabilityProvider.ProjCap)){//TODO
-                event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"projectile_data"),new ProjCapabilityProvider((CA_Projectile) event.getObject()));
+                event.addCapability(CelestialAwakening.createResourceLocation("projectile_data"),new ProjCapabilityProvider((CA_Projectile) event.getObject()));
             }
         }
 
         else if (entity instanceof Player){
             if (!event.getCapabilities().containsValue(LivingEntityCapabilityProvider.playerCapability)){
-                event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"player_data"),new LivingEntityCapabilityProvider());
+                event.addCapability(CelestialAwakening.createResourceLocation("player_data"),new LivingEntityCapabilityProvider());
             }
         }
     }

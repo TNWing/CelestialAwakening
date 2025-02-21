@@ -1,9 +1,11 @@
 package com.github.celestial_awakening.networking;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.networking.packets.*;
+import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
@@ -20,7 +22,7 @@ public class ModNetwork {
 
     public static void register(){
         SimpleChannel channel= NetworkRegistry.ChannelBuilder
-                .named(new ResourceLocation(CelestialAwakening.MODID,"messages"))
+                .named(CelestialAwakening.createResourceLocation("messages"))
                 .networkProtocolVersion(()->"1.0")
                 .clientAcceptedVersions(s->true)
                 .serverAcceptedVersions(s->true)

@@ -77,14 +77,14 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/generated")).texture("layer0",
-                new ResourceLocation(CelestialAwakening.MODID,"item/" + item.getId().getPath())
+                ResourceLocation.parse("item/generated")).texture("layer0",
+                CelestialAwakening.createResourceLocation("item/" + item.getId().getPath())
                 );
     }
     private ItemModelBuilder heldItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/handheld")).texture("layer0",
-                new ResourceLocation(CelestialAwakening.MODID,"item/" + item.getId().getPath()));
+                ResourceLocation.parse("item/handheld")).texture("layer0",
+                CelestialAwakening.createResourceLocation("item/" + item.getId().getPath()));
     }
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
         final String MOD_ID = CelestialAwakening.MODID;
@@ -106,9 +106,9 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = new ResourceLocation(MOD_ID, armorItemPath);
-                ResourceLocation trimResLoc = new ResourceLocation(trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = new ResourceLocation(MOD_ID, currentTrimName);
+                ResourceLocation armorItemResLoc =CelestialAwakening.createResourceLocation(armorItemPath);
+                ResourceLocation trimResLoc = ResourceLocation.parse(trimPath); // minecraft namespace
+                ResourceLocation trimNameResLoc = CelestialAwakening.createResourceLocation(currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
                 // avoid an IllegalArgumentException
@@ -126,7 +126,7 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
-                                new ResourceLocation(MOD_ID,
+                                CelestialAwakening.createResourceLocation(
                                         "item/" + itemRegistryObject.getId().getPath()));
             });
         }

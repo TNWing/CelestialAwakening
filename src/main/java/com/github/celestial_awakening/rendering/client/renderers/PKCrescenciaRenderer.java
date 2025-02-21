@@ -60,7 +60,7 @@ public void render(YourEntity entity, float entityYaw, float partialTicks, Matri
     public ResourceLocation getTextureLocation(PhantomKnight_Crescencia entity) {
         if (entity.getActionId()==0){
         }
-        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/pk_cres.png");
+        return CelestialAwakening.createResourceLocation("textures/entity/pk_cres.png");
     }
 }
 

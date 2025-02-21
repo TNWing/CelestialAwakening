@@ -10,16 +10,6 @@ import net.minecraftforge.eventbus.api.Event;
 import java.util.function.Predicate;
 
 public class ManiaArmor extends ArmorEffect {
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (cnt==4){
-            frenzy(player,event);
-            if (event instanceof LivingDamageEvent){
-                hysteria(player, (LivingDamageEvent) event);
-            }
-
-        }
-    }
 
     @Override
     public void onItemTooltipEvent(ItemTooltipEvent event, int cnt) {

@@ -13,7 +13,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 import java.util.Random;
@@ -22,30 +21,9 @@ import java.util.function.Predicate;
 public class EverlightArmor extends ArmorEffect{
     int boldColor=0xC0c0c0;
     int infoColor=0xC3c3c3;
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-        else if (event instanceof LivingDeathEvent){
-            pieceEffect(player,cnt);
-        }
-        else if (cnt==4){
-            if (event instanceof TickEvent.PlayerTickEvent){
-                TickEvent.PlayerTickEvent playerTickEvent= (TickEvent.PlayerTickEvent) event;
-                if (playerTickEvent.phase== TickEvent.Phase.END && player.tickCount%100==0){
-                    resurgence(player);
-                }
 
-            }
-            else if (event instanceof LivingDamageEvent){
-                starGazer( (LivingDamageEvent) event,player);
-            }
-        }
-
-    }
     @Override
-    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player, int cnt){
+    public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player, int cnt){
         if (cnt==4){
             if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
                 resurgence(player);
@@ -53,12 +31,12 @@ public class EverlightArmor extends ArmorEffect{
         }
     }
     @Override
-    void onLivingDeath(LivingDeathEvent event,Player player, int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player, int cnt){
         unyieldingFlame(event,player,cnt);
     }
 
     @Override
-    void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
+    public void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
         if (cnt==4){
             starGazer(event,player);
         }

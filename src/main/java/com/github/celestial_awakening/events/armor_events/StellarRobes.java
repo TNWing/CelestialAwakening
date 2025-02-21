@@ -8,13 +8,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public class StellarRobes extends ArmorEffect {
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-    }
-
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
 

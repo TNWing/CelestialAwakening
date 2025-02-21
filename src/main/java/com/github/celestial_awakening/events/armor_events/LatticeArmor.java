@@ -10,11 +10,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
@@ -25,23 +22,7 @@ public class LatticeArmor extends ArmorEffect{
     //                source.invulTicks=target.invulnerableTime;
 
 
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof LivingEquipmentChangeEvent){
-            glacierAttackMod(player,cnt);
-            pressure(player,cnt);
-        }
-        if (cnt==4){
-            if (event instanceof TickEvent.PlayerTickEvent){
-                glacier(player);
-                frostburn(player);
-            }
-            else if (event instanceof LivingDamageEvent){
-                glacierSlow(player, (LivingDamageEvent) event);
-            }
-        }
 
-    }
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {

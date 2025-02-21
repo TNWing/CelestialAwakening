@@ -18,7 +18,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
@@ -32,42 +31,18 @@ public class RemnantArmor extends ArmorEffect {
     float[] devouringLightSaturationLevels={0.5f,0.75f,1f,1f};
 
     @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof LivingDeathEvent){
-            devouringLight((LivingDeathEvent) event,player,cnt);
-        }
-        else if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-        else if (cnt==4){
-            if (event instanceof LivingHurtEvent){
-                LivingHurtEvent hurtEvent= (LivingHurtEvent) event;
-                if (hurtEvent.getSource().getDirectEntity() == player){
-                    collapse(hurtEvent,player);
-                }
-            }
-            else if (event instanceof LivingDamageEvent){
-                if (((LivingDamageEvent) event).getEntity() ==player){
-
-                    finalLight(player,((LivingDamageEvent) event).getAmount());
-                }
-            }
-        }
-
-    }
-    @Override
-    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         devouringLight(event,player,cnt);
     }
     @Override
-    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         if (cnt==4){
             collapse(event,player);
         }
 
     }
     @Override
-    void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
+    public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         if (cnt==4){
             finalLight(player,event.getAmount());
         }

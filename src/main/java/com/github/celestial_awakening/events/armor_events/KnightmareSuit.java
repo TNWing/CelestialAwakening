@@ -9,7 +9,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public class KnightmareSuit extends ArmorEffect{
     int boldColor=0xC0c0c0;
@@ -38,21 +37,6 @@ public class KnightmareSuit extends ArmorEffect{
         Notoriety is replaced if a stronger enemy is killed
 
      */
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-        else if (event instanceof LivingDeathEvent){
-            infamy((LivingDeathEvent) event,player,cnt);
-        }
-        else if (event instanceof LivingHurtEvent){
-            infamyBoost((LivingHurtEvent) event,player);
-        }
-        else if (cnt>=4){
-
-        }
-    }
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
@@ -73,12 +57,12 @@ public class KnightmareSuit extends ArmorEffect{
 
 
     @Override
-    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         infamy(event,player,cnt);
     }
 
     @Override
-    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         infamyBoost(event,player);
         if (cnt==4){
             applyHonorDuel(event,player);

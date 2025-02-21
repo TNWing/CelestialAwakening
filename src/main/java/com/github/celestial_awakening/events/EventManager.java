@@ -47,7 +47,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
@@ -180,7 +179,6 @@ public class EventManager {
                     cap.changeWaveCD(100);
                 }
             }
-
         }
     }
 
@@ -207,7 +205,7 @@ public class EventManager {
             }
         }
         if (cnt>0){
-            lunarArmor.getValue().performActions(player,cnt,event);
+            ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
         }
     }
 
@@ -216,9 +214,9 @@ public class EventManager {
         EquipmentSlot slot=event.getSlot();
         if (slot.isArmor() && event.getEntity() instanceof Player){
             Player player= (Player) event.getEntity();
-            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorMaterials.entrySet()) {
+            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectEquipmentChange.entrySet()) {
                 int cnt=countPieces(player,entry.getKey());
-                entry.getValue().performActions(player,cnt,event);
+                entry.getValue().onEquipmentChange(event,player,cnt);
             }
         }
     }
@@ -232,7 +230,7 @@ public class EventManager {
                 CustomArmorMaterial material= (CustomArmorMaterial) armorItem.getMaterial();
                 if(armorMaterials.containsKey(material)){
                     int cnt=countPieces(player,material);
-                    armorMaterials.get(material).performActions(player,cnt,event);
+                    armorMaterials.get(material).onItemTooltipEvent(event,cnt);
                 }
 
             }
@@ -282,7 +280,10 @@ public class EventManager {
                 }
             }
             solarEvents.dropSunstone(level,event);
-            armorCheck(player,event,armorEffectBlockBreak);
+            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectBlockBreak.entrySet()) {
+                int cnt=countPieces(player,entry.getKey());
+                entry.getValue().onBlockBreak(event,player,cnt);
+            }
         }
     }
 
@@ -294,7 +295,10 @@ public class EventManager {
         if (!target.level().isClientSide){
             if (target instanceof Player){
                 Player player=(Player) target;
-                armorCheck(player,event,armorEffectLivingDamageSelf);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    entry.getValue().onLivingDamageSelf(event,player,cnt);
+                }
                 if (directEntity instanceof Mob){
                     Mob mob= (Mob) directEntity;
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
@@ -310,7 +314,10 @@ public class EventManager {
 
             if(causingEntity instanceof Player){
                 Player player=(Player) causingEntity;
-                armorCheck(player,event,armorEffectLivingDamageOthers);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    entry.getValue().onLivingDamageOthers(event,player,cnt);
+                }
             }
             /*
             if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
@@ -336,7 +343,10 @@ public class EventManager {
             LivingEntity deadEntity=event.getEntity();
             if(event.getSource().getEntity() instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
-                armorCheck(player,event,armorEffectLivingDeath);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    entry.getValue().onLivingDeath(event,player,cnt);
+                }
             }
         }
     }
@@ -361,11 +371,17 @@ public class EventManager {
             }
             if (target instanceof Player){
                 Player player=(Player) event.getEntity();
-                armorCheck(player,event,armorEffectLivingHurtSelf);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingHurtSelf.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    entry.getValue().onLivingHurtSelf(event,player,cnt);
+                }
             }
             if(causingEntity instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
-                armorCheck(player,event,armorEffectLivingHurtOthers);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingHurtOthers.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    entry.getValue().onLivingHurtOthers(event,player,cnt);
+                }
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
@@ -489,11 +505,14 @@ public class EventManager {
 
 
     @SubscribeEvent
-    public void onInventoryTick(TickEvent.PlayerTickEvent event){
+    public void onPlayerTick(TickEvent.PlayerTickEvent event){
         Player player=event.player;
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
-                armorCheck(player,event,armorEffectTick);
+            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectTick.entrySet()) {
+                int cnt=countPieces(player,entry.getKey());
+                entry.getValue().onPlayerTick(event,player,cnt);
+            }
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
                 cap.tickAbilityMap();
@@ -501,13 +520,6 @@ public class EventManager {
         }
 
 
-    }
-
-    public void armorCheck(Player player,Event event,Map<ArmorMaterial,ArmorEffect> map){
-        for (Map.Entry<ArmorMaterial,ArmorEffect> entry:map.entrySet()) {
-            int cnt=countPieces(player,entry.getKey());
-            entry.getValue().performActions(player,cnt,event);
-        }
     }
 
     private int countPieces(Player player, ArmorMaterial material) {

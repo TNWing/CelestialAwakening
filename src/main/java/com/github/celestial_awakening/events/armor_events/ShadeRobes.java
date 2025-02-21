@@ -11,21 +11,9 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public class ShadeRobes extends ArmorEffect {
-    @Override
-    public void performActions(Player player,int cnt, Event event) {
-        if (event instanceof LivingEquipmentChangeEvent){
-            pieceEffect(player,cnt);
-        }
-        else if(event instanceof PlayerEvent.PlayerLoggedInEvent){
-            pieceEffect(player,cnt);
-        }
-        else if (event instanceof PlayerEvent.Clone){
-            pieceEffect(player,cnt);
-        }
+
         /*
             @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event){
@@ -38,20 +26,20 @@ public class ShadeRobes extends ArmorEffect {
         }
     }
          */
-    }
+
 
     @Override
-    void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
+    public void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
         pieceEffect(player,cnt);
     }
     @Override
-    void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
+    public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         if (cnt==4){
             fadeEffect(event,player);
         }
     }
     @Override
-    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         if (cnt==4){
             shadowStrikeEffect(event,player);
         }

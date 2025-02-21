@@ -9,13 +9,10 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public abstract class ArmorEffect {
     static int nightStart=12000;
     static int nightEnd=24000;
-    public abstract void performActions(Player player, int cnt, Event event);
-
 
     public void onItemTooltipEvent(ItemTooltipEvent event, int cnt) {
         if (cnt<1){
@@ -33,41 +30,41 @@ public abstract class ArmorEffect {
 
     abstract void longDesc(ItemTooltipEvent event,int cnt);
 
-    void onEquipmentChange(LivingEquipmentChangeEvent event, Player player, int cnt){
+    public void onEquipmentChange(LivingEquipmentChangeEvent event, Player player, int cnt){
 
     }
 
 
 
-    void onPlayerTick(TickEvent.PlayerTickEvent event, Player player, int cnt){
+    public void onPlayerTick(TickEvent.PlayerTickEvent event, Player player, int cnt){
 
     }
 
 
-    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
 
     }
 
-    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
 
     }
 
-    void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
 
     }
 
-    void onLivingDamageOthers(LivingDamageEvent event,Player player, int cnt){
+    public void onLivingDamageOthers(LivingDamageEvent event,Player player, int cnt){
 
     }
 
-    void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
+    public void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
 
     }
 
-    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+    public void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
 
     }
-    void forceUpdate(Player player,int cnt){//used to force updates such as due to player death
+    public void forceUpdate(Player player,int cnt){//used to force updates such as due to player death
 
     }
 

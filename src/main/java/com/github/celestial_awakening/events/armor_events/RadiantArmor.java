@@ -21,7 +21,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 import java.util.Random;
@@ -31,33 +30,18 @@ public class RadiantArmor extends ArmorEffect {
     int boldColor=0xe89a2c;
     int infoColor=0xdaa458;//daa458
     static Item[] seedArray={Items.BEETROOT_SEEDS,Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.PUMPKIN_SEEDS};
+
     @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof BlockEvent.BreakEvent){
-            pieceEffect_Crop((BlockEvent.BreakEvent) event,cnt);
-        }
-        else if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-        else if (event instanceof LivingDeathEvent){
-            pieceEffect_Death((LivingDeathEvent) event,cnt);
-        }
-        else if (cnt==4 && event instanceof TickEvent.PlayerTickEvent){
-            excitedParticles((TickEvent.PlayerTickEvent) event);
-            rejuvenatingWave((TickEvent.PlayerTickEvent) event);
-        }
-    }
-    @Override
-    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+    public void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
         pieceEffect_Crop(event,cnt);
     }
 
     @Override
-    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         pieceEffect_Death(event,cnt);
     }
     @Override
-    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
+    public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
         if (cnt==4){
             excitedParticles(event);
             rejuvenatingWave(event);

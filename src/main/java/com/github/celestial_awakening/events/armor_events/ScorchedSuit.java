@@ -10,7 +10,6 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.TierSortingRegistry;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -22,20 +21,6 @@ public class ScorchedSuit extends ArmorEffect {
     String coreBreakSpeedID;
     String coreArmorPointID;
     String coreArmorToughnessID;
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof LivingDamageEvent|| event instanceof PlayerEvent.BreakSpeed || event instanceof TickEvent.LevelTickEvent){
-            if (cnt>0){
-                melt(player,cnt,event);
-            }
-            if (cnt==4){
-                burningVeil();
-                //coreResonance(player);
-            }
-        }
-
-
-    }
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {

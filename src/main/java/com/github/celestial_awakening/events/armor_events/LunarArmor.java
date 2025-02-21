@@ -43,37 +43,12 @@ public class LunarArmor extends ArmorEffect {
 
     also, should use loottables instead of modifying these events
  */
-
     @Override
-    public void performActions(Player player,int cnt, Event event) {
-        //may need to account for log in event and clone event
-        if (event instanceof BlockEvent.BreakEvent){
-            pieceEffectBlockBreak((BlockEvent.BreakEvent) event,cnt);
-        }
-        else if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-        else if (event instanceof ItemFishedEvent){//maybe make it based on loottables instead of events
-            onFishEvent((ItemFishedEvent) event,cnt);
-        }
-        else if (event instanceof LivingEquipmentChangeEvent || event instanceof TickEvent.PlayerTickEvent){
-            setEffect(player,cnt,event);
-            if (cnt!=4){
-                player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID.fromString(moonlightPath));
-            }
-        }
-        else if (cnt==4){
-            if (event instanceof LivingDamageEvent){
-                orbiter((LivingDamageEvent) event,player);
-            }
-        }
-    }
-    @Override
-    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+    public void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
         pieceEffectBlockBreak(event,cnt);
     }
     @Override
-    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
+    public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
         if (cnt==4){
             if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
                 blessedNightEffects(event,player);
@@ -81,7 +56,7 @@ public class LunarArmor extends ArmorEffect {
         }
     }
     @Override
-    void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
+    public void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
         if (cnt==4){
             blessedNightEffects(event,player);
         }
@@ -91,7 +66,7 @@ public class LunarArmor extends ArmorEffect {
     }
 
     @Override
-    void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
+    public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         if (cnt==4){
             orbiter(event,player);
         }

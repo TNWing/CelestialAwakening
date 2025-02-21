@@ -11,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public class UmbraArmor extends ArmorEffect {
     int boldColor=0xC0c0c0;
@@ -22,29 +21,13 @@ public class UmbraArmor extends ArmorEffect {
     float[] dreadVals={0.4f,0.6f,0.9f,1.3f};
     int[] dreadCD={600,500,400,300};
     int[] dreadCDReduction={20,40,60,80};
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof LivingHurtEvent){
-            dread((LivingHurtEvent) event,player,cnt);
-            if (cnt==4){
-                pursuit((LivingHurtEvent) event,player);
-                cursedLight((LivingHurtEvent) event,player);
-            }
-        }
-        else if (event instanceof LivingDeathEvent){
-            cdModifier((LivingDeathEvent) event,player,cnt);
-        }
-        else if (event instanceof ItemTooltipEvent){
-            onItemTooltipEvent((ItemTooltipEvent) event,cnt);
-        }
-    }
 
     @Override
-    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         cdModifier( event,player,cnt);
     }
     @Override
-    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+    public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         dread( event,player,cnt);
         if (cnt==4){
             pursuit(event,player);

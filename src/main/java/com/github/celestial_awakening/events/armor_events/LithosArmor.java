@@ -14,7 +14,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
@@ -24,16 +23,7 @@ public class LithosArmor extends ArmorEffect {
     String abilityImpact="Lithos_Impact";
 
     String abilityMeteor="Lithos_Meteor";
-    @Override
-    public void performActions(Player player, int cnt, Event event) {
-        if (event instanceof LivingHurtEvent){
-            if (cnt==4){
-                livingMeteor((LivingHurtEvent) event,player);
-                impact((LivingHurtEvent) event,player);
-            }
-            shatterSkin((LivingHurtEvent) event,player,cnt);
-        }
-    }
+
 /*
 Set Bonus
 Impact

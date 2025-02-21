@@ -61,7 +61,7 @@ public class ClientEventsManager {
 
                     if (cap!=null && cap.divinerEyeToState>-2){
                         if (!minecraft.isPaused()) { // Check if the game is not paused
-                            System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
+                            //System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
                         }
                         renderDivinerEye(event.getPoseStack(),level,cap,event);
                     }

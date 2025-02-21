@@ -7,6 +7,9 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class ToolTipBuilder {
     public static void addShiftInfo(ItemTooltipEvent event){
+        /*
+        i can probably put my text before mc's standard text (such as armor stats) by grabbing the tooltip list, and appending mine to the front of the thing.
+         */
         Component component=Component.literal("Hold Shift for Details").setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.WHITE));
         event.getToolTip().add(component);
     }

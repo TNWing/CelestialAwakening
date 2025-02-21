@@ -2,7 +2,13 @@ package com.github.celestial_awakening.events.armor_events;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 public abstract class ArmorEffect {
@@ -27,15 +33,42 @@ public abstract class ArmorEffect {
 
     abstract void longDesc(ItemTooltipEvent event,int cnt);
 
-    /*
-    abstract void omLivingDeath();
+    void onEquipmentChange(LivingEquipmentChangeEvent event, Player player, int cnt){
 
-    abstract void onLivingHurt();
+    }
 
-    abstract void onLivingDamage();
 
-    abstract void onBlockBreak();
 
-     */
+    void onPlayerTick(TickEvent.PlayerTickEvent event, Player player, int cnt){
+
+    }
+
+
+    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+
+    }
+
+    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+
+    }
+
+    void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
+
+    }
+
+    void onLivingDamageOthers(LivingDamageEvent event,Player player, int cnt){
+
+    }
+
+    void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
+
+    }
+
+    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+
+    }
+    void forceUpdate(Player player,int cnt){//used to force updates such as due to player death
+
+    }
 
 }

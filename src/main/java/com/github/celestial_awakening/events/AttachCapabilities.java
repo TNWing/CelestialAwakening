@@ -46,7 +46,7 @@ public class AttachCapabilities {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         UUID playerID = player.getUUID();
-        PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+        LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null){
             cap.setUUID(playerID);
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);
@@ -68,8 +68,8 @@ public class AttachCapabilities {
         }
 
         else if (entity instanceof Player){
-            if (!event.getCapabilities().containsValue(PlayerCapabilityProvider.playerCapability)){
-                event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"player_data"),new PlayerCapabilityProvider());
+            if (!event.getCapabilities().containsValue(LivingEntityCapabilityProvider.playerCapability)){
+                event.addCapability(new ResourceLocation(CelestialAwakening.MODID,"player_data"),new LivingEntityCapabilityProvider());
             }
         }
     }

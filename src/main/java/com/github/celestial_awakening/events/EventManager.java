@@ -17,6 +17,8 @@ import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPac
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -37,6 +39,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -87,19 +90,34 @@ public class EventManager {
 
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectTick=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(lunarArmor).put(everlightArmor).put(stellarRobes).put(radiantArmor).put(umbraArmor).build();
+            .put(lunarArmor).put(everlightArmor).put(radiantArmor)
+            .build();
+
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectEquipmentChange=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+            .put(lunarArmor).put(shadeArmor)
+            .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectBlockBreak=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(radiantArmor).put(lunarArmor).build();
+            .put(radiantArmor).put(lunarArmor)
+            .build();
 
-    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurt=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(lunarArmor).put(shadeArmor).put(radiantArmor).put(remnantArmor).put(umbraArmor).put(knightmareSuit).build();
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurtOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+            .put(umbraArmor).put(shadeArmor).put(remnantArmor).put(knightmareSuit)
+            .build();
 
-    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamage=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(shadeArmor).put(radiantArmor).put(stellarRobes).put(lunarArmor).put(remnantArmor).put(everlightArmor).build();
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurtSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+            .build();
+
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+            .build();
+
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+            .put(shadeArmor).put(remnantArmor).put(lunarArmor).put(everlightArmor)
+            .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDeath=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(stellarRobes).put(radiantArmor).put(umbraArmor).put(knightmareSuit).build();
+            .put(radiantArmor).put(remnantArmor).put(umbraArmor).put(knightmareSuit).put(everlightArmor)
+            .build();
 
     private static ParticleManager particleManager=ParticleManager.createParticleManager();
 
@@ -272,20 +290,17 @@ public class EventManager {
     public void onLivingDamage(LivingDamageEvent event){
         Entity directEntity=event.getSource().getDirectEntity();
         Entity causingEntity=event.getSource().getEntity();
-        LivingEntity livingEntity=event.getEntity();
-        if (!livingEntity.level().isClientSide){
-
-            if (livingEntity instanceof Player){
-                Player player=(Player) livingEntity;
-
-                armorCheck(player,event,armorEffectLivingDamage);
-
+        LivingEntity target=event.getEntity();
+        if (!target.level().isClientSide){
+            if (target instanceof Player){
+                Player player=(Player) target;
+                armorCheck(player,event,armorEffectLivingDamageSelf);
                 if (directEntity instanceof Mob){
                     Mob mob= (Mob) directEntity;
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
-                            PlayerCapability cap=livingEntity.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+                            LivingEntityCapability cap=target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
                             if (cap!=null){
                             }
                         }
@@ -295,7 +310,7 @@ public class EventManager {
 
             if(causingEntity instanceof Player){
                 Player player=(Player) causingEntity;
-                armorCheck(player,event,armorEffectLivingDamage);
+                armorCheck(player,event,armorEffectLivingDamageOthers);
             }
             /*
             if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
@@ -346,11 +361,11 @@ public class EventManager {
             }
             if (target instanceof Player){
                 Player player=(Player) event.getEntity();
-                armorCheck(player,event,armorEffectLivingHurt);
+                armorCheck(player,event,armorEffectLivingHurtSelf);
             }
             if(causingEntity instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
-                armorCheck(player,event,armorEffectLivingHurt);
+                armorCheck(player,event,armorEffectLivingHurtOthers);
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
@@ -385,6 +400,44 @@ public class EventManager {
             }
         }
     }
+
+
+        @SubscribeEvent
+        public void onEntityLoad(EntityJoinLevelEvent event) {
+            if (!(event.getEntity() instanceof LivingEntity)) {
+                return;
+            }
+
+            LivingEntity entity = (LivingEntity) event.getEntity();
+
+            CompoundTag entityTag = entity.serializeNBT();
+            if (!entityTag.contains("ActiveEffects")) {
+                return;
+            }
+
+            ListTag effectsList = entityTag.getList("ActiveEffects", 10); // 10 = CompoundTag type
+            System.out.println("ENTITY OF NAME " + entity + " HAS ACTIVE EFFECT LIST? " + effectsList);
+            // Clear current effects so we can re-add them
+            //entity.removeAllEffects();
+
+            for (int i = 0; i < effectsList.size(); i++) {
+                CompoundTag effectTag = effectsList.getCompound(i);
+                System.out.println("ETAG IS " + effectTag);
+                MobEffectInstance effectInstance = null;
+                if (effectTag.contains("Stage")) {
+                    System.out.println("WE HAVE A STAGE  TAG HERE");
+                    // Use your custom loader to get an instance with updated custom data
+                    //effectInstance = CustomMobEffectInstance.load(effectTag);
+                } else {
+                    // Fall back to vanilla loading if no custom data is present
+                    effectInstance = MobEffectInstance.load(effectTag);
+                }
+                if (effectInstance != null) {
+                    //entity.addEffect(effectInstance);
+                }
+            }
+        }
+
     /*
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) throws NoSuchFieldException, IllegalAccessException {
@@ -441,7 +494,7 @@ public class EventManager {
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
                 armorCheck(player,event,armorEffectTick);
-            PlayerCapability cap=player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
                 cap.tickAbilityMap();
             }

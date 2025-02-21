@@ -1,12 +1,12 @@
 package com.github.celestial_awakening.networking.client;
 
-import com.github.celestial_awakening.capabilities.PlayerCapability;
-import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
+import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import net.minecraft.client.Minecraft;
 
 public class ClientPlayerData {
-    public static void setData(PlayerCapability newData){
-        PlayerCapability cap= Minecraft.getInstance().player.getCapability(PlayerCapabilityProvider.playerCapability).orElse(null);
+    public static void setData(LivingEntityCapability newData){
+        LivingEntityCapability cap= Minecraft.getInstance().player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null){
             cap.updateData(newData);
         }

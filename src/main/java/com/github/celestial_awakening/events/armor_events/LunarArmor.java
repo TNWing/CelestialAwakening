@@ -48,7 +48,7 @@ public class LunarArmor extends ArmorEffect {
     public void performActions(Player player,int cnt, Event event) {
         //may need to account for log in event and clone event
         if (event instanceof BlockEvent.BreakEvent){
-            pieceEffectBlockBreak(cnt, (BlockEvent.BreakEvent) event);
+            pieceEffectBlockBreak((BlockEvent.BreakEvent) event,cnt);
         }
         else if (event instanceof ItemTooltipEvent){
             onItemTooltipEvent((ItemTooltipEvent) event,cnt);
@@ -64,12 +64,37 @@ public class LunarArmor extends ArmorEffect {
         }
         else if (cnt==4){
             if (event instanceof LivingDamageEvent){
-                orbiter(player, (LivingDamageEvent) event);
+                orbiter((LivingDamageEvent) event,player);
             }
         }
+    }
+    @Override
+    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+        pieceEffectBlockBreak(event,cnt);
+    }
+    @Override
+    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
+        if (cnt==4){
+            if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
+                blessedNightEffects(event,player);
+            }
+        }
+    }
+    @Override
+    void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
+        if (cnt==4){
+            blessedNightEffects(event,player);
+        }
+        else{
+            player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID.fromString(moonlightPath));
+        }
+    }
 
-
-
+    @Override
+    void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
+        if (cnt==4){
+            orbiter(event,player);
+        }
     }
 
     public void onFishEvent(ItemFishedEvent event,int cnt){
@@ -154,7 +179,7 @@ public class LunarArmor extends ArmorEffect {
         ToolTipBuilder.addFullArmorSetComponent(event,"Orbiter",boldColor,"When attacked, creates a comet that follows the wearer. After a short delay, the comet will launch towards the nearest enemy. If no enemy present, the comet is consumed to heal the user slightly.",infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,"Lunar Resonance",boldColor,"Chance to gain special items upon breaking blocks or fishing up items.",infoColor);
     }
-    void pieceEffectBlockBreak(int cnt, BlockEvent.BreakEvent event){
+    void pieceEffectBlockBreak(BlockEvent.BreakEvent event,int cnt){
         BlockState blockState=event.getState();
         Block block=blockState.getBlock();
         if (blockState.is(BlockTags.DIRT) ){
@@ -173,11 +198,11 @@ public class LunarArmor extends ArmorEffect {
         if (event instanceof TickEvent.PlayerTickEvent){
         }
         else if (cnt==4){
-            blessedNightEffects(player,event);
+            blessedNightEffects(event,player);
         }
     }
 
-    private void orbiter(Player player, LivingDamageEvent event){//still hits
+    private void orbiter( LivingDamageEvent event,Player player){//still hits
         if (event.getEntity() == player && event.getSource().getDirectEntity() instanceof LivingEntity){
             LivingEntity livingEntity= (LivingEntity) event.getSource().getDirectEntity();
             event.setAmount(event.getAmount()*0.95f);
@@ -188,7 +213,7 @@ public class LunarArmor extends ArmorEffect {
 
 
 
-    void blessedNightEffects(Player player,Event event){
+    void blessedNightEffects(Event event,Player player){
         Level level=player.level();
         int time=(int)level.dayTime();//ranges from 0-24k
         if (time<nightStart){//daytime

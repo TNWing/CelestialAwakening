@@ -47,6 +47,22 @@ public class RadiantArmor extends ArmorEffect {
             rejuvenatingWave((TickEvent.PlayerTickEvent) event);
         }
     }
+    @Override
+    void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
+        pieceEffect_Crop(event,cnt);
+    }
+
+    @Override
+    void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+        pieceEffect_Death(event,cnt);
+    }
+    @Override
+    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
+        if (cnt==4){
+            excitedParticles(event);
+            rejuvenatingWave(event);
+        }
+    }
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {

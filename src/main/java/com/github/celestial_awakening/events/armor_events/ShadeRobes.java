@@ -20,17 +20,6 @@ public class ShadeRobes extends ArmorEffect {
         if (event instanceof LivingEquipmentChangeEvent){
             pieceEffect(player,cnt);
         }
-        else if(event instanceof LivingHurtEvent){
-            if (cnt==4){
-                fadeEffect(player, (LivingHurtEvent) event);
-
-            }
-        }
-        else if (event instanceof LivingDamageEvent){
-            if (cnt==4){
-                shadowStrikeEffect(player, (LivingDamageEvent) event);
-            }
-        }
         else if(event instanceof PlayerEvent.PlayerLoggedInEvent){
             pieceEffect(player,cnt);
         }
@@ -49,6 +38,23 @@ public class ShadeRobes extends ArmorEffect {
         }
     }
          */
+    }
+
+    @Override
+    void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
+        pieceEffect(player,cnt);
+    }
+    @Override
+    void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
+        if (cnt==4){
+            fadeEffect(event,player);
+        }
+    }
+    @Override
+    void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
+        if (cnt==4){
+            shadowStrikeEffect(event,player);
+        }
     }
 
     @Override
@@ -111,17 +117,17 @@ public class ShadeRobes extends ArmorEffect {
         }
 
     }
-    void fadeEffect(Player player,LivingHurtEvent event){
+    void fadeEffect(LivingDamageEvent event,Player player){
         if (event.getEntity()==player){
             float dmg=event.getAmount();
             Vec3 dmgPos=player.position();
             FadeMitigationCommandPattern command=new FadeMitigationCommandPattern(new Object[]{player,dmg,dmgPos});
             DelayedFunctionManager.delayedFunctionManager.insertIntoPlayerMap(player,command,100);
-            event.setAmount(0);
+            event.setCanceled(true);
         }
     }
-    void shadowStrikeEffect(Player player,LivingDamageEvent event){
-        if (event.getSource().getDirectEntity()==player){
+    void shadowStrikeEffect(LivingHurtEvent event,Player player){
+        if (event.getSource().getEntity()==player){
             Vec3 playerPos=player.position();
             Vec3 targetPos=event.getEntity().position();
             double dist=targetPos.distanceTo(playerPos);

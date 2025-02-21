@@ -39,13 +39,30 @@ public class EverlightArmor extends ArmorEffect{
 
             }
             else if (event instanceof LivingDamageEvent){
-                starGazer(player, (LivingDamageEvent) event);
+                starGazer( (LivingDamageEvent) event,player);
             }
         }
 
     }
+    @Override
+    void onPlayerTick(TickEvent.PlayerTickEvent event,Player player, int cnt){
+        if (cnt==4){
+            if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
+                resurgence(player);
+            }
+        }
+    }
+    @Override
+    void onLivingDeath(LivingDeathEvent event,Player player, int cnt){
+        unyieldingFlame(event,player,cnt);
+    }
 
-
+    @Override
+    void onLivingDamageSelf(LivingDamageEvent event,Player player, int cnt){
+        if (cnt==4){
+            starGazer(event,player);
+        }
+    }
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
@@ -59,6 +76,30 @@ public class EverlightArmor extends ArmorEffect{
         ToolTipBuilder.addFullArmorSetComponent(event,"Star Gazer",boldColor,"Applies glowing to attackers and reduces incoming damage for each nearby glowing entity.",infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,"Resurgence",boldColor,"Every 5 seconds, recover HP scaling with your current HP.",infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,"Unyielding Flame",boldColor,"Upon killing an enemy, ignite nearby enemies and gain absorption.",infoColor);
+    }
+
+    private void unyieldingFlame(LivingDeathEvent event,Player player,int cnt){
+        int dura=3+cnt;
+        int lvl= (int) (Math.ceil(cnt/2f));
+        MobEffectInstance absorption=new MobEffectInstance(MobEffects.ABSORPTION,dura,lvl-1);
+        player.addEffect(absorption);
+        AABB aabb=player.getBoundingBox();
+        aabb=aabb.inflate(4f);
+        List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+        if (!entities.isEmpty()){
+            int size=entities.size();
+            Random rand=new Random();
+
+            int r=rand.nextInt(size);
+            LivingEntity e=entities.remove(r);
+            e.setSecondsOnFire(3+lvl);
+
+            size--;
+
+            r=rand.nextInt(size);
+            e=entities.remove(r);
+            e.setSecondsOnFire(3+lvl);
+        }
     }
 
     private void pieceEffect(Player player,int cnt){//unyieldingFlame
@@ -91,8 +132,8 @@ public class EverlightArmor extends ArmorEffect{
         player.heal(healAmt);
     }
 
-    private void starGazer(Player player,LivingDamageEvent event){
-        if (event.getSource().getDirectEntity() instanceof LivingEntity){
+    private void starGazer(LivingDamageEvent event,Player player){
+        if (event.getSource().getEntity() instanceof LivingEntity){
             LivingEntity attacker= (LivingEntity) event.getSource().getDirectEntity();
             attacker.addEffect(new MobEffectInstance(MobEffects.GLOWING,5,1));
         }
@@ -107,8 +148,6 @@ public class EverlightArmor extends ArmorEffect{
         if (dmgMult<0.5f){
             dmgMult=0.5f;
         }
-        System.out.println("EVERLIGHT preReduce dmg: " + event.getAmount());
         event.setAmount(event.getAmount()*dmgMult);
-        System.out.println("EVERLIGHT postReduce dmg: " + event.getAmount());
     }
 }

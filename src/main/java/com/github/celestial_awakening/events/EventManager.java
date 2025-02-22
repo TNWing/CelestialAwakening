@@ -149,7 +149,7 @@ public class EventManager {
             //should reset capability data so maybe change this
             event.getOriginal().reviveCaps();
             event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
-                    oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copy(oldStore)));
+                    oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
             event.getOriginal().invalidateCaps();
         }
 

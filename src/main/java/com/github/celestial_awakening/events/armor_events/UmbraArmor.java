@@ -22,12 +22,12 @@ public class UmbraArmor extends ArmorEffect {
     int[] dreadCD={600,500,400,300};
     int[] dreadCDReduction={20,40,60,80};
 
-    public static final String DREAD_NAME = "tooltip.celestial_awakening.remnant_armor.dread_name";
-    public static final String DREAD_DESC = "tooltip.celestial_awakening.remnant_armor.dread_desc";
-    public static final String PURSUIT_NAME = "tooltip.celestial_awakening.remnant_armor.pursuit_name";
-    public static final String PURSUIT_DESC = "tooltip.celestial_awakening.remnant_armor.pursuit_desc";
-    public static final String CL_NAME = "tooltip.celestial_awakening.remnant_armor.cl_name";
-    public static final String CL_DESC = "tooltip.celestial_awakening.remnant_armor.cl_desc";
+    public static final String DREAD_NAME = "tooltip.celestial_awakening.umbra_armor.dread_name";
+    public static final String DREAD_DESC = "tooltip.celestial_awakening.umbra_armor.dread_desc";
+    public static final String PURSUIT_NAME = "tooltip.celestial_awakening.umbra_armor.pursuit_name";
+    public static final String PURSUIT_DESC = "tooltip.celestial_awakening.umbra_armor.pursuit_desc";
+    public static final String CL_NAME = "tooltip.celestial_awakening.umbra_armor.cl_name";
+    public static final String CL_DESC = "tooltip.celestial_awakening.umbra_armor.cl_desc";
 
 
     @Override

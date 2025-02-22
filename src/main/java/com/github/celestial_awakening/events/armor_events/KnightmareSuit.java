@@ -63,7 +63,7 @@ public class KnightmareSuit extends ArmorEffect{
         ToolTipBuilder.addFullArmorSetComponent(event,SS_NAME,boldColor,SS_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,HONOR_DUEL_NAME,boldColor,HONOR_DUEL_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,INFAMY_NAME,boldColor,
-               INFAMY_DESC,cnt*0.25f,
+               INFAMY_DESC,new Object[]{cnt*0.25f},
                 infoColor);
     }
 
@@ -115,7 +115,6 @@ public class KnightmareSuit extends ArmorEffect{
             if (cap!=null){
                 Integer[] data= (Integer[]) cap.getAbilityData(infamy);
                 if (data!=null){
-                    System.out.println("infamy boost");
                     int currentVal=data[0];
                     event.setAmount(event.getAmount()+currentVal);
                 }
@@ -135,7 +134,6 @@ public class KnightmareSuit extends ArmorEffect{
                     pCap.insertIntoAbilityMap(honorDuel,-10,dataForPlayer);
                     targetCap.insertIntoAbilityMap(honorDuel,-10,dataForTarget);
                     //HONOR DUEL FOR c77386e1-8d59-4429-af55-7f23135e7faf AND 380df991-f603-344c-a090-369bad2a924a
-                    System.out.println("HONOR DUEL FOR " + target.getUUID() +  " AND " + player.getUUID());
                 }
 
             }

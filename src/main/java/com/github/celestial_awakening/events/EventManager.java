@@ -139,6 +139,7 @@ public class EventManager {
 
     }
 
+
     //TODO: make sure this works
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event){
@@ -146,8 +147,10 @@ public class EventManager {
             //It seems that, if player dies, their capability doesn't work anymore. See why
             //it seems to work now? maybe it was the onLivingEntityDeath thing i changed
             //should reset capability data so maybe change this
+            event.getOriginal().reviveCaps();
             event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
-                    oldStore->event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copy(oldStore)));
+                    oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copy(oldStore)));
+            event.getOriginal().invalidateCaps();
         }
 
     }
@@ -195,13 +198,6 @@ public class EventManager {
         }
     }
 
-
-
-    public void onLivingTick(LivingEvent.LivingTickEvent event){
-
-    }
-
-
     @SubscribeEvent
     public void onItemFished(ItemFishedEvent event){
         int cnt=0;
@@ -229,7 +225,9 @@ public class EventManager {
             Player player= (Player) event.getEntity();
             for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectEquipmentChange.entrySet()) {
                 int cnt=countPieces(player,entry.getKey());
-                entry.getValue().onEquipmentChange(event,player,cnt);
+                if (cnt>0) {
+                    entry.getValue().onEquipmentChange(event, player, cnt);
+                }
             }
         }
     }
@@ -243,7 +241,9 @@ public class EventManager {
                 CustomArmorMaterial material= (CustomArmorMaterial) armorItem.getMaterial();
                 if(armorMaterials.containsKey(material)){
                     int cnt=countPieces(player,material);
-                    armorMaterials.get(material).onItemTooltipEvent(event,cnt);
+                    if (cnt>0) {
+                        armorMaterials.get(material).onItemTooltipEvent(event, cnt);
+                    }
                 }
 
             }
@@ -295,7 +295,9 @@ public class EventManager {
             solarEvents.dropSunstone(level,event);
             for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectBlockBreak.entrySet()) {
                 int cnt=countPieces(player,entry.getKey());
-                entry.getValue().onBlockBreak(event,player,cnt);
+                if (cnt>0) {
+                    entry.getValue().onBlockBreak(event, player, cnt);
+                }
             }
         }
     }
@@ -310,7 +312,9 @@ public class EventManager {
                 Player player=(Player) target;
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
-                    entry.getValue().onLivingDamageSelf(event,player,cnt);
+                    if (cnt>0) {
+                        entry.getValue().onLivingDamageSelf(event, player, cnt);
+                    }
                 }
                 if (directEntity instanceof Mob){
                     Mob mob= (Mob) directEntity;
@@ -329,7 +333,9 @@ public class EventManager {
                 Player player=(Player) causingEntity;
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
-                    entry.getValue().onLivingDamageOthers(event,player,cnt);
+                    if (cnt>0) {
+                        entry.getValue().onLivingDamageOthers(event, player, cnt);
+                    }
                 }
             }
             /*
@@ -358,7 +364,10 @@ public class EventManager {
                 Player player=(Player) event.getSource().getEntity();
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
-                    entry.getValue().onLivingDeath(event,player,cnt);
+                    if (cnt>0){
+                        entry.getValue().onLivingDeath(event,player,cnt);
+                    }
+
                 }
             }
         }
@@ -386,14 +395,19 @@ public class EventManager {
                 Player player=(Player) event.getEntity();
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingHurtSelf.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
-                    entry.getValue().onLivingHurtSelf(event,player,cnt);
+                    if (cnt>0){
+                        entry.getValue().onLivingHurtSelf(event,player,cnt);
+                    }
+
                 }
             }
             if(causingEntity instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingHurtOthers.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
-                    entry.getValue().onLivingHurtOthers(event,player,cnt);
+                    if (cnt>0) {
+                        entry.getValue().onLivingHurtOthers(event, player, cnt);
+                    }
                 }
             }
             if (directEntity instanceof AbstractArrow){
@@ -445,13 +459,11 @@ public class EventManager {
             }
 
             ListTag effectsList = entityTag.getList("ActiveEffects", 10); // 10 = CompoundTag type
-            System.out.println("ENTITY OF NAME " + entity + " HAS ACTIVE EFFECT LIST? " + effectsList);
             // Clear current effects so we can re-add them
             //entity.removeAllEffects();
 
             for (int i = 0; i < effectsList.size(); i++) {
                 CompoundTag effectTag = effectsList.getCompound(i);
-                System.out.println("ETAG IS " + effectTag);
                 MobEffectInstance effectInstance = null;
                 if (effectTag.contains("Stage")) {
                     System.out.println("WE HAVE A STAGE  TAG HERE");
@@ -524,7 +536,9 @@ public class EventManager {
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
             for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectTick.entrySet()) {
                 int cnt=countPieces(player,entry.getKey());
-                entry.getValue().onPlayerTick(event,player,cnt);
+                if (cnt>0) {
+                    entry.getValue().onPlayerTick(event, player, cnt);
+                }
             }
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){

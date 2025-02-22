@@ -182,5 +182,10 @@ public class LivingEntityCapability {
         this.navigauge=data.navigauge;
     }
 
-
+    public void copyForRespawn(LivingEntityCapability data){
+        this.abilityDataMap=data.abilityDataMap;
+        this.abilityDataMap.clear();
+        this.insanityPts=data.insanityPts;
+        this.navigauge=data.navigauge;
+    }
 }

@@ -13,8 +13,8 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 public class KnightmareSuit extends ArmorEffect{
     int boldColor=0xC0c0c0;
     int infoColor=0xC3c3c3;
-    static String honorDuel="Knightmare_Honor_Duel";
-    static String infamy="Knightmare_Infamy";
+    public static String honorDuel="Knightmare_Honor_Duel";
+    public static String infamy="Knightmare_Infamy";
     /*
     Sword & Shield
         Gain 2 defensive points on successful shield blocks.

@@ -130,7 +130,7 @@
   "tooltip.celestial_awakening.remnant_armor.fl_name": "Final Light",
   "tooltip.celestial_awakening.remnant_armor.fl_desc":"Upon falling below 20% of your max HP, gain increased attack damage, attack speed, and damage reduction for 5 seconds. Cooldown of 2 minutes.",
   "tooltip.celestial_awakening.remnant_armor.collapse_name": "Collapse",
-  "tooltip.celestial_awakening.remnant_armor.collapse_desc":"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 5 seconds",
+  "tooltip.celestial_awakening.remnant_armor.collapse_desc":"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 7 seconds",
 
   "tooltip.celestial_awakening.shade_robes.range_name": "Expanding Darkness",
   "tooltip.celestial_awakening.shade_robes.range_desc": "Increases attack range by %s",

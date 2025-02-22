@@ -70,10 +70,6 @@ public class RemnantArmor extends ArmorEffect {
         ToolTipBuilder.addFullArmorSetComponent(event,COLLAPSE_NAME,boldColor,COLLAPSE_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,DL_NAME,boldColor,DL_DESC,new Object[]{devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]},infoColor);
     }
-
-    /*
-    Kills restore hunger
-     */
     public void devouringLight(LivingDeathEvent event,Player player,int cnt){
         if (event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity()==player){
             if (cnt>0){
@@ -87,7 +83,7 @@ public class RemnantArmor extends ArmorEffect {
         LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null && cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,5,1));
-            player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,1,false,false,false));
+            player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,0,false,false,false));
             cap.insertIntoAbilityMap(abilityFLCD,20*120);
         }
 
@@ -95,21 +91,24 @@ public class RemnantArmor extends ArmorEffect {
 
     public void collapse(LivingHurtEvent event,Player player){
         LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        if (cap!=null && cap.getAbilityCD(abilityCollapse) ==null && event.getSource().getDirectEntity()==player){//off CD
+        if (cap!=null && cap.getAbilityCD(abilityCollapse) ==null && event.getSource().getEntity()==player){//off CD
+
             Level level=event.getEntity().level();
             LivingEntity target=event.getEntity();
             Vec3 targetPos=target.position();
-            AABB aabb=new AABB(targetPos.subtract(new Vec3(2.5f,2.5f,2.5f)),targetPos.add(new Vec3(2.5f,2.5f,2.5f)));
-            List<LivingEntity> entities= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-            if (!entities.isEmpty()){
-                cap.insertIntoAbilityMap(abilityCollapse,100);
-                for (LivingEntity livingEntity:entities) {
-                    livingEntity.hurt(event.getSource(),1.25f + event.getAmount()*0.2f);
-                    Vec3 dir= MathFuncs.getDirVecNoNormalize(targetPos,livingEntity.position()).scale(0.7f);
-                    livingEntity.push(dir.x,dir.y,dir.z);
+            boolean isCrit=player.fallDistance > 0.0F && !player.onGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && target instanceof LivingEntity && !player.isSprinting();
+            if (isCrit){
+                AABB aabb=new AABB(targetPos.subtract(new Vec3(2.5f,2.5f,2.5f)),targetPos.add(new Vec3(2.5f,2.5f,2.5f)));
+                List<LivingEntity> entities= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                if (!entities.isEmpty()){
+                    cap.insertIntoAbilityMap(abilityCollapse,140);
+                    for (LivingEntity livingEntity:entities) {
+                        livingEntity.hurt(event.getSource(),event.getAmount()*0.2f);
+                        Vec3 dir= MathFuncs.getDirVecNoNormalize(targetPos,livingEntity.position()).scale(0.7f);
+                        livingEntity.push(dir.x,dir.y,dir.z);
+                    }
                 }
             }
-
 
         }
     }

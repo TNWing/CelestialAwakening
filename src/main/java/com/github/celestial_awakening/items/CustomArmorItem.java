@@ -5,7 +5,9 @@ import net.minecraft.Util;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.DispenserBlock;
 
 import java.lang.reflect.Field;
@@ -46,8 +48,6 @@ public class CustomArmorItem extends ArmorItem {
         }
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
-
-
     @Override
     public float getToughness() {
         return this.material.getToughness() + this.toughnessModifier;

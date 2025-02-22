@@ -22,6 +22,14 @@ public class UmbraArmor extends ArmorEffect {
     int[] dreadCD={600,500,400,300};
     int[] dreadCDReduction={20,40,60,80};
 
+    public static final String DREAD_NAME = "tooltip.celestial_awakening.remnant_armor.dread_name";
+    public static final String DREAD_DESC = "tooltip.celestial_awakening.remnant_armor.dread_desc";
+    public static final String PURSUIT_NAME = "tooltip.celestial_awakening.remnant_armor.pursuit_name";
+    public static final String PURSUIT_DESC = "tooltip.celestial_awakening.remnant_armor.pursuit_desc";
+    public static final String CL_NAME = "tooltip.celestial_awakening.remnant_armor.cl_name";
+    public static final String CL_DESC = "tooltip.celestial_awakening.remnant_armor.cl_desc";
+
+
     @Override
     public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         cdModifier( event,player,cnt);
@@ -43,19 +51,19 @@ Reduces CD by 1/2/3/4 sec on kill
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event,"Pursuit",boldColor);
-        ToolTipBuilder.addFullSetName(event,"Cursed Light",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Dread",boldColor);
+        ToolTipBuilder.addFullSetName(event,PURSUIT_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event,CL_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,DREAD_NAME,boldColor);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Pursuit",boldColor,
-                "Hitting an enemy below 50% max HP will grant a speed boost to the wearer. Cooldown of 15 seconds, resets on kill",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Cursed Light",boldColor,
-                "Getting hit will apply Weakness 3 to the attacker for 3 seconds. Cooldown of 8 seconds",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Dread",boldColor,
-                String.format("Hitting a target at full HP will deal an additional %s damage. Cooldown of %s seconds, reduces cooldown by %s seconds on kill", dreadVals[cnt-1],dreadCD[cnt-1]/20,dreadCDReduction[cnt-1]/20)
+        ToolTipBuilder.addFullArmorSetComponent(event,PURSUIT_NAME,boldColor,
+                PURSUIT_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,CL_NAME,boldColor,
+                CL_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,DREAD_NAME,boldColor,
+              DREAD_DESC,new Object[]{dreadVals[cnt-1],dreadCD[cnt-1]/20,dreadCDReduction[cnt-1]/20}
                 ,infoColor);
     }
     public void dread(LivingHurtEvent event,Player player,int cnt){

@@ -30,6 +30,14 @@ public class RemnantArmor extends ArmorEffect {
     int[] devouringLightFoodLevels={1,1,1,2};
     float[] devouringLightSaturationLevels={0.5f,0.75f,1f,1f};
 
+    public static final String DL_NAME = "tooltip.celestial_awakening.remnant_armor.dl_name";
+    public static final String DL_DESC = "tooltip.celestial_awakening.remnant_armor.dl_desc";
+    public static final String FL_NAME = "tooltip.celestial_awakening.remnant_armor.fl_name";
+    public static final String FL_DESC = "tooltip.celestial_awakening.remnant_armor.fl_desc";
+    public static final String COLLAPSE_NAME = "tooltip.celestial_awakening.remnant_armor.collapse_name";
+    public static final String COLLAPSE_DESC = "tooltip.celestial_awakening.remnant_armor.collapse_desc";
+
+
     @Override
     public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         devouringLight(event,player,cnt);
@@ -51,16 +59,16 @@ public class RemnantArmor extends ArmorEffect {
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event,"Final Light",boldColor);
-        ToolTipBuilder.addFullSetName(event,"Collapse",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Devouring Light",boldColor);
+        ToolTipBuilder.addFullSetName(event,FL_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event,COLLAPSE_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,DL_NAME,boldColor);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Final Light",boldColor,"Upon falling below 20% of your max HP, gain increased attack damage, attack speed, and damage reduction for 5 seconds. Cooldown of 2 minutes",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Collapse",boldColor,"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 5 seconds",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Devouring Light",boldColor,String.format("Kills restore %s hunger and %s saturation",devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]),infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,FL_NAME,boldColor,FL_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,COLLAPSE_NAME,boldColor,COLLAPSE_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,DL_NAME,boldColor,DL_DESC,new Object[]{devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]},infoColor);
     }
 
     /*

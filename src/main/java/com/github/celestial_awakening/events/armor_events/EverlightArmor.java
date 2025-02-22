@@ -22,6 +22,12 @@ public class EverlightArmor extends ArmorEffect{
     int boldColor=0xC0c0c0;
     int infoColor=0xC3c3c3;
 
+    public static final String UNYIELDING_NAME = "tooltip.celestial_awakening.everlight_armor.unyielding_name";
+    public static final String UNYIELDING_DESC = "tooltip.celestial_awakening.everlight_armor.unyielding_desc";
+    public static final String STAR_GAZER_NAME = "tooltip.celestial_awakening.everlight_armor.star_gazer_name";
+    public static final String STAR_GAZER_DESC = "tooltip.celestial_awakening.everlight_armor.star_gazer_desc";
+    public static final String RESURGENCE_NAME = "tooltip.celestial_awakening.everlight_armor.resurgence_name";
+    public static final String RESURGENCE_DESC = "tooltip.celestial_awakening.everlight_armor.resurgence_desc";
     @Override
     public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player, int cnt){
         if (cnt==4){
@@ -44,16 +50,16 @@ public class EverlightArmor extends ArmorEffect{
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event,"Star Gazer",boldColor);
-        ToolTipBuilder.addFullSetName(event,"Resurgence",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Unyielding Flame",boldColor);
+        ToolTipBuilder.addFullSetName(event,STAR_GAZER_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event,RESURGENCE_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,UNYIELDING_NAME,boldColor);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Star Gazer",boldColor,"Applies glowing to attackers and reduces incoming damage for each nearby glowing entity.",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Resurgence",boldColor,"Every 5 seconds, recover HP scaling with your current HP.",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Unyielding Flame",boldColor,"Upon killing an enemy, ignite nearby enemies and gain absorption.",infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,STAR_GAZER_NAME,boldColor,STAR_GAZER_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,RESURGENCE_NAME,boldColor,RESURGENCE_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,UNYIELDING_NAME,boldColor,UNYIELDING_DESC,infoColor);
     }
 
     private void unyieldingFlame(LivingDeathEvent event,Player player,int cnt){
@@ -79,31 +85,6 @@ public class EverlightArmor extends ArmorEffect{
             e.setSecondsOnFire(3+lvl);
         }
     }
-
-    private void pieceEffect(Player player,int cnt){//unyieldingFlame
-        int dura=3+cnt;
-        int lvl= (int) (Math.ceil(cnt/2f));
-        MobEffectInstance absorption=new MobEffectInstance(MobEffects.ABSORPTION,dura,lvl-1);
-        player.addEffect(absorption);
-        AABB aabb=player.getBoundingBox();
-        aabb=aabb.inflate(4f);
-        List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-        if (!entities.isEmpty()){
-            int size=entities.size();
-            Random rand=new Random();
-            
-            int r=rand.nextInt(size);
-            LivingEntity e=entities.remove(r);
-            e.setSecondsOnFire(3+lvl);
-
-            size--;
-
-            r=rand.nextInt(size);
-            e=entities.remove(r);
-            e.setSecondsOnFire(3+lvl);
-        }
-    }
-
     private void resurgence(Player player){
         float hpPercent=player.getHealth()/player.getMaxHealth();
         float healAmt=hpPercent*4.5f;

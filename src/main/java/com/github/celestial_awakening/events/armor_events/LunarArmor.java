@@ -34,6 +34,18 @@ public class LunarArmor extends ArmorEffect {
 
     String moonlightPath="4c80d010-d025-40de-80ad-6b262763cc30";
 
+    public static final String RESONANCE_NAME = "tooltip.celestial_awakening.lunar_armor.resonance_name";
+    public static final String RESONANCE_DESC = "tooltip.celestial_awakening.lunar_armor.resonance_desc";
+    public static final String ORBITER_NAME = "tooltip.celestial_awakening.lunar_armor.orbiter_name";
+    public static final String ORBITER_DESC = "tooltip.celestial_awakening.lunar_armor.orbiter_desc";
+    public static final String BLESSED_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_name";
+    public static final String BLESSED_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_desc";
+    public static final String PATH_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_path_name";
+    public static final String PATH_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_path_desc";
+    public static final String DEAL_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_deal_name";
+    public static final String DEAL_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_deal_desc";
+    public static final String FISH_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_fish_name";
+    public static final String FISH_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_fish_desc";
 /*  TODO:
     piece effect should trigger on
     -trade
@@ -74,9 +86,7 @@ public class LunarArmor extends ArmorEffect {
 
     public void onFishEvent(ItemFishedEvent event,int cnt){
         Random rand=new Random();
-        System.out.println("CHECKING FISHY");
         if (rand.nextInt(0,100)<cnt*12){
-            System.out.println("ROLLED!");
             Player player=event.getEntity();
             int roll=rand.nextInt(0,10);
             ItemEntity itemEntity;
@@ -88,9 +98,6 @@ public class LunarArmor extends ArmorEffect {
             }
             player.level().addFreshEntity(itemEntity);
         }
-        else{
-            System.out.println("FAILED ROLL, chance to succeed was " + cnt*12);
-        }
     }
 
     @Override
@@ -101,27 +108,27 @@ public class LunarArmor extends ArmorEffect {
         ToolTipBuilder.addShiftInfo(event);
         if (time % 120 != 0) {//update the desc every 6 sec
             if (time < nightStart) {//daytime
-                ToolTipBuilder.addFullSetName(event,"Blessed Night",boldColor);
+                ToolTipBuilder.addFullSetName(event,BLESSED_NAME,boldColor);
             } else {
                 switch (level.getMoonPhase()) {
                     case 0: {
-                        ToolTipBuilder.addFullSetName(event,"Moonlight Path",boldColor);
+                        ToolTipBuilder.addFullSetName(event,PATH_NAME,boldColor);
                         break;
                     }
                     case 3:
                     case 7: {
-                        ToolTipBuilder.addFullSetName(event,"Shady Deal",boldColor);
+                        ToolTipBuilder.addFullSetName(event,DEAL_NAME,boldColor);
                         break;
                     }
                     case 5: {
-                        ToolTipBuilder.addFullSetName(event,"Lucky Moon",boldColor);
+                        ToolTipBuilder.addFullSetName(event,FISH_NAME,boldColor);
                         break;
                     }
                 }
             }
         }
-        ToolTipBuilder.addFullSetName(event,"Orbiter",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Lunar Resonance",boldColor);
+        ToolTipBuilder.addFullSetName(event,ORBITER_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,RESONANCE_NAME,boldColor);
 
     }
 
@@ -132,27 +139,27 @@ public class LunarArmor extends ArmorEffect {
         int time = (int) level.dayTime();//ranges from 0-24k
         if (time % 120 != 0) {//update the desc every 6 sec
             if (time < nightStart) {//daytime
-                ToolTipBuilder.addFullArmorSetComponent(event,"Blessed Night",boldColor,"Receive a buff at night depending on the moon phase.",infoColor);
+                ToolTipBuilder.addFullArmorSetComponent(event,BLESSED_NAME,boldColor,BLESSED_DESC,infoColor);
             } else {
                 switch (level.getMoonPhase()) {
                     case 0: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,"Moonlight Path",boldColor,"Drastically increased movement speed.",infoColor);
+                        ToolTipBuilder.addFullArmorSetComponent(event,PATH_NAME,boldColor,PATH_DESC,infoColor);
                         break;
                     }
                     case 3:
                     case 7: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,"Shady Deal",boldColor,"Refund a portion of materials used in villager trades.",infoColor);
+                        ToolTipBuilder.addFullArmorSetComponent(event,DEAL_NAME,boldColor,DEAL_DESC,infoColor);
                         break;
                     }
                     case 5: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,"Lucky Moon",boldColor,"Increases chance of fishing up treasures.",infoColor);
+                        ToolTipBuilder.addFullArmorSetComponent(event,FISH_NAME,boldColor,FISH_DESC,infoColor);
                         break;
                     }
                 }
             }
         }
-        ToolTipBuilder.addFullArmorSetComponent(event,"Orbiter",boldColor,"When attacked, creates a comet that follows the wearer. After a short delay, the comet will launch towards the nearest enemy. If no enemy present, the comet is consumed to heal the user slightly.",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Lunar Resonance",boldColor,"Chance to gain special items upon breaking blocks or fishing up items.",infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,ORBITER_NAME,boldColor,ORBITER_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,RESONANCE_NAME,boldColor,RESONANCE_DESC,infoColor);
     }
     void pieceEffectBlockBreak(BlockEvent.BreakEvent event,int cnt){
         BlockState blockState=event.getState();

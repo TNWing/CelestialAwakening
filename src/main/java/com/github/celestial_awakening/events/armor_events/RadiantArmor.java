@@ -31,6 +31,14 @@ public class RadiantArmor extends ArmorEffect {
     int infoColor=0xdaa458;//daa458
     static Item[] seedArray={Items.BEETROOT_SEEDS,Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.PUMPKIN_SEEDS};
 
+    public static final String ABS_NAME = "tooltip.celestial_awakening.radiant_armor.abs_name";
+    public static final String ABS_DESC = "tooltip.celestial_awakening.radiant_armor.abs_desc";
+    public static final String PARTICLE_NAME = "tooltip.celestial_awakening.radiant_armor.particle_name";
+    public static final String PARTICLE_DESC = "tooltip.celestial_awakening.radiant_armor.particle_desc";
+    public static final String WAVE_NAME = "tooltip.celestial_awakening.radiant_armor.wave_name";
+    public static final String WAVE_DESC = "tooltip.celestial_awakening.radiant_armor.wave_desc";
+
+
     @Override
     public void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
         pieceEffect_Crop(event,cnt);
@@ -51,16 +59,16 @@ public class RadiantArmor extends ArmorEffect {
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event,"Excited Particles",boldColor);
-        ToolTipBuilder.addFullSetName(event,"Rejuvinating Wave",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Life Absorption",boldColor);
+        ToolTipBuilder.addFullSetName(event,PARTICLE_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event,WAVE_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,ABS_NAME,boldColor);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Excited Particles",boldColor,"Speeds up the growth of nearby plants as well as speeds up the growth and breeding recovery period of animals.",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Rejuvinating Wave",boldColor,"Every 7 seconds, recover 2.5 HP.",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Life Absorption",boldColor,"Obtain special materials upon gathering crops or killing animals.",infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,PARTICLE_NAME,boldColor,PARTICLE_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,WAVE_NAME,boldColor,WAVE_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,ABS_NAME,boldColor,ABS_DESC,infoColor);
     }
     public void pieceEffect_Crop(BlockEvent.BreakEvent event, int cnt){
         if (!event.getLevel().isClientSide() && event.getState().getBlock() instanceof CropBlock && !event.isCanceled()){

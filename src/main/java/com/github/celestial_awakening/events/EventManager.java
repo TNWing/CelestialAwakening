@@ -240,9 +240,7 @@ public class EventManager {
                 CustomArmorMaterial material= (CustomArmorMaterial) armorItem.getMaterial();
                 if(armorMaterials.containsKey(material)){
                     int cnt=countPieces(player,material);
-                    if (cnt>0) {
-                        armorMaterials.get(material).onItemTooltipEvent(event, cnt);
-                    }
+                    armorMaterials.get(material).onItemTooltipEvent(event, cnt);
                 }
 
             }

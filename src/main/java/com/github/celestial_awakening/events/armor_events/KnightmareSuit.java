@@ -18,6 +18,14 @@ public class KnightmareSuit extends ArmorEffect{
     int infoColor=0xC3c3c3;
     public static String honorDuel="Knightmare_Honor_Duel";
     public static String infamy="Knightmare_Infamy";
+
+
+    public static final String INFAMY_NAME = "tooltip.celestial_awakening.knightmare_suit.infamy_name";
+    public static final String INFAMY_DESC = "tooltip.celestial_awakening.knightmare_suit.infamy_desc";
+    public static final String HONOR_DUEL_NAME = "tooltip.celestial_awakening.knightmare_suit.honor_duel_name";
+    public static final String HONOR_DUEL_DESC = "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc";
+    public static final String SS_NAME = "tooltip.celestial_awakening.knightmare_suit.ss_name";
+    public static final String SS_DESC = "tooltip.celestial_awakening.knightmare_suit.ss_desc";
     /*
     Sword & Shield
         Gain 2 defensive points on successful shield blocks.
@@ -45,21 +53,17 @@ public class KnightmareSuit extends ArmorEffect{
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event,"Sword & Shield",boldColor);
-        ToolTipBuilder.addFullSetName(event,"Honor Duel",boldColor);
-        ToolTipBuilder.addPieceBonusName(event,"Infamy",boldColor);
+        ToolTipBuilder.addFullSetName(event, SS_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event,HONOR_DUEL_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event,INFAMY_NAME,boldColor);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,"Sword & Shield",boldColor,"TBD",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Honor Duel",boldColor,"Hitting an enemy applies Honor Duel to the user\n" +
-                "Decreases damage taken from other enemies.\n" +
-                "Decreases damage dealt to other enemies.\n" +
-                "Honor Duel is removed if the user or the target is killed.\n"+
-                "An entity can only be linked with one Honor Duel at a time",infoColor);
-        ToolTipBuilder.addArmorPieceComponent(event,"Infamy",boldColor,
-                String.format("Upon killing an enemy, gain %s base damage for every 10 HP the enemy had.",cnt*0.25f),
+        ToolTipBuilder.addFullArmorSetComponent(event,SS_NAME,boldColor,SS_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,HONOR_DUEL_NAME,boldColor,HONOR_DUEL_DESC,infoColor);
+        ToolTipBuilder.addArmorPieceComponent(event,INFAMY_NAME,boldColor,
+               INFAMY_DESC,cnt*0.25f,
                 infoColor);
     }
 

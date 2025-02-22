@@ -79,9 +79,71 @@
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
+
   "tooltip.celestial_awakening.fluorescent_bow.tooltip": "Dangersense\nUpon nocking an arrow, reveal all nearby enemies that aren't invisible.",
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_desc": "Upon nocking an arrow, reveal all nearby enemies that aren't invisible.",
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name": "Revealing Shot",
-  "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target."
+  "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target.",
+
+  "tooltip.celestial_awakening.armor.full_set_effect": "Full Set Effect: ",
+  "tooltip.celestial_awakening.armor.piece_effect": "Piece Effect: ",
+
+
+  "tooltip.celestial_awakening.everlight_armor.unyielding_name": "Unyielding Flame",
+  "tooltip.celestial_awakening.everlight_armor.unyielding_desc": "Upon killing an enemy, ignite nearby enemies and gain absorption.",
+  "tooltip.celestial_awakening.everlight_armor.star_gazer_name": "Star Gazer",
+  "tooltip.celestial_awakening.everlight_armor.star_gazer_desc": "Applies glowing to attackers.\nReduces incoming damage for each nearby glowing entity.",
+  "tooltip.celestial_awakening.everlight_armor.resurgence_name": "Resurgence",
+  "tooltip.celestial_awakening.everlight_armor.resurgence_desc": "Every 5 seconds, recover HP scaling with your current HP.",
+
+  "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
+  "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had for 15 seconds.",
+  "tooltip.celestial_awakening.knightmare_suit.honor_duel_name": "Honor Duel",
+  "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc": "Hitting an enemy applies Honor Duel to the user.\nDecreases damage taken from other enemies.\nDecreases damage dealt to other enemies.\nHonor Duel is removed if the user or the target is killed.\nAn entity can only be linked with one Honor Duel at a time.",
+  "tooltip.celestial_awakening.knightmare_suit.ss_name": "Sword & Shield",
+  "tooltip.celestial_awakening.knightmare_suit.ss_desc": "TBD",
+
+  "tooltip.celestial_awakening.lunar_armor.resonance_name": "Lunar Resonance",
+  "tooltip.celestial_awakening.lunar_armor.resonance_desc": "Chance to gain special items upon breaking surface blocks or fishing up items.",
+  "tooltip.celestial_awakening.lunar_armor.orbiter_name": "Orbiter",
+  "tooltip.celestial_awakening.lunar_armor.orbiter_desc": "When attacked, creates a comet that follows the wearer. After a short delay, the comet will launch towards the nearest enemy. If no enemy present, the comet is consumed to heal the user slightly.",
+  "tooltip.celestial_awakening.lunar_armor.blessed_name": "Blessed Night",
+  "tooltip.celestial_awakening.lunar_armor.blessed_desc": "Receive a buff at night depending on the moon phase.",
+  "tooltip.celestial_awakening.lunar_armor.blessed_path_name": "Moonlight Path",
+  "tooltip.celestial_awakening.lunar_armor.blessed_path_desc": "Drastically increased movement speed.",
+  "tooltip.celestial_awakening.lunar_armor.blessed_deal_name": "Shady Deal",
+  "tooltip.celestial_awakening.lunar_armor.blessed_deal_desc": "Refund a portion of materials used in villager trades.",
+  "tooltip.celestial_awakening.lunar_armor.blessed_fish_name": "Lucky Moon",
+  "tooltip.celestial_awakening.lunar_armor.blessed_fish_desc": "(NOT IMPLEMENTED YET)\nIncreases chance of fishing up treasures.",
+
+  "tooltip.celestial_awakening.radiant_armor.abs_name": "Life Absorption",
+  "tooltip.celestial_awakening.radiant_armor.abs_desc": "Obtain special materials upon gathering crops or killing animals.",
+  "tooltip.celestial_awakening.radiant_armor.particle_name": "Excited Particles",
+  "tooltip.celestial_awakening.radiant_armor.particle_desc":"Speeds up the growth of nearby plants.\nSpeeds up the growth and breeding recovery period of animals.",
+  "tooltip.celestial_awakening.radiant_armor.wave_name": "Rejuvinating Wave",
+  "tooltip.celestial_awakening.radiant_armor.wave_desc":"Every 7 seconds, recover 2.5 HP.",
+
+  "tooltip.celestial_awakening.remnant_armor.dl_name": "Devouring Light",
+  "tooltip.celestial_awakening.remnant_armor.dl_desc": "Kills restore %s hunger and %s saturation",
+  "tooltip.celestial_awakening.remnant_armor.fl_name": "Final Light",
+  "tooltip.celestial_awakening.remnant_armor.fl_desc":"Upon falling below 20% of your max HP, gain increased attack damage, attack speed, and damage reduction for 5 seconds. Cooldown of 2 minutes.",
+  "tooltip.celestial_awakening.remnant_armor.collapse_name": "Collapse",
+  "tooltip.celestial_awakening.remnant_armor.collapse_desc":"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 5 seconds",
+
+  "tooltip.celestial_awakening.shade_robes.range_name": "Expanding Darkness",
+  "tooltip.celestial_awakening.shade_robes.range_desc": "Increases attack range by %s",
+  "tooltip.celestial_awakening.shade_robes.fade_name": "Fade",
+  "tooltip.celestial_awakening.shade_robes.fade_desc":"Each instance of damage taken is delayed by 5 seconds.\nWhen an instance of damage is dealt, the amount is reduced based on how far the wearer is from when they were hit.\n",
+  "tooltip.celestial_awakening.shade_robes.strike_name": "Shadow Strike",
+  "tooltip.celestial_awakening.shade_robes.strike_desc":"Increases damage dealt based on distance from the target.",
+
+  "tooltip.celestial_awakening.umbra_armor.dread_name": "Dread",
+  "tooltip.celestial_awakening.umbra_armor.dread_desc": "Hitting a target at full HP will deal an additional %s damage. Cooldown of %s seconds, reduces cooldown by %s seconds on kill.",
+  "tooltip.celestial_awakening.umbra_armor.pursuit_name": "Pursuit",
+  "tooltip.celestial_awakening.umbra_armor.pursuit_desc":"Hitting an enemy below 50% max HP will grant a speed boost to the wearer. Cooldown of 15 seconds, resets on kill.",
+  "tooltip.celestial_awakening.umbra_armor.cl_name": "Cursed Light",
+  "tooltip.celestial_awakening.umbra_armor.cl_desc":"Getting hit will apply Weakness 3 to the attacker for 3 seconds. Cooldown of 8 seconds"
+
+
 }

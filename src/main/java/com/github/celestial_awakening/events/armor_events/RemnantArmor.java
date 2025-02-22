@@ -102,9 +102,9 @@ public class RemnantArmor extends ArmorEffect {
             AABB aabb=new AABB(targetPos.subtract(new Vec3(2.5f,2.5f,2.5f)),targetPos.add(new Vec3(2.5f,2.5f,2.5f)));
             List<LivingEntity> entities= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
             if (!entities.isEmpty()){
-                cap.insertIntoAbilityMap(abilityCollapse,300);
+                cap.insertIntoAbilityMap(abilityCollapse,100);
                 for (LivingEntity livingEntity:entities) {
-                    livingEntity.hurt(event.getSource(),1.25f);
+                    livingEntity.hurt(event.getSource(),1.25f + event.getAmount()*0.2f);
                     Vec3 dir= MathFuncs.getDirVecNoNormalize(targetPos,livingEntity.position()).scale(0.7f);
                     livingEntity.push(dir.x,dir.y,dir.z);
                 }

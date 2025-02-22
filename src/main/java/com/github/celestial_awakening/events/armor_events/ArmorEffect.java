@@ -41,7 +41,7 @@ public abstract class ArmorEffect {
     }
 
 
-    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
+    public void onLivingDeath(LivingDeathEvent event, Player player, int cnt){
 
     }
 

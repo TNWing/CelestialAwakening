@@ -9,10 +9,12 @@ import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,6 +54,15 @@ public class AttachCapabilities {
         }
     }
     @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinLevelEvent event) {
+        Entity entity =  event.getEntity();
+        UUID uuID = entity.getUUID();
+        LivingEntityCapability cap=entity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+        if (cap!=null){
+            cap.setUUID(uuID);
+        }
+    }
+    @SubscribeEvent
     public void onAttachEntityCap(AttachCapabilitiesEvent<Entity> event){
         Entity entity=event.getObject();
         if (entity instanceof CA_Projectile){
@@ -66,7 +77,7 @@ public class AttachCapabilities {
             }
         }
 
-        else if (entity instanceof Player){
+        else if (entity instanceof Player || entity instanceof Monster){
             if (!event.getCapabilities().containsValue(LivingEntityCapabilityProvider.playerCapability)){
                 event.addCapability(CelestialAwakening.createResourceLocation("player_data"),new LivingEntityCapabilityProvider());
             }

@@ -4,8 +4,7 @@ import com.github.celestial_awakening.events.CommandMapValue;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
 import com.github.celestial_awakening.events.GenericCommandPattern;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -47,12 +46,38 @@ public class LivingEntityCapability {
 
     public LivingEntityCapability(){
     }
-    private ConcurrentHashMap<String, Pair<Integer,Integer[]>> abilityDataMap=new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Pair<Integer,Object[]>> abilityDataMap=new ConcurrentHashMap<>();
     /*
     instead of cd map, the above map does
      */
+    public CompoundTag initNBTData(CompoundTag nbt){
+        ListTag abilities=new ListTag();
+        for (Map.Entry<String, Pair<Integer,Object[]>> entry:abilityDataMap.entrySet()){
+            CompoundTag compoundTag=new CompoundTag();
+            compoundTag.putString("Name",entry.getKey());
+            compoundTag.putInt("CD",entry.getValue().getFirst());
 
-    //TODO: preserve cap data on death
+
+            ListTag dataList=new ListTag();
+
+            Object[] data=entry.getValue().getSecond();
+
+            for (Object obj:data) {
+                System.out.println("DATA TO SAVE IS " + obj);
+                if (obj instanceof UUID){
+                    dataList.add(StringTag.valueOf(((UUID)obj).toString()));
+                }
+                else if (obj instanceof Integer){
+                    dataList.add(IntTag.valueOf((Integer) obj));
+                }
+            }
+            compoundTag.put("Data",dataList);
+            abilities.add(compoundTag);
+        }
+        nbt.put("Abilities",abilities);
+        return nbt;
+    }
+
     void saveNBTData(CompoundTag nbt){
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (uuid !=null && DelayedFunctionManager.delayedFunctionManager.getPlayerCommandMap().containsKey(uuid)){
@@ -75,16 +100,31 @@ public class LivingEntityCapability {
         /*
         main issue is when the data is loaded, i need to map each command name to command pattern
          */
-        ListTag cdData= new ListTag();
-        for (Map.Entry<String,Pair<Integer,Integer[]>> entry:abilityDataMap.entrySet()) {
+        ListTag abilities=new ListTag();
+        for (Map.Entry<String, Pair<Integer,Object[]>> entry:abilityDataMap.entrySet()){
             CompoundTag compoundTag=new CompoundTag();
             compoundTag.putString("Name",entry.getKey());
             compoundTag.putInt("CD",entry.getValue().getFirst());
-            compoundTag.putIntArray("Data", List.of(entry.getValue().getSecond()));
-            System.out.println("SAVING ability " + entry.getKey() + " WITH TIME " + entry.getValue().getFirst());
-            cdData.add(compoundTag);
+
+
+            ListTag dataList=new ListTag();
+
+            Object[] data=entry.getValue().getSecond();
+            System.out.println("OUR UUID IS " + uuid);
+            for (Object obj:data) {
+                System.out.println("DATA TO SAVE IS " + obj);
+                if (obj instanceof UUID){
+                    dataList.add(StringTag.valueOf(((UUID)obj).toString()));
+                }
+                else if (obj instanceof Integer){
+                    dataList.add(IntTag.valueOf((Integer) obj));
+                }
+            }
+            System.out.println("WE ARE saving data for " + entry.getKey() +  ", data is as follows" +  dataList.toString());
+            compoundTag.put("Data",dataList);
+            abilities.add(compoundTag);
         }
-        nbt.put("AbilityData",cdData);
+        nbt.put("Abilities",abilities);
         nbt.putInt("NaviGauge",navigauge);
 
     }
@@ -98,25 +138,40 @@ public class LivingEntityCapability {
                 GenericCommandPattern pattern= LivingEntityCapHelperFuncs.findPatternFromString(commandName);
             }
         }
-        ListTag cdData=(ListTag) nbt.get("AbilityData");
-        if (cdData!=null){
-            for (int i = 0; i <cdData.size(); ++i) {
-                CompoundTag compoundtag = cdData.getCompound(i);
+        ListTag abilities=(ListTag) nbt.get("Abilities");
+        if (abilities!=null){
+            for (int i = 0; i <abilities.size(); ++i) {
+                CompoundTag compoundtag = abilities.getCompound(i);
                 String abilityName=compoundtag.getString("Name");
                 Integer cd=compoundtag.getInt("CD");
-                Integer[] data= Arrays.stream(compoundtag.getIntArray("Data")).boxed().toArray(Integer[]::new);
+                ListTag data= (ListTag) compoundtag.get("Data");
+                System.out.println("AB DATA load");
+                List<Object> objList = new ArrayList<>();
+                for (int a = 0; a < data.size(); ++a) {
+                    Tag abilityTag = data.get(a);
+                    if (abilityTag instanceof StringTag){
+                        objList.add(UUID.fromString(((StringTag)abilityTag).getAsString()));
+                        System.out.println("LOADING UUID " + UUID.fromString(((StringTag)abilityTag).getAsString()));
+                    }
+                    else if (abilityTag instanceof IntTag){
+                        objList.add(((IntTag)abilityTag).getAsInt());
+                    }
+                }
                 System.out.println("WE got ability " + abilityName + " WITH TIME " + cd);
-                abilityDataMap.put(abilityName,new Pair<>(cd,data));
+                System.out.println("OUR data list is " + objList.toString());
+                abilityDataMap.put(abilityName,new Pair<>(cd, objList.toArray()));
             }
         }
         navigauge=nbt.getInt("NaviGauge");
     }
 
     public void insertIntoAbilityMap(String abilityName, Integer cd){
-        abilityDataMap.put(abilityName,new Pair<>(cd,new Integer[0]));
+        abilityDataMap.put(abilityName,new Pair<>(cd,new Object[0]));
     }
-
-    public void insertIntoAbilityMap(String abilityName,Integer cd,Integer[] data){
+    public void removeFromAbilityMap(String abilityName){
+        abilityDataMap.remove(abilityName);
+    }
+    public void insertIntoAbilityMap(String abilityName,Integer cd,Object[] data){
         abilityDataMap.put(abilityName,new Pair<>(cd,data));
     }
     public void changeAbilityCD(String abilityName, int amt){
@@ -135,24 +190,28 @@ public class LivingEntityCapability {
         }
         return null;
     }
-    public Integer[] getAbilityData(String abilityName){
+    public Object[] getAbilityData(String abilityName){
         if (abilityDataMap.containsKey(abilityName)){
             return abilityDataMap.get(abilityName).getSecond();
         }
         return null;
     }
+    public void changeAbilityData(String abilityName,Object[] data){
+        if (abilityDataMap.containsKey(abilityName)){
+            abilityDataMap.put(abilityName, new Pair<>(abilityDataMap.get(abilityName).getFirst(), data));
+        }
+    }
     public void tickAbilityMap(){
-        Iterator<Map.Entry<String, Pair<Integer,Integer[]>>> iterator = abilityDataMap.entrySet().iterator();
+        Iterator<Map.Entry<String, Pair<Integer,Object[]>>> iterator = abilityDataMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<String, Pair<Integer,Integer[]>> entry = iterator.next();
-            Pair<Integer,Integer[]> val=entry.getValue();
+            Map.Entry<String, Pair<Integer,Object[]>> entry = iterator.next();
+            Pair<Integer,Object[]> val=entry.getValue();
             if (val.getFirst()!=-10){
                 entry.setValue(new Pair<>(val.getFirst()-1,val.getSecond()));
                 if (val.getFirst()-1 <= 0) {
                     if (LivingEntityCapHelperFuncs.onRemoveFromMap(entry.getKey(),uuid)){
                         iterator.remove();
                     }
-
 
                 }
             }
@@ -162,18 +221,6 @@ public class LivingEntityCapability {
 
     public void updateData(LivingEntityCapability data){
         this.abilityDataMap=data.abilityDataMap;
-    }
-    public CompoundTag initNBTData(CompoundTag nbt){
-        ListTag cdData=new ListTag();
-        for (Map.Entry<String, Pair<Integer,Integer[]>> entry:abilityDataMap.entrySet()){
-            CompoundTag compoundTag=new CompoundTag();
-            compoundTag.putString("Name",entry.getKey());
-            compoundTag.putInt("CD",entry.getValue().getFirst());
-            compoundTag.putIntArray("Data", List.of(entry.getValue().getSecond()));
-            cdData.add(compoundTag);
-        }
-        nbt.put("AbilityData",cdData);
-        return nbt;
     }
 
     public void copy(LivingEntityCapability data){

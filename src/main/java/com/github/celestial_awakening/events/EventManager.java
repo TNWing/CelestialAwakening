@@ -51,9 +51,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
 public class EventManager {
@@ -301,13 +300,58 @@ public class EventManager {
             }
         }
     }
+    ConcurrentHashMap<UUID,UUID[]> conversionDataStorage=new ConcurrentHashMap<>();//uuid of converting entity, uuid of other entity
 
+    @SubscribeEvent
+    public void onLivingConversionPre(LivingConversionEvent.Pre event){
+        LivingEntity entity= event.getEntity();
+        if (!entity.level().isClientSide){
+            ServerLevel level= (ServerLevel) entity.level();
+            LivingEntityCapability cap=entity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            if (cap!=null){
+
+                UUID[] data= (UUID[]) cap.getAbilityData(KnightmareSuit.honorDuel);
+                if (data!=null){
+                    conversionDataStorage.put(entity.getUUID(),data);
+                }
+
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onLivingConversionPost(LivingConversionEvent.Post event){
+        LivingEntity entity= event.getEntity();
+        if (!entity.level().isClientSide){
+            ServerLevel level= (ServerLevel) entity.level();
+            LivingEntity outcome=event.getOutcome();
+            UUID  originalUUID=entity.getUUID();
+            UUID outcomeUUID=outcome.getUUID();
+            if (conversionDataStorage.containsKey(originalUUID)){
+                UUID[] dataUUIDs=conversionDataStorage.get(originalUUID);
+                LivingEntityCapability outcomeCap=outcome.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+                if (outcomeCap!=null){
+                    outcomeCap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,dataUUIDs);
+                }
+                UUID otherUUID=dataUUIDs[0];//this will always be the other entity in the duel
+                LivingEntity otherEntity= (LivingEntity) level.getEntity(otherUUID);
+                LivingEntityCapability otherCap=otherEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+                if (otherCap!=null){
+                    otherCap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,new Object[]{outcomeUUID,dataUUIDs[1]});
+                }
+            }
+        }
+
+    }
     @SubscribeEvent
     public void onLivingDamage(LivingDamageEvent event){
         Entity directEntity=event.getSource().getDirectEntity();
         Entity causingEntity=event.getSource().getEntity();
         LivingEntity target=event.getEntity();
-        if (!target.level().isClientSide){
+        if (!target.level().isClientSide && causingEntity!=null){
+            LivingEntityCapability targetCap= target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            LivingEntityCapability attackerCap= causingEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (target instanceof Player){
                 Player player=(Player) target;
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
@@ -327,6 +371,13 @@ public class EventManager {
                         }
                     }
                 }
+                Object[] targetData= targetCap.getAbilityData(KnightmareSuit.honorDuel);
+                if (targetData!=null){
+                    UUID id1= (UUID) targetCap.getAbilityData(KnightmareSuit.honorDuel)[0];
+                    if (!id1.equals(causingEntity.getUUID())){
+                        event.setAmount(event.getAmount()*0.3f);
+                    }
+                }
             }
 
             if(causingEntity instanceof Player){
@@ -334,7 +385,15 @@ public class EventManager {
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
                     if (cnt>0) {
-                        entry.getValue().onLivingDamageOthers(event, player, cnt);
+                        entry.getValue().onLivingDamageOthers(event, player,
+                                cnt);
+                    }
+                }
+                Object[] attackerData= attackerCap.getAbilityData(KnightmareSuit.honorDuel);
+                if (attackerData!=null){
+                    UUID id1= (UUID) attackerCap.getAbilityData(KnightmareSuit.honorDuel)[0];
+                    if (!id1.equals(target.getUUID())){
+                        event.setAmount(event.getAmount()*0.3f);
                     }
                 }
             }
@@ -358,8 +417,31 @@ public class EventManager {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event){
-        if (!event.getEntity().level().isClientSide){
-            LivingEntity deadEntity=event.getEntity();
+        LivingEntity deadEntity=event.getEntity();
+        if (!deadEntity.level().isClientSide){
+            ServerLevel level= (ServerLevel) deadEntity.level();
+            LivingEntityCapability deadEntityCap=deadEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            if (deadEntityCap!=null){
+                Object[] honorDuelData=deadEntityCap.getAbilityData(KnightmareSuit.honorDuel);
+                UUID deadID=deadEntity.getUUID();
+                if (honorDuelData!=null){
+                    UUID id1= (UUID) honorDuelData[0];
+                    UUID id2= (UUID) honorDuelData[1];
+                    if (id2.equals(deadID)){//source of duel died
+                        if (level.getEntity(id1)!=null){
+                            level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                        }
+                    }
+                    else{//target of duel died
+                        Entity duelSource=level.getEntity(id2);
+                        if (duelSource!=null){
+                            duelSource.getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                        }
+                    }
+                }
+
+
+            }
             if(event.getSource().getEntity() instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
@@ -466,7 +548,6 @@ public class EventManager {
                 CompoundTag effectTag = effectsList.getCompound(i);
                 MobEffectInstance effectInstance = null;
                 if (effectTag.contains("Stage")) {
-                    System.out.println("WE HAVE A STAGE  TAG HERE");
                     // Use your custom loader to get an instance with updated custom data
                     //effectInstance = CustomMobEffectInstance.load(effectTag);
                 } else {

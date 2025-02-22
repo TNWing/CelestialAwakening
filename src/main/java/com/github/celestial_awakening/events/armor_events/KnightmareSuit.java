@@ -7,8 +7,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import java.util.UUID;
 
 public class KnightmareSuit extends ArmorEffect{
     int boldColor=0xC0c0c0;
@@ -37,6 +40,7 @@ public class KnightmareSuit extends ArmorEffect{
         Notoriety is replaced if a stronger enemy is killed
 
      */
+    //TODO: have honor duel removed upon entity death
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
@@ -49,11 +53,21 @@ public class KnightmareSuit extends ArmorEffect{
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addFullArmorSetComponent(event,"Sword & Shield",boldColor,"TBD",infoColor);
-        ToolTipBuilder.addFullArmorSetComponent(event,"Honor Duel",boldColor,"TBD",infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event,"Honor Duel",boldColor,"Hitting an enemy applies Honor Duel to the user\n" +
+                "Decreases damage taken from other enemies.\n" +
+                "Decreases damage dealt to other enemies.\n" +
+                "Honor Duel is removed if the user or the target is killed.\n"+
+                "An entity can only be linked with one Honor Duel at a time",infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,"Infamy",boldColor,
                 String.format("Upon killing an enemy, gain %s base damage for every 10 HP the enemy had.",cnt*0.25f),
                 infoColor);
     }
+
+    @Override
+    public void onEquipmentChange(LivingEquipmentChangeEvent event, Player player, int cnt){
+
+    }
+
 
 
     @Override
@@ -74,7 +88,7 @@ public class KnightmareSuit extends ArmorEffect{
 
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
-                Integer[] data=cap.getAbilityData(infamy);
+                Integer[] data= (Integer[]) cap.getAbilityData(infamy);
                 float mHp=event.getEntity().getMaxHealth();
                 int n= (int) ((mHp/10) * cnt*0.25f);
 
@@ -95,7 +109,7 @@ public class KnightmareSuit extends ArmorEffect{
 
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
-                Integer[] data=cap.getAbilityData(infamy);
+                Integer[] data= (Integer[]) cap.getAbilityData(infamy);
                 if (data!=null){
                     System.out.println("infamy boost");
                     int currentVal=data[0];
@@ -112,10 +126,12 @@ public class KnightmareSuit extends ArmorEffect{
             if (pCap!=null && targetCap!=null){
                 if (targetCap.getAbilityData(honorDuel)==null &&
                         pCap.getAbilityData(honorDuel)==null){//only apply if neither target is under honor duel
-                    Integer[] dataForPlayer= {target.getId(),player.getId()};//format: corresponding entity uuid, applying entity uuid
-                    Integer[] dataForTarget= {player.getId(),player.getId()};//format: corresponding entity uuid, applying entity uuid
+                    UUID[] dataForPlayer= {target.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
+                    UUID[] dataForTarget= {player.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
                     pCap.insertIntoAbilityMap(honorDuel,-10,dataForPlayer);
                     targetCap.insertIntoAbilityMap(honorDuel,-10,dataForTarget);
+                    //HONOR DUEL FOR c77386e1-8d59-4429-af55-7f23135e7faf AND 380df991-f603-344c-a090-369bad2a924a
+                    System.out.println("HONOR DUEL FOR " + target.getUUID() +  " AND " + player.getUUID());
                 }
 
             }
@@ -131,7 +147,7 @@ public class KnightmareSuit extends ArmorEffect{
         if(event.getSource().getEntity()==player){
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
-                Integer[] data=cap.getAbilityData("Knightmare_HonorDuel");
+                Object[] data=cap.getAbilityData(honorDuel);
             }
         }
     }

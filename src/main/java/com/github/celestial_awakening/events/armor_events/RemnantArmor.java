@@ -42,20 +42,21 @@ public class RemnantArmor extends ArmorEffect {
     public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
         devouringLight(event,player,cnt);
     }
+
     @Override
     public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         if (cnt==4){
             collapse(event,player);
         }
-
     }
+
     @Override
     public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         if (cnt==4){
             finalLight(player,event.getAmount());
         }
-
     }
+
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
         ToolTipBuilder.addShiftInfo(event);
@@ -70,6 +71,7 @@ public class RemnantArmor extends ArmorEffect {
         ToolTipBuilder.addFullArmorSetComponent(event,COLLAPSE_NAME,boldColor,COLLAPSE_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,DL_NAME,boldColor,DL_DESC,new Object[]{devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]},infoColor);
     }
+
     public void devouringLight(LivingDeathEvent event,Player player,int cnt){
         if (event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity()==player){
             if (cnt>0){
@@ -77,8 +79,8 @@ public class RemnantArmor extends ArmorEffect {
                 foodData.eat(devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]);
             }
         }
-
     }
+
     public void finalLight(Player player,float amt){
         LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         if (cap!=null && cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
@@ -86,7 +88,6 @@ public class RemnantArmor extends ArmorEffect {
             player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,0,false,false,false));
             cap.insertIntoAbilityMap(abilityFLCD,20*120);
         }
-
     }
 
     public void collapse(LivingHurtEvent event,Player player){
@@ -109,7 +110,6 @@ public class RemnantArmor extends ArmorEffect {
                     }
                 }
             }
-
         }
     }
 }

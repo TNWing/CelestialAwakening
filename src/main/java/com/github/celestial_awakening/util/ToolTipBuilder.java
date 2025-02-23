@@ -13,7 +13,7 @@ public class ToolTipBuilder {
         /*
         i can probably put my text before mc's standard text (such as armor stats) by grabbing the tooltip list, and appending mine to the front of the thing.
          */
-        Component component=Component.literal(SHIFT_TIP).setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.WHITE));
+        Component component=Component.translatable(SHIFT_TIP).setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.WHITE));
         event.getToolTip().add(component);
     }
     public static void addFullSetName(ItemTooltipEvent event, String effectName, int nameColor){

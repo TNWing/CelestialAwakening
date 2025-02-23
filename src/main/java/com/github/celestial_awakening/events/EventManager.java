@@ -37,9 +37,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -50,8 +52,12 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
@@ -162,43 +168,48 @@ public class EventManager {
     }
 
     @SubscribeEvent
-    public void onScytheAttack(MoonScytheAttackEvent event){
+    public static void onScytheAttack(MoonScytheAttackEvent event){
         ItemStack itemStack=event.getItemStack();
         boolean isCrit=event.getCrit();
-        MoonScytheCapability cap=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap).orElse(null);
+        @NotNull LazyOptional<MoonScytheCapability> capOptional=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap);
         Level level=event.getLevel();
-        if (cap!=null && !level.isClientSide){
-            ServerLevel serverLevel= (ServerLevel) level;
-            LivingEntity owner=event.getOwner();
-            float hAng=event.getHAng();
-            //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
-            if (isCrit){
-                if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
-                    LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
-                    crescent.setPos(event.getSpawnpoint());
-                    crescent.setYRot(owner.getYRot());
-                    crescent.setOwner(event.getOwner());
-                    serverLevel.addFreshEntity(crescent);
-                    ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
-                    cap.changeStrikeCD(100);
+        if (!level.isClientSide){
+            capOptional.ifPresent(cap->{
+                ServerLevel serverLevel= (ServerLevel) level;
+                LivingEntity owner=event.getOwner();
+                float hAng=event.getHAng();
+                //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
+                if (isCrit){
+                    if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
+                        LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
+                        crescent.setPos(event.getSpawnpoint());
+                        crescent.setYRot(owner.getYRot());
+                        crescent.setOwner(event.getOwner());
+                        serverLevel.addFreshEntity(crescent);
+                        ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
+                        cap.changeStrikeCD(100);
+                    }
                 }
-            }
-            else{
-                if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
-                    LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
-                    crescent.setPos(event.getSpawnpoint());
-                    crescent.setYRot(owner.getYRot());
-                    crescent.setOwner(event.getOwner());
-                    serverLevel.addFreshEntity(crescent);
-                    ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
-                    cap.changeWaveCD(100);
+                else{
+                    if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
+                        LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
+                        crescent.setPos(event.getSpawnpoint());
+                        crescent.setYRot(owner.getYRot());
+                        crescent.setOwner(event.getOwner());
+                        serverLevel.addFreshEntity(crescent);
+                        ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
+                        cap.changeWaveCD(100);
+                    }
                 }
-            }
+
+
+            });
+
         }
     }
 
     @SubscribeEvent
-    public void onItemFished(ItemFishedEvent event){
+    public static void onItemFished(ItemFishedEvent event){
         int cnt=0;
         Player player=event.getEntity();
         if (player!=null){
@@ -218,7 +229,7 @@ public class EventManager {
     }
 
     @SubscribeEvent
-    public void onEquipmentChange(LivingEquipmentChangeEvent event){
+    public static void onEquipmentChange(LivingEquipmentChangeEvent event){
         EquipmentSlot slot=event.getSlot();
         if (slot.isArmor() && event.getEntity() instanceof Player){
             Player player= (Player) event.getEntity();
@@ -231,7 +242,7 @@ public class EventManager {
         }
     }
     @SubscribeEvent
-    public void onItemToolTip(ItemTooltipEvent event){
+    public static void onItemToolTip(ItemTooltipEvent event){
         ItemStack itemStack=event.getItemStack();
         Player player=event.getEntity();
         if (player!=null){
@@ -248,78 +259,78 @@ public class EventManager {
 
     }
     @SubscribeEvent
-    public void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
+    public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
         ItemStack itemStack=event.getItem();
         LivingEntity player=event.getEntity();
-        if (player instanceof Player && itemStack.getFoodProperties(null)!=null && itemStack.hasTag() && itemStack.getTag().contains("LifeFragHeal")){
-            float heal=itemStack.getTag().getFloat("LifeFragHeal");
-            player.heal(heal);
+        if (player instanceof Player && itemStack.getFoodProperties(null) != null && itemStack.hasTag()) {
+            assert itemStack.getTag() != null;
+            if (itemStack.getTag().contains("LifeFragHeal")) {
+                float heal = itemStack.getTag().getFloat("LifeFragHeal");
+                player.heal(heal);
+            }
         }
 
     }
 
 
     @SubscribeEvent
-    public void onServerLevelLoad(LevelEvent.Load event){
+    public static void onServerLevelLoad(LevelEvent.Load event){
 
         LevelAccessor levelAccessor=event.getLevel();
 
         if (!levelAccessor.isClientSide()){
             ServerLevelAccessor serverLevelAccessor= (ServerLevelAccessor) levelAccessor;
             ServerLevel serverLevel=serverLevelAccessor.getLevel();
-            LevelCapability cap=serverLevel.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
-            if (cap!=null){
+            @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+            capOptional.ifPresent(cap->{
                 cap.loadNBTAfterLevelLoad();
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
-            }
+            });
         }
 
     }
     @SubscribeEvent
-    public void onBlockBreakEvent(BlockEvent.BreakEvent event){
+    public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
         Player player= event.getPlayer();
         Level level=player.level();
         if (level instanceof ServerLevel){
-            LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             BlockPos blockPos=event.getPos();
-            if (cap!=null){
+            capOptional.ifPresent(cap->{
                 if (cap.currentMoonstonePos.containsKey(blockPos)){
                     ItemEntity itemEntity =new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
                     level.addFreshEntity(itemEntity);
                     cap.currentMoonstonePos.remove(blockPos);
                 }
-            }
-            solarEvents.dropSunstone(level,event);
-            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectBlockBreak.entrySet()) {
-                int cnt=countPieces(player,entry.getKey());
-                if (cnt>0) {
-                    entry.getValue().onBlockBreak(event, player, cnt);
+                solarEvents.dropSunstone(level,event);
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectBlockBreak.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    if (cnt>0) {
+                        entry.getValue().onBlockBreak(event, player, cnt);
+                    }
                 }
-            }
+            });
         }
     }
-    ConcurrentHashMap<UUID,UUID[]> conversionDataStorage=new ConcurrentHashMap<>();//uuid of converting entity, uuid of other entity
+    static ConcurrentHashMap<UUID,UUID[]> conversionDataStorage=new ConcurrentHashMap<>();//uuid of converting entity, uuid of other entity
 
     @SubscribeEvent
-    public void onLivingConversionPre(LivingConversionEvent.Pre event){
+    public static void onLivingConversionPre(LivingConversionEvent.Pre event){
         LivingEntity entity= event.getEntity();
         if (!entity.level().isClientSide){
-            ServerLevel level= (ServerLevel) entity.level();
-            LivingEntityCapability cap=entity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null){
-
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
                 UUID[] data= (UUID[]) cap.getAbilityData(KnightmareSuit.honorDuel);
                 if (data!=null){
                     conversionDataStorage.put(entity.getUUID(),data);
                 }
-
-            }
+            });
         }
     }
 
 
     @SubscribeEvent
-    public void onLivingConversionPost(LivingConversionEvent.Post event){
+    public static void onLivingConversionPost(LivingConversionEvent.Post event){
         LivingEntity entity= event.getEntity();
         if (!entity.level().isClientSide){
             ServerLevel level= (ServerLevel) entity.level();
@@ -328,140 +339,23 @@ public class EventManager {
             UUID outcomeUUID=outcome.getUUID();
             if (conversionDataStorage.containsKey(originalUUID)){
                 UUID[] dataUUIDs=conversionDataStorage.get(originalUUID);
-                LivingEntityCapability outcomeCap=outcome.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-                if (outcomeCap!=null){
-                    outcomeCap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,dataUUIDs);
-                }
+                @NotNull LazyOptional<LivingEntityCapability> outcomeCapOptional=outcome.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                outcomeCapOptional.ifPresent(cap->{
+                    cap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,dataUUIDs);
+                });
                 UUID otherUUID=dataUUIDs[0];//this will always be the other entity in the duel
                 LivingEntity otherEntity= (LivingEntity) level.getEntity(otherUUID);
-                LivingEntityCapability otherCap=otherEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-                if (otherCap!=null){
-                    otherCap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,new Object[]{outcomeUUID,dataUUIDs[1]});
-                }
+                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=otherEntity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                otherCapOptional.ifPresent(cap->{
+                    cap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,new Object[]{outcomeUUID,dataUUIDs[1]});
+                });
             }
         }
 
     }
-    @SubscribeEvent
-    public void onLivingDamage(LivingDamageEvent event){
-        Entity directEntity=event.getSource().getDirectEntity();
-        Entity causingEntity=event.getSource().getEntity();
-        LivingEntity target=event.getEntity();
-        if (!target.level().isClientSide && causingEntity!=null){
-            LivingEntityCapability targetCap= target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            LivingEntityCapability attackerCap= causingEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (target instanceof Player){
-                Player player=(Player) target;
-                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
-                    int cnt=countPieces(player,entry.getKey());
-                    if (cnt>0) {
-                        entry.getValue().onLivingDamageSelf(event, player, cnt);
-                    }
-                }
-                if (directEntity instanceof Mob){
-                    Mob mob= (Mob) directEntity;
-                    if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
-                        if (!event.isCanceled()){
-                            mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
-                            LivingEntityCapability cap=target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-                            if (cap!=null){
-                            }
-                        }
-                    }
-                }
-                Object[] targetData= targetCap.getAbilityData(KnightmareSuit.honorDuel);
-                if (targetData!=null){
-                    UUID id1= (UUID) targetCap.getAbilityData(KnightmareSuit.honorDuel)[0];
-                    if (!id1.equals(causingEntity.getUUID())){
-                        event.setAmount(event.getAmount()*0.3f);
-                    }
-                }
-            }
-
-            if(causingEntity instanceof Player){
-                Player player=(Player) causingEntity;
-                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
-                    int cnt=countPieces(player,entry.getKey());
-                    if (cnt>0) {
-                        entry.getValue().onLivingDamageOthers(event, player,
-                                cnt);
-                    }
-                }
-                Object[] attackerData= attackerCap.getAbilityData(KnightmareSuit.honorDuel);
-                if (attackerData!=null){
-                    UUID id1= (UUID) attackerCap.getAbilityData(KnightmareSuit.honorDuel)[0];
-                    if (!id1.equals(target.getUUID())){
-                        event.setAmount(event.getAmount()*0.3f);
-                    }
-                }
-            }
-            /*
-            if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
-                ExposingLightMobEffectInstance exposingLightInstance= (ExposingLightMobEffectInstance) livingEntity.getEffect(MobEffectInit.EXPOSING_LIGHT.get());
-                int stacks=exposingLightInstance.getStacks();
-                event.setAmount(event.getAmount()*(1 + 0.015f*stacks));
-                if (exposingLightInstance.getStackCD()==0){
-
-                }
-                exposingLightInstance.increaseStacks(1);
-            }
-
-
-             */
-
-        }
-    }
-
 
     @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event){
-        LivingEntity deadEntity=event.getEntity();
-        if (!deadEntity.level().isClientSide){
-            ServerLevel level= (ServerLevel) deadEntity.level();
-            LivingEntityCapability deadEntityCap=deadEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (deadEntityCap!=null){
-                Object[] honorDuelData=deadEntityCap.getAbilityData(KnightmareSuit.honorDuel);
-                UUID deadID=deadEntity.getUUID();
-                if (honorDuelData!=null){
-                    UUID id1= (UUID) honorDuelData[0];
-                    UUID id2= (UUID) honorDuelData[1];
-                    if (id2.equals(deadID)){//source of duel died
-                        if (level.getEntity(id1)!=null){
-                            level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
-                        }
-                    }
-                    else{//target of duel died
-                        Entity duelSource=level.getEntity(id2);
-                        if (duelSource!=null){
-                            duelSource.getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
-                        }
-                    }
-                }
-
-
-            }
-            if(event.getSource().getEntity() instanceof Player){
-                Player player=(Player) event.getSource().getEntity();
-                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
-                    int cnt=countPieces(player,entry.getKey());
-                    if (cnt>0){
-                        entry.getValue().onLivingDeath(event,player,cnt);
-                    }
-
-                }
-            }
-        }
-    }
-
-
-    @SubscribeEvent
-    public void onPlayerChangeDim(PlayerEvent.PlayerChangedDimensionEvent event){
-        if (event.getTo() == null){
-
-        }
-    }
-    @SubscribeEvent
-    public void onLivingHurt(LivingHurtEvent event){
+    public static void onLivingHurt(LivingHurtEvent event){
         LivingEntity target=event.getEntity();
         if (!target.level().isClientSide){
             float amt=event.getAmount();
@@ -506,7 +400,130 @@ public class EventManager {
     }
 
     @SubscribeEvent
-    public void onTrade(TradeWithVillagerEvent event){
+    public static void onLivingDamage(LivingDamageEvent event){
+        Entity directEntity=event.getSource().getDirectEntity();
+        Entity causingEntity=event.getSource().getEntity();
+        LivingEntity target=event.getEntity();
+        if (!target.level().isClientSide && causingEntity!=null){
+            LivingEntityCapability targetCap= target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            LivingEntityCapability attackerCap= causingEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            if (target instanceof Player){
+                Player player=(Player) target;
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    if (cnt>0) {
+                        entry.getValue().onLivingDamageSelf(event, player, cnt);
+                    }
+                }
+                if (directEntity instanceof Mob){
+                    Mob mob= (Mob) directEntity;
+                    if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
+                        if (!event.isCanceled()){
+                            mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
+                            LivingEntityCapability cap=target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+                            if (cap!=null){
+                            }
+                        }
+                    }
+                }
+                Object[] targetData= targetCap.getAbilityData(KnightmareSuit.honorDuel);
+                if (targetData!=null){
+                    UUID id1= (UUID) targetCap.getAbilityData(KnightmareSuit.honorDuel)[0];
+                    if (!id1.equals(causingEntity.getUUID())){
+                        System.out.println("hduel");
+                        event.setAmount(event.getAmount()*0.3f);
+                    }
+                }
+            }
+
+            if(causingEntity instanceof Player){
+                Player player=(Player) causingEntity;
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    if (cnt>0) {
+                        entry.getValue().onLivingDamageOthers(event, player,
+                                cnt);
+                    }
+                }
+                Object[] attackerData= attackerCap.getAbilityData(KnightmareSuit.honorDuel);
+                if (attackerData!=null){
+                    UUID id1= (UUID) attackerCap.getAbilityData(KnightmareSuit.honorDuel)[0];
+                    if (!id1.equals(target.getUUID())){
+                        System.out.println("hduel");
+                        event.setAmount(event.getAmount()*0.3f);
+                    }
+                }
+            }
+            /*
+            if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
+                ExposingLightMobEffectInstance exposingLightInstance= (ExposingLightMobEffectInstance) livingEntity.getEffect(MobEffectInit.EXPOSING_LIGHT.get());
+                int stacks=exposingLightInstance.getStacks();
+                event.setAmount(event.getAmount()*(1 + 0.015f*stacks));
+                if (exposingLightInstance.getStackCD()==0){
+
+                }
+                exposingLightInstance.increaseStacks(1);
+            }
+
+
+             */
+
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event){
+        LivingEntity deadEntity=event.getEntity();
+        if (!deadEntity.level().isClientSide){
+            ServerLevel level= (ServerLevel) deadEntity.level();
+            LivingEntityCapability deadEntityCap=deadEntity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            if (deadEntityCap!=null){
+                Object[] honorDuelData=deadEntityCap.getAbilityData(KnightmareSuit.honorDuel);
+                UUID deadID=deadEntity.getUUID();
+                if (honorDuelData!=null){
+                    System.out.println("LDEATH RELEASE");
+                    UUID id1= (UUID) honorDuelData[0];
+                    UUID id2= (UUID) honorDuelData[1];
+                    if (id2.equals(deadID)){//source of duel died
+                        if (level.getEntity(id1)!=null){
+                            level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                        }
+                    }
+                    else{//target of duel died
+                        Entity duelSource=level.getEntity(id2);
+                        if (duelSource!=null){
+                            duelSource.getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                        }
+                    }
+                }
+
+
+            }
+            if(event.getSource().getEntity() instanceof Player){
+                Player player=(Player) event.getSource().getEntity();
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    if (cnt>0){
+                        entry.getValue().onLivingDeath(event,player,cnt);
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onPlayerChangeDim(PlayerEvent.PlayerChangedDimensionEvent event){
+        if (event.getTo() == null){
+
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onTrade(TradeWithVillagerEvent event){
         ItemStack costA=event.getMerchantOffer().getBaseCostA();
         ItemStack costB=event.getMerchantOffer().getCostB();
         Player player=event.getEntity();
@@ -525,42 +542,74 @@ public class EventManager {
     }
 
 
-        @SubscribeEvent
-        public void onEntityLoad(EntityJoinLevelEvent event) {
-            if (!(event.getEntity() instanceof LivingEntity)) {
-                return;
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+
+        LivingEntity entity = (LivingEntity) event.getEntity();
+
+        CompoundTag entityTag = entity.serializeNBT();
+        if (!entityTag.contains("ActiveEffects")) {
+            return;
+        }
+
+        ListTag effectsList = entityTag.getList("ActiveEffects", 10); // 10 = CompoundTag type
+        // Clear current effects so we can re-add them
+        //entity.removeAllEffects();
+
+        for (int i = 0; i < effectsList.size(); i++) {
+            CompoundTag effectTag = effectsList.getCompound(i);
+            MobEffectInstance effectInstance = null;
+            if (effectTag.contains("Stage")) {
+                // Use your custom loader to get an instance with updated custom data
+                //effectInstance = CustomMobEffectInstance.load(effectTag);
+            } else {
+                // Fall back to vanilla loading if no custom data is present
+                effectInstance = MobEffectInstance.load(effectTag);
             }
-
-            LivingEntity entity = (LivingEntity) event.getEntity();
-
-            CompoundTag entityTag = entity.serializeNBT();
-            if (!entityTag.contains("ActiveEffects")) {
-                return;
-            }
-
-            ListTag effectsList = entityTag.getList("ActiveEffects", 10); // 10 = CompoundTag type
-            // Clear current effects so we can re-add them
-            //entity.removeAllEffects();
-
-            for (int i = 0; i < effectsList.size(); i++) {
-                CompoundTag effectTag = effectsList.getCompound(i);
-                MobEffectInstance effectInstance = null;
-                if (effectTag.contains("Stage")) {
-                    // Use your custom loader to get an instance with updated custom data
-                    //effectInstance = CustomMobEffectInstance.load(effectTag);
-                } else {
-                    // Fall back to vanilla loading if no custom data is present
-                    effectInstance = MobEffectInstance.load(effectTag);
-                }
-                if (effectInstance != null) {
-                    //entity.addEffect(effectInstance);
-                }
+            if (effectInstance != null) {
+                //entity.addEffect(effectInstance);
             }
         }
+    }
+
+
+    @SubscribeEvent
+    public static void onEntityLeaveLevel(EntityLeaveLevelEvent event){
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+        if (event.getLevel().isClientSide){
+            return;
+        }
+        ServerLevel level= (ServerLevel) event.getLevel();
+        LivingEntity entity = (LivingEntity) event.getEntity();
+        LivingEntityCapability cap=entity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+        if (cap!=null){
+            if (cap.hasAbility(KnightmareSuit.honorDuel)){
+                Object[] honorDuelData=cap.getAbilityData(KnightmareSuit.honorDuel);
+                UUID id1= (UUID) honorDuelData[0];
+
+                LivingEntityCapability otherCap=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+                if (otherCap!=null){
+                    if (otherCap.hasAbility(KnightmareSuit.honorDuel) && otherCap.getAbilityData(KnightmareSuit.honorDuel)[0]==entity.getUUID()){
+                        System.out.println("RELEASING FROM HDUEL");
+                        otherCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+                    }
+
+                }
+
+                cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+            }
+        }
+    }
+
 
     /*
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) throws NoSuchFieldException, IllegalAccessException {
+    public static void onServerTick(TickEvent.ServerTickEvent event) throws NoSuchFieldException, IllegalAccessException {
         if (event.phase== TickEvent.Phase.START){
 
         }
@@ -569,7 +618,7 @@ public class EventManager {
      */
 
     @SubscribeEvent
-    public void onServerLevelTick(TickEvent.LevelTickEvent event) throws NoSuchFieldException, IllegalAccessException {
+    public static void onServerLevelTick(TickEvent.LevelTickEvent event) throws NoSuchFieldException, IllegalAccessException {
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             ServerLevel level = (ServerLevel) event.level;
             level.isDay();
@@ -609,7 +658,7 @@ public class EventManager {
 
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event){
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         Player player=event.player;
         if (event.phase== TickEvent.Phase.START && event.side.isServer()){
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
@@ -620,15 +669,36 @@ public class EventManager {
                 }
             }
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+            ServerLevel level= (ServerLevel) player.level();
             if (cap!=null){
                 cap.tickAbilityMap();
+                if (player.tickCount%200==0){
+                    if (cap.hasAbility(KnightmareSuit.honorDuel)){
+                        UUID targetID= (UUID) cap.getAbilityData(KnightmareSuit.honorDuel)[0];
+                        Entity target=level.getEntity(targetID);
+                        if (target==null || target.distanceTo(player)>25){
+                            System.out.println("REMOVING HDUEL DUE TO DIST");
+                            cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+                            LivingEntityCapability targetCap=target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
+                            if (targetCap!=null && targetCap.hasAbility(KnightmareSuit.honorDuel)){
+                                Object[] targetData=targetCap.getAbilityData(KnightmareSuit.honorDuel);
+                                if (player.getUUID().equals(targetData[0])){
+                                    targetCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+                                }
+                            }
+
+                        }
+                    }
+                    //perform forced updates
+                }
             }
+
         }
 
 
     }
 
-    private int countPieces(Player player, ArmorMaterial material) {
+    private static int countPieces(Player player, ArmorMaterial material) {
         int cnt=0;
         if (player!=null){
 

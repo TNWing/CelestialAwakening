@@ -112,10 +112,10 @@ public class KnightmareSuit extends ArmorEffect{
         if(event.getSource().getEntity()==player){
 
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null){
-                Integer[] data= (Integer[]) cap.getAbilityData(infamy);
+            if (cap!=null && cap.hasAbility(infamy)){
+                Object[] data= cap.getAbilityData(infamy);
                 if (data!=null){
-                    int currentVal=data[0];
+                    int currentVal= (int) data[0];
                     event.setAmount(event.getAmount()+currentVal);
                 }
             }

@@ -184,6 +184,9 @@ public class LivingEntityCapability {
         }
 
     }
+    public boolean hasAbility(String abilityName){
+        return abilityDataMap.containsKey(abilityName);
+    }
     public Integer getAbilityCD(String abilityName){
         if (abilityDataMap.containsKey(abilityName)){
             return abilityDataMap.get(abilityName).getFirst();

@@ -59,6 +59,11 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP=BUILDER.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,Integer.MAX_VALUE);
 
 
+
+    private static final ForgeConfigSpec.DoubleValue HONOR_DUEL_DIST=BUILDER.comment("The max distance between entities linked by honor duel. If the distance exceeds this amount, breaks the link.\nDefault: 25").defineInRange("honor_duel_dist",25f,1f,Float.MAX_VALUE);
+
+
+
     //private static ForgeConfigSpec.Builder b=BUILDER.comment("The lines below are used to modify the text and colors of item descriptions.");
 
     static final ForgeConfigSpec SPEC =  BUILDER.build();
@@ -86,15 +91,18 @@ public class Config
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
 
+
+    public static double honorDuelDist;
+
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
-                .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,new ResourceLocation(obj)))
+                .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,ResourceLocation.parse(obj)))
                 .collect(Collectors.toSet());
     }
 
     static Set<ResourceKey<EntityType<?>>> strToEntities(List<? extends String> list){
         return list.stream().map(
-          obj->ResourceKey.create(Registries.ENTITY_TYPE,new ResourceLocation(obj)))
+          obj->ResourceKey.create(Registries.ENTITY_TYPE,ResourceLocation.parse(obj)))
                 .filter(key->{EntityType<?> type= ForgeRegistries.ENTITY_TYPES.getValue(key.location());
                 return type!=null && LivingEntity.class.isAssignableFrom(type.getBaseClass());
                 })
@@ -122,6 +130,9 @@ public class Config
         pkCrescenciaMinDay=PK_CRESCENCIA_MIN_DAY.get()-1;
 
         pkSpawnCap=PK_SPAWN_CAP.get();
+
+
+        honorDuelDist= HONOR_DUEL_DIST.get();
 
 
         /*

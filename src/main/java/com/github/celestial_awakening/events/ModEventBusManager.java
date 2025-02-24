@@ -18,10 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEventBusManager {
     @SubscribeEvent
     public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
-
-        System.out.println("REGISTERING SPAWN PLACEMENTS");
         event.register(EntityInit.NIGHT_PROWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
-        System.out.println("POST REGISTER SP");
     }
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){

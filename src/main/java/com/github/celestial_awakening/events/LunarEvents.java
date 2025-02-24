@@ -50,7 +50,7 @@ public class LunarEvents {
     }
     public boolean attemptPKSpawn(ServerLevel level){
 
-        if (validDim(level, Config.solCultDimensionTypes)){
+        if (validDim(level, Config.transcendentsDimensionTypes)){
             int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
             if (MathFuncs.isInRange(time,18000,0)){//for now, offset will be 0
                 Random rand=new Random();

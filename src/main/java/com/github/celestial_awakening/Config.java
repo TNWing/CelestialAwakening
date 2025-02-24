@@ -23,10 +23,10 @@ public class Config
 {
 
 
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder().comment("Celestial Awakening Config\n\nSol Cult Config\n");
-    /*
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder().comment("Celestial Awakening Config\n\nTranscendents Config\n");
+/*
     private static final ForgeConfigSpec.ConfigValue<Double> MOB_HP_SCALE=BUILDER.comment("Multiplies each mob's base HP by this value. Default: 1").defineInRange("mob_hp_mult",1D,1D,Double.MAX_VALUE);
-    private static final ForgeConfigSpec.ConfigValue<Double> MOB_DMG_SCALE=BUILDER.comment("Multiplies each mob's base damage by this value. Default: 1").defineInRange("mob_dmg_mult",1D,1D,Double.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<Double> MOB_DMG_SCALE=BUILDER.comment("(CURRENTLY NOT FUNCTIONAL)Multiplies each mob's base damage by this value. Default: 1").defineInRange("mob_dmg_mult",1D,1D,Double.MAX_VALUE);
     private static final ForgeConfigSpec.ConfigValue<Double> MOB_ARMOR_PT_SCALE=BUILDER.comment("Multiplies each mob's base armor points by this value. Default: 1").defineInRange("mob_armor_pt_mult",1D,1D,Double.MAX_VALUE);
     private static final ForgeConfigSpec.ConfigValue<Double> MOB_ARMOR_TOUGH_SCALE=BUILDER.comment("Multiplies each mob's base armor toughness by this value. Default: 1").defineInRange("mob_armor_t_mult",1D,1D,Double.MAX_VALUE);
 
@@ -36,20 +36,22 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Double> ARMOR_T_SCALE=BUILDER.comment("Multiplies each armor's base armor toughness by this value. Default: 1").defineInRange("armor_t_mult",1D,1D,Double.MAX_VALUE);
 
 
-     */
+
+ */
+
     //private static final ForgeConfigSpec.ConfigValue<Integer> UPDATE_TICK_DELAY=BUILDER.comment("Represents how many ticks the Server waits for before performing a manual update on various mod components.\nWould recommend not touching this unless game\nDefault 2400 ticks(2 realtime minutes)").defineInRange("sol_cult_init_delay",2400,600,24000);
 
 
 
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> SOL_CULT_DIMENSIONS=BUILDER.comment("Dimensions that the Sol Cult's diviner and scout are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("sol_cult_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_DIMENSIONS =BUILDER.comment("Dimensions that the Transcendents's diviner and scout are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
 
-    private static final ForgeConfigSpec.ConfigValue<Boolean> SOL_CULT_MULTIPLE_DIVINER=BUILDER.comment("If the Sol Cult's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault false").define("sol_cult_diviner_shared_dim",false);
+    private static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_MULTIPLE_DIVINER =BUILDER.comment("If the Transcendents's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault false").define("transcendents_diviner_shared_dim",false);
 
-    private static final ForgeConfigSpec.ConfigValue<Integer> SOL_CULT_DELAY=BUILDER.comment("Upon creating a world, block the Sol Cult from doing anything until a set amount of time has passed.\nDefault 240000 ticks(10 in game days)").defineInRange("sol_cult_init_delay",240000,0,Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DELAY =BUILDER.comment("Upon creating a world, block the Transcendents from doing anything until a set amount of time has passed.\nDefault 240000 ticks(10 in game days)").defineInRange("transcendents_init_delay",240000,0,Integer.MAX_VALUE);
 
-    private static final ForgeConfigSpec.ConfigValue<Integer> SOL_CULT_MIN_CD=BUILDER.comment("Smallest amount of time it takes for the Sol Cult's diviner to perform another scrying. Does not restrict other factors from hastening the next scry.\nDefault 36000 ticks (1.5 in game days)").defineInRange("sol_cult_div_min_cd",36000,0,Integer.MAX_VALUE);
-    private static final ForgeConfigSpec.ConfigValue<Integer> SOL_CULT_MAX_CD=BUILDER.comment("Largest amount of time it takes for the Sol Cult's diviner to perform another scrying. Does not restrict other factors from impeding the next scry.\nDefault 72000 ticks (3 in game days)").defineInRange("sol_cult_div_max_cd",72000,0,Integer.MAX_VALUE);
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>>  SOL_CULT_ENEMIES=BUILDER.comment("(CURRENTLY NOT FUNCTIONAL)\nNon-player living entities that the sol cult will intentionally target.\nDefault: None.\nFormat:minecraft:zombie").defineListAllowEmpty("sol_cult_targets",new ArrayList<>(), obj->obj instanceof String);
+    private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_MIN_CD =BUILDER.comment("Smallest amount of time it takes for the Transcendents's diviner to perform another scrying. Does not restrict other factors from hastening the next scry.\nDefault 36000 ticks (1.5 in game days)").defineInRange("transcendents_div_min_cd",36000,0,Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_MAX_CD =BUILDER.comment("Largest amount of time it takes for the Transcendents's diviner to perform another scrying. Does not restrict other factors from impeding the next scry.\nDefault 72000 ticks (3 in game days)").defineInRange("transcendents_div_max_cd",72000,0,Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_ENEMIES =BUILDER.comment("(CURRENTLY NOT FUNCTIONAL)\nNon-player living entities that the transcendents will intentionally target.\nDefault: None.\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(), obj->obj instanceof String);
 
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS=BUILDER.comment("\n\nLunar Config\n\nDimensions that moonstones can spawn in.\nDefault minecraft:overworld").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
 
@@ -79,11 +81,11 @@ public class Config
     public static double armorToughnessScale=1;
 
     public static boolean divinerShared;
-    public static Set<ResourceKey<DimensionType>> solCultDimensionTypes;
-    public static int solCultInitDelay;
-    public static int solCultDivMinCD;
-    public static int solCultDivMaxCD;
-    public static Set<ResourceKey<EntityType<?>>> solCultTargets;
+    public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
+    public static int transcendentsInitDelay;
+    public static int transcendentsDivMinCD;
+    public static int transcendentsDivMaxCD;
+    public static Set<ResourceKey<EntityType<?>>> transcendentsTargets;
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
@@ -111,19 +113,19 @@ public class Config
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        solCultDimensionTypes= strToDimTypeKey(SOL_CULT_DIMENSIONS.get());
+        transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
 
         lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
 
-        divinerShared=SOL_CULT_MULTIPLE_DIVINER.get();
+        divinerShared= TRANSCENDENTS_MULTIPLE_DIVINER.get();
 
-        solCultInitDelay=SOL_CULT_DELAY.get();
+        transcendentsInitDelay = TRANSCENDENTS_DELAY.get();
 
-        solCultDivMinCD=SOL_CULT_MIN_CD.get();
+        transcendentsDivMinCD = TRANSCENDENTS_MIN_CD.get();
 
-        solCultDivMaxCD=SOL_CULT_MAX_CD.get();
+        transcendentsDivMaxCD = TRANSCENDENTS_MAX_CD.get();
 
-        solCultTargets=strToEntities(SOL_CULT_ENEMIES.get());
+        transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
 
         //pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
 
@@ -133,8 +135,6 @@ public class Config
 
 
         honorDuelDist= HONOR_DUEL_DIST.get();
-
-
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();
@@ -146,5 +146,12 @@ public class Config
         armorToughnessScale=ARMOR_T_SCALE.get();
 
          */
+        refreshMobAttributes();
+
+    }
+
+    public static void refreshMobAttributes(){
+        //Asteron.updateAttributesFromConfig();
+        System.out.println("new HP SCALE IS " + mobHPScale);
     }
 }

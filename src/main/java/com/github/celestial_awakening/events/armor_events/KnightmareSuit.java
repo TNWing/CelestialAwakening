@@ -92,12 +92,12 @@ public class KnightmareSuit extends ArmorEffect{
 
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null){
-                Integer[] data= (Integer[]) cap.getAbilityData(infamy);
+                Object[] data= (Object[]) cap.getAbilityData(infamy);
                 float mHp=event.getEntity().getMaxHealth();
                 int n= (int) ((mHp/10) * cnt*0.25f);
 
                 if (data!=null){
-                    int currentVal=data[0];
+                    int currentVal= (int) data[0];
                     if (currentVal<=n){
                         cap.insertIntoAbilityMap(infamy,15*20,new Integer[]{n});
                     }

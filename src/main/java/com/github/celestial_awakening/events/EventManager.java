@@ -683,17 +683,17 @@ public class EventManager {
                         if (target==null || target.distanceTo(player)> Config.honorDuelDist){
                             System.out.println("REMOVING HDUEL DUE TO DIST");
                             cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
-                            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.playerCapability);
-                            targetCapOptional.ifPresent(targetCap->{
-                                if (targetCap.hasAbility(KnightmareSuit.honorDuel)){
-                                    Object[] targetData=targetCap.getAbilityData(KnightmareSuit.honorDuel);
-                                    if (player.getUUID().equals(targetData[0])){
-                                        targetCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+                            if (target!=null){
+                                @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                                targetCapOptional.ifPresent(targetCap->{
+                                    if (targetCap.hasAbility(KnightmareSuit.honorDuel)){
+                                        Object[] targetData=targetCap.getAbilityData(KnightmareSuit.honorDuel);
+                                        if (player.getUUID().equals(targetData[0])){
+                                            targetCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
+                                        }
                                     }
-                                }
-                            });
-
-
+                                });
+                            }
                         }
                     }
                 }

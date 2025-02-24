@@ -21,7 +21,8 @@ public class ModEventBusManager {
         event.register(EntityInit.NIGHT_PROWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
     @SubscribeEvent
-    public static void registerAttributes(EntityAttributeCreationEvent event){
+    public static void registerAttributes(EntityAttributeCreationEvent event){//called before config load
+        System.out.println("CREATING ATT");
         event.put(EntityInit.ASTERON.get(), Asteron.createAttributes().build());
         event.put(EntityInit.ASTRALITE.get(), Astralite.createAttributes().build());
         event.put(EntityInit.NEBURE.get(), Nebure.createAttributes().build());
@@ -29,6 +30,7 @@ public class ModEventBusManager {
         event.put(EntityInit.NIGHT_PROWLER.get(), NightProwler.createAttributes().build());
         event.put(EntityInit.PK_CRESCENCIA.get(), PhantomKnight_Crescencia.createAttributes().build());
     }
+
     /*
     @SubscribeEvent
     public static void updateAttributes(EntityAttributeModificationEvent event){

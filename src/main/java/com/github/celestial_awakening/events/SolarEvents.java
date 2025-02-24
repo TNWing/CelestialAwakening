@@ -37,7 +37,7 @@ public class SolarEvents {
         if (event.side.isServer()){
             ServerLevel level= (ServerLevel) event.level;
             long time=level.getDayTime();
-            if (time%100==0 && time >Config.solCultInitDelay&& time%24000L<12000L ){
+            if (time%100==0 && time >Config.transcendentsInitDelay && time%24000L<12000L ){
                 LevelCapability cap;
                 if (Config.divinerShared){
                     cap=level.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
@@ -45,7 +45,7 @@ public class SolarEvents {
                 else{
                     cap= level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
                 }
-                if (cap!=null  && validDim(level, Config.solCultDimensionTypes)){
+                if (cap!=null  && validDim(level, Config.transcendentsDimensionTypes)){
                     if (cap.divinerEyeCD>0){
                         cap.divinerEyeCD--;
                     }
@@ -92,7 +92,7 @@ public class SolarEvents {
 
     public void createDivinerEye(LevelCapability cap, ResourceKey<Level> dimID){
         Random rand=new Random();
-        cap.divinerEyeCD=rand.nextInt(Config.solCultDivMinCD,Config.solCultDivMaxCD)+1;
+        cap.divinerEyeCD=rand.nextInt(Config.transcendentsDivMinCD,Config.transcendentsDivMaxCD)+1;
         cap.divinerEyeChance=0;
         cap.divinerEyeFromState=-1;
         cap.divinerEyeToState=-1;

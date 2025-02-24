@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.living.transcendents;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.combat.transcendents.asteron.AsteronCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.AnimationState;
@@ -29,6 +30,13 @@ public class Asteron extends AbstractTranscendent {
 
     public Asteron(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
+        System.out.println("PREV MHP IS " + this.getMaxHealth());
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(baseHP * Config.mobHPScale);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(baseDmg * Config.mobDmgScale);
+        this.getAttribute(Attributes.ARMOR).setBaseValue(baseArmor * Config.mobArmorPtScale);
+        this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(baseTough * Config.mobArmorToughnessScale);
+        System.out.println("new MHP IS " + this.getMaxHealth());
+        //this.setHealth(this.getMaxHealth());
     }
 
 
@@ -52,13 +60,32 @@ public class Asteron extends AbstractTranscendent {
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.KNOCKBACK_RESISTANCE,0.3D)
-                .add(Attributes.MAX_HEALTH, baseHP)
-                .add(Attributes.ARMOR, baseArmor)
-                .add(Attributes.ARMOR_TOUGHNESS, baseTough)
+                .add(Attributes.MAX_HEALTH, baseHP*Config.mobHPScale)
+                .add(Attributes.ARMOR, baseArmor*armorPtMult)
+                .add(Attributes.ARMOR_TOUGHNESS, baseTough*armorToughMult)
                 .add(Attributes.FOLLOW_RANGE,48D)
-                .add(Attributes.ATTACK_DAMAGE, baseDmg);
+                .add(Attributes.ATTACK_DAMAGE, baseDmg*dmgMult);
     }
 
+    public static void updateAttributesFromConfig(){
+        System.out.println("UPDATE " + Config.mobHPScale);
+        maxHealthMult =Config.mobHPScale;
+        dmgMult =  Config.mobDmgScale;
+        armorPtMult = Config.armorPtScale;
+        armorToughMult =Config.armorToughnessScale;
+    }
+
+
+    public static AttributeSupplier.Builder createScaledAttributes() {//TODO
+        return Monster.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(Attributes.KNOCKBACK_RESISTANCE,0.3D)
+                .add(Attributes.MAX_HEALTH, baseHP* Config.mobHPScale)
+                .add(Attributes.ARMOR,baseArmor*Config.mobArmorPtScale)
+                .add(Attributes.ARMOR_TOUGHNESS, baseTough*Config.mobArmorToughnessScale)
+                .add(Attributes.FOLLOW_RANGE,48D)
+                .add(Attributes.ATTACK_DAMAGE, baseDmg*Config.mobDmgScale);
+    }
     public static void addScaledAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> entityType){
         addScaledAttributes(event, entityType,baseHP,baseArmor,baseTough,baseDmg);
     }

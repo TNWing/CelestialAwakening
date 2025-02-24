@@ -38,6 +38,12 @@ public abstract class AbstractCALivingEntity extends Monster {
     public double maxRange;
     public boolean keepDist;//if true, instead of mob moving towards target, target tries to stay at least X blocks away
     public float spdMod;
+
+    protected static Double maxHealthMult =Config.mobHPScale;
+    protected static Double dmgMult =  Config.mobDmgScale;
+    protected static Double armorPtMult = Config.armorPtScale;
+    protected static Double armorToughMult =Config.armorToughnessScale;
+
     protected AbstractCALivingEntity(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 
         super(p_33002_, p_33003_);
@@ -55,6 +61,14 @@ public abstract class AbstractCALivingEntity extends Monster {
         event.add(type,Attributes.ARMOR_TOUGHNESS,baseTough*Config.mobArmorToughnessScale);
         event.add(type,Attributes.ATTACK_DAMAGE,baseDmg*Config.mobDmgScale);
     }
+    public static void createAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> type,double baseHP,double baseArmor,double baseTough,double baseDmg) {
+        event.add(type,Attributes.MAX_HEALTH,baseHP*Config.mobHPScale);
+        event.add(type,Attributes.ARMOR,baseArmor*Config.mobArmorPtScale);
+        event.add(type,Attributes.ARMOR_TOUGHNESS,baseTough*Config.mobArmorToughnessScale);
+        event.add(type,Attributes.ATTACK_DAMAGE,baseDmg*Config.mobDmgScale);
+    }
+
+
 
     public boolean isActing() {
         if (this.level().isClientSide) {

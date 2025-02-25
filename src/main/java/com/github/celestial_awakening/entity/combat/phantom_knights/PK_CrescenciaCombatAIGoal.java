@@ -5,7 +5,7 @@ import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
-    PhantomKnightBasicAttack basicAttack=new PhantomKnightBasicAttack(this.mob,20,60,30,0);
+    PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,20,40,30,0);
     PhantomKnightChargeAttack chargeAttack=new PhantomKnightChargeAttack(this.mob,50,200,50,30);
     PK_CrescenciaDualCrescentSlash dualCrescentSlash=new PK_CrescenciaDualCrescentSlash(this.mob,20,160,14,30);
     PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,30,270,165,30);

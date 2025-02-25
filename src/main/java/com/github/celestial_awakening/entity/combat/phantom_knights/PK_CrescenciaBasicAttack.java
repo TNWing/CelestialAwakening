@@ -10,11 +10,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+public class PK_CrescenciaBasicAttack extends GenericAbility {
 
-public class PhantomKnightBasicAttack extends GenericAbility {
 
-
-    public PhantomKnightBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="PK Basic";
     }
@@ -50,18 +49,28 @@ public class PhantomKnightBasicAttack extends GenericAbility {
                     }
 
                     if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
+                        /*
+                        if (PhantomKnight_Crescencia.class.equals(this.mob.getClass())) {
+
+                        }
+
+                         */
                         Level lvl=this.mob.level();
                         Vec3 dir= MathFuncs.getDirVec(this.mob.position(),target.position());
                         float hAng= MathFuncs.getAngFrom2DVec(dir);
                         float vAng= MathFuncs.getVertAngFromVec(dir);
-                        LunarCrescent crescent=LunarCrescent.create(lvl, (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE),70,2.7f,hAng,vAng,0,1f,0.25f,1f);
+                        float spd=1.1f;
+                        if (target.distanceToSqr(this.mob)>4f){
+                            spd=3.5f;
+                        }
+                        LunarCrescent crescent=LunarCrescent.create(lvl, (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE),70,spd,hAng,vAng,0,1f,0.25f,1f);
                         int id=crescent.getId();
                         Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                         crescent.setPos(startPos);
                         crescent.setOwner(this.mob);
                         lvl.addFreshEntity(crescent);
                         ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),lvl.dimension());
-                        this.setCD(this.abilityCD/2);
+                        this.setCD(this.abilityCD/4);
                     }
                     break;
                 }

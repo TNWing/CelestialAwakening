@@ -44,6 +44,11 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected static Double armorPtMult = Config.armorPtScale;
     protected static Double armorToughMult =Config.armorToughnessScale;
     protected boolean isCombatActive;
+    protected int bossBarWindup=0;
+
+    public int getBossBarWindup(){
+        return this.bossBarWindup;
+    }
     protected AbstractCALivingEntity(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 
         super(p_33002_, p_33003_);

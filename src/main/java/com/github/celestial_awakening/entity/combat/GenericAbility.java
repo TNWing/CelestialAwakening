@@ -15,13 +15,14 @@ public abstract class GenericAbility {
 
     protected int state;//0 for casting, 1 for executing, 2 for recovery
     protected int currentStateTimer;//used for the 3 state timers
-
+    protected boolean isInUse;
 
     //initiates ability
     public void startAbility(LivingEntity target,double dist){
         currentCD=abilityCD;
         currentStateTimer=abilityCastTime;
         this.mob.isActing=true;
+        this.isInUse=true;
         System.out.println("STARTING ABILITY " + this.getAbilityName());
 
     }
@@ -35,6 +36,7 @@ public abstract class GenericAbility {
 
     public GenericAbility(AbstractCALivingEntity mob, int castTime, int CD,int executeTime,int recoveryTime){
         this.mob=mob;
+        this.isInUse=false;
         this.abilityExecuteTime=executeTime;
         this.abilityCastTime=castTime;
         this.abilityCD=CD;
@@ -43,7 +45,10 @@ public abstract class GenericAbility {
     }
 
     public void decreaseCD(int i){
-        currentCD=Math.max(currentCD-i,0);
+        if (!isInUse){
+            currentCD=Math.max(currentCD-i,0);
+        }
+
     }
 
     public void decreaseStateTimer(int i){
@@ -63,6 +68,7 @@ public abstract class GenericAbility {
         mob.isActing=false;
         this.mob.setActionId(0);
         this.mob.spdMod=1f;
+        this.isInUse=false;
         System.out.println("RESETTING ACT ID");
     }
 
@@ -78,6 +84,9 @@ public abstract class GenericAbility {
 
     public int getCurrentCD(){
         return this.currentCD;
+    }
+    public boolean otherConds(LivingEntity target){
+        return true;
     }
     public int getCurrentStateTimer(){
         return this.currentStateTimer;

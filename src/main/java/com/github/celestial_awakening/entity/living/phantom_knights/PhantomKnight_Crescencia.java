@@ -8,17 +8,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
 public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
-    static double baseHP=115.0D;
+    static double baseHP=225.0D;
     static double baseDmg=4.5D;
     static double baseArmor=9D;
     static double baseTough=6D;
@@ -65,9 +61,9 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         this.goalSelector.addGoal(4,new PK_CrescenciaCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         //this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        //this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));
+        //this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
+        //this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     public void tick() {

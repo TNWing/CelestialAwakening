@@ -49,6 +49,10 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
         }
 
     }
+    @Override
+    public boolean otherConds(LivingEntity target){
+        return Math.abs(target.position().y-this.mob.position().y)<=1f;
+    }
 
     @Override
     public void executeAbility(LivingEntity target) {

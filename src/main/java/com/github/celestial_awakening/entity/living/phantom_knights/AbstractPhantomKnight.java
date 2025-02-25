@@ -1,6 +1,5 @@
 package com.github.celestial_awakening.entity.living.phantom_knights;
 
-import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -13,13 +12,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
 
-    boolean isAggressive;
-    int bossBarWindup=0;
+
     private final ServerBossEvent bossEvent=new ServerBossEvent(Component.translatable("entity.celestial_awakening.pk_crescencia"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
     protected AbstractPhantomKnight(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -27,16 +24,6 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
         this.bossBarWindup=0;
         this.bossEvent.setProgress(0);
     }
-
-    Predicate isCombatGoal=new Predicate() {
-        @Override
-        public boolean test(Object o) {
-            if (o instanceof WrappedGoal){
-                return ((WrappedGoal) o).getGoal() instanceof GenericCombatAIGoal;
-            }
-            return false;
-        }
-    };
     protected void defineSynchedData() {
         super.defineSynchedData();
     }
@@ -68,7 +55,6 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     protected void customServerAiStep() {
         super.customServerAiStep();
         Stream<WrappedGoal> runningGoals=this.goalSelector.getRunningGoals();
-        System.out.println(isCombatActive + " IS CA");
         if (isCombatActive){
             if (bossBarWindup>=100){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
@@ -76,23 +62,23 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
             else{
                 if (bossBarWindup<10){
                     ServerLevel serverLevel= (ServerLevel) this.level();
-                    System.out.println("SHOULD BE ADDING");
                     //Vec3 offset=new Vec3()
                     ServerChunkCache chunkSource=serverLevel.getChunkSource();
                     ChunkMap chunkMap=chunkSource.chunkMap;
                     List<ServerPlayer> serverPlayers = chunkMap.getPlayers(this.chunkPosition(),false);
                     for (ServerPlayer serverPlayer:serverPlayers) {
                         if (serverPlayer.hasLineOfSight(this)){
-                            System.out.println("ADDING");
                             this.bossEvent.addPlayer(serverPlayer);
                             //((ServerGamePacketListenerImpl) serverPlayer.connection).send(new ClientboundAddEntityPacket(this));
                         }
                     }
                 }
-                System.out.println("BOSS BAR WINDUP   " + bossBarWindup);
                 this.bossEvent.setProgress(bossBarWindup/100f);
                 bossBarWindup++;
             }
+        }
+        else{
+            this.heal(0.1f);
         }
     }
 
@@ -101,6 +87,12 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
         if (bossBarWindup<100){
             amt*=0.05f;
         }
+        if (source.getEntity()!=null){
+            if (this.distanceToSqr(source.getEntity())>15*15){
+                amt*=0.2f;
+            }
+        }
+
         boolean returnVal=super.hurt(source,amt);
         return returnVal;
     }

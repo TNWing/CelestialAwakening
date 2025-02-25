@@ -43,7 +43,7 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected static Double dmgMult =  Config.mobDmgScale;
     protected static Double armorPtMult = Config.armorPtScale;
     protected static Double armorToughMult =Config.armorToughnessScale;
-
+    protected boolean isCombatActive;
     protected AbstractCALivingEntity(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 
         super(p_33002_, p_33003_);
@@ -119,6 +119,10 @@ public abstract class AbstractCALivingEntity extends Monster {
         AABB aabb=this.getBoundingBox().inflate(i);
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,aabb,p);
         return livingEntityList;
+    }
+
+    public void setCombatActive(boolean b){
+        this.isCombatActive=b;
     }
     public abstract void updateAnim();
 

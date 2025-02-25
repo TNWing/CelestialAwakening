@@ -414,8 +414,8 @@ public class EventManager {
                         entry.getValue().onLivingDamageSelf(event, player, cnt);
                     }
                 }
-                if (directEntity instanceof Mob){
-                    Mob mob= (Mob) directEntity;
+                if (causingEntity instanceof Mob){
+                    Mob mob= (Mob) causingEntity;
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());

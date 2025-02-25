@@ -20,7 +20,7 @@ public class StellarRobes extends ArmorEffect {
 
     }
     private void nova(Player player, LivingDeathEvent event){
-        if (event.getSource().getDirectEntity()==player){
+        if (event.getSource().getEntity()==player){
             AABB bounds=new AABB(player.position().subtract(new Vec3(4,4,4)),player.position().add(new Vec3(4,4,4)));
             TargetingConditions conds=TargetingConditions.forCombat();
             conds.range(4);

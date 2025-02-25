@@ -43,7 +43,8 @@ public abstract class GenericCombatAIGoal extends Goal {
     }
 
     public void start(){
-
+        super.start();
+        this.mob.setCombatActive(true);
     }
 
     public void stop(){

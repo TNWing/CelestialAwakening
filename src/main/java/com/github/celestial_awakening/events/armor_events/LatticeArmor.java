@@ -51,7 +51,7 @@ public class LatticeArmor extends ArmorEffect{
         }
     }
     private void glacierSlow(Player player, LivingDamageEvent event){
-        if (event.getSource().getDirectEntity()==player){
+        if (event.getSource().getEntity()==player){
             LivingEntity livingEntity= event.getEntity();
             //should be a pot effect
         }

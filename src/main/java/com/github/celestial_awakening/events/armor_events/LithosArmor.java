@@ -55,7 +55,7 @@ CD: 1.5 sec
         ToolTipBuilder.addFullArmorSetComponent(event,"Living Meteor",boldColor,"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 5 seconds",infoColor);
     }
     public void impact(LivingHurtEvent event,Player player){
-        if (event.getSource().getDirectEntity()==player){
+        if (event.getSource().getEntity()==player){
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityImpact)==null){
                 AABB aabb=new AABB(player.position().subtract(new Vec3(1.2f,0,1.2f)),player.position().add(new Vec3(1.2f,0,1.2f)));

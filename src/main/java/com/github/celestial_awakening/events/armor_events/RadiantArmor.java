@@ -92,7 +92,7 @@ public class RadiantArmor extends ArmorEffect {
         }
     }
     public void pieceEffect_Death(LivingDeathEvent deathEvent, int cnt){
-        if (deathEvent.getSource().getDirectEntity() !=  null & deathEvent.getSource().getDirectEntity()  instanceof Player && deathEvent.getEntity() instanceof Animal){
+        if (deathEvent.getSource().getEntity() !=  null & deathEvent.getSource().getEntity()  instanceof Player && deathEvent.getEntity() instanceof Animal){
             Animal animal= (Animal) deathEvent.getEntity();
             if (random.nextInt(100)<cnt*4.5f){
                 Level level=animal.level();

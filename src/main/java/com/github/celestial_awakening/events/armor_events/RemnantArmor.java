@@ -73,7 +73,7 @@ public class RemnantArmor extends ArmorEffect {
     }
 
     public void devouringLight(LivingDeathEvent event,Player player,int cnt){
-        if (event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity()==player){
+        if (event.getSource().getEntity() != null && event.getSource().getEntity()==player){
             if (cnt>0){
                 FoodData foodData=player.getFoodData();
                 foodData.eat(devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]);

@@ -43,7 +43,7 @@ public class Config
 
 
 
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_DIMENSIONS =BUILDER.comment("Dimensions that the Transcendents's diviner and scout are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_DIMENSIONS =BUILDER.comment("Dimensions that the transcendents are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
 
     private static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_MULTIPLE_DIVINER =BUILDER.comment("If the Transcendents's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault false").define("transcendents_diviner_shared_dim",false);
 
@@ -62,11 +62,9 @@ public class Config
 
 
 
-    private static final ForgeConfigSpec.DoubleValue HONOR_DUEL_DIST=BUILDER.comment("The max distance between entities linked by honor duel. If the distance exceeds this amount, breaks the link.\nDefault: 25").defineInRange("honor_duel_dist",25f,1f,Float.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST=BUILDER.comment("\n\nArmor Config\n\n").comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,(int)Integer.MAX_VALUE);
 
 
-
-    //private static ForgeConfigSpec.Builder b=BUILDER.comment("The lines below are used to modify the text and colors of item descriptions.");
 
     static final ForgeConfigSpec SPEC =  BUILDER.build();
 

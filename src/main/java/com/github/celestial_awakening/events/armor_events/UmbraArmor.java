@@ -100,7 +100,7 @@ CD of 15 seconds, resets on kill
     public void pursuit(LivingHurtEvent event,Player player){
         LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         LivingEntity target=event.getEntity();
-        if(cap!=null && cap.getAbilityCD(abilityPursuit)==null && event.getSource().getDirectEntity() == player){
+        if(cap!=null && cap.getAbilityCD(abilityPursuit)==null && event.getSource().getEntity() == player){
             if (target.getHealth()-event.getAmount()<0.5f*target.getMaxHealth()){
                 MobEffectInstance spdBoost=new MobEffectInstance(MobEffects.MOVEMENT_SPEED,100,2);
                 player.addEffect(spdBoost);
@@ -114,15 +114,13 @@ Getting hit will apply Weakness 2 for 3 seconds to the attacker
 CD of 8 seconds
  */
     public void cursedLight(LivingHurtEvent event,Player player){
-        Entity entity=event.getSource().getDirectEntity();
+        Entity entity=event.getSource().getEntity();
         if (entity instanceof LivingEntity && event.getEntity()==player){
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityCursedLight)==null){
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,2));
                 cap.insertIntoAbilityMap(abilityCursedLight,160);
             }
-
-
         }
     }
 }

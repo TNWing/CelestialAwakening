@@ -70,8 +70,9 @@ public class EverlightArmor extends ArmorEffect{
         AABB aabb=player.getBoundingBox();
         aabb=aabb.inflate(4f);
         List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-        if (!entities.isEmpty()){
-            int size=entities.size();
+        int size=entities.size();
+        if (!entities.isEmpty() && size>0){
+
             Random rand=new Random();
 
             int r=rand.nextInt(size);
@@ -93,8 +94,8 @@ public class EverlightArmor extends ArmorEffect{
 
     private void starGazer(LivingDamageEvent event,Player player){
         if (event.getSource().getEntity() instanceof LivingEntity){
-            LivingEntity attacker= (LivingEntity) event.getSource().getDirectEntity();
-            attacker.addEffect(new MobEffectInstance(MobEffects.GLOWING,5,1));
+            LivingEntity attacker= (LivingEntity) event.getSource().getEntity();
+            attacker.addEffect(new MobEffectInstance(MobEffects.GLOWING,200,1));
         }
         float dmgMult=1f;
         Predicate<LivingEntity> getGlowing= livingEntity -> livingEntity.hasEffect(MobEffects.GLOWING);

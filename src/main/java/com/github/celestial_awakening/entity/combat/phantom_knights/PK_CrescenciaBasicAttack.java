@@ -44,7 +44,7 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                 case 0:{
                     state++;
                     currentStateTimer=abilityExecuteTime;
-                    if (target.distanceTo(this.mob)<1.5f){
+                    if (target.distanceTo(this.mob)<getAbilityRange(target)){
                         this.mob.doHurtTarget(target);
                     }
 
@@ -84,6 +84,6 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 5f;
+        return 1.5f;
     }
 }

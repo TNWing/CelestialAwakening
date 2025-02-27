@@ -28,7 +28,7 @@ public abstract class AbstractCALivingEntity extends Monster {
 
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
     //may not need action frame to be dataaccessor?
-    protected Integer ACTION_FRAME;
+    protected Integer ACTION_FRAME=0;
     public int animTime;
     public int currentAction;
 

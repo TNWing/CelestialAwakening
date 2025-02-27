@@ -120,20 +120,22 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
         if (isSameAnim()){
             if (animTime>0){
+                incrementActionFrame();
+                if (getActionFrame()==18 && this.getTarget()!=null){
+                    this.lookControl.setLookAt(this.getTarget());
+                }
                 animTime--;
             }
             else{
 
             }
-
         }
         else{
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
             switch(this.entityData.get(ACTION_ID)){
-
                 case 1:{
-                    animTime=30;
+                    animTime=96;
                 }
                 default:{
                     animTime=100;

@@ -107,7 +107,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                 MovementModifier deacc_mod=new MovementModifier
                         (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,0.15f,0,0,15,10);
                 MovementModifier flip_mod=new MovementModifier
-                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,0,0,180,0,20);
+                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,0,0,-360,0,10);
                 MovementModifier acc_mod=new MovementModifier
                         (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,2.15f,0,0,0,40);
                 cap.putInBackOfList(deacc_mod);
@@ -115,7 +115,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                 cap.putInBackOfList(acc_mod);
             }
             Vec3 dir=MathFuncs.get2DVecFromAngle(ang);
-            crescent.setPos(this.mob.position().add(dir.scale(0.2f)));
+            crescent.setPos(this.mob.position().add(dir.scale(0.2f)).add(0,1.2f,0));
             crescent.setOwner(this.mob);
             serverLevel.addFreshEntity(crescent);
             ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),serverLevel.dimension());

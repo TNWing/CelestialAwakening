@@ -108,8 +108,14 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
 
     public void startSeenByPlayer(ServerPlayer serverPlayer) {
         super.startSeenByPlayer(serverPlayer);
-        if (isCombatActive){
+        if (isCombatActive || this.bossBarWindup>=10){
             this.bossEvent.addPlayer(serverPlayer);
+            if (bossBarWindup>=100){
+                this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+            }
+            else{
+                this.bossEvent.setProgress(bossBarWindup/100f);
+            }
         }
     }
 }

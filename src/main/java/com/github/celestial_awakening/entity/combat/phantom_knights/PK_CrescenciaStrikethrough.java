@@ -30,7 +30,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Strikethrough";
     }
-    DamageSourceIgnoreIFrames dashSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
+
     LunarCrescent leftCrescent;
     LunarCrescent rightCrescent;
     boolean leftTP;
@@ -115,6 +115,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                     Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
                     this.mob.setPos(target.position().subtract(dir.scale(0.4)));
                     List<LivingEntity> entityList=this.mob.findCollidedEntities(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob),1.4f);
+                    DamageSourceIgnoreIFrames dashSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob,this.mob,this.mob.position());
                     if (!entityList.isEmpty()){
                         int diffMod=this.mob.level().getDifficulty().getId();
                         if (diffMod>0){

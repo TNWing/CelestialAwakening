@@ -21,16 +21,16 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
     @Override
     public void startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
-        if (abilityRange>=dist && this.getCurrentCD()==0){
-            mob.canMove=false;
-            super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
-        }
-        else{
-            mob.canMove=false;
-            super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
-            if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
+        if (this.getCurrentCD()==0){
+            if (abilityRange>=dist){
+                mob.canMove=false;
+                super.startAbility(target,dist);
+                setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            }
+            else if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
+                mob.canMove=false;
+                super.startAbility(target,dist);
+                setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
                 this.setCD(this.abilityCD/2);
             }
         }
@@ -49,12 +49,6 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                     }
 
                     if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
-                        /*
-                        if (PhantomKnight_Crescencia.class.equals(this.mob.getClass())) {
-
-                        }
-
-                         */
                         Level lvl=this.mob.level();
                         Vec3 dir= MathFuncs.getDirVec(this.mob.position(),target.position());
                         float hAng= MathFuncs.getAngFrom2DVec(dir);

@@ -1,6 +1,5 @@
 package com.github.celestial_awakening.items;
 
-import com.github.celestial_awakening.entity.projectile.CA_ArrowProjectile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -67,13 +66,11 @@ public class FluorescentBow extends BowItem {
                     boolean flag1 = player.getAbilities().instabuild || (arrowStack.getItem() instanceof ArrowItem && ((ArrowItem)arrowStack.getItem()).isInfinite(arrowStack, bowStack, player));
                     if (!p_40668_.isClientSide) {
                         ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
-                        System.out.println(arrowStack.getItem() +  "   is our arrowitem");
                         AbstractArrow abstractarrow = arrowitem.createArrow(p_40668_, arrowStack, player);
                         abstractarrow = customArrow(abstractarrow);
-                        abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()-0.25D);
+                        abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()*7f/8f);
                         abstractarrow.addTag("CA_FluorescentBoost");
                         abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
-                        System.out.println("is ca arrow " + (abstractarrow instanceof CA_ArrowProjectile));
                         if (f == 1.0F) {
                             abstractarrow.setCritArrow(true);
                         }

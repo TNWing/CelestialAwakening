@@ -2,6 +2,7 @@ package com.github.celestial_awakening.entity.living;
 
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -40,7 +42,7 @@ public class NightProwler extends AbstractCALivingEntity {
     public boolean hasCollision;
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, (double)0.5F)
+                .add(Attributes.MOVEMENT_SPEED, (double)0.4F)
                 .add(Attributes.KNOCKBACK_RESISTANCE,0.1D)
                 .add(Attributes.MAX_HEALTH, baseHP)
                 .add(Attributes.ARMOR, baseArmor)
@@ -220,6 +222,40 @@ public class NightProwler extends AbstractCALivingEntity {
 
     @Override
     public boolean doHurtTarget(Entity entity) {
-        return super.doHurtTarget(entity);
+        float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float f1 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        if (entity instanceof LivingEntity) {
+            f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)entity).getMobType());
+            f1 += (float)EnchantmentHelper.getKnockbackBonus(this);
+        }
+
+        int i = EnchantmentHelper.getFireAspect(this);
+        if (i > 0) {
+            entity.setSecondsOnFire(i * 4);
+        }
+        System.out.println("DMG TO DO " + f);
+        System.out.println("Entity invinc" + entity.invulnerableTime);
+        System.out.println("entity immune?  " + entity.isInvulnerableTo(this.damageSources().mobAttack(this)));
+        System.out.println("DIST TO TARGET " + this.distanceTo(entity));
+
+        System.out.println("on client? " + entity.level().isClientSide);
+        boolean flag = entity.hurt(this.damageSources().mobAttack(this), f);
+        System.out.println("dohurt flag " + flag);
+        if (flag) {
+            if (f1 > 0.0F && entity instanceof LivingEntity) {
+                ((LivingEntity)entity).knockback((double)(f1 * 0.5F), (double) Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(this.getYRot() * ((float)Math.PI / 180F))));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+            }
+
+            if (entity instanceof Player) {
+                Player player = (Player)entity;
+                //this.maybeDisableShield(player, this.getMainHandItem(), player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
+            }
+
+            this.doEnchantDamageEffects(this, entity);
+            this.setLastHurtMob(entity);
+        }
+
+        return flag;
     }
 }

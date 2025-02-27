@@ -15,7 +15,7 @@ public class AsteronBasicAttack extends GenericAbility {
         if (abilityRange>=dist && this.getCurrentCD()==0){
             mob.canMove=false;
             super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            setMoveVals(0,this.getAbilityRange(target),false);
         }
 
     }

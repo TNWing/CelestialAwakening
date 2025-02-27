@@ -9,8 +9,8 @@ public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
     public NightProwlerCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);
     }
-    NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,40,0,0);
-    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((NightProwler) this.mob,30,200,24,50);
+    NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,20,0,0);
+    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((NightProwler) this.mob,15,70,24,5);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         basicAttack.decreaseCD(1);
@@ -19,10 +19,10 @@ public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
             currentAbility.executeAbility(this.mob.getTarget());
         }
         else{
-
             currentAbility=basicAttack;
             if (shadowLeap.getCurrentCD()==0){
                 currentAbility=shadowLeap ;
+                System.out.println("can leap");
             }
             double d0 = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(target);
             currentAbility.startAbility(target,d0);

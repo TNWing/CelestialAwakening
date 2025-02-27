@@ -4,7 +4,7 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.entity.animations.NightProwlerAnimations;
+import com.github.celestial_awakening.rendering.client.animations.NightProwlerAnimations;
 import com.github.celestial_awakening.entity.living.NightProwler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -23,7 +23,7 @@ public abstract class GenericAbility {
         currentStateTimer=abilityCastTime;
         this.mob.isActing=true;
         this.isInUse=true;
-        System.out.println("STARTING ABILITY " + this.getAbilityName());
+        //System.out.println("STARTING ABILITY " + this.getAbilityName());
 
     }
     public void setMoveVals(double min,double max,boolean keepDist){

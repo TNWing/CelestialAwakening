@@ -20,6 +20,8 @@ public abstract class GenericCombatAIGoal extends Goal {
     protected GenericAbility currentAbility;
 
     protected int difficulty;
+    double minRange;
+    double maxRange;
     /*
     Controls combat ai for all custom entities
     each unique combat ai goal contains the following
@@ -63,7 +65,6 @@ public abstract class GenericCombatAIGoal extends Goal {
             boolean keepDist=this.mob.keepDist;
             double minDist=Math.pow(this.mob.minRange,2);
             double maxDist=Math.pow(this.mob.maxRange,2);
-
             double dist = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
             if (keepDist){//move towards maxDist (NOT IMPLEMENTED)
                 if (dist<maxDist && this.mob.canStillSenseTarget()){

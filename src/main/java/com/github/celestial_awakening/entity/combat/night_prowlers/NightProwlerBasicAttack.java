@@ -13,7 +13,8 @@ public class NightProwlerBasicAttack extends GenericAbility {
         if (this.getAbilityRange(target)>=dist){
             this.mob.getDirection();
             super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            setMoveVals(0,this.getAbilityRange(target),false);
+            this.mob.isActing=false;
         }
 
     }

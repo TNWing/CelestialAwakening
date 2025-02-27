@@ -19,7 +19,7 @@ public class AsteronPiercingRays extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            setMoveVals(0,this.getAbilityRange(target),false);
         }
 
     }

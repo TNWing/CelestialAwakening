@@ -3,7 +3,7 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 // Paste this class into your mod and generate all required imports
 
 
-import com.github.celestial_awakening.entity.animations.TranscendentAsteronAnimations;
+import com.github.celestial_awakening.rendering.client.animations.TranscendentAsteronAnimations;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -229,34 +229,7 @@ public class EventManager {
             ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
         }
     }
-    @SubscribeEvent
-    public void onAttributeModifier(ItemAttributeModifierEvent event){
-        ItemStack itemStack = event.getItemStack();
-        EquipmentSlot slot = event.getSlotType();
-        int level = itemStack.getEnchantmentLevel(EnchantmentInit.swiftBlade.get());
-        if (level > 0 && slot == EquipmentSlot.MAINHAND) {
-            double speedBonus = 0.1 + 0.05 * (level-1); // Adjust scaling as needed
-            Multimap<Attribute, AttributeModifier> modifiers=event.getOriginalModifiers();
-            Collection<AttributeModifier> atkDmgMods=modifiers.get(Attributes.ATTACK_DAMAGE);
-            Collection<AttributeModifier> atkSpdMods=modifiers.get(Attributes.ATTACK_SPEED);
-            if (!atkSpdMods.isEmpty()){
-                for (AttributeModifier mod:atkSpdMods) {
-                    double newAmount = mod.getAmount() + speedBonus;
-                    event.removeModifier(Attributes.ATTACK_SPEED, mod);
-                    event.addModifier(Attributes.ATTACK_SPEED, new AttributeModifier(mod.getId(),
-                            "Attack Speed Boost", newAmount, mod.getOperation()));
-                    break;
-                }
-            }
-            if (!atkDmgMods.isEmpty()){
-                for (AttributeModifier mod:atkDmgMods) {//reset to bring the attack damage stat back on top
-                    event.removeModifier(Attributes.ATTACK_DAMAGE, mod);
-                    event.addModifier(Attributes.ATTACK_DAMAGE, mod);
-                    break;
-                }
-            }
-        }
-    }
+
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event){
         EquipmentSlot slot=event.getSlot();

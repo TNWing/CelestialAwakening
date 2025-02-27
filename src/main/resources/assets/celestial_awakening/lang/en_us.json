@@ -77,11 +77,12 @@
   "advancement.celestial_awakening.obtain_ebony_fur.description":"Relieve a predator of its powerful hide",
   "advancement.celestial_awakening.obtain_dying_light_essence.title":"Event Horizon",
   "advancement.celestial_awakening.obtain_dying_light_essence.description":"Rescue the remnants of a star from its captor",
+  "advancement.celestial_awakening.obtain_midnight_iron.title": "When the Clock Strikes Twelve",
+  "advancement.celestial_awakening.obtain_midnight_iron.description": "Observe the transformation of a common metal",
+
 
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
-
-  "enchantment.celestial_awakening.swift_blade": "Swift Blade",
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",

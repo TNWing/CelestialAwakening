@@ -20,7 +20,7 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     private final ServerBossEvent bossEvent=new ServerBossEvent(Component.translatable("entity.celestial_awakening.pk_crescencia"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
     protected AbstractPhantomKnight(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
-        this.xpReward=100;
+        this.xpReward=500;
         this.bossBarWindup=0;
         this.bossEvent.setProgress(0);
     }

@@ -1,12 +1,12 @@
 {
-  "parent": "celestial_awakening:solar/spotted_by_diviner",
+  "parent": "celestial_awakening:root",
   "criteria": {
     "mat": {
       "conditions": {
         "items": [
           {
             "items": [
-              "celestial_awakening:dying_light_essence"
+              "celestial_awakening:midnight_iron_ingot"
             ]
           }
         ]
@@ -16,13 +16,13 @@
   },
   "display": {
     "description": {
-      "translate": "advancement.celestial_awakening.obtain_dying_light_essence.description"
+      "translate": "advancement.celestial_awakening.obtain_midnight_iron.description"
     },
     "icon": {
-      "item": "celestial_awakening:dying_light_essence"
+      "item": "celestial_awakening:midnight_iron_ingot"
     },
     "title": {
-      "translate": "advancement.celestial_awakening.obtain_dying_light_essence.title"
+      "translate": "advancement.celestial_awakening.obtain_midnight_iron.title"
     }
   },
   "requirements": [

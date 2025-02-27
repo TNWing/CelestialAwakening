@@ -4,8 +4,10 @@ import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
@@ -18,7 +20,7 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     private final ServerBossEvent bossEvent=new ServerBossEvent(Component.translatable("entity.celestial_awakening.pk_crescencia"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
     protected AbstractPhantomKnight(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
-        this.xpReward=40;
+        this.xpReward=100;
         this.bossBarWindup=0;
         this.bossEvent.setProgress(0);
     }
@@ -91,6 +93,17 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
 
     @Override
     public boolean hurt(DamageSource source,float amt){
+        if (this.isInvulnerableTo(source)) {
+            return false;
+        } else if (this.level().isClientSide) {
+            return false;
+        } else if (this.isDeadOrDying()) {
+            return false;
+        } else if (source.is(DamageTypeTags.IS_FIRE) && this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+            return false;
+        } else if (this.isSleeping() && !this.level().isClientSide) {
+                this.stopSleeping();
+            }
         if (bossBarWindup<100){
             amt*=0.05f;
         }
@@ -100,7 +113,10 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
             }
         }
         if (this.getActionId()<=0){
-            amt*=0.3f;
+            amt*=0.4f;
+        }
+        else{
+            amt*=1.1f;
         }
         boolean returnVal=super.hurt(source,amt);
         return returnVal;

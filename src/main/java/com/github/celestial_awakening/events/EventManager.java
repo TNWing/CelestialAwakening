@@ -8,6 +8,7 @@ import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
+import com.github.celestial_awakening.init.EnchantmentInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
@@ -17,6 +18,7 @@ import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -25,6 +27,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -37,6 +42,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -53,10 +59,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
@@ -226,19 +229,50 @@ public class EventManager {
             ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
         }
     }
-
     @SubscribeEvent
-    public static void onEquipmentChange(LivingEquipmentChangeEvent event){
-        EquipmentSlot slot=event.getSlot();
-        if (slot.isArmor() && event.getEntity() instanceof Player){
-            Player player= (Player) event.getEntity();
-            for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectEquipmentChange.entrySet()) {
-                int cnt=countPieces(player,entry.getKey());
-                if (cnt>0) {
-                    entry.getValue().onEquipmentChange(event, player, cnt);
+    public void onAttributeModifier(ItemAttributeModifierEvent event){
+        ItemStack itemStack = event.getItemStack();
+        EquipmentSlot slot = event.getSlotType();
+        int level = itemStack.getEnchantmentLevel(EnchantmentInit.swiftBlade.get());
+        if (level > 0 && slot == EquipmentSlot.MAINHAND) {
+            double speedBonus = 0.1 + 0.05 * (level-1); // Adjust scaling as needed
+            Multimap<Attribute, AttributeModifier> modifiers=event.getOriginalModifiers();
+            Collection<AttributeModifier> atkDmgMods=modifiers.get(Attributes.ATTACK_DAMAGE);
+            Collection<AttributeModifier> atkSpdMods=modifiers.get(Attributes.ATTACK_SPEED);
+            if (!atkSpdMods.isEmpty()){
+                for (AttributeModifier mod:atkSpdMods) {
+                    double newAmount = mod.getAmount() + speedBonus;
+                    event.removeModifier(Attributes.ATTACK_SPEED, mod);
+                    event.addModifier(Attributes.ATTACK_SPEED, new AttributeModifier(mod.getId(),
+                            "Attack Speed Boost", newAmount, mod.getOperation()));
+                    break;
+                }
+            }
+            if (!atkDmgMods.isEmpty()){
+                for (AttributeModifier mod:atkDmgMods) {//reset to bring the attack damage stat back on top
+                    event.removeModifier(Attributes.ATTACK_DAMAGE, mod);
+                    event.addModifier(Attributes.ATTACK_DAMAGE, mod);
+                    break;
                 }
             }
         }
+    }
+    @SubscribeEvent
+    public static void onEquipmentChange(LivingEquipmentChangeEvent event){
+        EquipmentSlot slot=event.getSlot();
+        if (event.getEntity() instanceof Player){
+            Player player= (Player) event.getEntity();
+            if (slot.isArmor() ){
+
+                for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectEquipmentChange.entrySet()) {
+                    int cnt=countPieces(player,entry.getKey());
+                    if (cnt>0) {
+                        entry.getValue().onEquipmentChange(event, player, cnt);
+                    }
+                }
+            }
+        }
+
     }
     @SubscribeEvent
     public static void onItemToolTip(ItemTooltipEvent event){

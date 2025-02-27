@@ -29,6 +29,44 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+
+              "function": "minecraft:set_enchantments",
+              "enchantments":
+                {
+                  "celestial_awakening:swift_blade": {
+                    "min": 1,
+                    "max": 2e/
+                  }
+
+                }
+            }
+          ]
+        }
+        ],
+      "rolls": 1.0
     }
   ]
 }

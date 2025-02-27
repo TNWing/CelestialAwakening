@@ -37,7 +37,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
             0,0f,()->Ingredient.of(ItemInit.COSMIC_HIDE.get())),
 
     PULSATING_DARKNESS("pulsating_darkness",19,new int[]{0,1,1,0},15,SoundEvents.ARMOR_EQUIP_ELYTRA,
-            0,0f,()->Ingredient.of(ItemInit.PULSATING_DARKNESS.get()));
+            0,0f,()->Ingredient.of(ItemInit.PULSATING_DARKNESS.get()),0.025f);
 
 
     private final String name;
@@ -49,6 +49,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     private final float toughness;
     private final Supplier<Ingredient> repairIngredient;
     private static final int[] BASE_DURABILITY = { 11, 16, 16, 13 };
+    private final float spdBoost;
     CustomArmorMaterial(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantmentValue, SoundEvent equipSound,
                         float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
         this.name = name;
@@ -59,8 +60,20 @@ public enum CustomArmorMaterial implements ArmorMaterial {
         this.toughness = toughness;
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = repairIngredient;
+        this.spdBoost=0;
     }
-
+    CustomArmorMaterial(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantmentValue, SoundEvent equipSound,
+                        float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient,float spd) {
+        this.name = name;
+        this.durabilityMultiplier = durabilityMultiplier;
+        this.protectionAmounts = protectionAmounts;
+        this.enchantmentValue = enchantmentValue;
+        this.equipSound = equipSound;
+        this.toughness = toughness;
+        this.knockbackResistance = knockbackResistance;
+        this.repairIngredient = repairIngredient;
+        this.spdBoost=spd;
+    }
     @Override
     public int getDurabilityForType(ArmorItem.Type pType) {
         return BASE_DURABILITY[pType.ordinal()] * this.durabilityMultiplier;
@@ -98,5 +111,9 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     @Override
     public float getKnockbackResistance() {
         return this.knockbackResistance;
+    }
+
+    public float getSpdBoost(){
+        return this.spdBoost;
     }
 }

@@ -48,6 +48,9 @@
   "item.celestial_awakening.midnight_iron_axe": "Midnight Iron Axe",
   "item.celestial_awakening.midnight_iron_shovel": "Midnight Iron Shovel",
   "item.celestial_awakening.midnight_iron_hoe": "Midnight Iron Hoe",
+
+  "item.celestial_awakening.honor_c": "Emblem of Honor - C",
+
   "item.celestial_awakening.knightmare_helmet": "Knightmare Helmet",
   "item.celestial_awakening.knightmare_chestplate": "Knightmare Chestplate",
   "item.celestial_awakening.knightmare_leggings": "Knightmare Leggings",
@@ -78,6 +81,7 @@
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
 
+  "enchantment.celestial_awakening.swift_blade": "Swift Blade",
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
@@ -94,7 +98,6 @@
   "tooltip.celestial_awakening.armor.full_set_effect": "Full Set Effect: ",
   "tooltip.celestial_awakening.armor.piece_effect": "Piece Effect: ",
   "tooltip.celestial_awakening.armor.shift_tip": "Hold Shift for Details",
-
 
   "tooltip.celestial_awakening.everlight_armor.unyielding_name": "Unyielding Flame",
   "tooltip.celestial_awakening.everlight_armor.unyielding_desc": "Upon killing an enemy, ignite nearby enemies and gain absorption.",

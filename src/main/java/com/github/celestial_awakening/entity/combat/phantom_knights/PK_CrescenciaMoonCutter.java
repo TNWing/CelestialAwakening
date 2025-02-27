@@ -65,7 +65,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                     float vAng=MathFuncs.getVertAngFromVec(dir);
                     for (int i=-3;i<=3;i++){
-                        float ang=baseAng+i*19.5f;
+                        float ang=baseAng+i*23f;
                         summonCrescent(serverLevel,ang,vAng,dmg,startPos);
                     }
                     break;

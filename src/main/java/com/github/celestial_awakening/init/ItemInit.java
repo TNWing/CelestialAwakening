@@ -72,6 +72,7 @@ public class ItemInit {
     public static final RegistryObject<Item> MIDNIGHT_IRON_AXE=ITEMS.register("midnight_iron_axe",()->new AxeItem(CustomTiers.MIDNIGHT_IRON,5.5F, -3.0F,new Item.Properties()));
     public static final RegistryObject<Item> MIDNIGHT_IRON_SHOVEL=ITEMS.register("midnight_iron_shovel",()->new ShovelItem(CustomTiers.MIDNIGHT_IRON,1.5F, -3.0F, new Item.Properties()));
     public static final RegistryObject<Item> MIDNIGHT_IRON_HOE=ITEMS.register("midnight_iron_hoe",()->new HoeItem(CustomTiers.MIDNIGHT_IRON,-2, -0.7F,new Item.Properties()));
+
     public static final RegistryObject<Item> KNIGHTMARE_HELMET = ITEMS.register("knightmare_helmet",
             () -> new CustomArmorItem(CustomArmorMaterial.MIDNIGHT_IRON, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> KNIGHTMARE_CHESTPLATE = ITEMS.register("knightmare_chestplate",

@@ -34,10 +34,13 @@ public class CustomArmorItem extends ArmorItem {
         // Create your own builder
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uuid = ARMOR_MODIFIER_UUID_PER_TYPE.get(type);
-        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", (double) this.getDefense(), AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", (double) this.getToughness(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier",  this.getDefense(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness",this.getToughness(), AttributeModifier.Operation.ADDITION));
         if (this.getKnockbackResistance() > 0) {
-            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", (double) this.getKnockbackResistance(), AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance",this.getKnockbackResistance(), AttributeModifier.Operation.ADDITION));
+        }
+        if (this.getSpdBoost()>0){
+            builder.put(Attributes.MOVEMENT_SPEED,new AttributeModifier(uuid,"Armor Speed",this.getSpdBoost(), AttributeModifier.Operation.ADDITION));
         }
         try {
             Field defaultModifiersField = ArmorItem.class.getDeclaredField("defaultModifiers");
@@ -55,5 +58,9 @@ public class CustomArmorItem extends ArmorItem {
 
     public float getKnockbackResistance() {
         return this.material.getKnockbackResistance();
+    }
+
+    public float getSpdBoost() {
+        return ((CustomArmorMaterial)this.material).getSpdBoost();
     }
 }

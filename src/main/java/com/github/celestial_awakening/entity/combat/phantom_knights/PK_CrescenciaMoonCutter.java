@@ -41,6 +41,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
+            this.mob.setActionId(9);
         }
 
     }
@@ -63,15 +64,13 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     float dmg=crescentDmgVals[diffMod];
                     Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                     float vAng=MathFuncs.getVertAngFromVec(dir);
-                    for (int i=-2;i<=2;i++){
-                        float ang=baseAng+i*12;
-
+                    for (int i=-3;i<=3;i++){
+                        float ang=baseAng+i*19.5f;
                         summonCrescent(serverLevel,ang,vAng,dmg,startPos);
                     }
                     break;
                 }
                 case 1:{
-
                     changeToState2();
                     break;
                 }
@@ -85,26 +84,25 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
     }
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 12;
+        return 8;
     }
 
     void summonCrescent(ServerLevel lvl,float ang,float vAng,float dmg,Vec3 startPos){
 
-        LunarCrescent crescent=LunarCrescent.create(lvl,dmg,120,4.1f,ang,vAng,0,1f,0.25f,1f);
+        LunarCrescent crescent=LunarCrescent.create(lvl,dmg,120,1f,ang,vAng,0,1f,0.25f,1f);
         ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
         if (cap!=null){
             MovementModifier modifier=new MovementModifier(
-                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
                     MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
-                    1,
+                    2f,
                     0,0,
                     100,
                     0,120);
             cap.putInBackOfList(modifier);
         }
         int id=crescent.getId();
-
         crescent.setPos(startPos);
         crescent.setOwner(this.mob);
         lvl.addFreshEntity(crescent);

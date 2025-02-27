@@ -46,6 +46,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             repsRemaining=7;
             Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
             currentStartAngle=MathFuncs.getAngFrom2DVec(dir);
+            this.mob.setActionId(6);
         }
 
     }
@@ -81,10 +82,12 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                     changeToState1();
                     this.mob.canMove=true;
                     this.mob.spdMod=0.4f;
+                    this.mob.setActionId(7);
                     break;
                 }
                 case 1:{
                     changeToState2();
+                    this.mob.setActionId(8);
                     break;
                 }
                 case 2:{
@@ -126,6 +129,6 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 9.5D;
+        return 5.25D;
     }
 }

@@ -99,7 +99,9 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
                 amt*=0.2f;
             }
         }
-
+        if (this.getActionId()<=0){
+            amt*=0.3f;
+        }
         boolean returnVal=super.hurt(source,amt);
         return returnVal;
     }

@@ -96,28 +96,28 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 
 		PartDefinition elbowL = upperbody.addOrReplaceChild("elbowL", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -2.0F, -1.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(7.0F, -16.0F, -1.0F));
 
-		PartDefinition armLPivot = upperbody.addOrReplaceChild("armLPivot", CubeListBuilder.create(), PartPose.offset(6.0F, -22.0F, 0.0F));
+		PartDefinition armLPivot = upperbody.addOrReplaceChild("armLPivot", CubeListBuilder.create(), PartPose.offsetAndRotation(6.0F, -22.0F, 0.0F, -1.0035F, 0.4971F, 0.1719F));
 
 		PartDefinition upperarmL = armLPivot.addOrReplaceChild("upperarmL", CubeListBuilder.create().texOffs(0, 40).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 0.0F, 0.0F));
 
 		PartDefinition lowerarmL = armLPivot.addOrReplaceChild("lowerarmL", CubeListBuilder.create().texOffs(0, 40).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, -2.0F));
 
-		PartDefinition armRPivot = upperbody.addOrReplaceChild("armRPivot", CubeListBuilder.create(), PartPose.offset(-6.0F, -22.0F, 0.0F));
+		PartDefinition armRPivot = upperbody.addOrReplaceChild("armRPivot", CubeListBuilder.create(), PartPose.offsetAndRotation(-6.0F, -22.0F, 0.0F, -0.9743F, -0.6194F, -0.2268F));
 
 		PartDefinition lowerarmR = armRPivot.addOrReplaceChild("lowerarmR", CubeListBuilder.create().texOffs(0, 40).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, -2.0F));
 
-		PartDefinition sword = lowerarmR.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(29, 25).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 25).addBox(-2.5F, -4.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 25).addBox(-3.5F, -5.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 25).addBox(2.5F, -5.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 25).addBox(1.5F, -4.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(27, 25).addBox(-1.5F, -3.0F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 26).addBox(-1.0F, -3.0F, 0.0F, 2.0F, -9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 6.0F, 0.35F, 1.5708F, 0.2182F, -1.5708F));
+		PartDefinition sword = lowerarmR.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(29, 25).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(29, 25).addBox(-2.5F, -4.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(29, 25).addBox(-3.5F, -5.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(29, 25).addBox(1.5F, -4.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(29, 25).addBox(2.5F, -5.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(27, 25).addBox(-1.5F, -3.0F, -0.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(28, 31).addBox(-1.0F, -3.0F, 0.0F, 2.0F, -12.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1586F, 6.2201F, 4.5893F, -2.0504F, 0.1066F, 0.6145F));
 
 		PartDefinition upperarmR = armRPivot.addOrReplaceChild("upperarmR", CubeListBuilder.create().texOffs(0, 40).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, 0.0F, 0.0F));
 
 		PartDefinition torsoPivot = upperbody.addOrReplaceChild("torsoPivot", CubeListBuilder.create().texOffs(16, 15).addBox(-4.0F, -24.0F, -3.0F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(15, 15).addBox(-4.0F, -24.0F, -3.0F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.3F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+				.texOffs(15, 15).addBox(-4.0F, -24.0F, -3.0F, 8.0F, 12.0F, 6.0F, new CubeDeformation(0.3F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition headPivot = model.addOrReplaceChild("headPivot", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -32.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -127,10 +127,11 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.model.getAllParts().forEach(ModelPart::resetPose);
-		this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
+		//this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
+		this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
 		this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
-		this.animate(((PhantomKnight_Crescencia)entity).nightSlashStartAnimationState, PK_CrescenciaAnimations.nightSlashStart,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).nightSlashStrikeAnimationState, PK_CrescenciaAnimations.nightSlashStrike,ageInTicks,1f);
+		//this.animate(((PhantomKnight_Crescencia)entity).nightSlashStartAnimationState, PK_CrescenciaAnimations.nightSlashStart,ageInTicks,1f);
+		//this.animate(((PhantomKnight_Crescencia)entity).nightSlashStrikeAnimationState, PK_CrescenciaAnimations.nightSlashStrike,ageInTicks,1f);
 	}
 
 	@Override

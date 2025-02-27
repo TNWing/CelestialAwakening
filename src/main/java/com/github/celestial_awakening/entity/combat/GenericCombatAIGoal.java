@@ -44,7 +44,9 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void start(){
         super.start();
+        System.out.println("STA5rting combat");
         this.mob.setCombatActive(true);
+        this.mob.setActionId(1);
     }
 
     public void stop(){
@@ -58,7 +60,6 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void movementController(LivingEntity target){
         if (this.mob.canMove){
-            this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             boolean keepDist=this.mob.keepDist;
             double minDist=Math.pow(this.mob.minRange,2);
             double maxDist=Math.pow(this.mob.maxRange,2);
@@ -86,6 +87,8 @@ public abstract class GenericCombatAIGoal extends Goal {
         else{
             this.mob.getNavigation().stop();
         }
+
+        this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
     }
 }

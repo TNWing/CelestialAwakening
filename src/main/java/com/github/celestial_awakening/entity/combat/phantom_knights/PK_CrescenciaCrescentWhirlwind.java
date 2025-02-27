@@ -25,9 +25,9 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     float currentStartAngle;//angle of first crescent of each burst
     int repsRemaining;//# of crescent bursts
     float horiDiff=1.5f;
-    float vertDiff=0.3f;
+    float vertDiff=0.6f;
     float[] crescentDmgVals={3.5f,5f,7.5f};
-    float[] whirlwindDmgVals={3f,4f,6f};
+    float[] whirlwindDmgVals={4f,6f,7f};
     float width=1f;
     float height=0.2f;
     float depth=0.4f;
@@ -63,7 +63,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             }
             if (this.currentStateTimer%15==0){
                 Vec3 pos=this.mob.position();
-                AABB aabb=new AABB(pos.x-horiDiff,pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,pos.y+vertDiff,pos.z+horiDiff);
+                AABB aabb=new AABB(pos.x-horiDiff,1f + pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,1f + pos.y+vertDiff,pos.z+horiDiff);
                 List<LivingEntity> entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
                 for (LivingEntity entity:entities) {
                     entity.hurt(whirlwindSource,whirlwindDmgVals[diffMod]);

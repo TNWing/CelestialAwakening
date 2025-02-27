@@ -58,6 +58,10 @@ public class EntityInit {
 
     public static final RegistryObject<EntityType<OrbiterProjectile>> ORBITER=ENTITY_TYPES.register("orbiter",
             ()->EntityType.Builder.<OrbiterProjectile>of(OrbiterProjectile::new,MobCategory.MISC).sized(0.3f,0.3f).build("orbiter"));
-
+    public static final RegistryObject<EntityType<CA_ArrowProjectile>> CUSTOM_ARROW=ENTITY_TYPES.register("ca_arrow",
+            ()->EntityType.Builder.<CA_ArrowProjectile>of(CA_ArrowProjectile::new,MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20).build("ca_arrow"));
 
 }

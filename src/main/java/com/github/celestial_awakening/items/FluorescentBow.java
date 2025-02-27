@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.entity.projectile.CA_ArrowProjectile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -28,14 +29,14 @@ public class FluorescentBow extends BowItem {
     public FluorescentBow(Properties p_40660_) {
         super(p_40660_);
     }
-    int dangersenseNameColor=0xe7e82c;
-    int dangersenseDescColor=0xe2e2e1;
+    int nameColor =0xe7e82c;
+    int descColor =0xe2e2e1;
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
-        Component dangerSenseName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(dangersenseNameColor)));
+        Component dangerSenseName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(nameColor)));
         components.add(dangerSenseName);
         components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_desc"));
-        Component revealShotName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(dangersenseNameColor)));
+        Component revealShotName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(nameColor)));
         components.add(revealShotName);
         components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc"));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
@@ -45,65 +46,67 @@ public class FluorescentBow extends BowItem {
     public int getUseDuration(ItemStack p_40680_) {
         return 72000;
     }
-    @Override
-    public void releaseUsing(ItemStack itemStack, Level level, LivingEntity p_40669_, int p_40670_) {
-        if (p_40669_ instanceof Player player) {
-            boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemStack) > 0;
-            ItemStack itemstack = player.getProjectile(itemStack);
 
-            int i = this.getUseDuration(itemStack) - p_40670_;
-            System.out.println(" I is " + i + " WIth our use dura being " + this.getUseDuration(itemStack));
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(itemStack, level, player, i, !itemstack.isEmpty() || flag);
+    @Override
+    public void releaseUsing(ItemStack bowStack, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
+        if (p_40669_ instanceof Player player) {
+            boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bowStack) > 0;
+            ItemStack arrowStack = player.getProjectile(bowStack);
+
+            int i = this.getUseDuration(bowStack) - p_40670_;
+            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(bowStack, p_40668_, player, i, !arrowStack.isEmpty() || flag);
             if (i < 0) return;
 
-            if (!itemstack.isEmpty() || flag) {
-                if (itemstack.isEmpty()) {
-                    itemstack = new ItemStack(Items.ARROW);
+            if (!arrowStack.isEmpty() || flag) {
+                if (arrowStack.isEmpty()) {
+                    arrowStack = new ItemStack(Items.ARROW);
                 }
 
                 float f = getPowerForTime(i);
                 if (!((double)f < 0.1D)) {
-                    boolean flag1 = player.getAbilities().instabuild || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, itemStack, player));
-                    if (!level.isClientSide) {
-                        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-                        AbstractArrow abstractarrow = arrowitem.createArrow(level, itemstack, player);
+                    boolean flag1 = player.getAbilities().instabuild || (arrowStack.getItem() instanceof ArrowItem && ((ArrowItem)arrowStack.getItem()).isInfinite(arrowStack, bowStack, player));
+                    if (!p_40668_.isClientSide) {
+                        ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
+                        System.out.println(arrowStack.getItem() +  "   is our arrowitem");
+                        AbstractArrow abstractarrow = arrowitem.createArrow(p_40668_, arrowStack, player);
                         abstractarrow = customArrow(abstractarrow);
-                        abstractarrow.addTag("CA_FluorescentBoost");
-                        abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 2.0F, 1.0F);
                         abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()-0.25D);
+                        abstractarrow.addTag("CA_FluorescentBoost");
+                        abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
+                        System.out.println("is ca arrow " + (abstractarrow instanceof CA_ArrowProjectile));
                         if (f == 1.0F) {
                             abstractarrow.setCritArrow(true);
                         }
 
-                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, itemStack);
+                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, bowStack);
                         if (j > 0) {
                             abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() + (double)j * 0.5D + 0.5D);
                         }
 
-                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, itemStack);
+                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, bowStack);
                         if (k > 0) {
                             abstractarrow.setKnockback(k);
                         }
 
-                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, itemStack) > 0) {
+                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bowStack) > 0) {
                             abstractarrow.setSecondsOnFire(100);
                         }
 
-                        itemStack.hurtAndBreak(1, player, (p_289501_) -> {
+                        bowStack.hurtAndBreak(1, player, (p_289501_) -> {
                             p_289501_.broadcastBreakEvent(player.getUsedItemHand());
                         });
-                        if (flag1 || player.getAbilities().instabuild && (itemstack.is(Items.SPECTRAL_ARROW) || itemstack.is(Items.TIPPED_ARROW))) {
+                        if (flag1 || player.getAbilities().instabuild && (arrowStack.is(Items.SPECTRAL_ARROW) || arrowStack.is(Items.TIPPED_ARROW))) {
                             abstractarrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
-                        level.addFreshEntity(abstractarrow);
+                        p_40668_.addFreshEntity(abstractarrow);
                     }
 
-                    level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    p_40668_.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !player.getAbilities().instabuild) {
-                        itemstack.shrink(1);
-                        if (itemstack.isEmpty()) {
-                            player.getInventory().removeItem(itemstack);
+                        arrowStack.shrink(1);
+                        if (arrowStack.isEmpty()) {
+                            player.getInventory().removeItem(arrowStack);
                         }
                     }
 
@@ -112,7 +115,6 @@ public class FluorescentBow extends BowItem {
             }
         }
     }
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level lvl, Player player, InteractionHand p_40674_) {
         ItemStack itemstack = player.getItemInHand(p_40674_);

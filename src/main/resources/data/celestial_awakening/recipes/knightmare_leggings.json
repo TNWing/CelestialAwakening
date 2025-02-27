@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "III",
+    "CAC",
+    "M M"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "celestial_awakening:midnight_iron_ingot"
+    },
+    "M": {
+      "item": "celestial_awakening:moonstone"
+    },
+    "A": {
+      "item": "celestial_awakening:umbra_leggings"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:knightmare_leggings",
+    "count": 1
+  }
+}

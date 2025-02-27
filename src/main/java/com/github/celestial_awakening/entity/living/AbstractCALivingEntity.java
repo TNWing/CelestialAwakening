@@ -5,16 +5,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -22,6 +24,8 @@ import java.util.function.Predicate;
 //TODO:
 //move the code in pathtotarget goal into targetting abilitygoal.
 public abstract class AbstractCALivingEntity extends Monster {
+
+
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
     //may not need action frame to be dataaccessor?
     protected Integer ACTION_FRAME;
@@ -45,6 +49,9 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected static Double armorToughMult =Config.armorToughnessScale;
     protected boolean isCombatActive;
     protected int bossBarWindup=0;
+    protected int genericAbilityCD;//after using an ability, how long until can use another non-basic ability
+    protected int genericAbilityUseCnt;//# of times can use a non-basic ability before relying on CD
+
 
     public int getBossBarWindup(){
         return this.bossBarWindup;
@@ -60,7 +67,16 @@ public abstract class AbstractCALivingEntity extends Monster {
         spdMod=1f;
     }
 
-    public static void addScaledAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> type,double baseHP,double baseArmor,double baseTough,double baseDmg) {
+    @Override
+    public boolean startRiding(@NotNull Entity entityIn) {
+        if (entityIn instanceof Boat || entityIn instanceof Minecart) {
+            return false;
+        }
+
+        return super.startRiding(entityIn);
+    }
+
+    public static void addScaledAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> type, double baseHP, double baseArmor, double baseTough, double baseDmg) {
         event.add(type,Attributes.MAX_HEALTH,baseHP*Config.mobHPScale);
         event.add(type,Attributes.ARMOR,baseArmor*Config.mobArmorPtScale);
         event.add(type,Attributes.ARMOR_TOUGHNESS,baseTough*Config.mobArmorToughnessScale);
@@ -116,9 +132,7 @@ public abstract class AbstractCALivingEntity extends Monster {
     }
 
     public List<LivingEntity> findCollidedEntities(Predicate p){
-        AABB aabb=this.getBoundingBox();
-        List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,aabb,p);
-        return livingEntityList;
+        return findCollidedEntities(p,0);
     }
     public List<LivingEntity> findCollidedEntities(Predicate p,float i){
         AABB aabb=this.getBoundingBox().inflate(i);
@@ -160,9 +174,5 @@ public abstract class AbstractCALivingEntity extends Monster {
     public boolean canStillSenseTarget(){
         LivingEntity target=this.getTarget();
         return this.getSensing().hasLineOfSight(target) && (this.distanceToSqr(target)<=Math.pow(this.getAttributeValue(Attributes.FOLLOW_RANGE),2));
-    }
-    public void setDeltaMovementOfProjectile(Projectile projectile, Vec3 dm){
-        projectile.setDeltaMovement(dm);
-        System.out.println("HELLO from client?" + this.level().isClientSide);
     }
 }

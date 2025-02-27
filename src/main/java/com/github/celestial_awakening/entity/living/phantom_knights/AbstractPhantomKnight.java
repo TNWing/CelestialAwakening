@@ -29,12 +29,13 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     }
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        tag.putInt("BossBarWindup",bossBarWindup);
+        this.bossBarWindup=tag.getInt("BossBarWindup");
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        this.bossBarWindup=tag.getInt("BossBarWindup");
+        tag.putInt("BossBarWindup",bossBarWindup);
+
     }
 
     @Override
@@ -62,7 +63,6 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
             else{
                 if (bossBarWindup<10){
                     ServerLevel serverLevel= (ServerLevel) this.level();
-                    //Vec3 offset=new Vec3()
                     ServerChunkCache chunkSource=serverLevel.getChunkSource();
                     ChunkMap chunkMap=chunkSource.chunkMap;
                     List<ServerPlayer> serverPlayers = chunkMap.getPlayers(this.chunkPosition(),false);

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ICI",
+    "MAM"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "celestial_awakening:midnight_iron_ingot"
+    },
+    "M": {
+      "item": "celestial_awakening:moonstone"
+    },
+    "A": {
+      "item": "celestial_awakening:umbra_helmet"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:knightmare_helmet",
+    "count": 1
+
+  }
+}

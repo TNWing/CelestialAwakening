@@ -35,8 +35,8 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
     LunarCrescent rightCrescent;
     boolean leftTP;
     float pkDir;
-    float[] crescentDmgVals={3,4,5};
-    float[] dashDmgVals={4,5,6};
+    float[] crescentDmgVals={4.5f,5.5f,7};
+    float[] dashDmgVals={4,6,9};
     @Override
     public void startAbility(LivingEntity target,double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);

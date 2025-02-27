@@ -12,7 +12,7 @@ public class DamageSourceIgnoreIFrames extends DamageSourceNoIFrames {
         super(holderOrThrow,entity);
     }
     public DamageSourceIgnoreIFrames(Holder.Reference<DamageType> holderOrThrow, Entity causing, Entity entity) {
-        super(holderOrThrow,entity);
+        super(holderOrThrow,causing,entity);
         //so after set owner, THE BYPASS SHIELD BECCOMES TRUE
         //System.out.println("ENT WITH ID " + causing.getId() + " can BYPASS SHIELD " + this.is(DamageTypeTags.BYPASSES_SHIELD) + " ON SIDE client? " + causing.level().isClientSide);
 

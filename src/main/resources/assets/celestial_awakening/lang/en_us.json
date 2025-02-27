@@ -1,6 +1,7 @@
 {
   "item.celestial_awakening.moonstone": "Moonstone",
   "item.celestial_awakening.lunar_scale": "Lunar Scale",
+  "item.celestial_awakening.lunar_arrow": "Lunar Arrow",
   "item.celestial_awakening.moon_scythe": "Moon Scythe",
   "item.celestial_awakening.moonstone_helmet": "Lunar Helmet",
   "item.celestial_awakening.moonstone_chestplate": "Lunar Chestplate",
@@ -11,6 +12,7 @@
 
   "item.celestial_awakening.fluorescent_bow": "Fluorescent Bow",
   "item.celestial_awakening.sunstone": "Sunstone",
+  "item.celestial_awakening.solar_arrow": "Solar Arrow",
   "item.celestial_awakening.life_fragment": "Life Fragment",
   "item.celestial_awakening.radiant_helmet": "Radiant Helmet",
   "item.celestial_awakening.radiant_chestplate": "Radiant Chestplate",
@@ -80,11 +82,14 @@
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
 
-  "tooltip.celestial_awakening.fluorescent_bow.tooltip": "Dangersense\nUpon nocking an arrow, reveal all nearby enemies that aren't invisible.",
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_desc": "Upon nocking an arrow, reveal all nearby enemies that aren't invisible.",
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name": "Revealing Shot",
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target.",
+
+  "tooltip.celestial_awakening.lunar_arrow.desc": "Upon hitting an entity, damages and slows all entities behind the target.",
+  "tooltip.celestial_awakening.solar_arrow.desc": "Ignites nearby enemies while airborne.",
+  "tooltip.celestial_awakening.singularity_arrow.desc": "",
 
   "tooltip.celestial_awakening.armor.full_set_effect": "Full Set Effect: ",
   "tooltip.celestial_awakening.armor.piece_effect": "Piece Effect: ",

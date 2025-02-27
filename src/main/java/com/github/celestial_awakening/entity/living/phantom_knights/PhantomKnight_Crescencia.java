@@ -7,11 +7,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+
+import java.util.HashMap;
 
 public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
     static double baseHP=225.0D;
@@ -19,14 +20,56 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
     static double baseArmor=9D;
     static double baseTough=6D;
 
+    /*
+    ACTION_IDs
+    0: idle
+    1: idle to combat ready
+    2: combat ready to idle
+    3: basic 1
+    4: basic 2
+    5: basic 3
+    6: whirlwind start
+    7: whirlwind
+    8: whirlwind to combat ready
+    9: moon cutter start
+    10: strikethrough start
+    11: strikethrough strike
+     */
 
     public final AnimationState idleAnimationState=new AnimationState();
+    public final AnimationState wakeUpAnimationState=new AnimationState();
+    public final AnimationState returnToIdleAnimationState=new AnimationState();
+    public final AnimationState basicAttack1AnimationState=new AnimationState();
+    public final AnimationState basicAttack2AnimationState=new AnimationState();
+    public final AnimationState basicAttack3AnimationState=new AnimationState();
     public final AnimationState whirlwindStartAnimationState=new AnimationState();
     public final AnimationState whirlwindAnimationState=new AnimationState();
+    public final AnimationState whirlwindEndAnimationState=new AnimationState();
+    public final AnimationState moonCutterAnimationState=new AnimationState();
+    public final AnimationState strikethroughStartAnimationState=new AnimationState();
+    public final AnimationState strikethroughStrikeAnimationState=new AnimationState();
+
+    HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
+
+
+
+
     public final AnimationState nightSlashStartAnimationState=new AnimationState();
     public final AnimationState nightSlashStrikeAnimationState=new AnimationState();
     public PhantomKnight_Crescencia(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
+        actionIDToAnimMap.put(0,idleAnimationState);
+        actionIDToAnimMap.put(1,wakeUpAnimationState);
+        actionIDToAnimMap.put(2,returnToIdleAnimationState);
+        actionIDToAnimMap.put(3,basicAttack1AnimationState);
+        actionIDToAnimMap.put(4,basicAttack2AnimationState);
+        actionIDToAnimMap.put(5,basicAttack3AnimationState);
+        actionIDToAnimMap.put(6,whirlwindStartAnimationState);
+        actionIDToAnimMap.put(7,whirlwindAnimationState);
+        actionIDToAnimMap.put(8,whirlwindEndAnimationState);
+        actionIDToAnimMap.put(9,moonCutterAnimationState);
+        actionIDToAnimMap.put(10,strikethroughStartAnimationState);
+        actionIDToAnimMap.put(11,strikethroughStrikeAnimationState);
     }
 
     protected void defineSynchedData() {
@@ -57,7 +100,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         addScaledAttributes(event, entityType,baseHP,baseArmor,baseTough,baseDmg);
     }
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FloatGoal(this));
+        super.registerGoals();
         this.goalSelector.addGoal(4,new PK_CrescenciaCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         //this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -72,118 +115,33 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
     @Override
     public void updateAnim() {
-        switch (this.entityData.get(ACTION_ID)) {
-            case 0: {//idle
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
+        int id=this.entityData.get(ACTION_ID);
+        AnimationState currentState=actionIDToAnimMap.get(id);
 
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 0;
-                    animTime = 60;
-
-                    idleAnimationState.start(this.tickCount);
-                }
-                break;
+        if (isSameAnim()){
+            if (animTime>0){
+                animTime--;
             }
-            case 1: {//walk
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
+            else{
 
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 1;
-                    animTime = 60;
-                }
-                break;
             }
-            case 2: {//whirlwindStart
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
 
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 2;
-                    animTime = 20;
-                    whirlwindStartAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 3: {//whirlwind
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
-
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 3;
-                    animTime = 30;
-                    whirlwindAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 4: {//nightSlashStart
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
-
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 4;
-                    animTime = 30;
-                    nightSlashStartAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 5:{//nightSlashStrike
-                if (isSameAnim()) {
-                    if (animTime > 0) {
-                        animTime--;
-                    }
-
-                } else {
-                    stopAnim(currentAction);
-                    currentAction = 4;
-                    animTime = 30;
-                    nightSlashStrikeAnimationState.start(this.tickCount);
-                }
-            }
         }
-    }
-    public void stopAnim(int i){
-        System.out.println("STOPPING ANIM W/ ACT ID " + i);
-        switch (i){
-            case 0:{
-                idleAnimationState.stop();
-                break;
+        else{
+            actionIDToAnimMap.get(currentAction).stop();
+            currentAction=id;
+            switch(this.entityData.get(ACTION_ID)){
+
+                case 1:{
+                    animTime=30;
+                }
+                default:{
+                    animTime=100;
+                    break;
+                }
             }
-            case 1:{
-                break;
-            }
-            case 2:{
-                whirlwindStartAnimationState.stop();
-                break;
-            }
-            case 3:{
-                whirlwindAnimationState.stop();
-                break;
-            }
-            case 4:{
-                nightSlashStartAnimationState.stop();
-                break;
-            }
-            case 5:{
-                nightSlashStrikeAnimationState.stop();
-                break;
-            }
+
+            currentState.start(this.tickCount);
         }
     }
 }

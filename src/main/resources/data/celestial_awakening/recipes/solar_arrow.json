@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "S",
+    "R",
+    "F"
+  ],
+  "key": {
+    "S": {
+      "item": "celestial_awakening:sunstone"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:solar_arrow",
+    "count": 4
+  }
+}

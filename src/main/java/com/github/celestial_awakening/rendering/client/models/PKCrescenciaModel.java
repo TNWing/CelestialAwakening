@@ -5,6 +5,7 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.animations.PK_CrescenciaAnimations;
+import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -127,11 +128,14 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.model.getAllParts().forEach(ModelPart::resetPose);
-		//this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
+		if (((AbstractCALivingEntity)entity).getActionId()==0){
+			this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
+		}
+		this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
-		this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
-		//this.animate(((PhantomKnight_Crescencia)entity).nightSlashStartAnimationState, PK_CrescenciaAnimations.nightSlashStart,ageInTicks,1f);
-		//this.animate(((PhantomKnight_Crescencia)entity).nightSlashStrikeAnimationState, PK_CrescenciaAnimations.nightSlashStrike,ageInTicks,1f);
+		//
+		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
+		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
 	}
 
 	@Override

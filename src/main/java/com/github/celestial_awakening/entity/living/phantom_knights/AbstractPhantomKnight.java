@@ -7,12 +7,10 @@ import net.minecraft.server.level.*;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
 
@@ -29,13 +27,23 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     }
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.bossBarWindup=tag.getInt("BossBarWindup");
+        if (!this.level().isClientSide){
+            ServerLevel level= (ServerLevel) this.level();
+            if (tag.hasUUID("PrevTarget")){
+                level.getEntity(tag.getUUID("PrevTarget"));
+            }
+
+        }
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putInt("BossBarWindup",bossBarWindup);
-
+        if (this.getTarget()!=null){
+            tag.putUUID("PrevTarget",this.getTarget().getUUID());
+        }
+        else{
+            //tag.putUUID("PrevTarget",null);
+        }
     }
 
     @Override
@@ -55,7 +63,6 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        Stream<WrappedGoal> runningGoals=this.goalSelector.getRunningGoals();
         if (isCombatActive){
             if (bossBarWindup>=100){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());

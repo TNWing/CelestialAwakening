@@ -43,7 +43,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
         if (abilityRange>=dist){
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            this.mob.setActionId(4);
+            this.mob.setActionId(10);
             //AttributeModifier attributeModifier=new AttributeModifier(UUID.fromString("KB_Res"),"CA_KB_Res",0.75f,AttributeModifier.Operation.MULTIPLY_BASE);
             //this.mob.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addTransientModifier();
         }
@@ -87,6 +87,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                     break;
                 }
                 case 20:{
+                    this.mob.setActionId(11);
                     if (leftTP){
                         Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
                         pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
@@ -111,11 +112,11 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                     }
                     break;
                 }
-                case 15:{
+                case 14:{
                     Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
                     this.mob.setPos(target.position().subtract(dir.scale(0.4)));
                     List<LivingEntity> entityList=this.mob.findCollidedEntities(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob),1.4f);
-                    DamageSourceIgnoreIFrames dashSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob,this.mob,this.mob.position());
+                    DamageSourceIgnoreIFrames dashSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
                     if (!entityList.isEmpty()){
                         int diffMod=this.mob.level().getDifficulty().getId();
                         if (diffMod>0){
@@ -136,8 +137,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
         if (currentStateTimer<=0) {
             switch (state) {
                 case 0:{
-                    this.mob.setActionId(5);
-                    this.mob.canMove=true;
+                    this.mob.canMove=false;
                     changeToState1();
                     break;
                 }

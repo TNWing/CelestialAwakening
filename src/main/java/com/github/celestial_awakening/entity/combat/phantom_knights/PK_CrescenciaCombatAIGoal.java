@@ -8,15 +8,15 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,20,40,30,0);
     PhantomKnightChargeAttack chargeAttack=new PhantomKnightChargeAttack(this.mob,50,200,50,30);
     PK_CrescenciaDualCrescentSlash dualCrescentSlash=new PK_CrescenciaDualCrescentSlash(this.mob,20,160,14,30);
-    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,30,270,165,30);
+    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,20,200,125,30);
     PK_CrescenciaNightSlash nightSlash=new PK_CrescenciaNightSlash(this.mob,20,200,120,30);
-    PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,26,150,50,40);
+    PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36);
     PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,30,160,0,20);
 
     public PK_CrescenciaCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);
     }
-    public void tick(){
+    public void tick(){//this tick occurs ever 2 standard ticks
         LivingEntity target=this.mob.getTarget();
         if (this.mob.getBossBarWindup()>=100){
             basicAttack.decreaseCD(1);

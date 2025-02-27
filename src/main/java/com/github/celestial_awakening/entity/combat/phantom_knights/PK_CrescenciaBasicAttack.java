@@ -23,11 +23,13 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (this.getCurrentCD()==0){
             if (abilityRange>=dist){
+                System.out.println("VALD RANGE");
                 mob.canMove=false;
                 super.startAbility(target,dist);
                 setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
             }
             else if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
+                System.out.println("LOW ON HP, summon crescent ");
                 mob.canMove=false;
                 super.startAbility(target,dist);
                 setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
@@ -45,6 +47,7 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                     state++;
                     currentStateTimer=abilityExecuteTime;
                     if (target.distanceTo(this.mob)<getAbilityRange(target)){
+                        System.out.println("HURT TARGETY VIA BASIC");
                         this.mob.doHurtTarget(target);
                     }
 

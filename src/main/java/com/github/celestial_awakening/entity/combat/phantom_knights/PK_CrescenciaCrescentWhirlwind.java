@@ -61,7 +61,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             if (diffMod>0){
                 diffMod-=1;
             }
-            if (this.currentStateTimer%15==0){
+            if (this.currentStateTimer%10==0){
                 Vec3 pos=this.mob.position();
                 AABB aabb=new AABB(pos.x-horiDiff,1f + pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,1f + pos.y+vertDiff,pos.z+horiDiff);
                 List<LivingEntity> entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
@@ -100,7 +100,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
         for (int i=0;i<4;i++){
             float ang=currentStartAngle+90*i;
-            LunarCrescent crescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],100,7f,ang,0,0,1.75f,0.35f,1.75f);
+            LunarCrescent crescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],85,7f,ang,0,0,1.75f,0.35f,1.75f);
             int id=crescent.getId();
             ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
             if (cap!=null){

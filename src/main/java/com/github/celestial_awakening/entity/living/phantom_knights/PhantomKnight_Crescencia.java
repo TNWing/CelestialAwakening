@@ -22,7 +22,8 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
     /*
     ACTION_IDs
-    0: idle
+    -1: dormant
+    0: idle/walking
     1: idle to combat ready
     2: combat ready to idle
     3: basic 1
@@ -58,6 +59,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
     public final AnimationState nightSlashStrikeAnimationState=new AnimationState();
     public PhantomKnight_Crescencia(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
+        this.setActionId(-1);
         actionIDToAnimMap.put(0,idleAnimationState);
         actionIDToAnimMap.put(1,wakeUpAnimationState);
         actionIDToAnimMap.put(2,returnToIdleAnimationState);
@@ -121,7 +123,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         if (isSameAnim()){
             if (animTime>0){
                 incrementActionFrame();
-                if (getActionFrame()==18 && this.getTarget()!=null){
+                if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
                     this.lookControl.setLookAt(this.getTarget());
                 }
                 animTime--;
@@ -130,7 +132,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
             }
         }
-        else{
+        else if (id!=-1){
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
             switch(this.entityData.get(ACTION_ID)){

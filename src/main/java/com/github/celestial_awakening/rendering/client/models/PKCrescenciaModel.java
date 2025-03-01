@@ -135,6 +135,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 		this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
+		this.animate(((PhantomKnight_Crescencia)entity).moonCutterAnimationState, PK_CrescenciaAnimations.mooncutter,ageInTicks,1f);
 	}
 
 	@Override

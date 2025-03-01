@@ -46,14 +46,14 @@ public class AstralitePhotonSurge extends GenericAbility {
                 break;
             }
             case 1:{
-                if (this.currentStateTimer%30==29){
+                if (this.currentStateTimer%40==39){
                     Vec3 targetPos=target.position();
                     targetBlockPos= BlockPos.containing(targetPos);
                 }
                 Level level=target.level();
                 if (!level.isClientSide() && targetBlockPos!=null){
                     ServerLevel serverLevel= (ServerLevel) level;
-                    if (this.currentStateTimer%15<=10){
+                    if (this.currentStateTimer%20<=12){
                         burnGround(serverLevel);
                     }
                     else{
@@ -90,9 +90,9 @@ public class AstralitePhotonSurge extends GenericAbility {
     }
 
     private void makeParticles(ServerLevel serverLevel){//15 ticks of particle
-        int x= targetBlockPos.getX();
-        int y= targetBlockPos.getY();
-        int z= targetBlockPos.getZ();
+        double x= targetBlockPos.getCenter().x;
+        double y= targetBlockPos.getCenter().y;
+        double z= targetBlockPos.getCenter().z;
         int count=20;
         float speed=0.15f;
         serverLevel.sendParticles(particleType, x, y, z, count, 0, 1, 0, speed);
@@ -100,9 +100,9 @@ public class AstralitePhotonSurge extends GenericAbility {
 
 
     private void burnGround(ServerLevel serverLevel){//every 15 ticks, burn ground
-        int x= targetBlockPos.getX();
-        int y= targetBlockPos.getY();
-        int z= targetBlockPos.getZ();
+        double x= targetBlockPos.getCenter().x;
+        double y= targetBlockPos.getCenter().y;
+        double z= targetBlockPos.getCenter().z;
         int count=25;
         float speed=0.45f;
         serverLevel.sendParticles(particleType, x, y, z, count, 0, 3, 0, speed);

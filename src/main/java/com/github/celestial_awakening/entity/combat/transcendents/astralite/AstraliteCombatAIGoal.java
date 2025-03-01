@@ -6,8 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class AstraliteCombatAIGoal extends GenericCombatAIGoal {
 
-    AstralitePhotonSurge photonSurge =new AstralitePhotonSurge(this.mob,20,160,120,30);
-    AstraliteBasicAttack basicAttack=new AstraliteBasicAttack(this.mob,20,70,30,0);
+    AstralitePhotonSurge photonSurge =new AstralitePhotonSurge(this.mob,20,110,80,30);
+    AstraliteBasicAttack basicAttack=new AstraliteBasicAttack(this.mob,20,30,30,0);
 
     public AstraliteCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);

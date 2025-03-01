@@ -51,7 +51,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<PhotonOrb>> PHOTON_ORB = ENTITY_TYPES.register("photon_orb",()->EntityType.Builder.<PhotonOrb>of(PhotonOrb::new,MobCategory.MISC).build("photon_orb"));
 
     public static final RegistryObject<EntityType<ShiningOrb>> SHINING_ORB=ENTITY_TYPES.register("shining_orb",
-            ()->EntityType.Builder.<ShiningOrb>of(ShiningOrb::new,MobCategory.MISC).sized(1f,1f).build("shining_orb"));
+            ()->EntityType.Builder.<ShiningOrb>of(ShiningOrb::new,MobCategory.MISC).sized(0.8f,0.8f).build("shining_orb"));
 
     public static final RegistryObject<EntityType<LunarCrescent>> LUNAR_CRESCENT=ENTITY_TYPES.register("lunar_crescent",
             ()->EntityType.Builder.<LunarCrescent>of(LunarCrescent::new,MobCategory.MISC).sized(1f,0.2f).build("lunar_crescent"));

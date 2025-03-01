@@ -17,9 +17,7 @@ public class AstraliteBasicAttack extends GenericAbility {
     @Override
     public void startAbility(LivingEntity target,double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
-        System.out.println("ATTEMPTING TO START BASIC ACO ATTACK");
         if (abilityRange>=dist && this.getCurrentCD()==0){
-            System.out.println("BASIC ACO ATTAACK");
             mob.canMove=false;
             super.startAbility(target,dist);
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
@@ -41,10 +39,12 @@ public class AstraliteBasicAttack extends GenericAbility {
                     Vec3 targetPos=target.position();
                     Vec3 dir=targetPos.subtract(ownerPos).normalize();
                     float ang=MathFuncs.getAngFrom2DVec(dir);
-                    Vec3 spt=new Vec3(ownerPos.x,ownerPos.y,ownerPos.z).add(dir.scale(1.1f));
-                    ShiningOrb orb=ShiningOrb.create(level,100,5,ang,0,3);
-                    orb.setPos(spt);
+                    float vAng=MathFuncs.getVertAngFromVec(dir);
+                    Vec3 spt=new Vec3(ownerPos.x,ownerPos.y+0.8f,ownerPos.z).add(MathFuncs.get2DVecFromAngle(ang).scale(1.1f));
+                    ShiningOrb orb=ShiningOrb.create(level,100,5,ang,0,2+this.mob.level().getDifficulty().getId());
                     orb.setOwner(this.mob);
+                    orb.setVAng(vAng);
+                    orb.setPos(spt);
                     level.addFreshEntity(orb);
                     break;
                 }

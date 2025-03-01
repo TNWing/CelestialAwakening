@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class ShiningOrbRenderer <T extends Entity> extends EntityRenderer<ShiningOrb> {
-    private static final ResourceLocation TEXTURE_LOCATION = CelestialAwakening.createResourceLocation("textures/entity/lightray_face1.png");
+    private static final ResourceLocation TEXTURE_LOCATION = CelestialAwakening.createResourceLocation("textures/entity/lightray_face2.png");
     private final ShiningOrbModel model;
     public ShiningOrbRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -30,7 +30,8 @@ public class ShiningOrbRenderer <T extends Entity> extends EntityRenderer<Shinin
     public void render(ShiningOrb entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
-        poseStack.scale(8f,8f,8f);
+        poseStack.scale(6f,6f,6f);
+        poseStack.translate(0,-1.35f,0);
         //need to translate
         this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();

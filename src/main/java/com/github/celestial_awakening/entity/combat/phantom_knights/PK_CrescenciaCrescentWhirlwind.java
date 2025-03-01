@@ -28,9 +28,6 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     float vertDiff=0.6f;
     float[] crescentDmgVals={5.5f,7f,10.5f};
     float[] whirlwindDmgVals={5.5f,7f,8.5f};
-    float width=1f;
-    float height=0.2f;
-    float depth=0.4f;
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
     public PK_CrescenciaCrescentWhirlwind(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);

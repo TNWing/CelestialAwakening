@@ -29,7 +29,7 @@ public class PurgingLight extends MobEffect {
         super.removeAttributeModifiers(livingEntity,attributeMap,amplifier);
         Collection<MobEffectInstance> effects=livingEntity.getActiveEffects();
         ArrayList<MobEffectInstance> buffs=new ArrayList<>();
-        int debuffCnt=0;
+        int debuffCnt=1;
         for (MobEffectInstance effectInstance:effects) {
             MobEffectCategory category=effectInstance.getEffect().getCategory();
             if (category==MobEffectCategory.BENEFICIAL){

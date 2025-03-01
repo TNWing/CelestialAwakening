@@ -163,6 +163,10 @@ public class OrbiterProjectile extends CA_Projectile {
 
             }
             if (entity.hurt(damagesource, this.getDmg())) {
+                float ang= this.getHAng();
+                double xDir=Math.sin(ang);
+                double yDir=Math.cos(ang);
+                entity.knockback(1.75f,xDir,yDir);
                 if (owner!=null && owner instanceof LivingEntity) {
                     ((LivingEntity)owner).setLastHurtMob(entity);
                 }

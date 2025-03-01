@@ -328,4 +328,41 @@ public class PK_CrescenciaAnimations {
 					new Keyframe(2.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.build();
+	public static final AnimationDefinition mooncutter = AnimationDefinition.Builder.withLength(1.2083F)
+			.addAnimation("armLPivot", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(51.7709F, -31.5695F, -14.1895F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.degreeVec(51.7709F, -31.5695F, -14.1895F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.degreeVec(51.7709F, -31.5695F, -14.1895F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2083F, KeyframeAnimations.degreeVec(51.7709F, -31.5695F, -14.1895F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.3333F, KeyframeAnimations.degreeVec(51.7709F, -31.5695F, -14.1895F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("armRPivot", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(60.3546F, 38.0542F, 17.9079F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.degreeVec(-14.5971F, 40.1385F, 20.0222F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.degreeVec(-14.5971F, 40.1385F, 20.0222F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2083F, KeyframeAnimations.degreeVec(46.0969F, 8.8397F, 12.9853F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.3333F, KeyframeAnimations.degreeVec(29.0561F, -9.3493F, 10.2136F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("lowerarmR", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.degreeVec(-92.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.degreeVec(-92.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.125F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2083F, KeyframeAnimations.degreeVec(-10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("sword", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(207.4959F, -19.7197F, 234.9848F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.degreeVec(207.4959F, -19.7197F, 234.9848F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.degreeVec(207.4959F, -19.7197F, 234.9848F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.125F, KeyframeAnimations.degreeVec(207.4959F, -19.7197F, 234.9848F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2083F, KeyframeAnimations.degreeVec(207.4959F, -19.7197F, 234.9848F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("sword", new AnimationChannel(AnimationChannel.Targets.POSITION,
+					new Keyframe(0.0F, KeyframeAnimations.posVec(0.4301F, 1.0681F, -2.8677F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.posVec(0.4301F, 1.0681F, -2.8677F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.posVec(0.4301F, 1.0681F, -2.8677F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.125F, KeyframeAnimations.posVec(0.4301F, 1.0681F, -2.8677F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2083F, KeyframeAnimations.posVec(0.4301F, 1.0681F, -2.8677F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.build();
 }

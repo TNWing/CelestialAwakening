@@ -41,13 +41,16 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            this.mob.setActionId(9);
+
         }
 
     }
 
     @Override
     public void executeAbility(LivingEntity target) {
+        if (state==0 && this.currentStateTimer==12){
+            this.mob.setActionId(9);
+        }
         this.currentStateTimer--;
         if (currentStateTimer<=0) {
             switch (state) {
@@ -76,6 +79,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     break;
                 }
                 case 1:{
+                    this.mob.setActionId(0);
                     changeToState2();
                     break;
                 }

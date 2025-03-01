@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class OrbiterRenderer<T extends Entity> extends EntityRenderer<OrbiterProjectile> {
-    private static final ResourceLocation TEXTURE_LOCATION = new  ResourceLocation(CelestialAwakening.MODID,"textures/entity/lightray_face1.png");
+    private static final ResourceLocation TEXTURE_LOCATION = CelestialAwakening.createResourceLocation("textures/entity/lightray_face1.png");
     private final OrbiterModel model;
     public OrbiterRenderer(EntityRendererProvider.Context context) {
         super(context);

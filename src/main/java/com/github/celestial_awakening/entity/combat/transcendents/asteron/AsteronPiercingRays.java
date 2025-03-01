@@ -19,6 +19,7 @@ public class AsteronPiercingRays extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
+            this.mob.setActionId(4);
             setMoveVals(0,this.getAbilityRange(target),false);
         }
 
@@ -56,6 +57,7 @@ public class AsteronPiercingRays extends GenericAbility {
                 case 1:{
                     state++;
                     currentStateTimer=abilityRecoveryTime;
+                    this.mob.setActionId(5);
                     break;
                 }
                 case 2:{

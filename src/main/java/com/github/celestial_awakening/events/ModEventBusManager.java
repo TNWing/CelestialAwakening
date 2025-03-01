@@ -22,7 +22,6 @@ public class ModEventBusManager {
     }
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){//called before config load
-        System.out.println("CREATING ATT");
         event.put(EntityInit.ASTERON.get(), Asteron.createAttributes().build());
         event.put(EntityInit.ASTRALITE.get(), Astralite.createAttributes().build());
         event.put(EntityInit.NEBURE.get(), Nebure.createAttributes().build());

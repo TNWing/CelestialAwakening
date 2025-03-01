@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class ShiningOrbRenderer <T extends Entity> extends EntityRenderer<ShiningOrb> {
-    private static final ResourceLocation TEXTURE_LOCATION = new  ResourceLocation(CelestialAwakening.MODID,"textures/entity/lightray_face1.png");
+    private static final ResourceLocation TEXTURE_LOCATION = CelestialAwakening.createResourceLocation("textures/entity/lightray_face1.png");
     private final ShiningOrbModel model;
     public ShiningOrbRenderer(EntityRendererProvider.Context context) {
         super(context);

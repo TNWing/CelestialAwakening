@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<LunarCrescent> {
-    private static final ResourceLocation TEXTURE_LOCATION = new  ResourceLocation(CelestialAwakening.MODID,"textures/entity/lunar_crescent.png");
+    private static final ResourceLocation TEXTURE_LOCATION = CelestialAwakening.createResourceLocation("textures/entity/lunar_crescent.png");
     private final LunarCrescentModel model;
     public LunarCrescentRenderer(EntityRendererProvider.Context context) {
         super(context);

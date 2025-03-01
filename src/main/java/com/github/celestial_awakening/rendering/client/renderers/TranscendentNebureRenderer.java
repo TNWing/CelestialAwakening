@@ -17,7 +17,7 @@ public class TranscendentNebureRenderer extends MobRenderer<Nebure, Transcendent
 
     @Override
     public ResourceLocation getTextureLocation(Nebure p_114482_) {
-        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/transcendent_asteron.png");
+        return CelestialAwakening.createResourceLocation("textures/entity/transcendent_asteron.png");
     }
 
     @Override

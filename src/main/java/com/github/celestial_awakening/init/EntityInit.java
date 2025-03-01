@@ -26,7 +26,7 @@ public class EntityInit {
             ()->EntityType.Builder.of(Nebure::new,MobCategory.MONSTER).sized(1.5f,3f).build("transcendent_nebure"));
 
     public static final RegistryObject<EntityType<NightProwler>> NIGHT_PROWLER=ENTITY_TYPES.register("night_prowler",
-            ()->EntityType.Builder.of(NightProwler::new,MobCategory.MONSTER).sized(1.3f,0.7f).build("night_prowler"));
+            ()->EntityType.Builder.of(NightProwler::new,MobCategory.MONSTER).build("night_prowler"));
 
 
 

@@ -140,6 +140,7 @@ public class TranscendentAsteronModel<T extends Entity> extends HierarchicalMode
 		this.animateWalk(TranscendentAsteronAnimations.idle,limbSwing,limbSwingAmount,1f,2f);
 		this.animate(((Asteron)entity).piercingRaysAnimationState, TranscendentAsteronAnimations.piercing_rays,ageInTicks,1f);
 		this.animate(((Asteron)entity).piercingRaysRecoveryAnimationState, TranscendentAsteronAnimations.piercing_rays_recover,ageInTicks,1f);
+		System.out.println(this.model.y + " is model y");//definitely is applied
 	}
 
 	@Override

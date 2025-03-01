@@ -23,8 +23,8 @@ import org.joml.Matrix4f;
 @OnlyIn(Dist.CLIENT)
 public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay> {
     //BeaconRenderer
-    private static final ResourceLocation END_FACE_TEXTURE = new  ResourceLocation(CelestialAwakening.MODID,"textures/entity/lightray_face1.png");
-    private static final ResourceLocation SIDE_FACE_TEXTURE = new  ResourceLocation(CelestialAwakening.MODID,"textures/entity/lightray_face2.png");
+    private static final ResourceLocation END_FACE_TEXTURE = CelestialAwakening.createResourceLocation("textures/entity/lightray_face1.png");
+    private static final ResourceLocation SIDE_FACE_TEXTURE = CelestialAwakening.createResourceLocation("textures/entity/lightray_face2.png");
 
     private final LightRayModel model;
     public LightRayRenderer(EntityRendererProvider.Context context) {

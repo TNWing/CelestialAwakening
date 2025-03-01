@@ -11,9 +11,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class NightProwlerRenderer extends MobRenderer<NightProwler, NightProwlerModel<NightProwler>> {
-    public NightProwlerRenderer(EntityRendererProvider.Context p_174304_, NightProwlerModel<NightProwler> p_174305_, float p_174306_) {
-        super(p_174304_, p_174305_, p_174306_);
-    }
     public NightProwlerRenderer(EntityRendererProvider.Context context) {
         super(context,new NightProwlerModel<>(context.bakeLayer(ModelLayerInit.NIGHT_PROWLER_LAYER)),2);
     }
@@ -25,6 +22,6 @@ public class NightProwlerRenderer extends MobRenderer<NightProwler, NightProwler
 
     @Override
     public ResourceLocation getTextureLocation(NightProwler p_114482_) {
-        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/night_prowler.png");
+        return CelestialAwakening.createResourceLocation("textures/entity/night_prowler.png");
     }
 }

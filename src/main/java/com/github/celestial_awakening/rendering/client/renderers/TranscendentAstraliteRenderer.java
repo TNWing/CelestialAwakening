@@ -18,7 +18,7 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
 
     @Override
     public ResourceLocation getTextureLocation(Astralite p_114482_) {
-        return new ResourceLocation(CelestialAwakening.MODID,"textures/entity/transcendent_asteron.png");
+        return CelestialAwakening.createResourceLocation("textures/entity/transcendent_asteron.png");
     }
 
     @Override

@@ -20,14 +20,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
+import java.util.HashMap;
+
 public class Asteron extends AbstractTranscendent {
 
     static double baseHP=20.0D;
     static double baseDmg=4.5D;
     static double baseArmor=6D;
     static double baseTough=1D;
-
-
+    public final AnimationState idleAnimationState=new AnimationState();
+    public final AnimationState readyUpAnimationState=new AnimationState();
+    public final AnimationState walkAnimationState=new AnimationState();
+    public final AnimationState basicAttackAnimationState=new AnimationState();
+    public final AnimationState piercingRaysAnimationState=new AnimationState();
+    public final AnimationState piercingRaysRecoveryAnimationState=new AnimationState();
+    HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public Asteron(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         System.out.println("PREV MHP IS " + this.getMaxHealth());
@@ -37,6 +44,13 @@ public class Asteron extends AbstractTranscendent {
         this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(baseTough * Config.mobArmorToughnessScale);
         System.out.println("new MHP IS " + this.getMaxHealth());
         //this.setHealth(this.getMaxHealth());
+        actionIDToAnimMap.put(0,idleAnimationState);
+        actionIDToAnimMap.put(1,readyUpAnimationState);
+        actionIDToAnimMap.put(2,walkAnimationState);
+        actionIDToAnimMap.put(3,basicAttackAnimationState);
+        actionIDToAnimMap.put(4,piercingRaysAnimationState);
+        actionIDToAnimMap.put(5,piercingRaysRecoveryAnimationState);
+
     }
 
 
@@ -51,11 +65,6 @@ public class Asteron extends AbstractTranscendent {
         super.addAdditionalSaveData(tag);
     }
 
-    public final AnimationState idleAnimationState=new AnimationState();
-    public final AnimationState walkAnimationState=new AnimationState();
-    public final AnimationState attackAnimationState=new AnimationState();
-    public final AnimationState piercingRaysAnimationState=new AnimationState();
-    public final AnimationState piercingRaysRecoveryAnimationState=new AnimationState();
     public static AttributeSupplier.Builder createAttributes() {//TODO
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
@@ -108,7 +117,27 @@ public class Asteron extends AbstractTranscendent {
 
     @Override
     public void updateAnim() {
-
+        int id=this.entityData.get(ACTION_ID);
+        AnimationState currentState=actionIDToAnimMap.get(id);
+        System.out.println("HELLO UPDATING anim, id is " + id);
+        if (isSameAnim()){
+            incrementActionFrame();
+            if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
+                this.lookControl.setLookAt(this.getTarget());
+            }
+        }
+        else if (id!=-1){
+            actionIDToAnimMap.get(currentAction).stop();
+            currentAction=id;
+            currentState.start(this.tickCount);
+            switch(this.entityData.get(ACTION_ID)){
+                case 1:{
+                }
+                default:{
+                    break;
+                }
+            }
+        }
     }
 
 

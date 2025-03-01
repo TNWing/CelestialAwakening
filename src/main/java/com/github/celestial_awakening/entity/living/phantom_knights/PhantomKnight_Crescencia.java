@@ -135,6 +135,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         else if (id!=-1){
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
+            currentState.start(this.tickCount);
             switch(this.entityData.get(ACTION_ID)){
                 case 1:{
                     animTime=96;
@@ -144,8 +145,6 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
                     break;
                 }
             }
-
-            currentState.start(this.tickCount);
         }
     }
 }

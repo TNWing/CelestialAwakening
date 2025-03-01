@@ -37,14 +37,14 @@ public class PK_CrescenciaAnimations {
 			))
 			.build();
 	public static final AnimationDefinition wakeUp = AnimationDefinition.Builder.withLength(4.0F)
-			.addAnimation("model", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+			.addAnimation("root", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.25F, KeyframeAnimations.degreeVec(0.0F, 20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(2.5F, KeyframeAnimations.degreeVec(0.0F, 20.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(3.25F, KeyframeAnimations.degreeVec(0.0F, 20.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
-			.addAnimation("model", new AnimationChannel(AnimationChannel.Targets.POSITION,
+			.addAnimation("root", new AnimationChannel(AnimationChannel.Targets.POSITION,
 					new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.25F, KeyframeAnimations.posVec(0.0F, -1.4F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, -1.4F, 0.0F), AnimationChannel.Interpolations.LINEAR),

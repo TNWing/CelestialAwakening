@@ -21,11 +21,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
+import java.util.HashMap;
+
 public class NightProwler extends AbstractCALivingEntity {
-    public NightProwler(EntityType<? extends Monster> p_33002_, Level p_33003_) {
-        super(p_33002_, p_33003_);
-        this.standardAABB=this.getBoundingBox();
-    }
+
     static double baseHP=28.0D;
     static double baseDmg=5.0D;
     static double baseArmor=1D;
@@ -36,10 +35,24 @@ public class NightProwler extends AbstractCALivingEntity {
     public final AnimationState attackAnimationState=new AnimationState();
     public final AnimationState crouchAnimationState=new AnimationState();
     public final AnimationState leapAnimationState=new AnimationState();
+    public final AnimationState leapRecoveryAnimationState=new AnimationState();
 
-
+    HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     protected float opacity;
     public boolean hasCollision;
+
+    public AABB standardAABB;
+
+
+    public NightProwler(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+        super(p_33002_, p_33003_);
+        this.standardAABB=this.getBoundingBox();
+        actionIDToAnimMap.put(0,idleAnimationState);
+        actionIDToAnimMap.put(1,attackAnimationState);
+        actionIDToAnimMap.put(2,crouchAnimationState);
+        actionIDToAnimMap.put(3,leapAnimationState);
+        actionIDToAnimMap.put(4,leapRecoveryAnimationState);
+    }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, (double)0.4F)
@@ -55,7 +68,7 @@ public class NightProwler extends AbstractCALivingEntity {
     public static void addScaledAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> entityType){
         addScaledAttributes(event, entityType,baseHP,baseArmor,baseTough,baseDmg);
     }
-    public AABB standardAABB;
+
 
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -109,108 +122,26 @@ public class NightProwler extends AbstractCALivingEntity {
 
 
     @Override
-    public void updateAnim(){
-        switch(this.entityData.get(ACTION_ID)){
-            case 0:{//idle
-                if (isSameAnim()){
-                    if (animTime>0){
-                        animTime--;
-                    }
-
-                }
-                else{
-                    stopAnim(currentAction);
-                    currentAction=0;
-                    animTime=60;
-
-                    idleAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 1:{//walk
-                if (isSameAnim()){
-                    if (animTime>0){
-                        animTime--;
-                    }
-
-                }
-                else{
-                    stopAnim(currentAction);
-                    currentAction=1;
-                    animTime=60;
-
-                }
-                break;
-            }
-            case 2:{//attack
-                if (isSameAnim()){
-                    if (animTime>0){
-                        animTime--;
-                    }
-
-                }
-                else{
-                    stopAnim(currentAction);
-                    currentAction=2;
-                    animTime=20;
-                    //attackAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 3:{//crouch
-                if (isSameAnim()){
-                    if (animTime>0){
-                        animTime--;
-                    }
-
-                }
-                else{
-                    stopAnim(currentAction);
-                    currentAction=3;
-                    animTime=30;
-                    crouchAnimationState.start(this.tickCount);
-                }
-                break;
-            }
-            case 4:{//leap
-                if (isSameAnim()){
-                    if (animTime>0){
-                        animTime--;
-                    }
-
-                }
-                else{
-                    stopAnim(currentAction);
-                    currentAction=4;
-                    animTime=30;
-                    leapAnimationState.start(this.tickCount);
-                }
-                break;
+    public void updateAnim() {
+        int id=this.entityData.get(ACTION_ID);
+        AnimationState currentState=actionIDToAnimMap.get(id);
+        System.out.println("HELLO UPDATING anim, id is " + id);
+        if (isSameAnim()){
+            incrementActionFrame();
+            if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
+                this.lookControl.setLookAt(this.getTarget());
             }
         }
-    }
-
-    public void stopAnim(int i){
-        System.out.println("STOPPING ANIM W/ ACT ID " + i);
-        switch (i){
-            case 0:{
-                idleAnimationState.stop();
-                break;
-            }
-            case 1:{
-                break;
-            }
-            case 2:{
-                attackAnimationState.stop();
-                break;
-            }
-            case 3:{
-                crouchAnimationState.stop();
-                break;
-            }
-            case 4:{
-                leapAnimationState.stop();
-                break;
+        else if (id!=-1){
+            actionIDToAnimMap.get(currentAction).stop();
+            currentAction=id;
+            currentState.start(this.tickCount);
+            switch(this.entityData.get(ACTION_ID)){
+                case 1:{
+                }
+                default:{
+                    break;
+                }
             }
         }
     }
@@ -233,14 +164,7 @@ public class NightProwler extends AbstractCALivingEntity {
         if (i > 0) {
             entity.setSecondsOnFire(i * 4);
         }
-        System.out.println("DMG TO DO " + f);
-        System.out.println("Entity invinc" + entity.invulnerableTime);
-        System.out.println("entity immune?  " + entity.isInvulnerableTo(this.damageSources().mobAttack(this)));
-        System.out.println("DIST TO TARGET " + this.distanceTo(entity));
-
-        System.out.println("on client? " + entity.level().isClientSide);
         boolean flag = entity.hurt(this.damageSources().mobAttack(this), f);
-        System.out.println("dohurt flag " + flag);
         if (flag) {
             if (f1 > 0.0F && entity instanceof LivingEntity) {
                 ((LivingEntity)entity).knockback((double)(f1 * 0.5F), (double) Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(this.getYRot() * ((float)Math.PI / 180F))));

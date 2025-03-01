@@ -43,7 +43,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 	private final ModelPart headPivot;
 
 	public PKCrescenciaModel(ModelPart root) {
-		this.model = root.getChild("model");
+		this.model = root.getChild("root");
 		this.legRPivot = this.model.getChild("legRPivot");
 		this.thighR = this.legRPivot.getChild("thighR");
 		this.lowerlegR = this.legRPivot.getChild("lowerlegR");
@@ -71,7 +71,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition model = partdefinition.addOrReplaceChild("model", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition model = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
 		PartDefinition legRPivot = model.addOrReplaceChild("legRPivot", CubeListBuilder.create(), PartPose.offset(-2.0F, -12.0F, 0.0F));
 
@@ -136,6 +136,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 		//
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
+		System.out.println(this.model.y + " is model y");
 	}
 
 	@Override

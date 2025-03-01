@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -32,12 +33,8 @@ public class NightProwlerShadowLeap extends GenericAbility {
             super.startAbility(target,dist);
             this.mob.canMove=false;
             setMoveVals(0,this.getAbilityRange(target),false);
-            this.mob.setActionId(3);
+            this.mob.setActionId(2);
         }
-        else{
-            System.out.println("FAILED TO START ,  DIST FOR LEAP IS " + dist + "  AND WE GOT RANGE " + abilityRange);
-        }
-
     }
 
     @Override
@@ -53,13 +50,26 @@ public class NightProwlerShadowLeap extends GenericAbility {
                  */
                     if (currentStateTimer==24){
                         System.out.println("STARTING AT " + this.mob.position());
-                        this.mob.setActionId(4);
+                        this.mob.setActionId(3);
                         Vec3 vec3 = this.mob.getDeltaMovement();
                         Vec3 vec31 = new Vec3(this.mob.getTarget().getX() - this.mob.getX(), 0.0D, this.mob.getTarget().getZ() - this.mob.getZ());
                         if (vec31.lengthSqr() > 1.0E-7D) {
                             vec31 = vec31.normalize().scale(2.1D).add(vec3.scale(0.2D));
                         }
                         this.mob.setDeltaMovement(vec31.x, 0.35D, vec31.z);
+                        AABB aabb=new AABB(this.mob.position(),this.mob.position());
+                        aabb=aabb.inflate(1.4f);
+                        LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
+                        if (entity!=null){
+                            System.out.println("ent i frame " + entity.invulnerableTime);
+                            System.out.println("AB " + ((Player)entity).getAbilities().invulnerable);
+                            System.out.println("DYING " + entity.isDeadOrDying());
+                            float f = (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                            boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), f*1.2f);//why would this still return false
+                            System.out.println("DID DMG " + b);
+                            currentStateTimer=1;
+                            this.mob.setDeltaMovement(Vec3.ZERO);
+                        }
                     }
                     else if(isTeleport){
                         //TODO: make this cleaner at some point
@@ -156,7 +166,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
                     /*
                     either set act ID to 0 OR make a new act/anim for leap recovery
                      */
-                    this.mob.setActionId(0);
+                    this.mob.setActionId(4);
                     break;
                 }
                 case 2:{

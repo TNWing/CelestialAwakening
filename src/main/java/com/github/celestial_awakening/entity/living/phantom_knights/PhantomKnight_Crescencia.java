@@ -15,8 +15,8 @@ import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import java.util.HashMap;
 
 public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
-    static double baseHP=225.0D;
-    static double baseDmg=4.5D;
+    static double baseHP=240.0D;
+    static double baseDmg=6.5D;
     static double baseArmor=9D;
     static double baseTough=6D;
 

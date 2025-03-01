@@ -8,11 +8,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -39,17 +41,27 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Float> DMG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
+
+    private static final EntityDataAccessor<Boolean> DISABLE_SHIELDS=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DISABLE_TICKS = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
+    DamageSource damagesource;
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,int lt) {
         super(p_37248_, p_37249_);
         this.setLifetime(lt);
 
 
     }
-    protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,float spd, float hA,float vA,float zR,int lt) {
-        super(p_37248_, p_37249_);
-        setMoveValues(spd,hA,vA);
-        this.setZRot(zR);
-        this.setLifetime(lt);
+    protected void disableTargetShields(LivingEntity target){
+        if (target instanceof Player){
+            Player player= (Player) target;
+            if (player.isDamageSourceBlocked(damagesource)){
+                player.getCooldowns().addCooldown(player.getUseItem().getItem(), getDisableTicks());
+                player.stopUsingItem();
+                player.level().broadcastEntityEvent(player, (byte)30);
+
+            }
+
+        }
     }
 
 
@@ -71,6 +83,8 @@ public class CA_Projectile extends Projectile {
         this.entityData.define(RENDERER_YSCALING,1f);
         this.entityData.define(RENDERER_ZSCALING,1f);
         this.entityData.define(REAL,true);
+        this.entityData.define(DISABLE_SHIELDS,false);
+        this.entityData.define(DISABLE_TICKS,0);
     }
     protected void setRScales(float r){
         this.entityData.set(RENDERER_XSCALING,r);
@@ -100,6 +114,8 @@ public class CA_Projectile extends Projectile {
         this.setZRot(tag.getFloat("ZRot"));
         this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
         this.setZRot(tag.getFloat("ZRot"));
+        this.setDisableShields(tag.getBoolean("Can_Disable"));
+        this.setDisableTicks(tag.getInt("Disable_Ticks"));
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
@@ -116,6 +132,8 @@ public class CA_Projectile extends Projectile {
         tag.putFloat("X_RScale",this.getXRScale());
         tag.putFloat("Y_RScale",this.getYRScale());
         tag.putFloat("Z_RScale",this.getZRScale());
+        tag.putBoolean("Can_Disable",this.canDisableShields());
+        tag.putInt("Disable_Ticks",this.getDisableTicks());
     }
     public float getWidth(){
         return this.entityData.get(WIDTH);
@@ -178,9 +196,21 @@ public class CA_Projectile extends Projectile {
         this.entityData.set(H_ANG,h);
 
     }
-    @Override
-    public void setPos(double p_20210_, double p_20211_, double p_20212_) {
-        super.setPos(p_20210_,p_20211_,p_20212_);
+    public void setDisableShields(boolean b){
+        this.entityData.set(DISABLE_SHIELDS,b);
+
+    }
+    public void setDisableTicks(int t){
+        this.entityData.set(DISABLE_TICKS,t);
+
+    }
+    public boolean canDisableShields(){
+        return this.entityData.get(DISABLE_SHIELDS);
+
+    }
+    public int getDisableTicks(){
+        return this.entityData.get(DISABLE_TICKS);
+
     }
 
     public MovementModifier getCurrentMovementModifier(){

@@ -3,7 +3,6 @@ package com.github.celestial_awakening.entity.projectile;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,11 +13,11 @@ import java.util.List;
 
 public class ShiningOrb extends CA_Projectile {
     private int life;
-    DamageSource damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
+
     double explosionRadius =1.5D;
     public ShiningOrb(EntityType<ShiningOrb> shiningOrbEntityType, Level level) {
         super(shiningOrbEntityType,level,80);
-
+        damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
         this.setNoGravity(true);
         life=0;
     }

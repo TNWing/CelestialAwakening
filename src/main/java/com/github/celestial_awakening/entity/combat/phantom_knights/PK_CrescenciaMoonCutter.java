@@ -30,7 +30,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             /teleport Dev -245.0 90 -232.4
     /teleport Dev -245.0 90 -233.0
      */
-    float crescentDmgVals[]={4f,5.5f,7f};
+    float crescentDmgVals[]={7f,9.5f,12f};
     public PK_CrescenciaMoonCutter(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
@@ -58,14 +58,19 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     if (diffMod>0){
                         diffMod-=1;
                     }
+                    //maybe perform a dash backwards?
                     Vec3 dir= MathFuncs.getDirVec(this.mob.position(),target.position());
                     float baseAng= MathFuncs.getAngFrom2DVec(dir);
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
                     float dmg=crescentDmgVals[diffMod];
                     Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                     float vAng=MathFuncs.getVertAngFromVec(dir);
-                    for (int i=-3;i<=3;i++){
-                        float ang=baseAng+i*23f;
+                    vAng=22.5f * (int)(vAng/22.5f);
+                    if (this.mob.distanceToSqr(target)<1.1f){
+                        vAng=0;
+                    }
+                    for (int i=-4;i<=4;i++){
+                        float ang=baseAng+i*20f;
                         summonCrescent(serverLevel,ang,vAng,dmg,startPos);
                     }
                     break;
@@ -96,15 +101,26 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
                     MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
-                    2f,
+                    0f,
                     0,0,
                     100,
-                    0,120);
+                    0,10);
+            MovementModifier modifier2=new MovementModifier(
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,
+                    MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
+                    4.2f,
+                    0,0,
+                    100,
+                    0,110);
             cap.putInBackOfList(modifier);
+            cap.putInBackOfList(modifier2);
         }
         int id=crescent.getId();
         crescent.setPos(startPos);
         crescent.setOwner(this.mob);
+        crescent.setDisableShields(true);
+        crescent.setDisableTicks(60);
         lvl.addFreshEntity(crescent);
         ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),lvl.dimension());
     }

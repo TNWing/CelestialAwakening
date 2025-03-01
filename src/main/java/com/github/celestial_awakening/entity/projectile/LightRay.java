@@ -172,7 +172,6 @@ public class LightRay extends CA_Projectile {
 
     protected void hitLivingEntity(LivingEntity entity) {
         Entity entity1 = this.getOwner();
-        DamageSource damagesource=null;
         if (entity1 == null) {
             damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC));
         }
@@ -186,8 +185,6 @@ public class LightRay extends CA_Projectile {
 
         int k = entity.getRemainingFireTicks();
         if (entity.hurt(damagesource, this.getDmg())) {
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity)entity;
 /*
                     if (!this.level().isClientSide && entity1 instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects(livingentity, entity1);
@@ -195,13 +192,10 @@ public class LightRay extends CA_Projectile {
                     }
 
  */
-                //this.doPostHurtEffects(livingentity);
-                if (entity1 != null && livingentity != entity1 && livingentity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
-                    ((ServerPlayer)entity1).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-                }
-
+            //this.doPostHurtEffects(livingentity);
+            if (entity1 != null && entity != entity1 && entity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
+                ((ServerPlayer)entity1).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
-
             //this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
         }
         else {

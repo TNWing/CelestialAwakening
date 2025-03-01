@@ -15,6 +15,27 @@ import static com.github.celestial_awakening.capabilities.MovementModifierNBTNam
 public class ProjCapability {
     int entityID;
     List<MovementModifier> movementModificationList = Collections.synchronizedList(new LinkedList<MovementModifier>());
+    /*
+
+        List<MovementModifier> spdModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
+        List<MovementModifier> angModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
+        List<MovementModifier> rotModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
+
+        having 3 separate lists (1 for each kind of mm) has several benefits but also downsides
+        Pros
+        -allows for a bit more flexibility when multiple modifiers are present
+        -less data sent via packets
+        -looks cleaner, and easier to debug most likely
+
+        Cons
+        -have to refactor and redo a bunch of stuff
+        -more data can be stored (a minor issue)
+        -managing mm in the projectile class can be more time consuming
+
+        If i were to do this, general structure would be
+        MovementModifier as a parent class
+        SpdMM, AngMM, RotMM as children classes
+     */
     public ProjCapability(int id){
         this.entityID=id;
     }

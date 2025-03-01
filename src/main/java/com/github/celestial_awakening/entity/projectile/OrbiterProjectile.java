@@ -1,7 +1,6 @@
 package com.github.celestial_awakening.entity.projectile;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
-import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
@@ -32,18 +31,6 @@ public class OrbiterProjectile extends CA_Projectile {
     public OrbiterProjectile(EntityType<OrbiterProjectile> orbiterProjectileEntityType, Level level) {
         super(EntityInit.ORBITER.get(),level,100);
         this.setDmg(2.5f);
-    }
-    public OrbiterProjectile(Level level, LivingEntity owner,int timer) {
-        super(EntityInit.ORBITER.get(), level,100);
-        this.setOwner(owner);
-        this.setDmg(2.5f);
-        Vec3 ownerPos=getOwner().position();
-        double hRad=Math.toRadians(this.getEntityData().get(H_ANGLE));
-        double vRad=Math.toRadians(this.getEntityData().get(V_ANGLE));
-        Vec3 newPos=new Vec3(ownerPos.x + Math.sin(hRad)*1.4f,ownerPos.y + Math.sin(vRad)*0.6f,ownerPos.z+Math.cos(hRad)*1.4f);
-        this.setPos(newPos);
-        this.entityData.set(OWNER_PREV_POS,owner.position().toVector3f());
-        this.entityData.set(RELEASETIMER,timer);
     }
     public static OrbiterProjectile create(Level level, LivingEntity owner,int timer) {
         OrbiterProjectile entity=new OrbiterProjectile(EntityInit.ORBITER.get(),level);
@@ -167,8 +154,6 @@ public class OrbiterProjectile extends CA_Projectile {
         LivingEntity entity=this.entityToHurt(conds);
         Entity owner=this.getOwner();
         if (entity!=null){
-            DamageSourceNoIFrames damagesource=null;
-
             if (owner == null) {
                 damagesource=new DamageSourceIgnoreIFrames(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),null);
             }

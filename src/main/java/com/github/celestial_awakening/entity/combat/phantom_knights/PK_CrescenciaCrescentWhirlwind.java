@@ -26,8 +26,8 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     int repsRemaining;//# of crescent bursts
     float horiDiff=1.5f;
     float vertDiff=0.6f;
-    float[] crescentDmgVals={3.5f,5f,7.5f};
-    float[] whirlwindDmgVals={4f,6f,7f};
+    float[] crescentDmgVals={5.5f,7f,10.5f};
+    float[] whirlwindDmgVals={5.5f,7f,8.5f};
     float width=1f;
     float height=0.2f;
     float depth=0.4f;
@@ -120,6 +120,8 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             Vec3 dir=MathFuncs.get2DVecFromAngle(ang);
             crescent.setPos(this.mob.position().add(dir.scale(0.2f)).add(0,1.2f,0));
             crescent.setOwner(this.mob);
+            crescent.setDisableShields(true);
+            crescent.setDisableTicks(40);
             serverLevel.addFreshEntity(crescent);
             ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),serverLevel.dimension());
             ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(id, cap),serverLevel.dimension());

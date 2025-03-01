@@ -26,13 +26,13 @@ public class LunarCrescent extends CA_Projectile {
     Magic DType bypasses shield
     Need to make a custom dtype later
      */
-    DamageSourceNoIFrames damagesource=new DamageSourceIgnoreIFrames(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this,null);
     private ArrayList<Integer> entityIDs=new ArrayList<>();
 
     private HashMap<Integer,Integer> entityHitMap=new HashMap<>();
     public LunarCrescent(EntityType<LunarCrescent> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_,70);
         life=0;
+        damagesource=new DamageSourceIgnoreIFrames(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this,null);
     }
     public static LunarCrescent create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR) {
         LunarCrescent crescent=new LunarCrescent(EntityInit.LUNAR_CRESCENT.get(),level);
@@ -125,6 +125,11 @@ public class LunarCrescent extends CA_Projectile {
                     if (e.hurt(damagesource,this.getDmg())){
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);
+                        }
+                    }
+                    else{
+                        if (this.canDisableShields()){
+                            this.disableTargetShields(e);
                         }
                     }
                 }

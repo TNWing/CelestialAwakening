@@ -117,7 +117,6 @@ public class NightProwlerModel<T extends Entity>  extends HierarchicalModel<T> {
 		this.animate(((NightProwler)entity).crouchAnimationState, NightProwlerAnimations.crouch,ageInTicks,1f);
 		this.animate(((NightProwler)entity).leapAnimationState,NightProwlerAnimations.leap,ageInTicks,1f);
 		this.animate(((NightProwler)entity).leapRecoveryAnimationState,NightProwlerAnimations.leapEnd,ageInTicks,1f);
-		System.out.println(this.model.y + " is model y");//definitely not applied
 	}
 
 	@Override

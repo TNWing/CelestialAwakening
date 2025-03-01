@@ -50,7 +50,7 @@ public class Asteron extends AbstractTranscendent {
         actionIDToAnimMap.put(3,basicAttackAnimationState);
         actionIDToAnimMap.put(4,piercingRaysAnimationState);
         actionIDToAnimMap.put(5,piercingRaysRecoveryAnimationState);
-
+        this.xpReward=12;
     }
 
 

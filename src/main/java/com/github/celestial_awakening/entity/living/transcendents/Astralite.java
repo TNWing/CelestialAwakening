@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 public class Astralite extends AbstractTranscendent {
     public Astralite(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
+        this.xpReward=12;
     }
     static double baseHP=20.0D;
     static double baseDmg=3.0D;

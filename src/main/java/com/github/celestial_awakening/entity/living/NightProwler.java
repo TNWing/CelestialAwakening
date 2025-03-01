@@ -2,9 +2,11 @@ package com.github.celestial_awakening.entity.living;
 
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -15,7 +17,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -150,37 +151,5 @@ public class NightProwler extends AbstractCALivingEntity {
     @Override
     public boolean hurt(DamageSource source, float amt){
         return super.hurt(source,amt);
-    }
-
-    @Override
-    public boolean doHurtTarget(Entity entity) {
-        float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        float f1 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-        if (entity instanceof LivingEntity) {
-            f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)entity).getMobType());
-            f1 += (float)EnchantmentHelper.getKnockbackBonus(this);
-        }
-
-        int i = EnchantmentHelper.getFireAspect(this);
-        if (i > 0) {
-            entity.setSecondsOnFire(i * 4);
-        }
-        boolean flag = entity.hurt(this.damageSources().mobAttack(this), f);
-        if (flag) {
-            if (f1 > 0.0F && entity instanceof LivingEntity) {
-                ((LivingEntity)entity).knockback((double)(f1 * 0.5F), (double) Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(this.getYRot() * ((float)Math.PI / 180F))));
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-            }
-
-            if (entity instanceof Player) {
-                Player player = (Player)entity;
-                //this.maybeDisableShield(player, this.getMainHandItem(), player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
-            }
-
-            this.doEnchantDamageEffects(this, entity);
-            this.setLastHurtMob(entity);
-        }
-
-        return flag;
     }
 }

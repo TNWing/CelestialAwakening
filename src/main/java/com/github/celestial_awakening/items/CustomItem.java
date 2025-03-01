@@ -14,15 +14,19 @@ import java.util.List;
 public class CustomItem extends Item {
     String toolTip;
     int rgb;
+    public CustomItem(Properties p_41383_,String text) {
+        super(p_41383_);
+        toolTip=text;
+        rgb=0xFFFFFF;
+    }
     public CustomItem(Properties p_41383_,String text,int c) {
         super(p_41383_);
         toolTip=text;
         rgb=c;
     }
-
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
-        Component tip=Component.translatable(toolTip).setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(rgb)));
+        Component tip=Component.translatable(toolTip).setStyle(Style.EMPTY.withBold(false).withColor(TextColor.fromRgb(rgb)));
         components.add(tip);
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }

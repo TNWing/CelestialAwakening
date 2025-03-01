@@ -12,7 +12,7 @@ public class ItemInit {
     public static final DeferredRegister<Item> ITEMS=DeferredRegister.create(ForgeRegistries.ITEMS, CelestialAwakening.MODID);
 
     public static final RegistryObject<Item> MOONSTONE = ITEMS.register("moonstone", () ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> LUNAR_SCALE = ITEMS.register("lunar_scale", () ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> LUNAR_SCALE = ITEMS.register("lunar_scale", () ->new CustomItem(new Item.Properties(),"tooltip.celestial_awakening.lunar_scale"));
     public static final RegistryObject<Item> LUNAR_ARROW = ITEMS.register("lunar_arrow", () ->new CustomArrowItem(new Item.Properties(),ArrowType.LUNAR));
 
     public static final RegistryObject<Item> MOON_SCYTHE=ITEMS.register("moon_scythe",()->new MoonScythe(new Item.Properties().stacksTo(1).durability(640)));
@@ -39,7 +39,7 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> SUNSTONE = ITEMS.register("sunstone", () ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> LIFE_FRAG = ITEMS.register("life_fragment", () ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> LIFE_FRAG = ITEMS.register("life_fragment", ()->new CustomItem(new Item.Properties(),"tooltip.celestial_awakening.life_frag"));
     public static final RegistryObject<Item> FLUORESCENT_BOW=ITEMS.register("fluorescent_bow",()->new FluorescentBow(new Item.Properties().stacksTo(1).durability(448)));
     public static final RegistryObject<Item> SOLAR_ARROW = ITEMS.register("solar_arrow", () ->new CustomArrowItem(new Item.Properties(), ArrowType.SOLAR));
     public static final RegistryObject<Item> RADIANT_HELMET = ITEMS.register("radiant_helmet",

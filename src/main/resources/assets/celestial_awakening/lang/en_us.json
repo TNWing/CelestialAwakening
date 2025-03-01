@@ -84,6 +84,9 @@
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
 
+  "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
+  "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
+
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
 

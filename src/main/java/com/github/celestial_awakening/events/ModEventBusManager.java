@@ -29,7 +29,6 @@ public class ModEventBusManager {
         event.put(EntityInit.NIGHT_PROWLER.get(), NightProwler.createAttributes().build());
         event.put(EntityInit.PK_CRESCENCIA.get(), PhantomKnight_Crescencia.createAttributes().build());
     }
-
     /*
     @SubscribeEvent
     public static void updateAttributes(EntityAttributeModificationEvent event){

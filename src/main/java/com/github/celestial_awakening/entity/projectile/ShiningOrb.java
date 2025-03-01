@@ -94,6 +94,7 @@ public class ShiningOrb extends CA_Projectile {
                 double xDir=Math.sin(rad);
                 double zDir=Math.cos(rad);
                 entity.knockback(1.75f,-xDir,-zDir);
+                entity.setSecondsOnFire(3);
             }
         }
         this.discard();

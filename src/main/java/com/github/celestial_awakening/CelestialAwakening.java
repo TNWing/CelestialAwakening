@@ -55,7 +55,7 @@ public class CelestialAwakening
         modEventBus.addListener(this::commonSetup);
 
         CREATIVE_MODE_TABS.register(modEventBus);
-        registerTiers();
+
         ItemInit.ITEMS.register(modEventBus);
         EnchantmentInit.ENCHANTMENTS.register(modEventBus);
         LootInit.LOOT_SERIALIZER.register(modEventBus);
@@ -63,7 +63,7 @@ public class CelestialAwakening
         LootInit.registerLootConditions();
         RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
-
+        registerTiers();
 /*
 optimize eventmangager later, theres some stuff thats eating up performance
  */

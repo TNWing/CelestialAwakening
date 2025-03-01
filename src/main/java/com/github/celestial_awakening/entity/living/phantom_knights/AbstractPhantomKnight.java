@@ -52,16 +52,6 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     public boolean canStillSenseTarget() {
         return super.canStillSenseTarget();
     }
-    /*TODO
-        the 3 miniboss phantom knights are these
-        -Crescencia (crescent phase)
-        -Gideon (gibbous phase)
-        -Halsey (half)
-
-
-        the big boss is
-        Fulton(full)
-     */
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();

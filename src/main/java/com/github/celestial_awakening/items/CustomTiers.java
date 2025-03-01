@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public enum CustomTiers implements Tier {
     MIDNIGHT_IRON(2,333,6.7f,2.2f,16,
-            ()->{return Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get());});
+            ()-> Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get()));
 
     //use tiersorterregistry
     private final int level;

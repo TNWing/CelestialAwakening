@@ -104,12 +104,18 @@ public class RemnantArmor extends ArmorEffect {
                 if (!entities.isEmpty()){
                     cap.insertIntoAbilityMap(abilityCollapse,140);
                     for (LivingEntity livingEntity:entities) {
+                        if (livingEntity!=target){
+                            float dist= (float) targetPos.distanceToSqr(livingEntity.position());
+                            Vec3 dir= MathFuncs.getDirVec(targetPos,livingEntity.position());
+                            System.out.println("dir is "+ dir);
+                            dir=dir.scale(0.8f/dist);
+                            System.out.println("NEW DIR IS " + dir);
+                            float dmgMult= ((2.5f-dist)/2.5f);
+                            livingEntity.hurt(event.getSource(), (event.getAmount()*0.4f*dmgMult));
 
-                        Vec3 dir= MathFuncs.getDirVecNoNormalize(targetPos,livingEntity.position()).scale(0.7f);
-                        float dmgMult= (float) ((2.5f-targetPos.distanceToSqr(livingEntity.position()))/2.5f);
-                        livingEntity.hurt(event.getSource(), (event.getAmount()*0.4f*dmgMult));
+                            livingEntity.push(-dir.x,-dir.y,-dir.z);
+                        }
 
-                        livingEntity.push(dir.x,dir.y,dir.z);
                     }
                 }
             }

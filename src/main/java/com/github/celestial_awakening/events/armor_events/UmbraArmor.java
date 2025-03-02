@@ -2,15 +2,23 @@ package com.github.celestial_awakening.events.armor_events;
 
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
+import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
+import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.ToolTipBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import java.util.List;
 
 public class UmbraArmor extends ArmorEffect {
     int boldColor=0xC0c0c0;
@@ -39,6 +47,11 @@ public class UmbraArmor extends ArmorEffect {
         dread( event,player,cnt);
         if (cnt==4){
             pursuit(event,player);
+        }
+    }
+    @Override
+    public void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
+        if (cnt==4){
             cursedLight(event,player);
         }
     }
@@ -110,7 +123,6 @@ CD of 15 seconds, resets on kill
     }
 /*
 Getting hit will apply Weakness 2 for 3 seconds to the attacker
-
 CD of 8 seconds
  */
     public void cursedLight(LivingHurtEvent event,Player player){
@@ -118,7 +130,15 @@ CD of 8 seconds
         if (entity instanceof LivingEntity && event.getEntity()==player){
             LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
             if (cap!=null && cap.getAbilityCD(abilityCursedLight)==null){
-                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,2));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,1));
+                AABB aabb=new AABB(player.position(),player.position());
+                aabb=aabb.inflate(3f,1,3);
+                List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),player);
+                for (LivingEntity living:entities) {
+                    living.hurt(source,1f);
+                    living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,30));
+                }
                 cap.insertIntoAbilityMap(abilityCursedLight,160);
             }
         }

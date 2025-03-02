@@ -9,6 +9,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class DamageSourceIgnoreIFrames extends DamageSourceNoIFrames {
 //damage source that doesn't trigger iframe or respects them
+    public DamageSourceIgnoreIFrames(Holder.Reference<DamageType> holderOrThrow) {
+        super(holderOrThrow);
+    }
     public DamageSourceIgnoreIFrames(Holder.Reference<DamageType> holderOrThrow, Entity entity) {
         super(holderOrThrow,entity);
     }

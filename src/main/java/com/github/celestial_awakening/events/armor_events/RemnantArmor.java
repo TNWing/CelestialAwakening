@@ -104,8 +104,11 @@ public class RemnantArmor extends ArmorEffect {
                 if (!entities.isEmpty()){
                     cap.insertIntoAbilityMap(abilityCollapse,140);
                     for (LivingEntity livingEntity:entities) {
-                        livingEntity.hurt(event.getSource(),event.getAmount()*0.2f);
+
                         Vec3 dir= MathFuncs.getDirVecNoNormalize(targetPos,livingEntity.position()).scale(0.7f);
+                        float dmgMult= (float) ((2.5f-targetPos.distanceToSqr(livingEntity.position()))/2.5f);
+                        livingEntity.hurt(event.getSource(), (event.getAmount()*0.4f*dmgMult));
+
                         livingEntity.push(dir.x,dir.y,dir.z);
                     }
                 }

@@ -113,7 +113,7 @@ public class EventManager {
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurtSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .build();
+            .put(umbraArmor).build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
             .build();

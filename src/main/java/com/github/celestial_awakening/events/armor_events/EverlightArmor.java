@@ -28,6 +28,7 @@ public class EverlightArmor extends ArmorEffect{
     public static final String STAR_GAZER_DESC = "tooltip.celestial_awakening.everlight_armor.star_gazer_desc";
     public static final String RESURGENCE_NAME = "tooltip.celestial_awakening.everlight_armor.resurgence_name";
     public static final String RESURGENCE_DESC = "tooltip.celestial_awakening.everlight_armor.resurgence_desc";
+    MobEffectInstance glow=new MobEffectInstance(MobEffects.GLOWING,200,1);
     @Override
     public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player, int cnt){
         if (cnt==4){
@@ -95,7 +96,13 @@ public class EverlightArmor extends ArmorEffect{
     private void starGazer(LivingDamageEvent event,Player player){
         if (event.getSource().getEntity() instanceof LivingEntity){
             LivingEntity attacker= (LivingEntity) event.getSource().getEntity();
-            attacker.addEffect(new MobEffectInstance(MobEffects.GLOWING,200,1));
+            if (attacker.canBeAffected(glow)){
+                attacker.addEffect(glow);
+            }
+            else{
+                System.out.println("attacker immune to glow");
+                player.heal(0.1f);
+            }
         }
         float dmgMult=1f;
         Predicate<LivingEntity> getGlowing= livingEntity -> livingEntity.hasEffect(MobEffects.GLOWING);

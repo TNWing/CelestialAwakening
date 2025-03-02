@@ -9,6 +9,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class DamageSourceNoIFrames extends DamageSource {
     public int invulTicks;
+    public DamageSourceNoIFrames(Holder.Reference<DamageType> holderOrThrow) {
+        super(holderOrThrow);
+    }
 //does not apply iframes but still respects them
     public DamageSourceNoIFrames(Holder.Reference<DamageType> holderOrThrow, Entity entity) {
         super(holderOrThrow,entity);

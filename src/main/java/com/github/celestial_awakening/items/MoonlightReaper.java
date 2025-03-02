@@ -68,8 +68,8 @@ public class MoonlightReaper extends MoonScythe {
             player.getFoodData().eat(1,1);
             @NotNull LazyOptional<MoonScytheCapability> capOptional=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap);
             capOptional.ifPresent(cap->{
+                System.out.println(attacker.level().isClientSide + " ON CLIENT");
                 cap.incrementLunarOrbs(attacker.level().getServer().getTickCount());
-                System.out.println("INC ORB");
             });
         }
     }

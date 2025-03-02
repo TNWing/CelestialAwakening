@@ -109,8 +109,8 @@ public class MoonScythe extends Item implements IForgeItem {
                     cap.changeStrikeCD(-1);
                 }
                 if (level.getServer().getTickCount()-200>cap.getLastOrbTick()){
+                    System.out.println("TICJK COMPARe " + level.getServer().getTickCount() + "  VS  " + cap.getLastOrbTick() + " ON SIDE CLIENT " + level.isClientSide);
                     cap.decrementLunarOrbs(level.getServer().getTickCount());
-                    System.out.println("dec ORB");
                 }
             }
 );

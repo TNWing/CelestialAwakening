@@ -183,8 +183,10 @@ public class EventManager {
                 float hAng=event.getHAng();
                 boolean enhanced=event.isEnhanced();
                 int orbs=cap.getLunarOrbs();
+                System.out.println("ORBS CNT IS " + orbs);
                 int cd=event.getCD();
                 cd-=orbs*5;
+                System.out.println("MODIFIED CD IS " + cd);
                 //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
                 LunarCrescent crescent=null;
                 if (isCrit){
@@ -206,10 +208,12 @@ public class EventManager {
                     crescent.setYRot(owner.getYRot());
                     crescent.setOwner(event.getOwner());
                     crescent.itemStackSource=itemStack;
+
                     if (orbs==6){
+                        System.out.println("SPAWNING");
                         if (isCrit){
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,90,2.4f,hAng + i*15,0,90);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*15,0,90);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());
@@ -220,7 +224,7 @@ public class EventManager {
                         }
                         else{
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,90,2.4f,hAng + i*21,0,90);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*21,0,0);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());

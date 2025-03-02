@@ -36,14 +36,15 @@ import java.util.List;
 import static net.minecraftforge.common.ToolActions.SWORD_SWEEP;
 
 public class MoonScythe extends Item implements IForgeItem {
-    private final float attackDamage;
-    private final float waveDamage;
-    private final float strikeDamage;
-    private final float attackSpd;
-    private final int cd;
-    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-    int abilityNameColor=0xbfbfbd;
-    int abilityDescColor=0xd8d7d5;
+    protected final float attackDamage;
+    protected final float waveDamage;
+    protected final float strikeDamage;
+    protected final float attackSpd;
+    protected final int cd;
+    protected final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    protected int abilityNameColor=0xbfbfbd;
+    protected int abilityDescColor=0xd8d7d5;
+    float displayCD;
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
         this.attackDamage=5.5f;
@@ -51,6 +52,7 @@ public class MoonScythe extends Item implements IForgeItem {
         this.strikeDamage=4.5f;
         this.attackSpd=-2.8f;
         this.cd=100;
+        this.displayCD=5;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpd, AttributeModifier.Operation.ADDITION));
@@ -65,6 +67,7 @@ public class MoonScythe extends Item implements IForgeItem {
         this.strikeDamage=strike;
         this.attackSpd=asp;
         this.cd=coolDown;
+        displayCD=((int)(cd/2f))/10f;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", asp, AttributeModifier.Operation.ADDITION));
@@ -75,7 +78,7 @@ public class MoonScythe extends Item implements IForgeItem {
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         Component abilityName=Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(abilityName);
-        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
+        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc",new Object[]{displayCD}).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
 

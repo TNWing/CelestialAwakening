@@ -3,6 +3,7 @@
   "item.celestial_awakening.lunar_scale": "Lunar Scale",
   "item.celestial_awakening.lunar_arrow": "Lunar Arrow",
   "item.celestial_awakening.moon_scythe": "Moon Scythe",
+  "item.celestial_awakening.moonlight_reaper": "Moonlight Reaper",
   "item.celestial_awakening.moonstone_helmet": "Lunar Helmet",
   "item.celestial_awakening.moonstone_chestplate": "Lunar Chestplate",
   "item.celestial_awakening.moonstone_leggings": "Lunar Leggings",
@@ -86,9 +87,16 @@
 
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
+  "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
+
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
-  "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of 5 seconds each.",
+  "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of %s seconds each.",
+
+
+  "tooltip.celestial_awakening.moonlight_reaper.ability_name": "Harvest Moon",
+  "tooltip.celestial_awakening.moonlight_reaper.ability_desc": "Kills restore hunger and saturation.",
+
 
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_desc": "Upon nocking an arrow, reveal all nearby enemies that aren't invisible.",

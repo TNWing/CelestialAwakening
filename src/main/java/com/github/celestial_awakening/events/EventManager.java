@@ -12,6 +12,7 @@ import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
+import com.github.celestial_awakening.items.MoonlightReaper;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -180,30 +181,30 @@ public class EventManager {
                 ServerLevel serverLevel= (ServerLevel) level;
                 LivingEntity owner=event.getOwner();
                 float hAng=event.getHAng();
+                boolean enhanced=event.isEnhanced();
                 //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
+                LunarCrescent crescent=null;
                 if (isCrit){
                     if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
-                        LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
-                        crescent.setPos(event.getSpawnpoint());
-                        crescent.setYRot(owner.getYRot());
-                        crescent.setOwner(event.getOwner());
-                        serverLevel.addFreshEntity(crescent);
-                        ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
-                        cap.changeStrikeCD(100);
+                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
+
+                        cap.changeStrikeCD(event.getCD());
                     }
                 }
                 else{
                     if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
-                        LunarCrescent crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
-                        crescent.setPos(event.getSpawnpoint());
-                        crescent.setYRot(owner.getYRot());
-                        crescent.setOwner(event.getOwner());
-                        serverLevel.addFreshEntity(crescent);
-                        ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
-                        cap.changeWaveCD(100);
+                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
+                        cap.changeWaveCD(event.getCD());
                     }
                 }
-
+                if (crescent!=null){
+                    crescent.setPos(event.getSpawnpoint());
+                    crescent.setYRot(owner.getYRot());
+                    crescent.setOwner(event.getOwner());
+                    crescent.itemStackSource=itemStack;
+                    serverLevel.addFreshEntity(crescent);
+                    ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
+                }
 
             });
 

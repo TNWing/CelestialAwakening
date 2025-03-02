@@ -10,6 +10,7 @@ Each ability has a cool down of 5 seconds.
      */
     int strikeCD=0;
     int waveCD=0;
+    int lunarOrbs=0;
     void saveNBTData(CompoundTag nbt){
         nbt.putInt("StrikeCD",strikeCD);
         nbt.putInt("WaveCD",waveCD);

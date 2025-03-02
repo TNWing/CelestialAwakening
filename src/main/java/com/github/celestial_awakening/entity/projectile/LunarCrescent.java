@@ -1,8 +1,8 @@
 package com.github.celestial_awakening.entity.projectile;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
-import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.init.EntityInit;
+import com.github.celestial_awakening.items.MoonlightReaper;
 import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +11,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.function.Predicate;
 
 public class LunarCrescent extends CA_Projectile {
     private int life;
-
+    public ItemStack itemStackSource;
     /*
     NOTE:
     Magic DType bypasses shield
@@ -125,6 +127,9 @@ public class LunarCrescent extends CA_Projectile {
                     if (e.hurt(damagesource,this.getDmg())){
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);
+                            if (!e.isAlive() && itemStackSource.getItem() instanceof MoonlightReaper){
+                                MoonlightReaper.healOnKill(e, (LivingEntity) owner);
+                            }
                         }
                     }
                     else{

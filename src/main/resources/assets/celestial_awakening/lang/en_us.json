@@ -95,7 +95,7 @@
 
 
   "tooltip.celestial_awakening.moonlight_reaper.ability_name": "Harvest Moon",
-  "tooltip.celestial_awakening.moonlight_reaper.ability_desc": "Kills restore hunger and saturation, and grant 1 Lunar Orb (up to 6).\nEach Lunar Orb reduces the cooldown of strike and wave by 0.25 seconds.\nAt 6 orbs, summon 2 weaker crescents when performing a strike or wave\n.Lose 1 Lunar Orb 10 seconds after not gaining one.",
+  "tooltip.celestial_awakening.moonlight_reaper.ability_desc": "Kills restore hunger and saturation, and grant 1 Lunar Orb (up to 6).\nEach Lunar Orb reduces the cooldown of strike and wave by 0.25 seconds.\nAt 6 orbs, summon 2 weaker crescents when performing a strike or wave.\nLose 1 Lunar Orb 10 seconds after not gaining one.",
 
 
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",

@@ -182,26 +182,54 @@ public class EventManager {
                 LivingEntity owner=event.getOwner();
                 float hAng=event.getHAng();
                 boolean enhanced=event.isEnhanced();
+                int orbs=cap.getLunarOrbs();
+                int cd=event.getCD();
+                cd-=orbs*5;
                 //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
                 LunarCrescent crescent=null;
                 if (isCrit){
                     if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
                         crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
 
-                        cap.changeStrikeCD(event.getCD());
+                        cap.changeStrikeCD(cd);
                     }
                 }
                 else{
                     if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
                         crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
-                        cap.changeWaveCD(event.getCD());
+                        cap.changeWaveCD(cd);
                     }
                 }
+
                 if (crescent!=null){
                     crescent.setPos(event.getSpawnpoint());
                     crescent.setYRot(owner.getYRot());
                     crescent.setOwner(event.getOwner());
                     crescent.itemStackSource=itemStack;
+                    if (orbs==6){
+                        if (isCrit){
+                            for(int i=-1;i<=1;i+=2){
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,90,2.4f,hAng + i*15,0,90);
+                                sideCresent.setPos(event.getSpawnpoint());
+                                sideCresent.setYRot(owner.getYRot());
+                                sideCresent.setOwner(event.getOwner());
+                                sideCresent.itemStackSource=itemStack;
+                                serverLevel.addFreshEntity(sideCresent);
+                                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(sideCresent.getId()),sideCresent.level().dimension());
+                            }
+                        }
+                        else{
+                            for(int i=-1;i<=1;i+=2){
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,90,2.4f,hAng + i*21,0,90);
+                                sideCresent.setPos(event.getSpawnpoint());
+                                sideCresent.setYRot(owner.getYRot());
+                                sideCresent.setOwner(event.getOwner());
+                                sideCresent.itemStackSource=itemStack;
+                                serverLevel.addFreshEntity(sideCresent);
+                                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(sideCresent.getId()),sideCresent.level().dimension());
+                            }
+                        }
+                    }
                     serverLevel.addFreshEntity(crescent);
                     ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),crescent.level().dimension());
                 }
@@ -714,6 +742,7 @@ public class EventManager {
 
 
     }
+
 
     private static int countPieces(Player player, ArmorMaterial material) {
         int cnt=0;

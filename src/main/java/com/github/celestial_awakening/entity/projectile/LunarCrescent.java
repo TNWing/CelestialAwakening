@@ -128,7 +128,7 @@ public class LunarCrescent extends CA_Projectile {
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);
                             if (!e.isAlive() && itemStackSource.getItem() instanceof MoonlightReaper){
-                                MoonlightReaper.healOnKill(e, (LivingEntity) owner);
+                                MoonlightReaper.healOnKill(itemStackSource, e, (LivingEntity) owner);
                             }
                         }
                     }

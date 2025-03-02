@@ -1,5 +1,7 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.capabilities.MoonScytheCapability;
+import com.github.celestial_awakening.capabilities.MoonScytheCapabilityProvider;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.network.chat.Component;
@@ -14,6 +16,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,15 +57,20 @@ public class MoonlightReaper extends MoonScythe {
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd,true));
             }
         }
-        healOnKill(target,attacker);
+        healOnKill(itemStack,target,attacker);
         return true;
     }
 
 
-    public static void healOnKill(LivingEntity target,LivingEntity attacker){
+    public static void healOnKill(ItemStack itemStack,LivingEntity target,LivingEntity attacker){
         if (!target.isAlive() && attacker instanceof Player){
             Player player= (Player) attacker;
             player.getFoodData().eat(1,1);
+            @NotNull LazyOptional<MoonScytheCapability> capOptional=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap);
+            capOptional.ifPresent(cap->{
+                cap.incrementLunarOrbs(attacker.level().getServer().getTickCount());
+                System.out.println("INC ORB");
+            });
         }
     }
 }

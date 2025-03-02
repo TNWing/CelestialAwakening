@@ -7,6 +7,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,9 +67,8 @@ public class ParticleManager {
 
     protected void moonstoneParticles(ServerLevel serverLevel){
         ParticleOptions particleType = ParticleTypes.ENCHANT; // Change this to the particle type you want
-        LevelCapability cap=serverLevel.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
-
-        if (cap!=null){
+        @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(cap->{
             Iterator<Map.Entry<BlockPos,Integer>> iterator = cap.currentMoonstonePos.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<BlockPos, Integer> entry = iterator.next();
@@ -90,14 +91,14 @@ public class ParticleManager {
             }
 
         }
+        );
 
     }
 
     protected void purgingLightParticles(ServerLevel serverLevel){
         ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK; // Change this to the particle type you want
-        LevelCapability cap=serverLevel.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
-
-        if (cap!=null){
+        @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(cap->{
             for (BlockPos blockPos:cap.currentMoonstonePos.keySet()) {
                 if (cap.currentMoonstonePos.get(blockPos)%10==0){
                     double x = blockPos.getX();
@@ -113,9 +114,7 @@ public class ParticleManager {
                     cap.currentMoonstonePos.remove(blockPos);
                 }
             }
-
-        }
-
+        });
     }
 
     //rework this

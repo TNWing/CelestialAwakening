@@ -29,6 +29,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeItem;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -98,15 +100,20 @@ public class MoonScythe extends Item implements IForgeItem {
 
     public void inventoryTick(ItemStack itemStack, Level level, Entity holder, int vanillaIndex, boolean isSelectedIndex) {
         if (!level.isClientSide()){
-            MoonScytheCapability cap=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap).orElse(null);
-            if (cap!=null){
+            @NotNull LazyOptional<MoonScytheCapability> capOptional=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap);
+            capOptional.ifPresent(cap->{
                 if (cap.getWaveCD()>0){
                     cap.changeWaveCD(-1);
                 }
                 if (cap.getStrikeCD()>0){
                     cap.changeStrikeCD(-1);
                 }
+                if (level.getServer().getTickCount()-200>cap.getLastOrbTick()){
+                    cap.decrementLunarOrbs(level.getServer().getTickCount());
+                    System.out.println("dec ORB");
+                }
             }
+);
         }
     }
 

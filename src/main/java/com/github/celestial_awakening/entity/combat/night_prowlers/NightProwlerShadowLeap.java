@@ -5,6 +5,8 @@ import com.github.celestial_awakening.entity.living.NightProwler;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,7 +29,8 @@ public class NightProwlerShadowLeap extends GenericAbility {
     float aabbInflate=1.25f;
     float dmg;
     double originalDist;
-    Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((NightProwler)this.mob);
+    ParticleOptions particleType = ParticleTypes.SMOKE;
+    Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob);
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
 
     public NightProwlerShadowLeap(NightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
@@ -128,8 +131,12 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 newDM=newDM.add(0,0.4f,0);
 
                                 this.mob.setDeltaMovement(newDM);
-                                
+                                for (int i =0;i<1;i++){
+                                    serverLevel.sendParticles(particleType, teleportPos.x,teleportPos.y+i*0.1f,teleportPos.z, 2, 0, 0, 0, 0);
+                                }
+
                                 this.mob.teleportTo(teleportPos.x,teleportPos.y,teleportPos.z);
+
                                 this.mob.setCollision(true);
                                 this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
                                 AABB aabb=new AABB(this.mob.position(),this.mob.position());

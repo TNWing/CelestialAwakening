@@ -98,7 +98,7 @@ public class NebureSolarExpansion extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 5;
+        return 6;
     }
 
     void calculateWhereToDraw(float oRad,float iRad){

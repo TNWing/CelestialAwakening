@@ -62,6 +62,7 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void movementController(LivingEntity target){
         if (this.mob.canMove){
+            System.out.println("MOVING");
             boolean keepDist=this.mob.keepDist;
             double minDist=Math.pow(this.mob.minRange,2);
             double maxDist=Math.pow(this.mob.maxRange,2);

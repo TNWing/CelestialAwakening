@@ -12,8 +12,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -56,34 +58,40 @@ CD: 1.5 sec
     }
     public void impact(LivingHurtEvent event,Player player){
         if (event.getSource().getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null && cap.getAbilityCD(abilityImpact)==null){
-                AABB aabb=new AABB(player.position().subtract(new Vec3(1.2f,0,1.2f)),player.position().add(new Vec3(1.2f,0,1.2f)));
-                List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-                if (!livingEntityList.isEmpty()){
-                    cap.insertIntoAbilityMap(abilityImpact,100);
-                    for (LivingEntity entity:livingEntityList) {
-                        DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),player);
-                        entity.hurt(source,event.getAmount()*0.25f);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+                if (cap.getAbilityCD(abilityImpact)==null){
+                    AABB aabb=new AABB(player.position().subtract(new Vec3(1.2f,0,1.2f)),player.position().add(new Vec3(1.2f,0,1.2f)));
+                    List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                    if (!livingEntityList.isEmpty()){
+                        cap.insertIntoAbilityMap(abilityImpact,100);
+                        for (LivingEntity entity:livingEntityList) {
+                            DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),player);
+                            entity.hurt(source,event.getAmount()*0.25f);
+                        }
                     }
-                }
 
-            }
+                }
+            });
+
         }
     }
 
     public void livingMeteor(LivingHurtEvent event,Player player){
         if (event.getSource().is(DamageTypeTags.IS_FALL) && event.getEntity() == player){
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null && cap.getAbilityCD(abilityMeteor)==null){
-                AABB aabb=new AABB(player.position().subtract(new Vec3(3.5f,0,3.5f)),player.position().add(new Vec3(3.5f,0,3.5f)));
-                List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-                for (LivingEntity entity:livingEntityList) {
-                    DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),player);
-                    entity.hurt(source,event.getAmount()*1.25f);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+                if (cap.getAbilityCD(abilityMeteor)==null){
+                    AABB aabb=new AABB(player.position().subtract(new Vec3(3.5f,0,3.5f)),player.position().add(new Vec3(3.5f,0,3.5f)));
+                    List<LivingEntity> livingEntityList=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                    for (LivingEntity entity:livingEntityList) {
+                        DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),player);
+                        entity.hurt(source,event.getAmount()*1.25f);
+                    }
+                    cap.insertIntoAbilityMap(abilityMeteor,900);
                 }
-                cap.insertIntoAbilityMap(abilityMeteor,900);
-            }
+            });
+
         }
     }
 }

@@ -6,7 +6,6 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -14,9 +13,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -83,11 +84,14 @@ Reduces CD by 1/2/3/4 sec on kill
         if (cnt>0){
             LivingEntity entity=event.getEntity();
             if (entity.getHealth()>=entity.getMaxHealth()){
-                LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-                if (cap!=null && cap.getAbilityCD(abilityDread)==null){
-                    event.setAmount(event.getAmount()+dreadVals[cnt-1]);
-                    cap.insertIntoAbilityMap(abilityDread,dreadCD[cnt-1]);
-                }
+                @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                capOptional.ifPresent(cap->{
+                    if (cap.getAbilityCD(abilityDread)==null){
+                        event.setAmount(event.getAmount()+dreadVals[cnt-1]);
+                        cap.insertIntoAbilityMap(abilityDread,dreadCD[cnt-1]);
+                    }
+                });
+
 
             }
         }
@@ -99,27 +103,30 @@ hitting an enemy below 50% max HP will grant a speed boost to the player.
 CD of 15 seconds, resets on kill
  */
     public void cdModifier(LivingDeathEvent event,Player player, int cnt){
-        LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        if (cap!=null){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityDread)!=null){
                 cap.changeAbilityCD(abilityDread,-20*cnt);
             }
             if (cnt==4 && cap.getAbilityCD(abilityPursuit)!=null){
                 cap.changeAbilityCD(abilityPursuit,-300);
             }
-        }
+        });
     }
 
     public void pursuit(LivingHurtEvent event,Player player){
-        LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
         LivingEntity target=event.getEntity();
-        if(cap!=null && cap.getAbilityCD(abilityPursuit)==null && event.getSource().getEntity() == player){
-            if (target.getHealth()-event.getAmount()<0.5f*target.getMaxHealth()){
-                MobEffectInstance spdBoost=new MobEffectInstance(MobEffects.MOVEMENT_SPEED,100,2);
-                player.addEffect(spdBoost);
-                cap.insertIntoAbilityMap(abilityPursuit,300);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        capOptional.ifPresent(cap->{
+            if(cap.getAbilityCD(abilityPursuit)==null && event.getSource().getEntity() == player){
+                if (target.getHealth()-event.getAmount()<0.5f*target.getMaxHealth()){
+                    MobEffectInstance spdBoost=new MobEffectInstance(MobEffects.MOVEMENT_SPEED,100,2);
+                    player.addEffect(spdBoost);
+                    cap.insertIntoAbilityMap(abilityPursuit,300);
+                }
             }
-        }
+        });
+
     }
 /*
 Getting hit will apply Weakness 2 for 3 seconds to the attacker
@@ -128,19 +135,22 @@ CD of 8 seconds
     public void cursedLight(LivingHurtEvent event,Player player){
         Entity entity=event.getSource().getEntity();
         if (entity instanceof LivingEntity && event.getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null && cap.getAbilityCD(abilityCursedLight)==null){
-                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,1));
-                AABB aabb=new AABB(player.position(),player.position());
-                aabb=aabb.inflate(3f,1,3);
-                List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
-                DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),player);
-                for (LivingEntity living:entities) {
-                    living.hurt(source,1f);
-                    living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,30));
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+                if (cap.getAbilityCD(abilityCursedLight)==null){
+                    ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,1));
+                    AABB aabb=new AABB(player.position(),player.position());
+                    aabb=aabb.inflate(3f,1,3);
+                    List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                    DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),player);
+                    for (LivingEntity living:entities) {
+                        living.hurt(source,1f);
+                        living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,30));
+                    }
+                    cap.insertIntoAbilityMap(abilityCursedLight,160);
                 }
-                cap.insertIntoAbilityMap(abilityCursedLight,160);
-            }
+            });
+
         }
     }
 }

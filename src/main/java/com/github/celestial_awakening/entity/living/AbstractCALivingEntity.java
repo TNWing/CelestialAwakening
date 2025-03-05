@@ -27,6 +27,8 @@ public abstract class AbstractCALivingEntity extends Monster {
 
 
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Boolean> HAS_COLLISION = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BOOLEAN);
     //may not need action frame to be dataaccessor?
     protected Integer ACTION_FRAME=0;
     public int animTime;
@@ -102,6 +104,8 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected void defineSynchedData(){
         super.defineSynchedData();
         this.entityData.define(ACTION_ID,(byte)0);
+        this.entityData.define(OPACITY,1f);
+        this.entityData.define(HAS_COLLISION,true);
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
@@ -151,6 +155,23 @@ public abstract class AbstractCALivingEntity extends Monster {
     public int getActionId() {
         return this.entityData.get(ACTION_ID);
     }
+
+
+    public void setOpacity(float f) {
+        this.entityData.set(OPACITY, f);
+    }
+    public float getOpacity() {
+        return this.entityData.get(OPACITY);
+    }
+
+    public void setCollision(boolean b) {
+        this.entityData.set(HAS_COLLISION, b);
+    }
+    public boolean hasCollision() {
+        return this.entityData.get(HAS_COLLISION);
+    }
+
+
 
     public void setActionFrame(int i) {
         ACTION_FRAME=i;

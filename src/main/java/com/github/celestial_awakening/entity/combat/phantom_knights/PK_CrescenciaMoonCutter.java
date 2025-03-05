@@ -12,6 +12,8 @@ import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 public class PK_CrescenciaMoonCutter extends GenericAbility {
     /*
@@ -99,8 +101,8 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
     void summonCrescent(ServerLevel lvl,float ang,float vAng,float dmg,Vec3 startPos){
 
         LunarCrescent crescent=LunarCrescent.create(lvl,dmg,120,1f,ang,vAng,0,1f,0.25f,1f);
-        ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
-        if (cap!=null){
+        @NotNull LazyOptional<ProjCapability> capOptional=crescent.getCapability(ProjCapabilityProvider.ProjCap);
+        capOptional.ifPresent(cap->{
             MovementModifier modifier=new MovementModifier(
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
                     MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,
@@ -119,7 +121,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     0,110);
             cap.putInBackOfList(modifier);
             cap.putInBackOfList(modifier2);
-        }
+        });
         int id=crescent.getId();
         crescent.setPos(startPos);
         crescent.setOwner(this.mob);

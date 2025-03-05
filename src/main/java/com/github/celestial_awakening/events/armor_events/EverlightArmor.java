@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -73,15 +74,11 @@ public class EverlightArmor extends ArmorEffect{
         List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
         int size=entities.size();
         if (!entities.isEmpty() && size>0){
-
             Random rand=new Random();
-
             int r=rand.nextInt(size);
             LivingEntity e=entities.remove(r);
             e.setSecondsOnFire(3+lvl);
-
             size--;
-
             r=rand.nextInt(size);
             e=entities.remove(r);
             e.setSecondsOnFire(3+lvl);
@@ -96,11 +93,8 @@ public class EverlightArmor extends ArmorEffect{
     private void starGazer(LivingDamageEvent event,Player player){
         if (event.getSource().getEntity() instanceof LivingEntity){
             LivingEntity attacker= (LivingEntity) event.getSource().getEntity();
-            if (attacker.canBeAffected(glow)){
-                attacker.addEffect(glow);
-            }
-            else{
-                System.out.println("attacker immune to glow");
+            attacker.addEffect(glow);
+            if (!attacker.isCurrentlyGlowing()){
                 player.heal(0.1f);
             }
         }

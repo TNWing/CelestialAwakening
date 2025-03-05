@@ -11,6 +11,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 public class DivinerDataCommand{
     public DivinerDataCommand(CommandDispatcher<CommandSourceStack> dispatcher,int permLvl) {
@@ -67,19 +69,22 @@ public class DivinerDataCommand{
     }
 
     private int queryDiv(CommandSourceStack stack){
-        String msg="";
-        LevelCapability cap;
+        @NotNull LazyOptional<LevelCapability> capOptional;
         if (Config.divinerShared){
-            cap=stack.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=stack.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
-            cap=stack.getLevel().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=stack.getLevel().getCapability(LevelCapabilityProvider.LevelCap);
         }
-        if (cap!=null){
+        capOptional.ifPresent(cap->{
+            String msg="";
             msg+="Diviner Eye Information\n";
             msg+="Current Chance:" + cap.divinerEyeChance + "%\n";
             msg+="Cooldown:" + (cap.divinerEyeCD/24000f) + " days\n";
             stack.sendSystemMessage(Component.literal(msg));
+
+        });
+        if (capOptional.isPresent()){
             return 1;
         }
         stack.sendSystemMessage(Component.literal("Failed to obtain diviner data"));
@@ -89,16 +94,19 @@ public class DivinerDataCommand{
 
     private int setDivCD(CommandSourceStack stack, int c) throws CommandSyntaxException {
         ServerPlayer p=stack.getPlayerOrException();
-        LevelCapability cap;
+        @NotNull LazyOptional<LevelCapability> capOptional;
         if (Config.divinerShared){
-            cap=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
-            cap=p.serverLevel().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=p.serverLevel().getCapability(LevelCapabilityProvider.LevelCap);
         }
-        if (cap!=null){
+
+        capOptional.ifPresent(cap->{
             cap.divinerEyeCD=c;
             stack.sendSystemMessage(Component.literal("Set diviner eye cooldown to " + c));
+        });
+        if (capOptional.isPresent()){
             return 1;
         }
         stack.sendSystemMessage(Component.literal("Failed to update diviner eye chance!"));
@@ -108,16 +116,19 @@ public class DivinerDataCommand{
 
     private int setDivChance(CommandSourceStack stack, float c) throws CommandSyntaxException {
         ServerPlayer p=stack.getPlayerOrException();
-        LevelCapability cap;
+        @NotNull LazyOptional<LevelCapability> capOptional;
         if (Config.divinerShared){
-            cap=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
-            cap=p.serverLevel().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+            capOptional=p.serverLevel().getCapability(LevelCapabilityProvider.LevelCap);
         }
-        if (cap!=null){
+        capOptional.ifPresent(cap->{
             cap.divinerEyeChance=c;
             stack.sendSystemMessage(Component.literal("Set diviner eye chance to " + c));
+
+        });
+        if (capOptional.isPresent()){
             return 1;
         }
         stack.sendSystemMessage(Component.literal("Failed to update diviner eye chance!"));

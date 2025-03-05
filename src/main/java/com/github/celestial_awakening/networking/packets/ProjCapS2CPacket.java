@@ -8,7 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -103,10 +105,10 @@ public class ProjCapS2CPacket {
                 Entity entity=level.getEntity(this.entityID);
                 //List<CA_Projectile> ca_projectiles=level.getEntitiesOfClass(CA_Projectile.class,new AABB(-25,-7,75,25,105,25));
                 if (entity!=null){
-                    ProjCapability clientCap=entity.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
-                    if (clientCap!=null){
+                    @NotNull LazyOptional<ProjCapability> clientCapOptional=entity.getCapability(ProjCapabilityProvider.ProjCap);
+                    clientCapOptional.ifPresent(clientCap->{
                         clientCap.updateData(this.cap);
-                    }
+                    });
                 }
             }
         });

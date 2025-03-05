@@ -89,6 +89,7 @@ public class MathFuncs {
         }
         return random;
     }
+
     public static <T extends Entity> List<T> getEntitiesIn2DDonutArea(Class<T> eClass,Vec3 center,Level level, float outerRad, float innerRad, float height,Predicate pred){
         AABB aabb=new AABB(center.x - outerRad,
                 center.y-height,
@@ -98,15 +99,13 @@ public class MathFuncs {
                 center.z+outerRad);
         List<T> entityList=level.getEntitiesOfClass(eClass,aabb,pred);
         Iterator<T> iterator = entityList.iterator();
-
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
             if (Math.sqrt(entity.distanceToSqr(center)) <= innerRad) {
                 iterator.remove();
             }
         }
-
-            return entityList;
+        return entityList;
     }
 
 }

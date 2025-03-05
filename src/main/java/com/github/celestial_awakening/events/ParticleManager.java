@@ -43,7 +43,7 @@ public class ParticleManager {
         particleDataMap.put(obj,startTicks);
     }
 
-    protected ParticleData createParticleDataect(double x,double y,double z,ServerLevel serverLevel,ParticleOptions options, int amt, float spd, int reps, int tickDelay){
+    protected ParticleData createParticleData(double x,double y,double z,ServerLevel serverLevel,ParticleOptions options, int amt, float spd, int reps, int tickDelay){
         return new ParticleData(x, y, z, serverLevel, options, amt, spd, reps, tickDelay);
     }
     private HashMap<ParticleData,Integer> particleDataMap=new HashMap<>();
@@ -56,10 +56,6 @@ public class ParticleManager {
 
         }
         return particleManager;
-    }
-
-    private ParticleManager(){
-
     }
     protected void generateParticles(ServerLevel serverLevel){
         moonstoneParticles(serverLevel);
@@ -90,8 +86,7 @@ public class ParticleManager {
                 }
             }
 
-        }
-        );
+        });
 
     }
 

@@ -3,11 +3,11 @@ package com.github.celestial_awakening.events.armor_events;
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.Event;
-
-import java.util.function.Predicate;
+import org.jetbrains.annotations.NotNull;
 
 public class ManiaArmor extends ArmorEffect {
 
@@ -30,20 +30,18 @@ public class ManiaArmor extends ArmorEffect {
 
     }
     private void frenzy(Player player,Event event){
-        LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        if (cap!=null){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        capOptional.ifPresent(cap->{
 
-        }
+        });
     }
 
     private void hysteria(Player player, LivingDamageEvent event){
         if (event.getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null){
-                Predicate predicate = null;
-                //MobEffectInstance effects[]=player.getActiveEffects().stream().filter(predicate).toArray();
-            }
-            //
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+
+            });
         }
     }
 }

@@ -88,6 +88,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                 }
                 case 20:{
                     this.mob.setActionId(11);
+                    Vec3 newPos;
                     if (leftTP){
                         Vec3 vec=MathFuncs.getDirVec(leftCrescent.position(),target.position());
                         pkDir=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(leftCrescent.position(),target.position()));
@@ -96,7 +97,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                         rightCrescent.setHAng(rightDir);
                         rightCrescent.setVAng(vAng);
                         rightCrescent.setSpd(8.5f);
-                        this.mob.setPos(leftCrescent.position());
+                        newPos=leftCrescent.position();
                         leftCrescent.discard();
                     }
                     else{
@@ -107,9 +108,10 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                         leftCrescent.setVAng(vAng);
                         leftCrescent.setHAng(leftDir);
                         leftCrescent.setSpd(8.5f);
-                        this.mob.setPos(rightCrescent.position());
+                        newPos=(rightCrescent.position());
                         rightCrescent.discard();
                     }
+                    this.mob.teleportTo(newPos.x,newPos.y,newPos.z);
                     break;
                 }
                 case 14:{

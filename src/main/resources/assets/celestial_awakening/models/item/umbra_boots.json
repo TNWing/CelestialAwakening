@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "celestial_awakening:item/umbra_boots"
+    "layer0": "celestial_awakening:item/armor/umbra_boots"
   }
 }

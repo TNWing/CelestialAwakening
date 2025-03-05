@@ -39,11 +39,7 @@ public class NightProwler extends AbstractCALivingEntity {
     public final AnimationState leapRecoveryAnimationState=new AnimationState();
 
     HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
-    protected float opacity;
-    public boolean hasCollision;
-
     public AABB standardAABB;
-
 
     public NightProwler(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -57,7 +53,7 @@ public class NightProwler extends AbstractCALivingEntity {
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, (double)0.4F)
+                .add(Attributes.MOVEMENT_SPEED, (double)0.35F)
                 .add(Attributes.KNOCKBACK_RESISTANCE,0.1D)
                 .add(Attributes.MAX_HEALTH, baseHP)
                 .add(Attributes.ARMOR, baseArmor)
@@ -99,7 +95,6 @@ public class NightProwler extends AbstractCALivingEntity {
 
 
     public void tick() {
-
         super.tick();
     }
 
@@ -114,20 +109,17 @@ public class NightProwler extends AbstractCALivingEntity {
             f = 0f;
         }
         this.walkAnimation.update(f, 0.2f);
-        //TODO
-        /*
-        figure out how to get walk anim to work
-         */
-
-
     }
-
+    @Override
+    public void setDeltaMovement(Vec3 dm){
+        super.setDeltaMovement(dm);
+    }
 
     @Override
     public void updateAnim() {
         int id=this.entityData.get(ACTION_ID);
         AnimationState currentState=actionIDToAnimMap.get(id);
-        System.out.println("HELLO UPDATING anim, id is " + id);
+
         if (isSameAnim()){
             incrementActionFrame();
             if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
@@ -135,6 +127,7 @@ public class NightProwler extends AbstractCALivingEntity {
             }
         }
         else if (id!=-1){
+            System.out.println("HELLO switching anim, id is " + id);
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
             currentState.start(this.tickCount);
@@ -147,6 +140,7 @@ public class NightProwler extends AbstractCALivingEntity {
             }
         }
     }
+
 
     @Override
     public boolean hurt(DamageSource source, float amt){

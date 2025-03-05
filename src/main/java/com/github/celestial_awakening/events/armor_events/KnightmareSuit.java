@@ -5,11 +5,12 @@ import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvide
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -90,9 +91,9 @@ public class KnightmareSuit extends ArmorEffect{
     private void infamy(LivingDeathEvent event,Player player,int cnt){
         if(event.getSource().getEntity()==player){
 
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null){
-                Object[] data= (Object[]) cap.getAbilityData(infamy);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+                Object[] data= cap.getAbilityData(infamy);
                 float mHp=event.getEntity().getMaxHealth();
                 int n= (int) ((mHp/10) * cnt*0.25f);
 
@@ -105,59 +106,42 @@ public class KnightmareSuit extends ArmorEffect{
                 else{
                     cap.insertIntoAbilityMap(infamy,15*20,new Integer[]{n});
                 }
-            }
+            });
         }
     }
     private void infamyBoost(LivingHurtEvent event,Player player){
         if(event.getSource().getEntity()==player){
 
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null && cap.hasAbility(infamy)){
-                Object[] data= cap.getAbilityData(infamy);
-                if (data!=null){
-                    int currentVal= (int) data[0];
-                    event.setAmount(event.getAmount()+currentVal);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            capOptional.ifPresent(cap->{
+                if (cap.hasAbility(infamy)){
+                    Object[] data= cap.getAbilityData(infamy);
+                    if (data!=null){
+                        int currentVal= (int) data[0];
+                        event.setAmount(event.getAmount()+currentVal);
+                    }
                 }
-            }
+            });
+
         }
     }
     private void applyHonorDuel(LivingHurtEvent event,Player player){
         if(event.getSource().getEntity()==player){
             LivingEntity target=event.getEntity();
-            LivingEntityCapability pCap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            LivingEntityCapability targetCap=target.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (pCap!=null && targetCap!=null){
-                if (targetCap.getAbilityData(honorDuel)==null &&
-                        pCap.getAbilityData(honorDuel)==null){//only apply if neither target is under honor duel
-                    UUID[] dataForPlayer= {target.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
-                    UUID[] dataForTarget= {player.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
-                    pCap.insertIntoAbilityMap(honorDuel,-10,dataForPlayer);
-                    targetCap.insertIntoAbilityMap(honorDuel,-10,dataForTarget);
-                    //HONOR DUEL FOR c77386e1-8d59-4429-af55-7f23135e7faf AND 380df991-f603-344c-a090-369bad2a924a
-                }
-
-            }
+            @NotNull LazyOptional<LivingEntityCapability> pCapOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            pCapOptional.ifPresent(pCap->{
+                targetCapOptional.ifPresent(targetCap->{
+                    if (targetCap.getAbilityData(honorDuel)==null &&
+                            pCap.getAbilityData(honorDuel)==null){//only apply if neither target is under honor duel
+                        UUID[] dataForPlayer= {target.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
+                        UUID[] dataForTarget= {player.getUUID(),player.getUUID()};//format: corresponding entity uuid, applying entity uuid
+                        pCap.insertIntoAbilityMap(honorDuel,-10,dataForPlayer);
+                        targetCap.insertIntoAbilityMap(honorDuel,-10,dataForTarget);
+                        //HONOR DUEL FOR c77386e1-8d59-4429-af55-7f23135e7faf AND 380df991-f603-344c-a090-369bad2a924a
+                    }
+                });
+            });
         }
-    }
-    //maybe make an honor duel effect thats invisible and essentially does nothing
-    //and whhen an entity dies, check if they had honor duel. if so, grab cap data
-    //that might not work particularly well, maybe i should put honor duel into the living entity cap
-    //or just remerge player and living caps
-    //i can also handle this in event manager, since it triggers upon the entity dying by any means
-    //the effect should be removed if too far away from target, and this should be checked every 5 seconds.
-    private void removeHonorDuel(Player player, LivingDeathEvent event){
-        if(event.getSource().getEntity()==player){
-            LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-            if (cap!=null){
-                Object[] data=cap.getAbilityData(honorDuel);
-            }
-        }
-    }
-
-    private void honorDmgReduction(Player player, LivingDamageEvent event){
-        if (event.getEntity() == player){
-            LivingEntityCapability pCap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        }
-
     }
 }

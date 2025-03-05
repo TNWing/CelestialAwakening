@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "celestial_awakening:item/knightmare_helmet"
+    "layer0": "celestial_awakening:item/armor/knightmare_helmet"
   }
 }

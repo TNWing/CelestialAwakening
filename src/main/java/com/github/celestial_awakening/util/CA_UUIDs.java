@@ -7,7 +7,4 @@ public class CA_UUIDs {
     public static UUID latticePressureID =UUID.fromString("d0918378-ac9b-4d8c-9b78-a984a80e42df");
     public static UUID shadePieceEffectID =UUID.fromString("a25b685c-392e-4951-bca3-a564a4921b81");
     public static UUID remnantFinalLightID=UUID.fromString("67f594b9-808d-417f-a144-368a01eff3f0");
-
-
-    public static UUID enchantmentSwiftBladeID=UUID.fromString("a9e6116f-4d45-4eca-8d59-19eb084fa332");
 }

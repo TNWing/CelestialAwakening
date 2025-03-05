@@ -8,8 +8,8 @@ import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
-import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
@@ -18,6 +18,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -102,8 +104,14 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             float ang=currentStartAngle+90*i;
             LunarCrescent crescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],85,7f,ang,0,0,1.75f,0.35f,1.75f);
             int id=crescent.getId();
-            ProjCapability cap=crescent.getCapability(ProjCapabilityProvider.ProjCap).orElse(null);
-            if (cap!=null){
+            @NotNull LazyOptional<ProjCapability> capOptional=crescent.getCapability(ProjCapabilityProvider.ProjCap);
+
+            Vec3 dir=MathFuncs.get2DVecFromAngle(ang);
+            crescent.setPos(this.mob.position().add(dir.scale(0.2f)).add(0,1.2f,0));
+            crescent.setOwner(this.mob);
+            crescent.setDisableShields(true);
+            crescent.setDisableTicks(40);
+            capOptional.ifPresent(cap->{
                 MovementModifier deacc_mod=new MovementModifier
                         (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,0.15f,0,0,15,10);
                 MovementModifier flip_mod=new MovementModifier
@@ -113,15 +121,11 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                 cap.putInBackOfList(deacc_mod);
                 cap.putInBackOfList(flip_mod);
                 cap.putInBackOfList(acc_mod);
-            }
-            Vec3 dir=MathFuncs.get2DVecFromAngle(ang);
-            crescent.setPos(this.mob.position().add(dir.scale(0.2f)).add(0,1.2f,0));
-            crescent.setOwner(this.mob);
-            crescent.setDisableShields(true);
-            crescent.setDisableTicks(40);
+                ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(id, cap),serverLevel.dimension());
+            });
             serverLevel.addFreshEntity(crescent);
             ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),serverLevel.dimension());
-            ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(id, cap),serverLevel.dimension());
+
         }
         currentStartAngle+=22.5f;
     }

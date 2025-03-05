@@ -13,11 +13,13 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -47,20 +49,20 @@ public class AttachCapabilities {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         UUID playerID = player.getUUID();
-        LivingEntityCapability cap=player.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        if (cap!=null){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        capOptional.ifPresent(cap->{
             cap.setUUID(playerID);
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);
-        }
+        });
     }
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinLevelEvent event) {
         Entity entity =  event.getEntity();
         UUID uuID = entity.getUUID();
-        LivingEntityCapability cap=entity.getCapability(LivingEntityCapabilityProvider.playerCapability).orElse(null);
-        if (cap!=null){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        capOptional.ifPresent(cap->{
             cap.setUUID(uuID);
-        }
+        });
     }
     @SubscribeEvent
     public void onAttachEntityCap(AttachCapabilitiesEvent<Entity> event){

@@ -12,16 +12,12 @@ import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
-import com.github.celestial_awakening.items.MoonlightReaper;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
-import com.github.celestial_awakening.recipes.LifeFragFood;
-import com.github.celestial_awakening.recipes.serializers.LifeFragFoodSerializer;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -35,8 +31,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -45,7 +39,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -54,13 +47,15 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
@@ -129,11 +124,6 @@ public class EventManager {
     private static ParticleManager particleManager=ParticleManager.createParticleManager();
 
     private static int currentDay;
-
-
-    //for some odd reason, this never fires, will have to manually spawn prowlers then since they are the only ones who can spawn naturally
-
-
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event){
         new DivinerDataCommand(event.getDispatcher(),2);
@@ -148,13 +138,9 @@ public class EventManager {
     }
 
 
-    //TODO: make sure this works
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event){
-        if (event.isWasDeath()){
-            //It seems that, if player dies, their capability doesn't work anymore. See why
-            //it seems to work now? maybe it was the onLivingEntityDeath thing i changed
-            //should reset capability data so maybe change this
+        if (event.isWasDeath()){//Saves any necessary capability data
             event.getOriginal().reviveCaps();
             event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
                     oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
@@ -164,8 +150,7 @@ public class EventManager {
     }
 
     @SubscribeEvent
-    public static void onServerload(LevelEvent.Unload event) {
-        // Clear the data in DelayedFunctionManager when a world is unloaded
+    public static void onServerUnload(LevelEvent.Unload event) {
         DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().clear();
         DelayedFunctionManager.delayedFunctionManager.getPlayerCommandMap().clear();
     }
@@ -181,12 +166,9 @@ public class EventManager {
                 ServerLevel serverLevel= (ServerLevel) level;
                 LivingEntity owner=event.getOwner();
                 float hAng=event.getHAng();
-                boolean enhanced=event.isEnhanced();
                 int orbs=cap.getLunarOrbs();
-                System.out.println("ORBS CNT IS " + orbs);
                 int cd=event.getCD();
                 cd-=orbs*5;
-                System.out.println("MODIFIED CD IS " + cd);
                 //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
                 LunarCrescent crescent=null;
                 if (isCrit){
@@ -242,7 +224,7 @@ public class EventManager {
 
         }
     }
-
+    //TODO: replace with loot table later
     @SubscribeEvent
     public static void onItemFished(ItemFishedEvent event){
         int cnt=0;
@@ -278,8 +260,8 @@ public class EventManager {
                 }
             }
         }
-
     }
+
     @SubscribeEvent
     public static void onItemToolTip(ItemTooltipEvent event){
         ItemStack itemStack=event.getItemStack();
@@ -295,8 +277,8 @@ public class EventManager {
 
             }
         }
-
     }
+
     @SubscribeEvent
     public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
         ItemStack itemStack=event.getItem();
@@ -314,9 +296,7 @@ public class EventManager {
 
     @SubscribeEvent
     public static void onServerLevelLoad(LevelEvent.Load event){
-
         LevelAccessor levelAccessor=event.getLevel();
-
         if (!levelAccessor.isClientSide()){
             ServerLevelAccessor serverLevelAccessor= (ServerLevelAccessor) levelAccessor;
             ServerLevel serverLevel=serverLevelAccessor.getLevel();
@@ -326,8 +306,8 @@ public class EventManager {
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
             });
         }
-
     }
+
     @SubscribeEvent
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
         Player player= event.getPlayer();
@@ -351,7 +331,8 @@ public class EventManager {
             });
         }
     }
-    static ConcurrentHashMap<UUID,UUID[]> conversionDataStorage=new ConcurrentHashMap<>();//uuid of converting entity, uuid of other entity
+
+    static ConcurrentHashMap<UUID,UUID[]> conversionDataStorage=new ConcurrentHashMap<>();//Keeps track of uuids for converting entities
 
     @SubscribeEvent
     public static void onLivingConversionPre(LivingConversionEvent.Pre event){
@@ -390,7 +371,6 @@ public class EventManager {
                 });
             }
         }
-
     }
 
     @SubscribeEvent
@@ -435,9 +415,6 @@ public class EventManager {
                     }
                 }
             }
-        }
-        if (event.isCanceled()) {
-            System.out.println("LivingHurtEvent was canceled for: " + event.getEntity().getName().getString());
         }
     }
 
@@ -498,20 +475,6 @@ public class EventManager {
                 });
 
             }
-            /*
-            if (livingEntity.hasEffect(MobEffectInit.EXPOSING_LIGHT.get())){
-                ExposingLightMobEffectInstance exposingLightInstance= (ExposingLightMobEffectInstance) livingEntity.getEffect(MobEffectInit.EXPOSING_LIGHT.get());
-                int stacks=exposingLightInstance.getStacks();
-                event.setAmount(event.getAmount()*(1 + 0.015f*stacks));
-                if (exposingLightInstance.getStackCD()==0){
-
-                }
-                exposingLightInstance.increaseStacks(1);
-            }
-
-
-             */
-
         }
     }
 
@@ -526,7 +489,6 @@ public class EventManager {
                 Object[] honorDuelData=deadEntityCap.getAbilityData(KnightmareSuit.honorDuel);
                 UUID deadID=deadEntity.getUUID();
                 if (honorDuelData!=null){
-                    System.out.println("LDEATH RELEASE");
                     UUID id1= (UUID) honorDuelData[0];
                     UUID id2= (UUID) honorDuelData[1];
                     if (id2.equals(deadID)){//source of duel died
@@ -583,43 +545,6 @@ public class EventManager {
         }
     }
 
-
-    @SubscribeEvent
-    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity)) {
-            return;
-        }
-/*
-        LivingEntity entity = (LivingEntity) event.getEntity();
-
-        CompoundTag entityTag = entity.serializeNBT();
-        if (!entityTag.contains("ActiveEffects")) {
-            return;
-        }
-
-        ListTag effectsList = entityTag.getList("ActiveEffects", 10); // 10 = CompoundTag type
-        // Clear current effects so we can re-add them
-        //entity.removeAllEffects();
-
-        for (int i = 0; i < effectsList.size(); i++) {
-            CompoundTag effectTag = effectsList.getCompound(i);
-            MobEffectInstance effectInstance = null;
-            if (effectTag.contains("Stage")) {
-                // Use your custom loader to get an instance with updated custom data
-                //effectInstance = CustomMobEffectInstance.load(effectTag);
-            } else {
-                // Fall back to vanilla loading if no custom data is present
-                effectInstance = MobEffectInstance.load(effectTag);
-            }
-            if (effectInstance != null) {
-                //entity.addEffect(effectInstance);
-            }
-        }
-
- */
-    }
-
-
     @SubscribeEvent
     public static void onEntityLeaveLevel(EntityLeaveLevelEvent event){
         if (!(event.getEntity() instanceof LivingEntity)) {
@@ -632,14 +557,13 @@ public class EventManager {
         LivingEntity entity = (LivingEntity) event.getEntity();
         @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
         capOptional.ifPresent(cap->{
-            if (cap.hasAbility(KnightmareSuit.honorDuel)){
+            if (cap.hasAbility(KnightmareSuit.honorDuel)){//Needs to remove honor duel
                 Object[] honorDuelData=cap.getAbilityData(KnightmareSuit.honorDuel);
                 UUID id1= (UUID) honorDuelData[0];
 
                 @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.playerCapability);
                 otherCapOptional.ifPresent(otherCap->{
                     if (otherCap.hasAbility(KnightmareSuit.honorDuel) && otherCap.getAbilityData(KnightmareSuit.honorDuel)[0]==entity.getUUID()){
-                        System.out.println("RELEASING FROM HDUEL");
                         otherCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
                     }
                 });
@@ -647,17 +571,6 @@ public class EventManager {
             }
         });
     }
-
-
-    /*
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) throws NoSuchFieldException, IllegalAccessException {
-        if (event.phase== TickEvent.Phase.START){
-
-        }
-    }
-
-     */
 
     @SubscribeEvent
     public static void onServerLevelTick(TickEvent.LevelTickEvent event) {
@@ -725,7 +638,6 @@ public class EventManager {
                         UUID targetID= (UUID) cap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         Entity target=level.getEntity(targetID);
                         if (target==null || target.distanceTo(player)> Config.honorDuelDist){
-                            System.out.println("REMOVING HDUEL DUE TO DIST");
                             cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
                             if (target!=null){
                                 @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.playerCapability);
@@ -743,8 +655,6 @@ public class EventManager {
                 }
             });
         }
-
-
     }
 
 
@@ -761,7 +671,6 @@ public class EventManager {
                 }
             }
         }
-
         return cnt;
     }
 }

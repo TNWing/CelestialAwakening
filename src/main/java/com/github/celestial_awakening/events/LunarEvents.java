@@ -24,6 +24,8 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +42,6 @@ public class LunarEvents {
     }
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
-
-    public boolean attemptProwlerSpawn(ServerLevel level){
-        int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-        if (MathFuncs.isInRange(time,18000,3000)) {
-
-        }
-        return false;
-    }
     public boolean attemptPKSpawn(ServerLevel level){
 
         if (validDim(level, Config.transcendentsDimensionTypes)){
@@ -55,29 +49,29 @@ public class LunarEvents {
             if (MathFuncs.isInRange(time,18000,0)){//for now, offset will be 0
                 Random rand=new Random();
                 switch (level.getMoonPhase()) {
-                    case 3://half
-                    case 7:
-                    {
+                    //half
+                    case 3, 7 -> {
                         break;
                     }
-                    case 2://gibb
-                    case 8:
-                    {
+//gibb
+                    case 2, 8 -> {
                         break;
                     }
-                    case 4://crescent
-                    case 6:{
-                        if (level.getDayTime()/24000L % 2147483647L>Config.pkCrescenciaMinDay){//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
+//crescent
+                    case 4, 6 -> {
+                        if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
                             //perform rng roll
-                            if (rand.nextInt(10)>6){//30% chance
-                                level.addFreshEntity(new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level));
+                            if (true) {//rand.nextInt(10)>6    30% chance
+                                PhantomKnight_Crescencia crescencia = new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level);
+                                //crescencia.setPos();
+                                level.addFreshEntity(crescencia);
                                 return true;
                             }
 
                         }
                         break;
                     }
-                    case 5:{//new moon
+                    case 5 -> {//new moon
                         break;
                     }
                 }
@@ -104,76 +98,74 @@ public class LunarEvents {
 
     public void moonstoneMark(Level level){
         Random rand = new Random();
+        @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(cap-> {
+            if (!cap.currentMoonstonePos.isEmpty()) {
+                for (BlockPos blockPos : cap.currentMoonstonePos.keySet()) {
+                    AABB bound = new AABB(blockPos);
+                    TargetingConditions conds = TargetingConditions.forNonCombat();
+                    Monster monster = level.getNearestEntity(Monster.class, conds, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), bound);
 
-        LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
-
-        if (cap!=null && !cap.currentMoonstonePos.isEmpty()){
-            for (BlockPos blockPos:cap.currentMoonstonePos.keySet()){
-                AABB bound=new AABB(blockPos);
-                TargetingConditions conds=TargetingConditions.forNonCombat();
-                Monster monster =level.getNearestEntity(Monster.class,conds,null,blockPos.getX(),blockPos.getY(),blockPos.getZ(), bound);
-
+                }
             }
-        }
+        });
     }
 
     public void revealMoonstone(Level level){
         Random rand = new Random();
-        LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+        @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(cap-> {
+            if (validDim(level, Config.lunarMatDimensionTypes) && level.isNight()){
 
-        if (cap!=null && validDim(level, Config.lunarMatDimensionTypes) && level.isNight()){
-
-            int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-            //time% % 24000L will give the actual daytime
+                int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
+                //time% % 24000L will give the actual daytime
             /*
             night is 12000-24000
             spawn at 15000,18000,21000
              */
-            if ((time%12000)%3000==0 && time!=24000){//valid time
-                //for each player, attempt to create a moonstone in a nearby chunk
-                List<? extends Player> pList=level.players();
-                for (Player p:pList) {
-                    if (cap.currentMoonstonePos.keySet().size()>15){
-                        break;
-                    }
-                    ChunkPos chunkPos=p.chunkPosition();
-                    ArrayList<BlockPos> applicableBlocks=new ArrayList<BlockPos>();
-                    for (int cx=-1;cx<=1;cx++){
-                        for (int cz=-1;cz<=1;cz++){
-                            if (cx!=0 && cz!=0){
-                                LevelChunk chunk=level.getChunk(chunkPos.x+cx,chunkPos.z+cz);
-                                for (int x=0;x<16;x++){
-                                    for (int z=0;z<16;z++){
-                                        int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getPos().x*16+x, chunk.getPos().z*16+z);//highest block
-                                        BlockPos blockPos=new BlockPos(chunk.getPos().x*16+x,y-1,chunk.getPos().z*16+z);
+                if ((time%12000)%3000==0 && time!=24000){//valid time
+                    //for each player, attempt to create a moonstone in a nearby chunk
+                    List<? extends Player> pList=level.players();
+                    for (Player p:pList) {
+                        if (cap.currentMoonstonePos.keySet().size()>15){
+                            break;
+                        }
+                        ChunkPos chunkPos=p.chunkPosition();
+                        ArrayList<BlockPos> applicableBlocks=new ArrayList<BlockPos>();
+                        for (int cx=-1;cx<=1;cx++){
+                            for (int cz=-1;cz<=1;cz++){
+                                if (cx!=0 && cz!=0){
+                                    LevelChunk chunk=level.getChunk(chunkPos.x+cx,chunkPos.z+cz);
+                                    for (int x=0;x<16;x++){
+                                        for (int z=0;z<16;z++){
+                                            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getPos().x*16+x, chunk.getPos().z*16+z);//highest block
+                                            BlockPos blockPos=new BlockPos(chunk.getPos().x*16+x,y-1,chunk.getPos().z*16+z);
 
-                                        //check to see if block is exposed to surface and is one of X types
-                                        BlockState blockState=level.getBlockState(blockPos);
-                                        if (!cap.currentMoonstonePos.containsKey(blockPos)){
-                                            if ((blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.BASE_STONE_OVERWORLD) || blockState.is(BlockTags.SAND))){
-                                                applicableBlocks.add(blockPos);
+                                            //check to see if block is exposed to surface and is one of X types
+                                            BlockState blockState=level.getBlockState(blockPos);
+                                            if (!cap.currentMoonstonePos.containsKey(blockPos)){
+                                                if ((blockState.is(BlockTags.DIRT) || blockState.is(BlockTags.BASE_STONE_OVERWORLD) || blockState.is(BlockTags.SAND))){
+                                                    applicableBlocks.add(blockPos);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    //pick a random applicable block
-                    if (applicableBlocks.size()>0){
+                        //pick a random applicable block
+                        if (applicableBlocks.size()>0){
 
-                        BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
-                        System.out.println("PLACING MOONSTONE at " + chosenSpot);
-                        cap.currentMoonstonePos.put(chosenSpot,1800);
-                    }
+                            BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
+                            System.out.println("PLACING MOONSTONE at " + chosenSpot);
+                            cap.currentMoonstonePos.put(chosenSpot,1800);
+                        }
 
+                    }
                 }
-            }
 
-        }
-        //level.addParticle();
-        ServerLevel serverLevel= (ServerLevel) level;
-        //serverLevel.sendParticles()
+            }
+        });
     }
 
     public void midnightIronTransformation(Level level){

@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -271,13 +272,16 @@ public class CA_Projectile extends Projectile {
 
         super.tick();
 
-        ProjCapability cap=getProjCap().orElse(null);
+        @NotNull LazyOptional<ProjCapability> capOptional=getProjCap();
+        capOptional.ifPresent(cap->{
+                    if (cap!=null){
+                        currentMovementModifier=cap.popFromList();
+                    }
+            updateMovementFactors(cap);
+        });
 
-        if (currentMovementModifier==null && cap!=null){
-            currentMovementModifier=cap.popFromList();
-        }
         //this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
-        updateMovementFactors(cap);
+
         Vec3 dir=calculateMoveVec();
         this.setDeltaMovement(dir);
         Vec3 dm=this.getDeltaMovement();

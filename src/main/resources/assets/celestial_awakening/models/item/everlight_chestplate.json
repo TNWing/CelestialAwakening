@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "celestial_awakening:item/everlight_chestplate"
+    "layer0": "celestial_awakening:item/armor/everlight_chestplate"
   }
 }

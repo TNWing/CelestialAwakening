@@ -20,9 +20,11 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -38,31 +40,34 @@ public class SolarEvents {
             ServerLevel level= (ServerLevel) event.level;
             long time=level.getDayTime();
             if (time%100==0 && time >Config.transcendentsInitDelay && time%24000L<12000L ){
-                LevelCapability cap;
+                @NotNull LazyOptional<LevelCapability> capOptional;
                 if (Config.divinerShared){
-                    cap=level.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+                    capOptional=level.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap);
                 }
                 else{
-                    cap= level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
+                    capOptional= level.getCapability(LevelCapabilityProvider.LevelCap);
                 }
-                if (cap!=null  && validDim(level, Config.transcendentsDimensionTypes)){
-                    if (cap.divinerEyeCD>0){
-                        cap.divinerEyeCD--;
-                    }
-                    else{
-                        Random rand = new Random();
-                        float randF=rand.nextFloat();
-                        if (randF<cap.divinerEyeChance){
-                            createDivinerEye(cap,level.dimension());
-                            cap.divinerEyeChance=0;
-                            //success, perform roll
+                capOptional.ifPresent(cap->{
+                    if (validDim(level, Config.transcendentsDimensionTypes)){
+                        if (cap.divinerEyeCD>0){
+                            cap.divinerEyeCD--;
                         }
-                        else{//increase chance for next attempt
-                            cap.divinerEyeChance+=rand.nextInt(1,6)/100f;
-                        }
+                        else{
+                            Random rand = new Random();
+                            float randF=rand.nextFloat();
+                            if (randF<cap.divinerEyeChance){
+                                createDivinerEye(cap,level.dimension());
+                                cap.divinerEyeChance=0;
+                                //success, perform roll
+                            }
+                            else{//increase chance for next attempt
+                                cap.divinerEyeChance+=rand.nextInt(1,6)/100f;
+                            }
 
+                        }
                     }
-                }
+                });
+
             }
         }
 

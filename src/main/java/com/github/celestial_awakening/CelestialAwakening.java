@@ -65,20 +65,15 @@ public class CelestialAwakening
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
         registerTiers();
 /*
-optimize eventmangager later, theres some stuff thats eating up performance
+optimize eventmanager later, theres probably  some stuff eating up performance
  */
         MinecraftForge.EVENT_BUS.register(new EventManager());
         MinecraftForge.EVENT_BUS.register(new AttachCapabilities());
         MinecraftForge.EVENT_BUS.register(new ClientEventsManager());
         MinecraftForge.EVENT_BUS.register(this);
 
-
-
-
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
 
@@ -94,7 +89,6 @@ optimize eventmangager later, theres some stuff thats eating up performance
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        LOGGER.info("HELLO FROM COMMON SETUP");
         ModNetwork.register();
     }
 

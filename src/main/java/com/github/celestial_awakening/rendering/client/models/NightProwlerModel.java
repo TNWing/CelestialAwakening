@@ -1,17 +1,17 @@
 package com.github.celestial_awakening.rendering.client.models;
+
 import com.github.celestial_awakening.entity.living.NightProwler;
+import com.github.celestial_awakening.rendering.client.animations.NightProwlerAnimations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.Entity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.github.celestial_awakening.rendering.client.animations.NightProwlerAnimations;
+import org.jetbrains.annotations.NotNull;
+
 public class NightProwlerModel<T extends Entity>  extends HierarchicalModel<T> {
 	private final ModelPart model;
 	private final ModelPart upperhalf;
@@ -34,7 +34,8 @@ public class NightProwlerModel<T extends Entity>  extends HierarchicalModel<T> {
 	private final ModelPart bl_upper;
 	private final ModelPart bl_lower;
 
-	public NightProwlerModel(ModelPart root) {
+	public NightProwlerModel(@NotNull ModelPart root) {
+		super(RenderType::entityTranslucent);
 		this.model = root.getChild("root");
 		this.upperhalf = this.model.getChild("upperhalf");
 		this.head = this.upperhalf.getChild("head");
@@ -55,6 +56,7 @@ public class NightProwlerModel<T extends Entity>  extends HierarchicalModel<T> {
 		this.b_left_leg = this.limbs.getChild("b_left_leg");
 		this.bl_upper = this.b_left_leg.getChild("bl_upper");
 		this.bl_lower = this.b_left_leg.getChild("bl_lower");
+
 	}
 
 	public static LayerDefinition createBodyLayer() {

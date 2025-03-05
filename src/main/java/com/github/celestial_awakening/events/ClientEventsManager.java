@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.joml.Matrix4f;
@@ -55,16 +56,17 @@ public class ClientEventsManager {
 
                 ClientLevel level=Minecraft.getInstance().level;
                 if (level!=null && level.dimension()==Level.OVERWORLD){
-                    LevelCapability cap=level.getCapability(LevelCapabilityProvider.LevelCap).orElse(null);
-                    //not synchronizing when relogging
-                    //also i think the eye is not updating afterwards
-
-                    if (cap!=null && cap.divinerEyeToState>-2){
-                        if (!minecraft.isPaused()) { // Check if the game is not paused
-                            //System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
+                    LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+                    capOptional.ifPresent(cap->{
+                        if (cap.divinerEyeToState>-2){
+                            if (!minecraft.isPaused()) { // Check if the game is not paused
+                                //System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
+                            }
+                            renderDivinerEye(event.getPoseStack(),level,cap,event);
                         }
-                        renderDivinerEye(event.getPoseStack(),level,cap,event);
-                    }
+                    });
+
+
                 }
             }
 

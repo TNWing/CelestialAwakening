@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "celestial_awakening:item/radiant_helmet"
+    "layer0": "celestial_awakening:item/armor/radiant_helmet"
   }
 }

@@ -3,11 +3,12 @@ package com.github.celestial_awakening.entity.combat.night_prowlers;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.NightProwler;
 import com.github.celestial_awakening.util.CA_Predicates;
+import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -18,7 +19,14 @@ import java.util.function.Predicate;
 public class NightProwlerShadowLeap extends GenericAbility {
     boolean canTeleport=true;
     boolean isTeleport=false;
+    Vec3 targetPos=Vec3.ZERO;
+    Vec3 leapDir=Vec3.ZERO;
     Vec3 teleportPos=Vec3.ZERO;
+    float prevOpacity=1;
+    double prevDist;//used to check if leapt pass the mark
+    float aabbInflate=1.25f;
+    float dmg;
+    double originalDist;
     Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((NightProwler)this.mob);
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
 
@@ -34,6 +42,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
             this.mob.canMove=false;
             setMoveVals(0,this.getAbilityRange(target),false);
             this.mob.setActionId(2);
+            dmg= (float) (this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE)*1.2f);
         }
     }
 
@@ -42,87 +51,131 @@ public class NightProwlerShadowLeap extends GenericAbility {
         if (currentStateTimer>0){
             switch (state){
                 case 1:{//should take around 1.2 seconds total?, so 24 ticks
-                /*
-                    the first 0.25 seconds (5 ticks) are as normal
-                    then, if the leap is a teleport, begin dissolve process for 0.75 seconds (lose collision and rapidly fade).
-                    The last 0.2 seconds is reappearing from the ground behind, reenable collisionb and full opacity
+                    if (currentStateTimer==12){
+                        targetPos=target.position();
 
-                 */
-                    if (currentStateTimer==24){
-                        System.out.println("STARTING AT " + this.mob.position());
+                        originalDist=prevDist=this.mob.position().distanceTo(target.position());
                         this.mob.setActionId(3);
-                        Vec3 vec3 = this.mob.getDeltaMovement();
-                        Vec3 vec31 = new Vec3(this.mob.getTarget().getX() - this.mob.getX(), 0.0D, this.mob.getTarget().getZ() - this.mob.getZ());
-                        if (vec31.lengthSqr() > 1.0E-7D) {
-                            vec31 = vec31.normalize().scale(2.1D).add(vec3.scale(0.2D));
+                        double dist=target.position().distanceTo(this.mob.position());
+                        Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
+                        float yM=0.44f;
+                        if (dist>5){
+                            yM=0.5f;
                         }
-                        this.mob.setDeltaMovement(vec31.x, 0.35D, vec31.z);
+                        Vec3 dm=new Vec3(dir.x,0,dir.z).scale(0.4*dist).add(0,yM,0);
+                        this.mob.setDeltaMovement(dm);
+                        leapDir=this.mob.getDeltaMovement();
                         AABB aabb=new AABB(this.mob.position(),this.mob.position());
-                        aabb=aabb.inflate(1.4f);
+                        aabb=aabb.inflate(aabbInflate);
                         LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                         if (entity!=null){
-                            System.out.println("ent i frame " + entity.invulnerableTime);
-                            System.out.println("AB " + ((Player)entity).getAbilities().invulnerable);
-                            System.out.println("DYING " + entity.isDeadOrDying());
-                            float f = (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
-                            boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), f*1.2f);//why would this still return false
-                            System.out.println("DID DMG " + b);
+                            boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
                             currentStateTimer=1;
                             this.mob.setDeltaMovement(Vec3.ZERO);
                         }
-                    }
-                    else if(isTeleport){
-                        //TODO: make this cleaner at some point
-                        if(currentStateTimer<=19 && currentStateTimer>4){
-                            if (currentStateTimer==19){
-                                ((NightProwler)mob).hasCollision=false;
-                                //disable collision
-                                this.mob.setBoundingBox(new AABB(0,0,0,0,0,0));
-                            }
-                        }
-                        else if (currentStateTimer==4){
-                            System.out.println("TP POS IS " + teleportPos);
-                            System.out.println("CURRENT POs " + this.mob.position());
-                            this.mob.setPos(teleportPos);
-                            System.out.println("new POs " + this.mob.position());
-                            ((NightProwler)mob).hasCollision=true;
-                            this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
-                            AABB aabb=new AABB(this.mob.position(),this.mob.position());
-                            aabb=aabb.inflate(1.4f);
-                            System.out.println(aabb);
 
-                            LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
-                            if (entity!=null){
-                                float f = (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
-                                System.out.println("TP found");
-                                boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), f*1.2f);
-                                System.out.println("DID DMG " + b);
-                                currentStateTimer=1;
-                                this.mob.setDeltaMovement(Vec3.ZERO);
-                            }
-                        }
-                        else if (currentStateTimer<4){
-
-                        }
                     }
                     else{
-                        System.out.println("isTeleport "+isTeleport);
-                        AABB aabb=new AABB(this.mob.position(),this.mob.position());
-                        aabb=aabb.inflate(1.4f);
-                        System.out.println("mob POs " + this.mob.position());
-                        System.out.println(aabb);
-                        LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
-                        System.out.println("CHECKING FOR ENT");
-                        if (entity!=null){
-                            float f = (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
-                            System.out.println("ound");
-                            boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), f*1.2f);
-                            this.mob.setDeltaMovement(Vec3.ZERO);
-                            System.out.println("DID DMG " + b);
-                            currentStateTimer=1;
-                        }
+                        double currentDist=this.mob.position().distanceTo(target.position());
+                        if (currentDist>prevDist+1f){//overshot, force tp if can
+                            if (currentStateTimer>5){
+                                if (isTeleport){
+                                    currentStateTimer=5;
+                                    this.mob.setOpacity(0f);
+                                }
+                                else{
+                                    currentStateTimer=1;
+                                }
+                            }
 
+                        }
+                        else{
+                            prevDist=currentDist;
+                        }
+                        if(isTeleport){
+                            //TODO: make this cleaner at some point, this is a mess
+                            if (this.mob.onGround() && this.currentStateTimer<7 && this.currentStateTimer>4){
+                                this.currentStateTimer=4;
+                            }
+                            if(currentStateTimer>4){
+                                if (currentStateTimer==11){
+                                    mob.setCollision(false);
+                                    this.mob.setBoundingBox(new AABB(0,0,0,0,0,0));
+                                }
+                                this.mob.setOpacity(Math.max(0,Math.min(prevOpacity,(float) (prevDist/originalDist))-0.08f));
+                                prevOpacity=this.mob.getOpacity();
+                            }
+                            else if (currentStateTimer==4){
+                                ServerLevel serverLevel= (ServerLevel) target.level();
+                                teleportPos=targetPos=target.position();
+                                for (int i=-1;i>=-2;i--){
+                                    Vec3 tempDir=new Vec3(this.mob.getDeltaMovement().x,0,this.mob.getDeltaMovement().z).normalize();
+                                    tempDir=tempDir.scale(i).normalize();
+                                    Vec3 teleportPosCheck=teleportPos.add(tempDir);
+                                    BlockPos blockPos= new BlockPos((int)teleportPosCheck.x,(int)teleportPosCheck.y+ 1,(int)teleportPosCheck.z);
+                                    BlockState blockState=target.level().getBlockState(blockPos);
+                                    if (!blockState.isAir()){
+                                        break;
+                                    }
+                                    teleportPos=teleportPosCheck;
+                                }
+                                Vec3 newDM=Vec3.ZERO;
+                                Vec3 dir= MathFuncs.getDirVec(teleportPos,targetPos);
+                                double dist=teleportPos.distanceTo(targetPos);
+                                if (dist> 1.0E-5D){
+                                    newDM=dir.scale(1.25f*dist);
+                                }
+                                newDM=newDM.add(0,0.4f,0);
+
+                                this.mob.setDeltaMovement(newDM);
+                                
+                                this.mob.teleportTo(teleportPos.x,teleportPos.y,teleportPos.z);
+                                this.mob.setCollision(true);
+                                this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
+                                AABB aabb=new AABB(this.mob.position(),this.mob.position());
+                                aabb=aabb.inflate(1.4f);
+                                this.mob.lookAt(target,30,30);
+                                LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
+                                if (entity!=null){
+                                    System.out.println("FOUND");
+                                    entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                    currentStateTimer=1;
+                                    this.mob.setDeltaMovement(Vec3.ZERO);
+                                }
+
+                                System.out.println("NOW AT POS " + this.mob.position());
+                                this.mob.setOpacity(1f);
+
+                            }
+                            else if (currentStateTimer<4){
+
+                                this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
+                                AABB aabb=new AABB(this.mob.position(),this.mob.position());
+                                aabb=aabb.inflate(aabbInflate);
+                                LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
+                                if (entity!=null){
+                                    System.out.println("FOUND");
+                                    entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                    currentStateTimer=1;
+                                    this.mob.setDeltaMovement(Vec3.ZERO);
+                                }
+                            }
+                        }
+                        else{
+                            AABB aabb=new AABB(this.mob.position(),this.mob.position());
+                            aabb=aabb.inflate(aabbInflate);
+                            LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
+                            if (entity!=null){
+                                System.out.println("FOUND");
+                                boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                this.mob.setDeltaMovement(Vec3.ZERO);
+                                currentStateTimer=1;
+                                this.mob.setOpacity(1f);
+                            }
+
+                        }
                     }
+
                     break;
                 }
                 case 2:{
@@ -136,12 +189,12 @@ public class NightProwlerShadowLeap extends GenericAbility {
                 case 0:{
                     state++;
                     currentStateTimer=abilityExecuteTime;
-                    Vec3 targetPos=target.position();
+                    targetPos=target.position();
                     Vec3 targetDir=target.getLookAngle();
                     targetDir=new Vec3(targetDir.x,0,targetDir.y);
                     for (int i=-1;i>=-2;i--){
                         Vec3 tempDir=targetDir;
-                        tempDir=tempDir.scale(i).normalize();//repeat this twice
+                        tempDir=tempDir.scale(i).normalize();
                         Vec3 teleportPos=targetPos.add(tempDir);
                         BlockPos blockPos=new BlockPos((int)teleportPos.x,(int)teleportPos.y+ 1,(int)teleportPos.z);
                         BlockState blockState=target.level().getBlockState(blockPos);
@@ -162,10 +215,6 @@ public class NightProwlerShadowLeap extends GenericAbility {
                 case 1:{
                     state++;
                     currentStateTimer=abilityRecoveryTime;
-                    //TODO
-                    /*
-                    either set act ID to 0 OR make a new act/anim for leap recovery
-                     */
                     this.mob.setActionId(4);
                     break;
                 }
@@ -184,6 +233,6 @@ public class NightProwlerShadowLeap extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 2.2D;
+        return 4.2D;
     }
 }

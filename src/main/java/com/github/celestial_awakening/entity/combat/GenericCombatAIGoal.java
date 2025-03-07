@@ -62,7 +62,7 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void movementController(LivingEntity target){
         if (this.mob.canMove){
-            System.out.println("MOVING");
+
             boolean keepDist=this.mob.keepDist;
             double minDist=Math.pow(this.mob.minRange,2);
             double maxDist=Math.pow(this.mob.maxRange,2);
@@ -78,7 +78,8 @@ public abstract class GenericCombatAIGoal extends Goal {
             }
             else{//move towards mindist
                 if (dist>minDist && this.mob.canStillSenseTarget()){
-                    this.mob.getNavigation().moveTo(this.mob.getNavigation().createPath(target,0), this.mob.spdMod);
+                    Path path=this.mob.getNavigation().createPath(target,0);
+                    boolean b=this.mob.getNavigation().moveTo(path,this.mob.spdMod);
                 }
                 else{
                     this.mob.getNavigation().stop();

@@ -54,7 +54,7 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected int genericAbilityCD;//after using an ability, how long until can use another non-basic ability
     protected int genericAbilityUseCnt;//# of times can use a non-basic ability before relying on CD
 
-
+    boolean hasSpawned=false;
     public int getBossBarWindup(){
         return this.bossBarWindup;
     }
@@ -66,7 +66,9 @@ public abstract class AbstractCALivingEntity extends Monster {
         canMove=true;
         isActing=false;
         keepDist=false;
+
         spdMod=1f;
+        hasSpawned=true;
     }
 
     @Override
@@ -110,10 +112,14 @@ public abstract class AbstractCALivingEntity extends Monster {
 
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        if (tag.contains("HasSpawned")){
+            hasSpawned=tag.getBoolean("HasSpawned");
+        }
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean("HasSpawned",hasSpawned);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.entity.living.transcendents;
 
 import com.github.celestial_awakening.entity.combat.transcendents.astralite.AstraliteCombatAIGoal;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -11,10 +12,13 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
 public class Astralite extends AbstractTranscendent {
@@ -26,7 +30,6 @@ public class Astralite extends AbstractTranscendent {
     static double baseDmg=3.0D;
     static double baseArmor=4D;
     static double baseTough=0D;
-
     public static AttributeSupplier.Builder createAttributes() {//TODO
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
@@ -39,6 +42,12 @@ public class Astralite extends AbstractTranscendent {
     }
     public static void addScaledAttributes(EntityAttributeModificationEvent event, EntityType<? extends LivingEntity> entityType){
         addScaledAttributes(event, entityType,baseHP,baseArmor,baseTough,baseDmg);
+    }
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        FlyingPathNavigation navigation=new FlyingPathNavigation(this, level);
+        navigation.setCanFloat(true);
+        return navigation;
     }
 
     protected void registerGoals() {
@@ -54,6 +63,16 @@ public class Astralite extends AbstractTranscendent {
 
     public void tick() {
         super.tick();
+    }
+
+    @Override
+    public boolean hurt(DamageSource p_19946_, float p_19947_) {
+        boolean b=super.hurt(p_19946_,p_19947_);
+        return b;
+    }
+    @Override
+    public void travel(Vec3 travelVec){
+        super.travel(travelVec);
     }
 
     @Override

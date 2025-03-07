@@ -37,12 +37,10 @@ public class Asteron extends AbstractTranscendent {
     HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public Asteron(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
-        System.out.println("PREV MHP IS " + this.getMaxHealth());
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(baseHP * Config.mobHPScale);
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(baseDmg * Config.mobDmgScale);
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseArmor * Config.mobArmorPtScale);
         this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(baseTough * Config.mobArmorToughnessScale);
-        System.out.println("new MHP IS " + this.getMaxHealth());
         //this.setHealth(this.getMaxHealth());
         actionIDToAnimMap.put(0,idleAnimationState);
         actionIDToAnimMap.put(1,readyUpAnimationState);

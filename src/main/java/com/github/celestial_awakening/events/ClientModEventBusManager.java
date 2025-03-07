@@ -16,7 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ClientModEventBusManager {
 
     @SubscribeEvent
-    public static void onClientSetup(FMLCommonSetupEvent event){
+    public static void onCommonSetup(FMLCommonSetupEvent event){
         EntityRenderers.register(EntityInit.ASTERON.get(), TranscendentAsteronRenderer::new);
         EntityRenderers.register(EntityInit.ASTRALITE.get(), TranscendentAstraliteRenderer::new);
         EntityRenderers.register(EntityInit.NEBURE.get(), TranscendentNebureRenderer::new);
@@ -32,7 +32,6 @@ public class ClientModEventBusManager {
 
         CA_ItemProperties.addProperties();
     }
-
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(ModelLayerInit.ASTERON_LAYER, TranscendentAsteronModel::createBodyLayer);

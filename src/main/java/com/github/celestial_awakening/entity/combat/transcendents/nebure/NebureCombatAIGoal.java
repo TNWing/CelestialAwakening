@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
     NebureBasicAttack basicAttack=new NebureBasicAttack(this.mob,30,30,10,0);
     NebureLightEntanglement lightEntanglement=new NebureLightEntanglement(this.mob,25,250,80,0);
-    NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,32,400,30,0);
+    NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,30,400,15,0);
     NebureSolarExpansion solarExpansion=new NebureSolarExpansion(this.mob,40,100,75,30);
     public NebureCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);

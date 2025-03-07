@@ -64,6 +64,7 @@ public class ClientEventsManager {
                             }
                             renderDivinerEye(event.getPoseStack(),level,cap,event);
                         }
+
                     });
 
 
@@ -73,6 +74,9 @@ public class ClientEventsManager {
     }
 //also, whenever a transition to state starts, theres a brief moment of glitched texture
     public void renderDivinerEye(PoseStack poseStack,ClientLevel level, LevelCapability cap,RenderLevelStageEvent event){
+        //System.out.println("rendering on time " + level.getDayTime());
+        Minecraft minecraft = Minecraft.getInstance();
+
         float f12 = 30.0F;
         FogRenderer.levelFogColor();
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
@@ -90,6 +94,7 @@ public class ClientEventsManager {
          */
         int fromState=cap.divinerEyeFromState;
         int toState=cap.divinerEyeToState;
+
         /*
         vertex defines a shape
         uv: maps 2d texture onto model
@@ -129,6 +134,11 @@ public class ClientEventsManager {
                 }
                 ind=eyeLidRender(cap.divinerEyeFrameProgress,false);
             }
+        }
+        if (!minecraft.isPaused() && level.getDayTime()%30==0) { // Check if the game is not paused
+            System.out.println("rendering on time " + level.getDayTime());
+            System.out.println("STATES ARE " + fromState + " TO " + toState);
+            System.out.println("ind is " + ind);
         }
         //System.out.println("IND IS " + ind);
         RenderSystem.setShaderTexture(0, divinerEyeBase.get(ind));

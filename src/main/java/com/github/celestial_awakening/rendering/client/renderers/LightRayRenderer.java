@@ -11,7 +11,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -21,6 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay> {
@@ -45,8 +45,15 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         poseStack.pushPose();
         RenderSystem.disableCull();
         RenderSystem.disableDepthTest();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        float alpha=entity.getOpactiy();
+        //System.out.println("OUR ALPHA IS " + alpha);
         //        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(END_FACE_TEXTURE));
-        VertexConsumer vertexconsumerEnd = bufferSource.getBuffer(RenderType.beaconBeam(END_FACE_TEXTURE,false));
+        //beaconBeam(END_FACE_TEXTURE,false)
+
+        VertexConsumer vertexconsumerEnd = bufferSource.getBuffer(CA_RenderTypes.translucentFullBright(END_FACE_TEXTURE));
         PoseStack.Pose posestack$pose = poseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
@@ -57,50 +64,53 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXPR()));//can probs replace with vang
         //TODO: modify collision detection
         //bottom face
-        drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,0,width);
+        drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,0,width,alpha);
         //top face
-        drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,height,width);
-
-        VertexConsumer vertexconsumerSide = bufferSource.getBuffer(RenderType.beaconBeam(SIDE_FACE_TEXTURE,false));
+        drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,height,width,alpha);
+        VertexConsumer vertexconsumerSide = bufferSource.getBuffer(CA_RenderTypes.translucentFullBright(SIDE_FACE_TEXTURE));
         //front face
-        drawFBFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,width,height,-width);
+        drawFBFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,width,height,-width,alpha);
         //back face
-        drawFBFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,-width,height,width);
+        drawFBFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,-width,height,width,alpha);
         //left face
-        drawLRFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,-width,height,width);
+        drawLRFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,-width,height,width,alpha);
         //right face
-        drawLRFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,width,height,-width);
+        drawLRFace(poseStack,matrix4f,matrix3f,vertexconsumerSide,packedLight,width,height,-width,alpha);
         //RenderSystem.disableCull();
         RenderSystem.enableCull();
         RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+
         poseStack.popPose();
     }
-    public void drawFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, float xOffset,float yOffset,float zOffset){
-        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,-zOffset,0,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,-zOffset,1,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,zOffset,0,1, LightTexture.FULL_BRIGHT);
+    public void drawFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, float xOffset,float yOffset,float zOffset,float alpha){
+        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,-zOffset,0,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,-zOffset,1,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,zOffset,0,1, LightTexture.FULL_BRIGHT,alpha);
     }
 
     //front back
-    public void drawFBFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, int packedLight,float xOffset,float yOffset,float zOffset){
-        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,0,zOffset,0,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,zOffset,1,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,zOffset,0,1, LightTexture.FULL_BRIGHT);
+    public void drawFBFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, int packedLight,float xOffset,float yOffset,float zOffset,float alpha){
+        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,0,zOffset,0,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,zOffset,1,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,-xOffset,yOffset,zOffset,0,1, LightTexture.FULL_BRIGHT,alpha);
     }
 
     //left right
-    public void drawLRFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, int packedLight,float xOffset,float yOffset,float zOffset){
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,-zOffset,0,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,zOffset,1,0, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT);
-        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,-zOffset,0,1, LightTexture.FULL_BRIGHT);
+    public void drawLRFace(PoseStack poseStack,Matrix4f matrix4f,Matrix3f matrix3f,VertexConsumer vertexConsumer, int packedLight,float xOffset,float yOffset,float zOffset,float alpha){
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,-zOffset,0,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,0,zOffset,1,0, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,zOffset,1,1, LightTexture.FULL_BRIGHT,alpha);
+        createVertex(vertexConsumer,matrix4f,matrix3f,xOffset,yOffset,-zOffset,0,1, LightTexture.FULL_BRIGHT,alpha);
     }
-    public void createVertex(VertexConsumer vertexConsumer,Matrix4f m4f, Matrix3f m3f,float x,float y,float z, float ux,float uy, int packedLight){
+    public void createVertex(VertexConsumer vertexConsumer,Matrix4f m4f, Matrix3f m3f,float x,float y,float z, float ux,float uy, int packedLight,float alpha){
+        float ourAlpha=alpha;
+        //System.out.println("Our alpoha " + ourAlpha);
         VertexConsumer v= vertexConsumer.vertex(m4f,x,y,z);
         v
-                .color(255,255,255,255)
+                .color(1f,1f,1f,alpha)
                 .uv(ux,uy)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2( LightTexture.FULL_BRIGHT)

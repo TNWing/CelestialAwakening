@@ -75,7 +75,6 @@ public class LightRay extends CA_Projectile {
     //for some reason, server calls base ray while client calls asteron ray?
     public LightRay(EntityType<LightRay> entityType, Level level) {
         super(entityType,level,20);
-        System.out.println("base ray ON CLIENT? " + this.level().isClientSide);
         this.setDmg(2f);
         this.widthProgress=1f;
         this.heightProgress=1f;
@@ -386,7 +385,7 @@ OG
 
         }
         else {
-            if(this.isAlive()) {
+            if(this.isAlive() && this.hasCollision()) {
                 raycast();
             }
         }

@@ -581,7 +581,7 @@ public class EventManager {
             @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             int time= (int) (level.getDayTime()%24000L);
             capOptional.ifPresent(cap->{
-                if (cap.divinerEyeFromState>-1){
+                if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
                     try {
                         solarEvents.detectPlayers(level,cap);
                     } catch (NoSuchFieldException e) {

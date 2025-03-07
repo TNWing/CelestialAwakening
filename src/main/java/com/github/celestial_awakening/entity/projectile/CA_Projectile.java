@@ -33,6 +33,7 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Float> RENDERER_XSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RENDERER_YSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RENDERER_ZSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> SPD = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
@@ -43,6 +44,7 @@ public class CA_Projectile extends Projectile {
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
 
+    private static final EntityDataAccessor<Boolean> HAS_COLLISION=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DISABLE_SHIELDS=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DISABLE_TICKS = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     DamageSource damagesource;
@@ -83,9 +85,11 @@ public class CA_Projectile extends Projectile {
         this.entityData.define(RENDERER_XSCALING,1f);
         this.entityData.define(RENDERER_YSCALING,1f);
         this.entityData.define(RENDERER_ZSCALING,1f);
+        this.entityData.define(OPACITY,1f);
         this.entityData.define(REAL,true);
         this.entityData.define(DISABLE_SHIELDS,false);
         this.entityData.define(DISABLE_TICKS,0);
+        this.entityData.define(HAS_COLLISION,true);
     }
     protected void setRScales(float r){
         this.entityData.set(RENDERER_XSCALING,r);
@@ -214,6 +218,24 @@ public class CA_Projectile extends Projectile {
 
     }
 
+    public boolean hasCollision(){
+        return this.entityData.get(HAS_COLLISION);
+
+    }
+    public void setCollision(boolean b){
+        this.entityData.set(HAS_COLLISION,b);
+
+    }
+
+
+    public float getOpactiy(){
+        return this.entityData.get(OPACITY);
+
+    }
+    public void setOpacity(float f){
+        this.entityData.set(OPACITY,f);
+
+    }
     public MovementModifier getCurrentMovementModifier(){
         return this.currentMovementModifier;
     }

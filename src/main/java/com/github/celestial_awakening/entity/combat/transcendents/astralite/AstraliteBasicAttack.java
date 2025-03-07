@@ -4,11 +4,15 @@ import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import com.github.celestial_awakening.entity.projectile.ShiningOrb;
 import com.github.celestial_awakening.util.MathFuncs;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class AstraliteBasicAttack extends GenericAbility {
+    ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK;
     public AstraliteBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
 
@@ -28,6 +32,11 @@ public class AstraliteBasicAttack extends GenericAbility {
 
     @Override
     public void executeAbility(LivingEntity target) {
+        if (state==0 && currentStateTimer%5==0){
+            ServerLevel serverLevel= (ServerLevel) target.level();
+            Vec3 particlePos=this.mob.position().add(this.mob.getLookAngle());//will probs need to use yrot instead
+            serverLevel.sendParticles(particleType, particlePos.x, particlePos.y, particlePos.z, 3, 0, 0, 0, 0);
+        }
         this.currentStateTimer--;
         if (currentStateTimer<=0){
             switch (state){

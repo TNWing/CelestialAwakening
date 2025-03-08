@@ -27,15 +27,15 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.MOONSTONE, ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final RegistryObject<Item> LUNAR_DIAL = ITEMS.register("lunar_dial", ()->new LunarDial(new Item.Properties().defaultDurability(1000)));
 
-    public static final RegistryObject<Item> EBONY_FUR = ITEMS.register("ebony_fur", () ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ONYX_FUR = ITEMS.register("onyx_fur", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> UMBRA_HELMET = ITEMS.register("umbra_helmet",
-            () -> new CustomArmorItem(CustomArmorMaterial.EBONY_FUR, ArmorItem.Type.HELMET, new Item.Properties()));
+            () -> new CustomArmorItem(CustomArmorMaterial.ONYX_FUR, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> UMBRA_CHESTPLATE = ITEMS.register("umbra_chestplate",
-            () -> new CustomArmorItem(CustomArmorMaterial.EBONY_FUR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+            () -> new CustomArmorItem(CustomArmorMaterial.ONYX_FUR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> UMBRA_LEGGINGS = ITEMS.register("umbra_leggings",
-            () -> new CustomArmorItem(CustomArmorMaterial.EBONY_FUR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+            () -> new CustomArmorItem(CustomArmorMaterial.ONYX_FUR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> UMBRA_BOOTS = ITEMS.register("umbra_boots",
-            () -> new CustomArmorItem(CustomArmorMaterial.EBONY_FUR, ArmorItem.Type.BOOTS, new Item.Properties()));
+            () -> new CustomArmorItem(CustomArmorMaterial.ONYX_FUR, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
     public static final RegistryObject<Item> SUNSTONE = ITEMS.register("sunstone", () ->new Item(new Item.Properties()));

@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.living.phantom_knights;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -98,7 +99,7 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
             amt*=0.05f;
         }
         if (source.getEntity()!=null){
-            if (this.distanceToSqr(source.getEntity())>15*15){
+            if (this.distanceTo(source.getEntity())> Config.pkDmgResDist){
                 amt*=0.2f;
             }
         }

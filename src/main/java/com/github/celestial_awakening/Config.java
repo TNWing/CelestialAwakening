@@ -65,7 +65,7 @@ public class Config
 
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP=BUILDER.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,Integer.MAX_VALUE);
 
-
+    private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST=BUILDER.comment("The max distance between a phantom knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",1,1,Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST=BUILDER.comment("\n\nArmor Config\n\n").comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,(int)Integer.MAX_VALUE);
 
@@ -93,6 +93,7 @@ public class Config
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
+    public static int pkDmgResDist;
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
@@ -140,8 +141,11 @@ public class Config
 
         pkSpawnCap=PK_SPAWN_CAP.get();
 
+        pkDmgResDist=PK_RMG_RES_DIST.get();
 
         honorDuelDist= HONOR_DUEL_DIST.get();
+
+
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();

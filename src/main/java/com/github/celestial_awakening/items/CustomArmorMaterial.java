@@ -18,8 +18,8 @@ public enum CustomArmorMaterial implements ArmorMaterial {
             SoundEvents.ARMOR_EQUIP_LEATHER, 1, 0f, () -> Ingredient.of(ItemInit.SUNSTONE.get())),
 
 
-    EBONY_FUR("umbra",18,new int[]{2,5,4,1},15,SoundEvents.ARMOR_EQUIP_LEATHER,
-            0,0f,()->Ingredient.of(ItemInit.EBONY_FUR.get())),
+    ONYX_FUR("umbra",18,new int[]{2,5,4,1},15,SoundEvents.ARMOR_EQUIP_LEATHER,
+            0,0f,()->Ingredient.of(ItemInit.ONYX_FUR.get())),
 
     DYING_LIGHT_ESSENCE("remnant",18,new int[]{2,5,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),

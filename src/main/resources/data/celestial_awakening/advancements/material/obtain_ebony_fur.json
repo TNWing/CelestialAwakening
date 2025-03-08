@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "celestial_awakening:ebony_fur"
+              "celestial_awakening:onyx_fur"
             ]
           }
         ]
@@ -16,13 +16,13 @@
   },
   "display": {
     "description": {
-      "translate": "advancement.celestial_awakening.obtain_ebony_fur.description"
+      "translate": "advancement.celestial_awakening.obtain_onyx_fur.description"
     },
     "icon": {
-      "item": "celestial_awakening:ebony_fur"
+      "item": "celestial_awakening:onyx_fur"
     },
     "title": {
-      "translate": "advancement.celestial_awakening.obtain_ebony_fur.title"
+      "translate": "advancement.celestial_awakening.obtain_onyx_fur.title"
     }
   },
   "requirements": [

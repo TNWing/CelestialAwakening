@@ -53,6 +53,11 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_MAX_CD =BUILDER.comment("Largest amount of time it takes for the Transcendents's diviner to perform another scrying. Does not restrict other factors from impeding the next scry.\nDefault 72000 ticks (3 in game days)").defineInRange("transcendents_div_max_cd",72000,0,Integer.MAX_VALUE);
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_ENEMIES =BUILDER.comment("(CURRENTLY NOT FUNCTIONAL)\nNon-player living entities that the transcendents will intentionally target.\nDefault: None.\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(), obj->obj instanceof String);
 
+    private static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =BUILDER.comment("Determines whether or not the diviner's heatwave can modify the terrain.\nDefault true").define("transcendents_diviner_heatwave",true);
+
+
+
+
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS=BUILDER.comment("\n\nLunar Config\n\nDimensions that moonstones can spawn in.\nDefault minecraft:overworld").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
 
     //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS=BUILDER.comment("Dimensions that Phantom Knights are allowed to spawn in. Default minecraft:overworld").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
@@ -79,6 +84,7 @@ public class Config
     public static double armorToughnessScale=1;
 
     public static boolean divinerShared;
+    public static boolean divinerHeatWaveBlockMod;
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
     public static int transcendentsInitDelay;
     public static int transcendentsDivMinCD;
@@ -124,6 +130,9 @@ public class Config
         transcendentsDivMaxCD = TRANSCENDENTS_MAX_CD.get();
 
         transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
+
+        divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
+
 
         //pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
 

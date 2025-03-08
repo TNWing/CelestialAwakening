@@ -150,7 +150,7 @@ public class SolarEvents {
                     CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,0,1);
                     entity.addEffect(mobEffectInstance);
                     cap.divinerEyePower+=1;
-                    if (startingDivPower>10){//perform heatwave
+                    if (Config.divinerHeatWaveBlockMod && startingDivPower>10){//perform heatwave
                         BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
                         BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
                         BlockState dirtState= Blocks.DIRT.defaultBlockState();

@@ -47,13 +47,12 @@ public class NebureScorchingRays extends GenericAbility {
                 double ang=Math.toRadians(angStartOffset+angDiff*i);
                 rays[i]=LightRay.create(this.mob.level(),90, (float) (this.mob.getAttribute(Attributes.ATTACK_DAMAGE).getValue()*1.75f));
                 rays[i].setOwner(this.mob);
-                rays[i].setOwner(this.mob);
                 rays[i].setCollision(false);
                 rays[i].setOpacity(0.25f);
                 rays[i].initDims(0.25f,0,0.25f,0,0.4f,8f,0,2f);
                 rays[i].setHAng(-(float) Math.toDegrees(ang)+90);
-                rays[i].setXPR(90);
-                rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.25f,0));
+                rays[i].setVAng(90);
+                rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.85f,0));
                 this.mob.level().addFreshEntity(rays[i]);
             }
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
@@ -63,13 +62,14 @@ public class NebureScorchingRays extends GenericAbility {
     public void executeAbility(LivingEntity target) {
         if (state==0){
             if (this.currentStateTimer%1==0){
+                float yOffset=currentStateTimer*0.02f;
                 for (int i=0;i<rays.length;i++){
                     double ang= Math.toRadians(i*angDiff+dir*angStartOffset);
                     rays[i].setHAng(-(float) Math.toDegrees(ang)+90);
-                    rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.25f,0));
+                    rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.25f+yOffset,0));
                 }
                 aChange+=3;
-                angStartOffset+=Math.cos(Math.toRadians(aChange))*14;
+                angStartOffset+=Math.cos(Math.toRadians(aChange))*15;
             }
         }
         else if (state==1){

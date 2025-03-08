@@ -1,4 +1,5 @@
 package com.github.celestial_awakening.capabilities;
+
 import com.github.celestial_awakening.events.CommandMapValue;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
 import com.github.celestial_awakening.events.GenericCommandPattern;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LevelCapability{
@@ -41,8 +41,15 @@ public class LevelCapability{
     public int divinerEyeToState;
     public int divinerEyeCurrentChangeDelay;
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
+    public int divinerEyePower;//0-100, determines what abilities can be used
+/*
+power is increased via
+    -applying celestial beacon to an entity without the effect
+    -when an anchor is made
+ */
     public int pkRemainingSpawnAttempts;
     public int prowlerSpawnCD;
+    public float temperature;
     /*
     -2: not active
     -1: eye closed
@@ -51,7 +58,7 @@ public class LevelCapability{
     wondering if i can do an overlay style
     instead of a separate file for each unique frame, i instead have a few image files for each general state (closed, half open, open.
     Then, i have a separate img file overlayed on it for the open states, which results in less img files.
-    furthermore, this overlayed file doesnt need to be anything special. it can be a really tiny ass img whose position is shifted.
+    furthermore, this overlayed file doesnt need to be anything special. it can be a really tiny img whose position is shifted.
      */
 
 
@@ -66,6 +73,8 @@ public class LevelCapability{
         this.currentMoonstonePos=data.currentMoonstonePos;
         this.levelResourceKey=data.levelResourceKey;
         this.prowlerSpawnCD=data.prowlerSpawnCD;
+        this.temperature=data.temperature;
+        this.divinerEyePower=data.divinerEyePower;
     }
 
     void saveNBTData(CompoundTag nbt){
@@ -90,6 +99,7 @@ public class LevelCapability{
         divEyeTag.putFloat("chance",this.divinerEyeChance);
 
         divEyeTag.putInt("timer",this.divinerEyeTimer);
+        divEyeTag.putInt("power",this.divinerEyePower);
         DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
         result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put("levelRK",encodedObj));//not savingg?
 
@@ -115,6 +125,8 @@ public class LevelCapability{
         divEyeTag.putInt("timer",this.divinerEyeTimer);
 
         nbt.put("divEye",divEyeTag);
+
+        nbt.putFloat("Temperature",temperature);
     }
 
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -139,6 +151,7 @@ public class LevelCapability{
             this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
             this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
             this.divinerEyeChance=divEye.getFloat("chance");
+            this.divinerEyePower=divEye.getInt("power");
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
             System.out.println("LOADING DIV Data");
             System.out.println("TIMER is " +divinerEyeTimer+ " WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);

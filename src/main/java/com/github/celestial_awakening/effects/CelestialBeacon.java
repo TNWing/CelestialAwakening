@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.effects;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
@@ -61,60 +62,63 @@ public class CelestialBeacon extends MobEffect {
         Random rand = new Random();
         //find valid spawn points
         Level level=target.level();
-        BlockPos targetCenter=target.blockPosition();
-        ChunkAccess chunkAccess=level.getChunk(targetCenter);
-        ChunkPos chunkPos=chunkAccess.getPos();
-        ArrayList<BlockPos> applicableBlocks=new ArrayList<>();
-        for (int cx=-1;cx<=1;cx++){
-            for (int cz=-1;cz<=1;cz++){
-                LevelChunk chunk=level.getChunk(chunkPos.x+cx,chunkPos.z+cz);
-                for (int x=0;x<16;x++){
-                    for (int z=0;z<16;z++){
-                        //for future changes
-                        //instead of the 16 by 16
-                        //check each 4 by 4 square in a chunk
-                        int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getPos().x*16+x, chunk.getPos().z*16+z);//highest block
-                        if (Math.abs(y-targetCenter.getY())<=15){
-                            BlockPos blockPos=new BlockPos(chunk.getPos().x*16+x,y,chunk.getPos().z*16+z);
-                            applicableBlocks.add(blockPos);
+        if (Config.transcendentsDimensionTypes.contains(level.dimensionTypeId())){
+            BlockPos targetCenter=target.blockPosition();
+            ChunkAccess chunkAccess=level.getChunk(targetCenter);
+            ChunkPos chunkPos=chunkAccess.getPos();
+            ArrayList<BlockPos> applicableBlocks=new ArrayList<>();
+            for (int cx=-1;cx<=1;cx++){
+                for (int cz=-1;cz<=1;cz++){
+                    LevelChunk chunk=level.getChunk(chunkPos.x+cx,chunkPos.z+cz);
+                    for (int x=0;x<16;x++){
+                        for (int z=0;z<16;z++){
+                            //for future changes
+                            //instead of the 16 by 16
+                            //check each 4 by 4 square in a chunk
+                            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getPos().x*16+x, chunk.getPos().z*16+z);//highest block
+                            if (Math.abs(y-targetCenter.getY())<=15){
+                                BlockPos blockPos=new BlockPos(chunk.getPos().x*16+x,y,chunk.getPos().z*16+z);
+                                applicableBlocks.add(blockPos);
+                            }
                         }
                     }
                 }
             }
-        }
-        if (applicableBlocks.size()>0){
-            ArrayList<AbstractTranscendent[]> groups = new ArrayList<>();
-            switch (stage){
-                case 1:{
-                    AbstractTranscendent[] group=new AbstractTranscendent[5];
+            if (applicableBlocks.size()>0){
+                ArrayList<AbstractTranscendent[]> groups = new ArrayList<>();
+                switch (stage){
+                    case 1:{
+                        AbstractTranscendent[] group=new AbstractTranscendent[5];
 
-                    group[0]=new Asteron(EntityInit.ASTERON.get(), level);
-                    group[1]=new Astralite(EntityInit.ASTRALITE.get(),level);
-                    group[2]=new Astralite(EntityInit.ASTRALITE.get(),level);
-                    group[3]=new Asteron(EntityInit.ASTERON.get(),level);
-                    group[4]=new Astralite(EntityInit.ASTRALITE.get(),level);
-                    groups.add(group);
-                    break;
+                        group[0]=new Asteron(EntityInit.ASTERON.get(), level);
+                        group[1]=new Astralite(EntityInit.ASTRALITE.get(),level);
+                        group[2]=new Astralite(EntityInit.ASTRALITE.get(),level);
+                        group[3]=new Asteron(EntityInit.ASTERON.get(),level);
+                        group[4]=new Astralite(EntityInit.ASTRALITE.get(),level);
+                        groups.add(group);
+                        break;
+                    }
+                    case 2:{
+                        break;
+                    }
+                    case 3:{
+                        break;
+                    }
+                    case 4:{
+                        break;
+                    }
                 }
-                case 2:{
-                    break;
-                }
-                case 3:{
-                    break;
-                }
-                case 4:{
-                    break;
-                }
-            }
-            for (AbstractTranscendent[] mobGroup:groups) {
-                BlockPos chosenPos=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));
-                Vec3 spt=Vec3.atLowerCornerOf(chosenPos);
-                for (int i=0;i< mobGroup.length;i++){
-                    mobGroup[i].setPos(spt);
-                    level.addFreshEntity(mobGroup[i]);
+                for (AbstractTranscendent[] mobGroup:groups) {
+                    BlockPos chosenPos=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));
+                    Vec3 spt=Vec3.atLowerCornerOf(chosenPos);
+                    for (int i=0;i< mobGroup.length;i++){
+                        mobGroup[i].setPos(spt);
+                        level.addFreshEntity(mobGroup[i]);
+                    }
                 }
             }
         }
+
     }
 
 

@@ -63,6 +63,10 @@ public class DivinerDataCommand{
                                         .then(Commands.argument("chance", FloatArgumentType.floatArg(0f,100f))
                                             .executes(context -> setDivChance(context.getSource(),FloatArgumentType.getFloat(context, "chance")) ))
                                 )
+                                .then(Commands.literal("setPower")
+                                        .then(Commands.argument("power", IntegerArgumentType.integer(0,100))
+                                                .executes(context -> setPower(context.getSource(),IntegerArgumentType.getInteger(context, "power")) ))
+                                )
                         )
                 )
         );
@@ -81,6 +85,7 @@ public class DivinerDataCommand{
             msg+="Diviner Eye Information\n";
             msg+="Current Chance:" + cap.divinerEyeChance + "%\n";
             msg+="Cooldown:" + (cap.divinerEyeCD/24000f) + " days\n";
+            msg+="Power:" + cap.divinerEyePower;
             stack.sendSystemMessage(Component.literal(msg));
 
         });
@@ -132,6 +137,27 @@ public class DivinerDataCommand{
             return 1;
         }
         stack.sendSystemMessage(Component.literal("Failed to update diviner eye chance!"));
+        return -1;
+    }
+
+    private int setPower(CommandSourceStack stack, int power) throws CommandSyntaxException {
+        ServerPlayer p=stack.getPlayerOrException();
+        @NotNull LazyOptional<LevelCapability> capOptional;
+        if (Config.divinerShared){
+            capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
+        }
+        else{
+            capOptional=p.serverLevel().getCapability(LevelCapabilityProvider.LevelCap);
+        }
+        capOptional.ifPresent(cap->{
+            cap.divinerEyePower=power;
+            stack.sendSystemMessage(Component.literal("Set diviner power to " + power));
+
+        });
+        if (capOptional.isPresent()){
+            return 1;
+        }
+        stack.sendSystemMessage(Component.literal("Failed to update diviner eye power!"));
         return -1;
     }
 

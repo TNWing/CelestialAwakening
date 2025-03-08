@@ -148,7 +148,7 @@
   "tooltip.celestial_awakening.remnant_armor.dl_name": "Devouring Light",
   "tooltip.celestial_awakening.remnant_armor.dl_desc": "Kills restore %s hunger and %s saturation",
   "tooltip.celestial_awakening.remnant_armor.fl_name": "Final Light",
-  "tooltip.celestial_awakening.remnant_armor.fl_desc":"Upon falling below 20% of your max HP, gain increased attack damage, attack speed, and damage reduction for 5 seconds.\nCooldown of 2 minutes.",
+  "tooltip.celestial_awakening.remnant_armor.fl_desc":"Upon falling below 20% of your max HP due to an attack, gain increased attack damage, attack speed, and damage reduction for 5 seconds.\nCooldown of 2 minutes.",
   "tooltip.celestial_awakening.remnant_armor.collapse_name": "Collapse",
   "tooltip.celestial_awakening.remnant_armor.collapse_desc":"Landing a critical hit will pull in nearby enemies and deal 40% of the hit's damage to them.\nCooldown of 7 seconds",
 

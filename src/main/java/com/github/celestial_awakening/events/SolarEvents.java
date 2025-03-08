@@ -1,4 +1,5 @@
 package com.github.celestial_awakening.events;
+
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
@@ -9,17 +10,22 @@ import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.*;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -118,6 +124,7 @@ public class SolarEvents {
         Field visibleChunkMapField = ChunkMap.class.getDeclaredField("visibleChunkMap");
         visibleChunkMapField.setAccessible(true);
         Map<Long, ChunkHolder> visibleChunkMap = (Map<Long, ChunkHolder>) visibleChunkMapField.get(chunkCache.chunkMap);
+        float startingDivPower=cap.divinerEyePower;
         for (ChunkHolder chunkHolder : visibleChunkMap.values()) {
             LevelChunk chunk = chunkHolder.getFullChunk();
             if (chunk==null){
@@ -128,20 +135,51 @@ public class SolarEvents {
             //int chunkSize = 16;
             AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
             List<Player> entities = level.getEntitiesOfClass(Player.class, chunkBoundingBox);
-            for (Player player:entities){
-                if (player.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
+            for (Player entity:entities){
+                if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }
-                BlockPos playerBlockPos=player.blockPosition();
-                if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
 
+                BlockPos playerBlockPos=entity.blockPosition();
+                if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
                     /*
                     TODO: IDEA
                     amplifier is determined by how long the player has stood in the open consecutively?
                    i can do that later
                      */
                     CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,0,1);
-                    player.addEffect(mobEffectInstance);
+                    entity.addEffect(mobEffectInstance);
+                    cap.divinerEyePower+=1;
+                    if (startingDivPower>10){//perform heatwave
+                        BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
+                        BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
+                        BlockState dirtState= Blocks.DIRT.defaultBlockState();
+                        entity.setSecondsOnFire(4);
+                        BlockPos centerBlockPos=entity.blockPosition();
+                        int vOffset=9;
+                        int hOffset=6;
+                        for (int y=centerBlockPos.getY()-vOffset;y<centerBlockPos.getY()+vOffset;y++){
+                            for (int x=centerBlockPos.getX()-hOffset;x<centerBlockPos.getX()+hOffset;x++){
+                                for (int z=centerBlockPos.getZ()-hOffset;z<centerBlockPos.getZ()+hOffset;z++){
+                                    BlockPos blockPos=new BlockPos(x,y,z);
+                                    BlockState blockState=level.getBlockState(blockPos);
+                                    List<TagKey<Block>> tags=blockState.getTags().toList();
+                                    if (tags.contains(BlockTags.LEAVES)){
+                                        level.destroyBlock(blockPos,true);
+                                    }
+                                    else if (tags.contains(BlockTags.CROPS)){
+                                        level.setBlockAndUpdate(blockPos,bushState);
+                                    }
+                                    else if (blockState.getBlock() instanceof FarmBlock || tags.contains(BlockTags.DIRT)){
+                                        level.setBlockAndUpdate(blockPos,dirtState);
+                                    }
+                                    else if (tags.contains(Tags.Blocks.COBBLESTONE) || tags.contains(Tags.Blocks.STONE)){
+                                        level.setBlockAndUpdate(blockPos,magmaState);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

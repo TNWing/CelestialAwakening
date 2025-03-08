@@ -55,6 +55,7 @@ public class RemnantArmor extends ArmorEffect {
     @Override
     public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         if (cnt==4){
+            System.out.println("DAMAGE SELF REM");
             finalLight(player,event.getAmount());
         }
     }
@@ -87,6 +88,7 @@ public class RemnantArmor extends ArmorEffect {
         @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
         capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
+                System.out.println("OFF CD AND ENOUGH DMG");
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,5,1));
                 player.addEffect(new MobEffectInstance(MobEffectInit.REMNANT_FL.get(),5,0,false,false,false));
                 cap.insertIntoAbilityMap(abilityFLCD,20*120);

@@ -74,8 +74,13 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     if (this.mob.distanceToSqr(target)<1.1f){
                         vAng=0;
                     }
-                    for (int i=-4;i<=4;i++){
-                        float ang=baseAng+i*20f;
+                    int diff=target.level().getDifficulty().getId();
+                    int bound=3;
+                    if (diff>=2){
+                        bound=4;
+                    }
+                    for (int i=-bound;i<=bound;i++){
+                        float ang=baseAng+i*(24f-1.5f*i);
                         summonCrescent(serverLevel,ang,vAng,dmg,startPos);
                     }
                     break;

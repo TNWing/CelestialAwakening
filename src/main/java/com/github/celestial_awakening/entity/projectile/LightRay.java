@@ -7,9 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -69,8 +66,6 @@ public class LightRay extends CA_Projectile {
     Utilize currentlife instead of ticklivetime
     FOR ALL ENTITIES, REMOVE ALL CONSTRUCTORS AND REPLACE WITH A STATIC CREATE METHOD
      */
-    private static final EntityDataAccessor<Float> XPR= SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.FLOAT);
-
 
     //for some reason, server calls base ray while client calls asteron ray?
     public LightRay(EntityType<LightRay> entityType, Level level) {
@@ -95,7 +90,6 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(XPR,0f);
     }
 
     @Override
@@ -120,14 +114,11 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.entityData.set(XPR,tag.getFloat("XPR"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putFloat("XPR",this.entityData.get(XPR));
-
     }
 
     public void setSize(float w,float h){
@@ -135,13 +126,6 @@ public class LightRay extends CA_Projectile {
         this.setHeight(h);
 
     }
-    public float getXPR(){
-        return this.entityData.get(XPR);
-    }
-    public void setXPR(float r){
-        this.entityData.set(XPR,r);
-    }
-
 
     public AABB updateAABB(Vec3 p_20394_) {
         return this.updateAABB(p_20394_.x, p_20394_.y, p_20394_.z);
@@ -281,8 +265,8 @@ public class LightRay extends CA_Projectile {
 
         //current xz:Math.toRadians((-1*this.getYRot())-90)
         double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
-        double y=Math.toRadians(this.getXPR());
-        if (this.getXPR()>=180){
+        double y=Math.toRadians(this.getVAng());
+        if (this.getVAng()>=180){
         }
 
         Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
@@ -318,7 +302,7 @@ public class LightRay extends CA_Projectile {
             else if(entity instanceof AbstractTranscendent){//ally
 
             }
-            else{//
+            else{//TODO: modify the offsets to have more accurate collision checking
                 AABB aabb=entity.getBoundingBox();
                 Vec3[] rayOffsets = new Vec3[] {
                         new Vec3(-0 / 2, 0, 0),
@@ -352,7 +336,7 @@ public class LightRay extends CA_Projectile {
 
 
     public void tick() {
-        //super.tick();
+        //super.tick();//todo (MAYBE): reenable in future and make sure it doesnt screw up things
         if (!this.level().isClientSide) {
             float tW=this.getWidth();
             float tH=this.getHeight();
@@ -362,22 +346,8 @@ public class LightRay extends CA_Projectile {
 
 
         this.setSize(this.getWidth(),this.getHeight());
-/*
-OG
-        if (this.tickLiveTime>=0){
-            this.tickLiveTime--;
-            if (tickLiveTime<=0){
-                System.out.println("DISCARD TIME");
-                System.out.println("ON SIDE " + this.level().isClientSide);
-                this.discard();
-            }
-        }
- */
-        System.out.println("TICKLIVETIME ON SIDE CLIENT? " + this.level().isClientSide + " IS " + this.tickLiveTime + "  AND LTIME IS  "  + this.getLifeTime());
         this.tickLiveTime++;
         if (tickLiveTime>=this.getLifeTime()){
-            System.out.println("DISCARD TIME");
-            System.out.println("ON SIDE " + this.level().isClientSide);
             this.discard();
         }
 
@@ -391,42 +361,4 @@ OG
         }
 
     }
-//the code below breaks the placement of the thing
-        /*
-    planned tick
-        public void tick() {
-        //super.tick();
-        if (!this.level().isClientSide) {
-            float tW=this.getWidth();
-            float tH=this.getHeight();
-            this.setWidth(MathFuncs.clamp(tW+widthRateOfChange,minWidth,maxWidth));
-            this.setHeight(MathFuncs.clamp(tH+heightRateOfChange,minHeight,maxHeight));
-        }
-
-
-        this.setSize(this.getWidth(),this.getHeight());
-
-        if (this.tickLiveTime<=this.getLifeTime()){
-            this.tickLiveTime++;
-            System.out.println("OU+R LIFE IS " + this.tickLiveTime);
-            System.out.println("OUR POS IS " + this.position());
-        }
-        else{
-            System.out.println("DISCARD TIME");
-            System.out.println("ON SIDE " + this.level().isClientSide);
-            System.out.println("OUR CURRENT LIFE IS " + this.tickLiveTime);
-            this.discard();
-        }
-
-        if (this.inGround) {
-
-        }
-        else {
-            if(this.isAlive()) {
-                raycast();
-            }
-        }
-
-    }
-     */
 }

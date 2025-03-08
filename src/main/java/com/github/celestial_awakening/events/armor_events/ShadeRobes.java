@@ -58,7 +58,7 @@ public class ShadeRobes extends ArmorEffect {
     void longDesc(ItemTooltipEvent event, int cnt) {
 
     }
-    class FadeMitigationCommandPattern extends GenericCommandPattern {
+    class FadeMitigationCommandPattern extends GenericCommandPattern {//might replace this and just put it into abilityMap
         public FadeMitigationCommandPattern(Object[] params) {
             super(params);
         }

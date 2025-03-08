@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
@@ -570,6 +571,18 @@ public class EventManager {
                 cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
             }
         });
+    }
+
+    public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){
+        BlockPos blockPos=event.getPos();
+        LevelAccessor levelAccessor=event.getLevel();
+        BlockState blockState=event.getLevel().getBlockState(blockPos);
+        if (levelAccessor instanceof Level level){
+            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+            capOptional.ifPresent(cap->{
+
+            });
+        }
     }
 
     @SubscribeEvent

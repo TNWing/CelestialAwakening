@@ -5,9 +5,9 @@ import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
-    NebureBasicAttack basicAttack=new NebureBasicAttack(this.mob,30,30,10,0);
+    NebureBasicAttack basicAttack=new NebureBasicAttack(this.mob,20,40,0,15);
     NebureLightEntanglement lightEntanglement=new NebureLightEntanglement(this.mob,25,250,80,0);
-    NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,30,400,15,0);
+    NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,30,200,15,0);
     NebureSolarExpansion solarExpansion=new NebureSolarExpansion(this.mob,40,100,75,30);
     public NebureCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);
@@ -23,11 +23,11 @@ public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
             currentAbility.executeAbility(this.mob.getTarget());
         }
         else{
-            //currentAbility=basicAttack;
+            currentAbility=basicAttack;
             if (solarExpansion.getCurrentCD()==0){
-                //currentAbility= solarExpansion;
+                currentAbility= solarExpansion;
             }
-            if (scorchingRays.getCurrentCD()==0){
+            else if (scorchingRays.getCurrentCD()==0){
                 currentAbility= scorchingRays;
             }
             double d0 = this.mob.distanceToSqr(target);

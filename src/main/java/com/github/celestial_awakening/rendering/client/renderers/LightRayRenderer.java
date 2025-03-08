@@ -61,7 +61,7 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         float height=entity.getHeight();
         poseStack.mulPose(Axis.YP.rotationDegrees(entity.getHAng()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
-        poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXPR()));//can probs replace with vang
+        poseStack.mulPose(Axis.XP.rotationDegrees(entity.getVAng()));//can probs replace with vang
         //TODO: modify collision detection
         //bottom face
         drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,0,width,alpha);

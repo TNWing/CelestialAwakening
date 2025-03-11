@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.celestial_awakening.capabilities.MovementModifierNBTNames.*;
+import static com.github.celestial_awakening.nbt_strings.MovementModifierNBTNames.*;
 
 
 public class ProjCapability {

@@ -19,7 +19,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-
+import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
 public class LevelCapability{
     public LevelCapability(Level level){
         initVals(level);
@@ -41,7 +41,9 @@ public class LevelCapability{
     public int divinerEyeToState;
     public int divinerEyeCurrentChangeDelay;
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
-    public int divinerEyePower;//0-100, determines what abilities can be used
+    public int divinerEyePower;//0-100, determines what abilities can be used, maybe make new cap in the thousands or 1 mil?
+    public int divinerSunControlVal;//-10 to 10, default 0. neg means dark age, pos means heatstroke
+    public int divinerSunControlTimer;
 /*
 power is increased via
     -applying celestial beacon to an entity without the effect
@@ -49,7 +51,6 @@ power is increased via
  */
     public int pkRemainingSpawnAttempts;
     public int prowlerSpawnCD;
-    public float temperature;
     /*
     -2: not active
     -1: eye closed
@@ -63,6 +64,7 @@ power is increased via
 
 
     public void updateData(LevelCapability data){
+        System.out.println("UPDATING lcap");
         this.divinerEyeToState=data.divinerEyeToState;
         this.divinerEyeFromState=data.divinerEyeFromState;
         this.divinerEyeCurrentChangeDelay =data.divinerEyeCurrentChangeDelay;
@@ -70,10 +72,11 @@ power is increased via
         this.divinerEyeTimer=data.divinerEyeTimer;
         this.divinerEyeChance=data.divinerEyeChance;
         this.divinerEyeCD=data.divinerEyeCD;
+        this.divinerSunControlVal =data.divinerSunControlVal;
+        this.divinerSunControlTimer =data.divinerSunControlTimer;
         this.currentMoonstonePos=data.currentMoonstonePos;
         this.levelResourceKey=data.levelResourceKey;
         this.prowlerSpawnCD=data.prowlerSpawnCD;
-        this.temperature=data.temperature;
         this.divinerEyePower=data.divinerEyePower;
     }
 
@@ -100,6 +103,8 @@ power is increased via
 
         divEyeTag.putInt("timer",this.divinerEyeTimer);
         divEyeTag.putInt("power",this.divinerEyePower);
+        divEyeTag.putInt(nbtName_DivSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
         DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
         result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put("levelRK",encodedObj));//not savingg?
 
@@ -125,8 +130,6 @@ power is increased via
         divEyeTag.putInt("timer",this.divinerEyeTimer);
 
         nbt.put("divEye",divEyeTag);
-
-        nbt.putFloat("Temperature",temperature);
     }
 
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -141,7 +144,6 @@ power is increased via
             }
 
         }
-
         CompoundTag divEye= nbt.getCompound("divEye");
         if (divEye!=null){
             this.divinerEyeTimer=divEye.getInt("timer");
@@ -152,8 +154,9 @@ power is increased via
             this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
             this.divinerEyeChance=divEye.getFloat("chance");
             this.divinerEyePower=divEye.getInt("power");
+            this.divinerSunControlVal =divEye.getInt(nbtName_DivSunControlVal);
+            this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
-            System.out.println("LOADING DIV Data");
             System.out.println("TIMER is " +divinerEyeTimer+ " WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (insert && this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
@@ -175,7 +178,6 @@ power is increased via
                 BlockPos blockPos=new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z"));
                 currentMoonstonePos.put(blockPos,compoundtag.getInt("timer"));
             }
-
             CompoundTag divEye= (CompoundTag) storedNBT.get("divEye");
             this.divinerEyeTimer=divEye.getInt("timer");
             this.divinerEyeCD=divEye.getInt("cd");
@@ -184,8 +186,11 @@ power is increased via
             this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
             this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
             this.divinerEyeChance=divEye.getFloat("chance");
+            this.divinerEyePower=divEye.getInt("power");
+            this.divinerSunControlVal =divEye.getInt(nbtName_DivSunControlVal);
+            this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
-            System.out.println("LOADING DIV Data AFTER Lvl load");
+            System.out.println("LOADING DIV Data AFTER Lvl load on levelkey " + this.levelResourceKey);
             System.out.println("TIMER is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
@@ -218,6 +223,9 @@ power is increased via
         divEyeTag.putFloat("frameProgress",this.divinerEyeFrameProgress);
         divEyeTag.putFloat("chance",this.divinerEyeChance);
         divEyeTag.putInt("timer",this.divinerEyeTimer);
+        divEyeTag.putInt("power",this.divinerEyePower);
+        divEyeTag.putInt(nbtName_DivSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
         nbt.put("divEye",divEyeTag);
         return nbt;
     }
@@ -232,8 +240,24 @@ power is increased via
         this.divinerEyeCurrentChangeDelay =0;
         this.divinerEyeFrameProgress=0;
         this.divinerEyeChance=0;
+        this.divinerSunControlVal =0;
+        this.divinerEyePower=0;
         if (level!=null){
             this.levelResourceKey=level.dimension();
         }
+    }
+
+    public void changeDivPower(int i){
+        this.divinerEyePower=Math.max(Math.min(this.divinerEyePower+i,100),0);
+    }
+
+
+    public boolean decrementSunControlTimer(){
+        this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer--);
+        if (this.divinerSunControlTimer ==0){
+            this.divinerEyePower=0;
+            return true;
+        }
+        return false;
     }
 }

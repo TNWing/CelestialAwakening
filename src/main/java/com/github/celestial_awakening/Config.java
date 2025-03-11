@@ -55,6 +55,8 @@ public class Config
 
     private static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =BUILDER.comment("Determines whether or not the diviner's heatwave can modify the terrain.\nDefault true").define("transcendents_diviner_heatwave",true);
 
+    private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =BUILDER.comment("The amount of power the diviner gets for each entity scanned.\nDefault 10").defineInRange("transcendents_div_scan_power",10,0,100);
+
 
 
 
@@ -85,11 +87,13 @@ public class Config
 
     public static boolean divinerShared;
     public static boolean divinerHeatWaveBlockMod;
+    public static int divinerScanPower;
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
     public static int transcendentsInitDelay;
     public static int transcendentsDivMinCD;
     public static int transcendentsDivMaxCD;
     public static Set<ResourceKey<EntityType<?>>> transcendentsTargets;
+
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;

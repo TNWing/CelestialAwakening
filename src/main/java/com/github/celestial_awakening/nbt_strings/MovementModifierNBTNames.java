@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.capabilities;
+package com.github.celestial_awakening.nbt_strings;
 
 public class MovementModifierNBTNames {
     public static String spdFunc="spdFunc";

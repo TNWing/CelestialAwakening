@@ -135,6 +135,7 @@ public class SolarEvents {
             //int chunkSize = 16;
             AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
             List<Player> entities = level.getEntitiesOfClass(Player.class, chunkBoundingBox);
+            boolean capDirty=false;
             for (Player entity:entities){
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
@@ -149,8 +150,9 @@ public class SolarEvents {
                      */
                     CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,0,1);
                     entity.addEffect(mobEffectInstance);
-                    cap.divinerEyePower+=1;
-                    if (Config.divinerHeatWaveBlockMod && startingDivPower>10){//perform heatwave
+                    cap.changeDivPower(Config.divinerScanPower);
+                    capDirty=true;
+                    if (Config.divinerHeatWaveBlockMod && startingDivPower>=10){//perform heatwave
                         BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
                         BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
                         BlockState dirtState= Blocks.DIRT.defaultBlockState();
@@ -180,7 +182,24 @@ public class SolarEvents {
                             }
                         }
                     }
+                    if (startingDivPower>=25){
+                        int pts= (int) (2500*startingDivPower/(startingDivPower+25));
+                        if (level.random.nextInt(0,2)==0){
+                            cap.divinerSunControlVal = (int) (-startingDivPower/10);
+                            cap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
+                            System.out.println("LEVEL STATE IS " + cap.divinerSunControlVal);
+                        }
+                        else{
+                            cap.divinerSunControlVal = (int) (-startingDivPower/10);
+                            cap.divinerSunControlTimer = (pts*35);
+                            System.out.println("LEVEL STATE IS " + cap.divinerSunControlVal);
+                        }
+                    }
                 }
+            }
+            if (capDirty){
+                System.out.println("DIRT CAP, sending details");
+                ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),level.dimension());
             }
         }
         return null;

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.github.celestial_awakening.capabilities.MovementModifierNBTNames.*;
+import static com.github.celestial_awakening.nbt_strings.MovementModifierNBTNames.*;
 public class ProjCapS2CPacket {
     private final int entityID;
     private final ProjCapability cap;

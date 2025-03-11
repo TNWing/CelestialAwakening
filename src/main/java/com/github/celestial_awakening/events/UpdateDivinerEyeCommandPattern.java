@@ -9,62 +9,11 @@ import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
-//i could possible attempt to store commands as a cap, but more of a last resort
 public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
-    /*
-    TODO:BRAINSTORMING
-    Besides spawning enemies, what else should diviner/cel beacon do?
-    Maybe launch a flare strike on the player
-    Diviner will have a power level that increases whenever they successfully lock onto a player. Power level improves and unlocks abilities
-    -CELESTIAL BEACON SUMMONING
-        -what's currently implemented
-    -HEATSTROKE/DARK AGE (not sure if i wanna do this)
-        -Locked by default
-        -Enabled if there exists a celestial anchor in the world?
-        -Whenever the diviner eye shows up, has a chance to cause entities to suffer from heatstroke for the rest of the day
-        -Chance formula = baseValue*power + amp*scannedEntities
-        -Level caps will have a temp val, and this is a negative/positive float. Can be used in tandem with biome temps (see Biome.java's getHeightAdjustedTemperature())
-        -I cant modify biome temps without mixins though, so for now wont modify vanilla temp
-        -HEATSTROKE INFO
-            -Heatstroke slowly increases over time while out in the open.
-            -Heatstroke decreases slowly while not in the open, and decreases faster if in water
-            -Heatstroke changes are impacted by both the level temp and the biome temp
-            -Effects
-                -Increased exhaustion
-                -Negative debuffs (ex: slowness and weakness) at medium-high heatstroke levels
-                -Periodic damage at high levels
-                -Animals have a chance to not grow/reduce breeding CD
-                -Successful random ticks of plants have a chance to fail? i dont think i can attach caps to standard blocks but i can just have it as an effect on the level
-        -DARK AGE INFO
-            -Skylight is set to a lower value for the duration, value dependent on power level
-            -Undead no longer burn (not sure if this is tied to skylight levels)
-            -Increased chances of ice meteors (whenever i implement them)
-            -While active, has a filter over the sun to make it less visible/look darker
-    -CURSE OF SOL
-        -Locked by default
-        -Debuff that can be applied alongside celestial beacon. 2 tiers
-            -1: Target takes periodic damage when exposed to direct sunlight. Takes increased damage from transcendents.
-            -2: Target takes periodic damage when in areas above a given light level. Takes increased damage from transcendents.
-        -Cannot be removed by milk
-    -CREATE ANCHOR
-    -SUMMON APOC EMBER
-    -HEATWAVE (diff variation of heatstroke)
-        -Locked by default.
-        -If the target is considered a sufficient threat, the diviner will unleash a heat wave at their position
-        -Effects
-            -Ignites all entities in the area for a short duration (like 4 seconds)
-            -Converts/Removes blocks
-                -Stones and Cobbled Stones->Magma Blocks
-                -Flowers/Plants/Crops->Dead Bushes
-                -Farmland->Dirt
-                -Leaves->Removed
-     */
+
     Random random=new Random();
     public UpdateDivinerEyeCommandPattern(Object[] params, int delay) {
         super(params,delay);
-
-        Level level;
-
     }
 
     //need to use delay and divinetimer

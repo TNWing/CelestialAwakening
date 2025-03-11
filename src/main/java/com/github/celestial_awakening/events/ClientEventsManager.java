@@ -135,7 +135,7 @@ public class ClientEventsManager {
                 ind=eyeLidRender(cap.divinerEyeFrameProgress,false);
             }
         }
-        if (!minecraft.isPaused() && level.getDayTime()%30==0) { // Check if the game is not paused
+        if (!minecraft.isPaused() && level.getDayTime()%100==0) { // Check if the game is not paused
             System.out.println("rendering on time " + level.getDayTime());
             System.out.println("STATES ARE " + fromState + " TO " + toState);
             System.out.println("ind is " + ind);

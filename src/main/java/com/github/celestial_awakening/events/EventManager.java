@@ -17,8 +17,10 @@ import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +37,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
@@ -299,15 +302,35 @@ public class EventManager {
     public static void onServerLevelLoad(LevelEvent.Load event){
         LevelAccessor levelAccessor=event.getLevel();
         if (!levelAccessor.isClientSide()){
+
             ServerLevelAccessor serverLevelAccessor= (ServerLevelAccessor) levelAccessor;
             ServerLevel serverLevel=serverLevelAccessor.getLevel();
             @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
                 cap.loadNBTAfterLevelLoad();
+                System.out.println("PREPARING TO SEND TO ");
+                for (Player p:levelAccessor.players()) {
+                    System.out.println("Player " + p.getName());
+
+                }
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
+                System.out.println("PACKET SENT to players");
             });
         }
     }
+
+
+    @SubscribeEvent
+    public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event){
+        Player player=event.getEntity();
+        Level level=player.level();
+        @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(cap->{
+            cap.loadNBTAfterLevelLoad();
+            ModNetwork.sendToClient(new LevelCapS2CPacket(cap), (ServerPlayer) player);
+        });
+    }
+
 
     @SubscribeEvent
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
@@ -584,48 +607,67 @@ public class EventManager {
             });
         }
     }
-
     @SubscribeEvent
     public static void onServerLevelTick(TickEvent.LevelTickEvent event) {
-        if (event.phase== TickEvent.Phase.START && event.side.isServer()){
-            ServerLevel level = (ServerLevel) event.level;
-            level.isDay();
-            DelayedFunctionManager.delayedFunctionManager.tickLevelMap(level);//this is called twice
-            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+        if (event.phase== TickEvent.Phase.START){
+            Level level=event.level;
             int time= (int) (level.getDayTime()%24000L);
-            capOptional.ifPresent(cap->{
-                if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
-                    try {
-                        solarEvents.detectPlayers(level,cap);
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    solarEvents.canCreateDivinerEye(event);
-                }
-            });
-            if (time>12000){
-                int phase=level.getMoonPhase();
-                switch(phase){
-                    case 0:{
-                        lunarEvents.revealMoonstone(level);
-                        break;
-                    }
-                    default:{
-                        break;
-                    }
-                }
-                lunarEvents.detectIfLookingAtCelestialBody(level,-1);
-                if (time==18000){
-                    lunarEvents.midnightIronTransformation(level);
-                    boolean didSpawnPK=lunarEvents.attemptPKSpawn(level);
-                }
+            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
 
+            if (event.side.isServer()){
+                ServerLevel serverLevel = (ServerLevel) level;
+                DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);//this is called twice
+
+                capOptional.ifPresent(cap->{
+                    if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
+                        try {
+                            solarEvents.detectPlayers(serverLevel,cap);
+                        } catch (NoSuchFieldException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        solarEvents.canCreateDivinerEye(event);
+                    }
+                    if (cap.decrementSunControlTimer()){
+                        ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
+                    }
+
+                });
+                if (time>12000){
+                    int phase=serverLevel.getMoonPhase();
+                    switch(phase){
+                        case 0:{
+                            lunarEvents.revealMoonstone(serverLevel);
+                            break;
+                        }
+                        default:{
+                            break;
+                        }
+                    }
+                    lunarEvents.detectIfLookingAtCelestialBody(serverLevel,-1);
+                    if (time==18000){
+                        lunarEvents.midnightIronTransformation(serverLevel);
+                        boolean didSpawnPK=lunarEvents.attemptPKSpawn(serverLevel);
+                    }
+
+                }
+                particleManager.generateParticles(serverLevel);
             }
-            particleManager.generateParticles(level);
+            if (time%50==0 &&  level.dimensionTypeId() == BuiltinDimensionTypes.OVERWORLD){
+                capOptional.ifPresent(cap->{
+                    System.out.println("SKY DARKEN IS " + level.getSkyDarken() + " on side " + event.side + " WITH CAP STATE " + cap.divinerSunControlVal);
+                    if (level instanceof ClientLevel){
+                        ClientLevel clientLevel= (ClientLevel) level;
+                        System.out.println("CLIENTS VER RETURNS " + clientLevel.getSkyDarken(1.0F));
+                    }
+                    //level.updateSkyBrightness();
+                });
+
+                //System.out.println("LEVEL LIGHT LEVEL IS " + level.getMaxLocalRawBrightness(new BlockPos(0,100,0)));
+            }
         }
     }
 

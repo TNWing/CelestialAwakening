@@ -86,6 +86,15 @@ public class DivinerDataCommand{
             msg+="Current Chance:" + cap.divinerEyeChance + "%\n";
             msg+="Cooldown:" + (cap.divinerEyeCD/24000f) + " days\n";
             msg+="Power:" + cap.divinerEyePower;
+            int sunControl=cap.divinerSunControlVal;
+            msg+="Sun Control Value:" + sunControl;
+            float sunControlDays=((int)(100*cap.divinerSunControlTimer /24000f))/100f;
+            if (sunControl<0){
+                msg+="The world is in a age of darkness for " + sunControlDays + " days";
+            }
+            else if (sunControl>0){
+
+            }
             stack.sendSystemMessage(Component.literal(msg));
 
         });

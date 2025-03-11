@@ -17,7 +17,6 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     SUNSTONE("radiant", 20, new int[]{ 2, 2, 2, 1}, 14,
             SoundEvents.ARMOR_EQUIP_LEATHER, 1, 0f, () -> Ingredient.of(ItemInit.SUNSTONE.get())),
 
-
     ONYX_FUR("umbra",18,new int[]{2,5,4,1},15,SoundEvents.ARMOR_EQUIP_LEATHER,
             0,0f,()->Ingredient.of(ItemInit.ONYX_FUR.get())),
 
@@ -29,9 +28,6 @@ public enum CustomArmorMaterial implements ArmorMaterial {
 
     MIDNIGHT_IRON("knightmare",22,new int[]{2,5,5,2},14,SoundEvents.ARMOR_EQUIP_IRON,
             1,0.1f,()->Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),
-
-
-
 
     COSMIC_HIDE("cosmic_hide",19,new int[]{0,1,1,0},16,SoundEvents.ARMOR_EQUIP_ELYTRA,
             0,0f,()->Ingredient.of(ItemInit.COSMIC_HIDE.get())),

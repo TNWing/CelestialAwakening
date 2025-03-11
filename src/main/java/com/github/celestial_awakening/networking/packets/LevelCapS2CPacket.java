@@ -1,6 +1,8 @@
 package com.github.celestial_awakening.networking.packets;
+
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.networking.client.ClientLevelData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,6 +39,7 @@ public class LevelCapS2CPacket {
         context.enqueueWork(()->{
             //client-side
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()-> ClientLevelData.setData( cap));
+            Minecraft.getInstance().level.updateSkyBrightness();
         });
         return true;
     }

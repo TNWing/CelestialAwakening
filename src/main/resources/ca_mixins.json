@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.celestial_awakening.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "LevelLightEngineMixin",
+    "LevelMixin"
+  ],
+  "client": [
+    "ClientLevelMixin"
+  ],
+  "refmap": "mixins.celestial_awakening.refmap.json"
+}

@@ -60,7 +60,7 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                         if (target.distanceToSqr(this.mob)>4f){
                             spd=3.5f;
                         }
-                        LunarCrescent crescent=LunarCrescent.create(lvl, (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.8f,70,spd,hAng,vAng,0,1f,0.25f,1f);
+                        LunarCrescent crescent=LunarCrescent.create(lvl, (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.8f,70,spd,hAng,vAng,90,1f,0.25f,1f);
                         int id=crescent.getId();
                         Vec3 startPos=this.mob.position().add(dir.scale(0.2f)).add(new Vec3(0,1.25f,0));
                         crescent.setPos(startPos);

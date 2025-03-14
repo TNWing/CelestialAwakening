@@ -3,15 +3,17 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 // Paste this class into your mod and generate all required imports
 
 
+import com.github.celestial_awakening.entity.living.transcendents.Astralite;
+import com.github.celestial_awakening.rendering.client.animations.TranscendentAstraliteAnimations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 
-public class TranscendentAstraliteModel<T extends Entity> extends EntityModel<T> {
+public class TranscendentAstraliteModel<T extends Entity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	//public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "transcendent_astralite"), "main");
 	private final ModelPart root;
@@ -123,10 +125,19 @@ public class TranscendentAstraliteModel<T extends Entity> extends EntityModel<T>
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root.getAllParts().forEach(ModelPart::resetPose);
+		this.animate(((Astralite)entity).idleAnimationState, TranscendentAstraliteAnimations.idle,ageInTicks,1f);
+		this.animate(((Astralite)entity).basicAttackAnimationState, TranscendentAstraliteAnimations.basic_attack,ageInTicks,1f);
+
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+
+	@Override
+	public ModelPart root() {
+		return this.root;
 	}
 }

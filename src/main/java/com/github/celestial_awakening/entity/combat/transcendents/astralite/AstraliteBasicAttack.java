@@ -25,7 +25,7 @@ public class AstraliteBasicAttack extends GenericAbility {
             mob.canMove=false;
             super.startAbility(target,dist);
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
-            mob.setActionId(4);
+            mob.setActionId(3);
         }
 
     }

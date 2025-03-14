@@ -19,7 +19,9 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
+
+import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.nbtName_DivSunControlTime;
+import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.nbtName_DivSunControlVal;
 public class LevelCapability{
     public LevelCapability(Level level){
         initVals(level);
@@ -74,6 +76,9 @@ power is increased via
         this.divinerEyeCD=data.divinerEyeCD;
         this.divinerSunControlVal =data.divinerSunControlVal;
         this.divinerSunControlTimer =data.divinerSunControlTimer;
+        if (this.divinerSunControlTimer==0){
+            this.divinerSunControlVal=0;
+        }
         this.currentMoonstonePos=data.currentMoonstonePos;
         this.levelResourceKey=data.levelResourceKey;
         this.prowlerSpawnCD=data.prowlerSpawnCD;
@@ -254,9 +259,9 @@ power is increased via
 
     public boolean decrementSunControlTimer(){
         if (divinerSunControlTimer>0){
-            this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer--);
+            this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer-1);
             if (this.divinerSunControlTimer ==0){
-                this.divinerEyePower=0;
+                this.divinerSunControlVal=0;
                 return true;
             }
         }

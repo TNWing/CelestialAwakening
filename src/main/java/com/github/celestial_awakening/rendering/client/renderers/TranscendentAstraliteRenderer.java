@@ -19,7 +19,7 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
 
     @Override
     public ResourceLocation getTextureLocation(Astralite entity) {
-        if (entity.getActionId()==4){
+        if (entity.getActionId()==3){
 
             if (!Minecraft.getInstance().isPaused()){
                 System.out.println("BASIC");

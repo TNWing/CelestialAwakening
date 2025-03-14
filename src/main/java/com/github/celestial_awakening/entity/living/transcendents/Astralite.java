@@ -2,6 +2,7 @@ package com.github.celestial_awakening.entity.living.transcendents;
 
 import com.github.celestial_awakening.entity.combat.transcendents.astralite.AstraliteCombatAIGoal;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,15 +22,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
+import java.util.HashMap;
+
 public class Astralite extends AbstractTranscendent {
     public Astralite(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward=12;
+        actionIDToAnimMap.put(0,idleAnimationState);
+        actionIDToAnimMap.put(4,basicAttackAnimationState);
     }
     static double baseHP=20.0D;
     static double baseDmg=3.0D;
     static double baseArmor=4D;
     static double baseTough=0D;
+    public final AnimationState idleAnimationState=new AnimationState();
+    public final AnimationState readyUpAnimationState=new AnimationState();
+    public final AnimationState walkAnimationState=new AnimationState();
+    public final AnimationState basicAttackAnimationState=new AnimationState();
+    public final AnimationState photonSurgeAnimationState=new AnimationState();
+    HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public static AttributeSupplier.Builder createAttributes() {//TODO
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
@@ -77,7 +88,10 @@ public class Astralite extends AbstractTranscendent {
     @Override
     public void updateAnim() {
         int id=this.entityData.get(ACTION_ID);
-        //AnimationState currentState=actionIDToAnimMap.get(id);
+        AnimationState currentState=actionIDToAnimMap.get(id);
+        if (currentState==null){
+            return;
+        }
         if (isSameAnim()){
             incrementActionFrame();
             if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
@@ -85,10 +99,10 @@ public class Astralite extends AbstractTranscendent {
             }
         }
         else if (id!=-1){
-            //actionIDToAnimMap.get(currentAction).stop();
+            actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
             ACTION_FRAME=0;
-            //currentState.start(this.tickCount);
+            currentState.start(this.tickCount);
             switch(this.entityData.get(ACTION_ID)){
                 case 1:{
                 }

@@ -140,7 +140,7 @@ public class SolarEvents {
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }
-
+                capDirty=true;
                 BlockPos playerBlockPos=entity.blockPosition();
                 if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
                     /*
@@ -151,7 +151,7 @@ public class SolarEvents {
                     CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,0,1);
                     entity.addEffect(mobEffectInstance);
                     cap.changeDivPower(Config.divinerScanPower);
-                    capDirty=true;
+
                     if (Config.divinerHeatWaveBlockMod && startingDivPower>=10){//perform heatwave
                         BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
                         BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
@@ -194,6 +194,10 @@ public class SolarEvents {
                             cap.divinerSunControlTimer = (pts*35);
                             System.out.println("LEVEL STATE IS " + cap.divinerSunControlVal);
                         }
+                    }
+                    else{
+                        System.out.println("REMOVING AoD");
+                        cap.divinerSunControlTimer=10;
                     }
                 }
             }

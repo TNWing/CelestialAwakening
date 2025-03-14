@@ -639,6 +639,8 @@ public class EventManager {
                         solarEvents.canCreateDivinerEye(event);
                     }
                     if (cap.decrementSunControlTimer()){
+                        System.out.println("DONE WITH SC");
+                        System.out.println(cap.divinerSunControlVal);
                         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
                     }
 

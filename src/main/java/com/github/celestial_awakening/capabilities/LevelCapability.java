@@ -191,7 +191,7 @@ power is increased via
             this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
             System.out.println("LOADING DIV Data AFTER Lvl load on levelkey " + this.levelResourceKey);
-            System.out.println("TIMER is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
+            System.out.println("TIMER after is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
                     Object[] params=new Object[]{this,this.levelResourceKey};
@@ -253,11 +253,16 @@ power is increased via
 
 
     public boolean decrementSunControlTimer(){
-        this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer--);
-        if (this.divinerSunControlTimer ==0){
-            this.divinerEyePower=0;
-            return true;
+        if (divinerSunControlTimer>0){
+            this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer--);
+            if (this.divinerSunControlTimer ==0){
+                this.divinerEyePower=0;
+                return true;
+            }
         }
         return false;
+    }
+    public void setSunControlVal(int i){
+        this.divinerSunControlVal=Math.max(-10,Math.min(10,i));
     }
 }

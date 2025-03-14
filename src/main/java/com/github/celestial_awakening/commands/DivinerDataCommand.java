@@ -85,12 +85,12 @@ public class DivinerDataCommand{
             msg+="Diviner Eye Information\n";
             msg+="Current Chance:" + cap.divinerEyeChance + "%\n";
             msg+="Cooldown:" + (cap.divinerEyeCD/24000f) + " days\n";
-            msg+="Power:" + cap.divinerEyePower;
+            msg+="Power:" + cap.divinerEyePower + "\n";
             int sunControl=cap.divinerSunControlVal;
-            msg+="Sun Control Value:" + sunControl;
+            msg+="Sun Control Value:" + sunControl+ "\n";
             float sunControlDays=((int)(100*cap.divinerSunControlTimer /24000f))/100f;
             if (sunControl<0){
-                msg+="The world is in a age of darkness for " + sunControlDays + " days";
+                msg+="The world is in a age of darkness for " + sunControlDays + " days\n";
             }
             else if (sunControl>0){
 

@@ -25,6 +25,7 @@ public class AstraliteBasicAttack extends GenericAbility {
             mob.canMove=false;
             super.startAbility(target,dist);
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            mob.setActionId(4);
         }
 
     }
@@ -42,12 +43,17 @@ public class AstraliteBasicAttack extends GenericAbility {
             switch (state){
                 case 0:{
                     changeToState1();
+
+                    break;
+                }
+                case 1:{
+                    changeToState2();
                     Vec3 ownerPos=this.mob.position();
                     Level level=this.mob.level();
 
                     Vec3 targetPos=target.position();
                     Vec3 dir=targetPos.subtract(ownerPos).normalize();
-                    float ang=MathFuncs.getAngFrom2DVec(dir);
+                    float ang= MathFuncs.getAngFrom2DVec(dir);
                     float vAng=MathFuncs.getVertAngFromVec(dir);
                     Vec3 spt=new Vec3(ownerPos.x,ownerPos.y+0.8f,ownerPos.z).add(MathFuncs.get2DVecFromAngle(ang).scale(1.1f));
                     ShiningOrb orb=ShiningOrb.create(level,100,5,ang,0,2+this.mob.level().getDifficulty().getId());
@@ -55,10 +61,6 @@ public class AstraliteBasicAttack extends GenericAbility {
                     orb.setVAng(vAng);
                     orb.setPos(spt);
                     level.addFreshEntity(orb);
-                    break;
-                }
-                case 1:{
-                    changeToState2();
                     break;
                 }
                 case 2:{

@@ -23,8 +23,8 @@ public abstract class LevelMixin {
         LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
         boolean b=level.dimensionTypeId() == BuiltinDimensionTypes.OVERWORLD;
         capOptional.ifPresent(cap->{
-            //=skyDarken=Math.max(skyDarken,-cap.divinerLevelState);
-            //ModNetwork.sendToClientsInDim(new LevelSkyDarknessS2CPacket(skyDarken),level.dimension());
+            skyDarken=Math.max(skyDarken,-cap.divinerSunControlVal);
+            //ModNetwork.sendToClientsInDim(new LevelSkyDarknessS2CPacket(skyDarken),level.dimension());//may need to readd
 
         });
 

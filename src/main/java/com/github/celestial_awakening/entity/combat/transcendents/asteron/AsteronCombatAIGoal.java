@@ -5,9 +5,6 @@ import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AsteronCombatAIGoal extends GenericCombatAIGoal {
-    //maybe instead of an arr list like this, do a hashmap associating priority and ability
-    //lower priority=better
-//need to add tbe canuse stuff
     public AsteronCombatAIGoal(Asteron mob) {
         super(mob);
     }

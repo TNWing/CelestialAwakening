@@ -48,9 +48,7 @@ public class ModNetwork {
     }
 
     public static <MSG> void sendToClientsInDim(MSG message, ResourceKey<Level> type){
-        System.out.println("SEND TO CLIENTS IN DIm");
         INSTANCE.send(PacketDistributor.DIMENSION.with(()->type),message);
-        System.out.println("DIM SEND SUCC");
     }
     public static <MSG> void sendToServer(MSG message){
         INSTANCE.sendToServer(message);

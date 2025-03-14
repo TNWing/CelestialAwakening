@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class AsteronPiercingRays extends GenericAbility {
     public AsteronPiercingRays(AbstractCALivingEntity mob, int castTime, int CD, int rec, int et) {
-        super(mob,castTime, CD,rec,et);
+        super(mob,castTime, CD,et,rec);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class AsteronPiercingRays extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
-            this.mob.setActionId(4);
+
             setMoveVals(0,this.getAbilityRange(target),false);
         }
 

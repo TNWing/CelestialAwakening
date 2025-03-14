@@ -5,6 +5,7 @@ import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.TranscendentAstraliteModel;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -17,8 +18,24 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Astralite p_114482_) {
-        return CelestialAwakening.createResourceLocation("textures/entity/astralite/astralite.png");
+    public ResourceLocation getTextureLocation(Astralite entity) {
+        if (entity.getActionId()==4){
+
+            if (!Minecraft.getInstance().isPaused()){
+                System.out.println("BASIC");
+            }
+            int index=entity.getActionFrame()/2;
+
+            if (index>0){
+                if (index>16){
+                    index=16;
+                }
+                String rl=String.format("textures/entity/astralite/astralite_basic%d.png",index);
+                return CelestialAwakening.createResourceLocation(rl);
+            }
+
+        }
+        return CelestialAwakening.createResourceLocation("textures/entity/astralite/astralite_base.png");
     }
 
     @Override
@@ -29,4 +46,6 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
         super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
         poseStack.popPose();
     }
+
+
 }

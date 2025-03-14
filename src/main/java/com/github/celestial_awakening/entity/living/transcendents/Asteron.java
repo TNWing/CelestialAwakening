@@ -117,7 +117,6 @@ public class Asteron extends AbstractTranscendent {
     public void updateAnim() {
         int id=this.entityData.get(ACTION_ID);
         AnimationState currentState=actionIDToAnimMap.get(id);
-        System.out.println("HELLO UPDATING anim, id is " + id);
         if (isSameAnim()){
             incrementActionFrame();
             if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
@@ -127,6 +126,7 @@ public class Asteron extends AbstractTranscendent {
         else if (id!=-1){
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
+            ACTION_FRAME=0;
             currentState.start(this.tickCount);
             switch(this.entityData.get(ACTION_ID)){
                 case 1:{

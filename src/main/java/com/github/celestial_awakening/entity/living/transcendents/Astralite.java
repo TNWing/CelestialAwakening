@@ -74,10 +74,28 @@ public class Astralite extends AbstractTranscendent {
     public void travel(Vec3 travelVec){
         super.travel(travelVec);
     }
-
     @Override
     public void updateAnim() {
-
+        int id=this.entityData.get(ACTION_ID);
+        //AnimationState currentState=actionIDToAnimMap.get(id);
+        if (isSameAnim()){
+            incrementActionFrame();
+            if (id==1 && getActionFrame()==18 && this.getTarget()!=null){
+                this.lookControl.setLookAt(this.getTarget());
+            }
+        }
+        else if (id!=-1){
+            //actionIDToAnimMap.get(currentAction).stop();
+            currentAction=id;
+            ACTION_FRAME=0;
+            //currentState.start(this.tickCount);
+            switch(this.entityData.get(ACTION_ID)){
+                case 1:{
+                }
+                default:{
+                    break;
+                }
+            }
+        }
     }
-
 }

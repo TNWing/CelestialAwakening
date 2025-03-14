@@ -21,6 +21,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -36,7 +37,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -64,6 +64,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
 public class EventManager {
+    protected static final RandomSource randomSource=RandomSource.create();
+
     public static LunarEvents lunarEvents=new LunarEvents();
     public static SolarEvents solarEvents=new SolarEvents();
 
@@ -132,8 +134,8 @@ public class EventManager {
     public static void onRegisterCommands(RegisterCommandsEvent event){
         new DivinerDataCommand(event.getDispatcher(),2);
         ConfigCommand.register(event.getDispatcher());
-
     }
+
 
     //TODO: spawn multiple prowlers in here, base it off the cel beacon spawning
     @SubscribeEvent
@@ -596,14 +598,19 @@ public class EventManager {
         });
     }
 
+    @SubscribeEvent
     public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){
         BlockPos blockPos=event.getPos();
         LevelAccessor levelAccessor=event.getLevel();
-        BlockState blockState=event.getLevel().getBlockState(blockPos);
         if (levelAccessor instanceof Level level){
             @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
-
+                int sunControl=cap.divinerSunControlVal;
+                if (sunControl<0){
+                    if (randomSource.nextInt(sunControl+1)<sunControl){
+                        event.setCanceled(true);
+                    }
+                }
             });
         }
     }

@@ -32,9 +32,6 @@ public class LevelCapability{
     public ConcurrentHashMap<BlockPos,Integer> currentMoonstonePos=new ConcurrentHashMap<>();
 
     public ResourceKey<Level> levelResourceKey;
-    //first 60 ticks will be the eye opening, last 60 ticks is closing, 40 ticks before closing, the eye resets to frame 0, players will not be detected during opening and closing
-    //can range from 20-40 sec (including opening and closing), so 400 - 800 ticks
-    //
     Codec<ResourceKey<Level>> levelCodec = ResourceKey.codec(Registries.DIMENSION);
     public float divinerEyeChance;
     public int divinerEyeCD;//in ticks
@@ -44,13 +41,9 @@ public class LevelCapability{
     public int divinerEyeCurrentChangeDelay;
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
     public int divinerEyePower;//0-100, determines what abilities can be used, maybe make new cap in the thousands or 1 mil?
-    public int divinerSunControlVal;//-10 to 10, default 0. neg means dark age, pos means heatstroke
+    public int divinerSunControlVal;//-10 to 10
     public int divinerSunControlTimer;
-/*
-power is increased via
-    -applying celestial beacon to an entity without the effect
-    -when an anchor is made
- */
+
     public int pkRemainingSpawnAttempts;
     public int prowlerSpawnCD;
     /*

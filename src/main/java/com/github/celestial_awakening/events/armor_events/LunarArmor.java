@@ -4,6 +4,7 @@ import com.github.celestial_awakening.entity.projectile.OrbiterProjectile;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -23,6 +24,8 @@ import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -102,6 +105,17 @@ public class LunarArmor extends ArmorEffect {
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         Player player = event.getEntity();
         Level level = player.level();
         int time = (int) level.dayTime();//ranges from 0-24k
@@ -129,11 +143,22 @@ public class LunarArmor extends ArmorEffect {
         }
         ToolTipBuilder.addFullSetName(event,ORBITER_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,RESONANCE_NAME,boldColor);
-
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         Player player = event.getEntity();
         Level level = player.level();
         int time = (int) level.dayTime();//ranges from 0-24k
@@ -160,6 +185,7 @@ public class LunarArmor extends ArmorEffect {
         }
         ToolTipBuilder.addFullArmorSetComponent(event,ORBITER_NAME,boldColor,ORBITER_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,RESONANCE_NAME,boldColor,RESONANCE_DESC,infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
     void pieceEffectBlockBreak(BlockEvent.BreakEvent event,int cnt){
         BlockState blockState=event.getState();

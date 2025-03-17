@@ -1,6 +1,8 @@
 package com.github.celestial_awakening.entity.living;
 
 import com.github.celestial_awakening.Config;
+import com.github.celestial_awakening.entity.AlertInterface;
+import com.github.celestial_awakening.entity.CA_Entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,21 +23,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
-//TODO:
-//move the code in pathtotarget goal into targetting abilitygoal.
-public abstract class AbstractCALivingEntity extends Monster {
+public abstract class AbstractCALivingEntity extends Monster implements CA_Entity {
 
 
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Boolean> HAS_COLLISION = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BOOLEAN);
-    //may not need action frame to be dataaccessor?
+
     protected Integer ACTION_FRAME=0;
     public int animTime;
     public int currentAction;
 
     public int nextActionTickCount;//delay before next action
-    protected int actionTickCast;//ticks an action takes
     public boolean isActing;
     public boolean canMove;
     public boolean fixedRot;
@@ -55,6 +54,9 @@ public abstract class AbstractCALivingEntity extends Monster {
     protected int genericAbilityUseCnt;//# of times can use a non-basic ability before relying on CD
 
     boolean hasSpawned=false;
+
+    AlertInterface alertInterface;
+
     public int getBossBarWindup(){
         return this.bossBarWindup;
     }
@@ -69,6 +71,7 @@ public abstract class AbstractCALivingEntity extends Monster {
 
         spdMod=1f;
         hasSpawned=true;
+        
     }
 
     @Override
@@ -201,5 +204,16 @@ public abstract class AbstractCALivingEntity extends Monster {
     public boolean canStillSenseTarget(){
         LivingEntity target=this.getTarget();
         return this.getSensing().hasLineOfSight(target) && (this.distanceToSqr(target)<=Math.pow(this.getAttributeValue(Attributes.FOLLOW_RANGE),2));
+    }
+
+
+    @Override
+    public AlertInterface getAlertInterface() {
+        return this.alertInterface;
+    }
+
+    @Override
+    public void setAlertInterface(AlertInterface alertInterface) {
+        this.alertInterface=alertInterface;
     }
 }

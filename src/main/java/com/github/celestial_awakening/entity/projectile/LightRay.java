@@ -20,6 +20,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class LightRay extends CA_Projectile {
     //can also just use an int for the hit multiple, to set a limit on number of hits
     protected boolean destroyIfHitLiving=true;
 
+    boolean hasHitSomething=false;
     /*
     0:destroy self
     1:stick to block
@@ -60,6 +62,8 @@ public class LightRay extends CA_Projectile {
     float maxHeight;
 
     Vec3 rotDir;//represents the direction of movement and expansion
+
+    Vec3 end;
     //TODO:
     /*
     Replace XPR with VAng
@@ -137,6 +141,7 @@ public class LightRay extends CA_Projectile {
         return new AABB(p_20385_ - (double)f, p_20386_, p_20387_ - (double)f, p_20385_ + (double)f, p_20386_ + (double)f1, p_20387_ + (double)f);
     }
 
+
     public void initDims(float w,float h,float minW,float minH,float maxW,float maxH,float wChange,float hChange){
         this.setWidth(w);
         this.setHeight(h);
@@ -147,13 +152,13 @@ public class LightRay extends CA_Projectile {
         widthRateOfChange=wChange;
         heightRateOfChange=hChange;
         //System.out.println("INIT DIMS TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
-        this.refreshDimensions();
-        this.setBoundingBox(this.updateAABB(this.position()));
+        //this.refreshDimensions();
+        //this.setBoundingBox(this.updateAABB(this.position()));
 
     }
 
 
-    protected void hitLivingEntity(LivingEntity entity) {
+    public void hitLivingEntity(LivingEntity entity) {
         Entity entity1 = this.getOwner();
         if (entity1 == null) {
             damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC));
@@ -249,6 +254,7 @@ public class LightRay extends CA_Projectile {
          */
     }
 
+
     public void raycast(){
         //TODO
         /*
@@ -263,33 +269,7 @@ public class LightRay extends CA_Projectile {
         //also got to figure out why this is called even when ray is gone
         //z is no longer used
 
-        //current xz:Math.toRadians((-1*this.getYRot())-90)
-        double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
-        double y=Math.toRadians(this.getVAng());
-        if (this.getVAng()>=180){
-        }
-
-        Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
-        Vec3 end=this.position();
-        end=end.add(dir.scale(this.getHeight()));
-        ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
-        BlockHitResult result= this.level().clip(clipContext);
-
-        if (result!=null){//this is occuring, presumably if air block
-            //block in the way, so cut the ray short
-            BlockPos hitPos=result.getBlockPos();
-
-            if (!this.level().getBlockState(hitPos).isAir()){
-                end=result.getLocation();
-            }
-
-        }
-        else{
-
-        }
-
-        //System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
-        AABB rayBox=new AABB(this.position(),end);
+        AABB rayBox=getRayBox();
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox);
 
         ArrayList<LivingEntity> entitiesToHit=new ArrayList<>();
@@ -326,12 +306,51 @@ public class LightRay extends CA_Projectile {
                 }
             }
         }
+        if (!entitiesToHit.isEmpty() ){
+            System.out.println("entities hit is " + Arrays.toString(Arrays.stream(entitiesToHit.toArray()).toArray()));
+            hasHitSomething=true;
+        }
+        if (hasHitSomething &&  alertInterface!=null){
+            this.alertInterface.onAlert();
+        }
         for (LivingEntity entity:entitiesToHit) {
             this.hitLivingEntity(entity);
         }
         if (!entitiesToHit.isEmpty() && destroyIfHitLiving){
             this.discard();
         }
+    }
+    public AABB getRayBox(){
+        //current xz:Math.toRadians((-1*this.getYRot())-90)
+        double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
+        double y=Math.toRadians(this.getVAng());
+        if (this.getVAng()>=180){
+        }
+
+        Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
+        end=this.position();
+        end=end.add(dir.scale(this.getHeight()));
+        ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
+        BlockHitResult result= this.level().clip(clipContext);
+
+        if (result!=null){//this is occuring, presumably if air block
+            //block in the way, so cut the ray short
+            BlockPos hitPos=result.getBlockPos();
+
+            if (!this.level().getBlockState(hitPos).isAir()){
+                end=result.getLocation();
+                System.out.println("HIT BLOCK at " + hitPos);
+                hasHitSomething=true;
+            }
+
+        }
+        else{
+
+        }
+
+        //System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
+        AABB rayBox=new AABB(this.position(),end);
+        return rayBox;
     }
 
 

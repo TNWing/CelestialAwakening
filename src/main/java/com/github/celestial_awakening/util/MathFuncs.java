@@ -34,10 +34,7 @@ public class MathFuncs {
         return (float) Math.toDegrees(ang);
     }
     public static float getVertAngFromVec(Vec3 dir) {
-        // Calculate the horizontal distance in the xz-plane
         double horizontalDist = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-
-        // Calculate the vertical angle using arctangent
         double ang = Math.atan2(dir.y, horizontalDist);
 
         return (float) Math.toDegrees(ang);

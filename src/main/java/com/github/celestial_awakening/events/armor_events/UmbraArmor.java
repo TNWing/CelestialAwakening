@@ -6,6 +6,7 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -19,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UmbraArmor extends ArmorEffect {
@@ -64,14 +66,37 @@ Reduces CD by 1/2/3/4 sec on kill
  */
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,PURSUIT_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,CL_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,DREAD_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addFullArmorSetComponent(event,PURSUIT_NAME,boldColor,
                 PURSUIT_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,CL_NAME,boldColor,
@@ -79,6 +104,7 @@ Reduces CD by 1/2/3/4 sec on kill
         ToolTipBuilder.addArmorPieceComponent(event,DREAD_NAME,boldColor,
               DREAD_DESC,new Object[]{dreadVals[cnt-1],dreadCD[cnt-1]/20,dreadCDReduction[cnt-1]/20}
                 ,infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
     public void dread(LivingHurtEvent event,Player player,int cnt){
         if (cnt>0){

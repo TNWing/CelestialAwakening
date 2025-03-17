@@ -14,6 +14,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.function.Predicate;
 public class NebureSolarExpansion extends GenericAbility {
     Predicate pred= CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractTranscendent.class));
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),this.mob);
-    ParticleOptions particleType = ParticleTypes.WHITE_ASH;
+    ParticleOptions particleType = ParticleTypes.ASH;
 
     ParticleOptions particleTypeD = ParticleTypes.FLASH;
 
@@ -35,7 +37,8 @@ public class NebureSolarExpansion extends GenericAbility {
     float innerRad;
     float outerRad;
 
-    int donutAreaInterval=15;
+    int donutAreaInterval=8;
+    int donutIntervalDiv=4;
 
     public NebureSolarExpansion(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
@@ -46,8 +49,8 @@ public class NebureSolarExpansion extends GenericAbility {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.canMove=false;
-            innerRad=0;
-            outerRad=donutAreaIncrement;
+            innerRad=0.8f;
+            outerRad=donutAreaIncrement+innerRad;
             centerPos=this.mob.position();
             super.startAbility(target,dist);
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
@@ -65,11 +68,11 @@ public class NebureSolarExpansion extends GenericAbility {
                 outerRad+=donutAreaIncrement;
                 calculateWhereToDraw(outerRad,innerRad);
             }
-            else if (this.currentStateTimer%(donutAreaInterval/5)==0 && this.currentStateTimer>donutAreaInterval){
+            else if (this.currentStateTimer%(donutAreaInterval/donutIntervalDiv)==0 && this.currentStateTimer>donutAreaInterval){
                 drawWarning((ServerLevel) this.mob.level());
             }
         }
-        else if (state==0 && this.currentStateTimer<=donutAreaInterval && this.currentStateTimer%(donutAreaInterval/5)==0){
+        else if (state==0 && this.currentStateTimer<=donutAreaInterval && this.currentStateTimer%(donutAreaInterval/donutIntervalDiv)==0){
             drawWarning((ServerLevel) this.mob.level());
         }
         this.currentStateTimer--;
@@ -126,16 +129,19 @@ public class NebureSolarExpansion extends GenericAbility {
     }
     void drawDamage(ServerLevel lvl){
         for (Vec3 pos: particlePosDamage) {
-            lvl.sendParticles(particleTypeD,pos.x,pos.y+1,pos.z,1,0,0,0,particleSpd);
+            lvl.sendParticles(particleTypeD,pos.x,pos.y+0.7f,pos.z,1,0,0,0,particleSpd);
         }
     }
 
     void damageArea(float oRad,float iRad){
         List<LivingEntity> entityList= MathFuncs.getEntitiesIn2DDonutArea(LivingEntity.class,centerPos,this.mob.level(),oRad,iRad,2,pred);
         for (LivingEntity entity :entityList) {
-            entity.hurt(source,4f);
+            entity.hurt(source,(float)this.mob.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 1.5f);
             MobEffectInstance purgingLight=new MobEffectInstance(MobEffectInit.PURGING_LIGHT.get(),140,1);
             entity.addEffect(purgingLight);
+            if (entity instanceof Player){
+
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.github.celestial_awakening.events.armor_events;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.animal.Animal;
@@ -22,6 +23,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.BlockEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -58,17 +60,41 @@ public class RadiantArmor extends ArmorEffect {
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,PARTICLE_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,WAVE_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,ABS_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addFullArmorSetComponent(event,PARTICLE_NAME,boldColor,PARTICLE_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,WAVE_NAME,boldColor,WAVE_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,ABS_NAME,boldColor,ABS_DESC,infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
     public void pieceEffect_Crop(BlockEvent.BreakEvent event, int cnt){
         if (!event.getLevel().isClientSide() && event.getState().getBlock() instanceof CropBlock && !event.isCanceled()){

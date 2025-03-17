@@ -3,6 +3,8 @@ package com.github.celestial_awakening.entity.projectile;
 import com.github.celestial_awakening.capabilities.MovementModifier;
 import com.github.celestial_awakening.capabilities.ProjCapability;
 import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
+import com.github.celestial_awakening.entity.AlertInterface;
+import com.github.celestial_awakening.entity.CA_Entity;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,10 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CA_Projectile extends Projectile {
+public class CA_Projectile extends Projectile implements CA_Entity {
     Vec3 rotMoveDir;
     int rmdTicks;
     MovementModifier currentMovementModifier;
+    AlertInterface alertInterface;
     private static final EntityDataAccessor<Boolean> REAL = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> RENDERER_XSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RENDERER_YSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
@@ -507,4 +510,13 @@ public class CA_Projectile extends Projectile {
         }
     }
 
+    @Override
+    public AlertInterface getAlertInterface() {
+        return this.alertInterface;
+    }
+
+    @Override
+    public void setAlertInterface(AlertInterface alertInterface) {
+        this.alertInterface=alertInterface;
+    }
 }

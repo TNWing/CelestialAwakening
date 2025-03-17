@@ -50,7 +50,7 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.SUNSTONE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> RADIANT_BOOTS = ITEMS.register("radiant_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.SUNSTONE, ArmorItem.Type.BOOTS, new Item.Properties()));
-
+    public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));
 
     public static final RegistryObject<Item> DYING_LIGHT_ESSENCE =
             ITEMS.register("dying_light_essence", () ->new Item(new Item.Properties()));

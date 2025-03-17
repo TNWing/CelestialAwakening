@@ -29,7 +29,7 @@ public class Astralite extends AbstractTranscendent {
         super(p_33002_, p_33003_);
         this.xpReward=12;
         actionIDToAnimMap.put(0,idleAnimationState);
-        actionIDToAnimMap.put(4,basicAttackAnimationState);
+        actionIDToAnimMap.put(3,basicAttackAnimationState);
     }
     static double baseHP=20.0D;
     static double baseDmg=3.0D;

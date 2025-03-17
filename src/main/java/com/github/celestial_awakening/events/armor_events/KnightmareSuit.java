@@ -3,6 +3,7 @@ package com.github.celestial_awakening.events.armor_events;
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import com.github.celestial_awakening.util.ToolTipBuilder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
@@ -12,6 +13,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class KnightmareSuit extends ArmorEffect{
@@ -53,19 +56,43 @@ public class KnightmareSuit extends ArmorEffect{
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
-        ToolTipBuilder.addFullSetName(event, SS_NAME,boldColor);
+        //ToolTipBuilder.addFullSetName(event, SS_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,HONOR_DUEL_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,INFAMY_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-        ToolTipBuilder.addFullArmorSetComponent(event,SS_NAME,boldColor,SS_DESC,infoColor);
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
+        //ToolTipBuilder.addFullArmorSetComponent(event,SS_NAME,boldColor,SS_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,HONOR_DUEL_NAME,boldColor,HONOR_DUEL_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,INFAMY_NAME,boldColor,
                INFAMY_DESC,new Object[]{cnt*0.25f},
                 infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override

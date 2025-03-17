@@ -6,6 +6,7 @@ import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import com.github.celestial_awakening.util.ToolTipBuilder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemnantArmor extends ArmorEffect {
@@ -62,17 +64,41 @@ public class RemnantArmor extends ArmorEffect {
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,FL_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,COLLAPSE_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,DL_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addFullArmorSetComponent(event,FL_NAME,boldColor,FL_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,COLLAPSE_NAME,boldColor,COLLAPSE_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,DL_NAME,boldColor,DL_DESC,new Object[]{devouringLightFoodLevels[cnt-1],devouringLightSaturationLevels[cnt-1]},infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     public void devouringLight(LivingDeathEvent event,Player player,int cnt){

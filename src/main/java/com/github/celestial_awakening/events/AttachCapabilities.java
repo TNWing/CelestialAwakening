@@ -5,6 +5,7 @@ import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.entity.projectile.CA_Projectile;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.items.MoonScythe;
+import com.github.celestial_awakening.items.SunStaff;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,6 +42,11 @@ public class AttachCapabilities {
         if (itemStack.getItem() instanceof MoonScythe){
             if (!event.getCapabilities().containsValue(MoonScytheCapabilityProvider.ScytheCap)){
                 event.addCapability(CelestialAwakening.createResourceLocation("scythe_data"),new MoonScytheCapabilityProvider());
+            }
+        }
+        else if (itemStack.getItem() instanceof SunStaff){
+            if (!event.getCapabilities().containsValue(SunStaffCapabilityProvider.cap)){
+                event.addCapability(CelestialAwakening.createResourceLocation("sun_staff_data"),new SunStaffCapabilityProvider());
             }
         }
     }

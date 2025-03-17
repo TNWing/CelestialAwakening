@@ -665,7 +665,7 @@ public class EventManager {
                 }
                 particleManager.generateParticles(serverLevel);
             }
-            if (time%50==0 &&  level.dimensionTypeId() == BuiltinDimensionTypes.OVERWORLD){
+            if (false && time%50==0 &&  level.dimensionTypeId() == BuiltinDimensionTypes.OVERWORLD){
                 capOptional.ifPresent(cap->{
                     System.out.println("SKY DARKEN IS " + level.getSkyDarken() + " on side " + event.side + " WITH CAP STATE " + cap.divinerSunControlVal);
                     if (level instanceof ClientLevel){

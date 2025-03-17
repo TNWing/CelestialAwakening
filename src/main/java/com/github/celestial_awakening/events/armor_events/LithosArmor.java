@@ -6,6 +6,7 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LithosArmor extends ArmorEffect {
@@ -46,15 +48,39 @@ CD: 1.5 sec
 
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,"Impact",boldColor);
         ToolTipBuilder.addFullSetName(event,"Living Meteor",boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addFullArmorSetComponent(event,"Impact",boldColor,"Upon falling below 20% of your max HP, gain increased attack damage, attack speed, and damage reduction for 5 seconds. Cooldown of 2 minutes",infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,"Living Meteor",boldColor,"Landing a critical hit will deal 20% of the damage dealt to surrounding enemies. Cooldown of 5 seconds",infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
     public void impact(LivingHurtEvent event,Player player){
         if (event.getSource().getEntity()==player){

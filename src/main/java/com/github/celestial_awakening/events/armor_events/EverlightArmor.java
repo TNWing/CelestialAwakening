@@ -2,11 +2,11 @@ package com.github.celestial_awakening.events.armor_events;
 
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.ToolTipBuilder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -51,17 +52,41 @@ public class EverlightArmor extends ArmorEffect{
     }
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,STAR_GAZER_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,RESURGENCE_NAME,boldColor);
         ToolTipBuilder.addPieceBonusName(event,UNYIELDING_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
         ToolTipBuilder.addFullArmorSetComponent(event,STAR_GAZER_NAME,boldColor,STAR_GAZER_DESC,infoColor);
         ToolTipBuilder.addFullArmorSetComponent(event,RESURGENCE_NAME,boldColor,RESURGENCE_DESC,infoColor);
         ToolTipBuilder.addArmorPieceComponent(event,UNYIELDING_NAME,boldColor,UNYIELDING_DESC,infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     private void unyieldingFlame(LivingDeathEvent event,Player player,int cnt){

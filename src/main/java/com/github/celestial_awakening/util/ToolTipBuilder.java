@@ -15,6 +15,7 @@ public class ToolTipBuilder {
          */
         Component component=Component.translatable(SHIFT_TIP).setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.WHITE));
         event.getToolTip().add(component);
+
     }
     public static void addFullSetName(ItemTooltipEvent event, String effectName, int nameColor){
         Component component=Component.translatable(FULL_SET_EFFECT).append(Component.translatable(effectName)).setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(nameColor)));

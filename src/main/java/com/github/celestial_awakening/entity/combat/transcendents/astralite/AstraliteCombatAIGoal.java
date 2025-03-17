@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class AstraliteCombatAIGoal extends GenericCombatAIGoal {
 
     AstralitePhotonSurge photonSurge =new AstralitePhotonSurge(this.mob,10,110,80,30);
-    AstraliteBasicAttack basicAttack=new AstraliteBasicAttack(this.mob,17,30,0,0);
+    AstraliteBasicAttack basicAttack=new AstraliteBasicAttack(this.mob,18,30,0,0);
 
     public AstraliteCombatAIGoal(AbstractCALivingEntity mob) {
         super(mob);
@@ -23,7 +23,7 @@ public class AstraliteCombatAIGoal extends GenericCombatAIGoal {
         else{
             currentAbility=basicAttack;
             if (photonSurge.getCurrentCD()==0){
-                //currentAbility= photonSurge;
+                currentAbility= photonSurge;
             }
             double d0 = this.mob.distanceToSqr(target);
             currentAbility.startAbility(target,d0);

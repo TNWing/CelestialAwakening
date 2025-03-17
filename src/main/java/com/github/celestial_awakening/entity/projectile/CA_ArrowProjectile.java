@@ -1,10 +1,12 @@
 package com.github.celestial_awakening.entity.projectile;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
+import com.github.celestial_awakening.entity.AlertInterface;
+import com.github.celestial_awakening.entity.CA_Entity;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.CA_Predicates;
-import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -24,9 +26,10 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CA_ArrowProjectile extends AbstractArrow {
+public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
+    AlertInterface alertInterface;
     ArrowType type;
-    ParticleType particleType;
+    ParticleOptions particleOptions;
     boolean hasHitBlock;
     DamageSourceIgnoreIFrames lunarDamage=new DamageSourceIgnoreIFrames(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),this.getOwner(),this);
     public CA_ArrowProjectile(EntityType<CA_ArrowProjectile> customArrowProjectileEntityType, Level level) {
@@ -43,11 +46,11 @@ public class CA_ArrowProjectile extends AbstractArrow {
         entity.type=t;
         switch(t){
             case SOLAR -> {
-                entity.particleType=ParticleTypes.FLAME;
+                entity.particleOptions =ParticleTypes.FLAME;
                 entity.setBaseDamage(1.5f);
             }
             case LUNAR -> {
-                entity.particleType=ParticleTypes.CRIT;
+                entity.particleOptions =ParticleTypes.CRIT;
                 entity.setBaseDamage(1.8f);
             }
         }
@@ -75,12 +78,12 @@ public class CA_ArrowProjectile extends AbstractArrow {
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            if(!this.inGround){
-                this.level().addParticle(ParticleTypes.INSTANT_EFFECT, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+            if(!this.inGround && !hasHitBlock){
+                this.level().addParticle(particleOptions, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
             }
 
         }
-        else if (!this.inGround){
+        else if (!this.inGround && !hasHitBlock){
             if (type==ArrowType.SOLAR){
                 AABB aabb=this.getBoundingBox().inflate(1.5f);
                 Predicate p=null;
@@ -126,5 +129,16 @@ public class CA_ArrowProjectile extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
+        hasHitBlock=true;
+    }
+
+    @Override
+    public AlertInterface getAlertInterface() {
+        return this.alertInterface;
+    }
+
+    @Override
+    public void setAlertInterface(AlertInterface alertInterface) {
+        this.alertInterface=alertInterface;
     }
 }

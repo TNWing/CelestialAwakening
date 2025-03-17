@@ -38,22 +38,16 @@ Each ability has a cool down of 5 seconds.
         strikeCD+=cnt;
     }
     public void changeLunarOrbs(int cnt,int t){
-        System.out.println("before ORBS AT " + lunarOrbs + " WITH old TICKS " + lastOrbTick);
         lunarOrbs=Math.max(0,Math.min(6,cnt));
         lastOrbTick=t;
-        System.out.println("now ORBS AT " + lunarOrbs + " WITH NEW TICKS " + lastOrbTick);
     }
     public void incrementLunarOrbs(int t){
-        System.out.println("before ORBS AT " + lunarOrbs + " WITH old TICKS "  + lastOrbTick);
         lunarOrbs=Math.min(6,lunarOrbs+1);
         lastOrbTick=t;
-        System.out.println("now ORBS AT " + lunarOrbs + " WITH NEW TICKS " + lastOrbTick);
     }
     public void decrementLunarOrbs(int t){
-        System.out.println("before ORBS AT " + lunarOrbs + " WITH old TICKS "  + lastOrbTick);
         lunarOrbs=Math.max(0,lunarOrbs-1);
         lastOrbTick=t;
-        System.out.println("now ORBS AT " + lunarOrbs + " WITH NEW TICKS "  + lastOrbTick);
     }
     public int getLastOrbTick(){
         return lastOrbTick;

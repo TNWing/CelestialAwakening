@@ -51,6 +51,7 @@ public class AsteronPiercingRays extends GenericAbility {
                         ray.setVAng(200);//test w/ 70, prod should be 200
                         ray.setPos(spt);
                         level.addFreshEntity(ray);
+                        
                     }
                     break;
                 }

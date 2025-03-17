@@ -110,11 +110,9 @@ public class LivingEntityCapability {
             ListTag dataList=new ListTag();
 
             Object[] data=entry.getValue().getSecond();
-            System.out.println("OUR UUID IS " + uuid);
             for (Object obj:data) {
-                System.out.println("DATA TO SAVE IS " + obj);
                 if (obj instanceof UUID){
-                    dataList.add(StringTag.valueOf(((UUID)obj).toString()));
+                    dataList.add(StringTag.valueOf(obj.toString()));
                 }
                 else if (obj instanceof Integer){
                     dataList.add(IntTag.valueOf((Integer) obj));
@@ -145,7 +143,6 @@ public class LivingEntityCapability {
                 String abilityName=compoundtag.getString("Name");
                 Integer cd=compoundtag.getInt("CD");
                 ListTag data= (ListTag) compoundtag.get("Data");
-                System.out.println("AB DATA load");
                 List<Object> objList = new ArrayList<>();
                 for (int a = 0; a < data.size(); ++a) {
                     Tag abilityTag = data.get(a);
@@ -158,7 +155,6 @@ public class LivingEntityCapability {
                     }
                 }
                 System.out.println("WE got ability " + abilityName + " WITH TIME " + cd);
-                System.out.println("OUR data list is " + objList.toString());
                 abilityDataMap.put(abilityName,new Pair<>(cd, objList.toArray()));
             }
         }

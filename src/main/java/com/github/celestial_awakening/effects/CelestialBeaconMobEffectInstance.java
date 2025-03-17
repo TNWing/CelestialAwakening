@@ -17,19 +17,19 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
         super(p_19513_);
         this.startDuration=this.getDuration();
         this.stage=1;
-        System.out.println("C beacon basic");
+
     }
     public CelestialBeaconMobEffectInstance(int duration) {
         super(MobEffectInit.CELESTIAL_BEACON.get(),duration);
         this.startDuration=duration;
         this.stage=1;
-        System.out.println("C beacon with dura");
+
     }
     public CelestialBeaconMobEffectInstance(int duration,int amp) {
         super(MobEffectInit.CELESTIAL_BEACON.get(),duration,amp);
         this.startDuration=duration;
         this.stage=1;
-        System.out.println("C beacon with dura and amp");
+
     }
     public CelestialBeaconMobEffectInstance(int duration,int amp,int stage) {
         super(MobEffectInit.CELESTIAL_BEACON.get(),duration,amp);
@@ -39,7 +39,7 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
     }
     public CelestialBeaconMobEffectInstance(MobEffect effect, int dura, int amp, boolean ambient, boolean visible, boolean showIcon, @Nullable MobEffectInstance hiddenEffect, Optional<FactorData> factorData) {
         super(effect,dura,amp,ambient,visible,showIcon,hiddenEffect,factorData);
-        System.out.println("C beacon complex");
+
 
     }
     @Override

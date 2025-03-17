@@ -11,7 +11,7 @@ public class CArrowRenderer  <T extends Entity> extends ArrowRenderer<CA_ArrowPr
         super(p_174008_);
     }
 
-    public static final ResourceLocation CA_ARROW_LOCATION = ResourceLocation.parse("textures/entity/projectiles/spectral_arrow.png");
+    public static final ResourceLocation CA_ARROW_LOCATION = new ResourceLocation("textures/entity/projectiles/spectral_arrow.png");
     @Override
     public ResourceLocation getTextureLocation(CA_ArrowProjectile p_114482_) {
         return CA_ARROW_LOCATION;

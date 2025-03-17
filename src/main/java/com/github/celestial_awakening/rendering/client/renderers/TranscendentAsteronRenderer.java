@@ -5,7 +5,6 @@ import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.TranscendentAsteronModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -28,9 +27,6 @@ public class TranscendentAsteronRenderer extends MobRenderer<Asteron, Transcende
         if (mob.getActionId()==4){
             int actFrame=mob.getActionFrame();
             int quotient=actFrame/4;
-            if (!Minecraft.getInstance().isPaused()){
-                System.out.println("ACT FRAME is " + actFrame + " AND QUOT is " + quotient + "MOB tick cnt is " + mob.tickCount);
-            }
 
             ResourceLocation valToReturn;
             switch(quotient){
@@ -64,7 +60,6 @@ public class TranscendentAsteronRenderer extends MobRenderer<Asteron, Transcende
     @Override
     public void render(Asteron entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        //VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
         poseStack.scale(0.75f,0.75f,0.75f);
 
         super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);

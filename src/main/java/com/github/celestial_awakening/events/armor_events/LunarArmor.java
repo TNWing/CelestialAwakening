@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +103,24 @@ public class LunarArmor extends ArmorEffect {
             }
             player.level().addFreshEntity(itemEntity);
         }
+    }
+
+    public void onFishHookCreationEvent(FishingHook hook){
+        /*
+        Field luckField = FishingHook.class.getDeclaredField("luck");
+        Field spdField = FishingHook.class.getDeclaredField("lureSpeed");
+        luckField.setAccessible(true);
+        spdField.setAccessible(true);
+        int spd=spdField.getInt(hook);
+	luck f_37096_
+	lureSpeed f_37097_
+         */
+
+        int luck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37096_");
+        int lureSpd= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37097_");
+        ObfuscationReflectionHelper.setPrivateValue(FishingHook.class,hook,luck+1,"f_37096_");
+
+
     }
 
     @Override

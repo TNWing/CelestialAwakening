@@ -77,13 +77,13 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),
-                ResourceLocation.parse("item/generated")).texture("layer0",
+                new ResourceLocation("item/generated")).texture("layer0",
                 CelestialAwakening.createResourceLocation("item/" + item.getId().getPath())
                 );
     }
     private ItemModelBuilder heldItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),
-                ResourceLocation.parse("item/handheld")).texture("layer0",
+                new ResourceLocation("item/generated")).texture("layer0",
                 CelestialAwakening.createResourceLocation("item/" + item.getId().getPath()));
     }
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
@@ -106,12 +106,12 @@ public class CustomItemModelProvider extends net.minecraftforge.client.model.gen
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
+                // new ResourceLocation("item/generated")).texture("layer0",
                 ResourceLocation armorItemResLoc =CelestialAwakening.createResourceLocation(armorItemPath);
-                ResourceLocation trimResLoc = ResourceLocation.parse(trimPath); // minecraft namespace
+                ResourceLocation trimResLoc = new ResourceLocation(trimPath); // minecraft namespace
                 ResourceLocation trimNameResLoc = CelestialAwakening.createResourceLocation(currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
-                // avoid an IllegalArgumentException
                 existingFileHelper.trackGenerated(trimResLoc, PackType.CLIENT_RESOURCES, ".png", "textures");
 
                 // Trimmed armorItem files

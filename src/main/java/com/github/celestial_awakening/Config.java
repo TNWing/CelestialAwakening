@@ -107,13 +107,13 @@ public class Config
 
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
-                .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,ResourceLocation.parse(obj)))
+                .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,new ResourceLocation(obj)))
                 .collect(Collectors.toSet());
     }
 
     static Set<ResourceKey<EntityType<?>>> strToEntities(List<? extends String> list){
         return list.stream().map(
-          obj->ResourceKey.create(Registries.ENTITY_TYPE,ResourceLocation.parse(obj)))
+          obj->ResourceKey.create(Registries.ENTITY_TYPE,new ResourceLocation(obj)))
                 .filter(key->{EntityType<?> type= ForgeRegistries.ENTITY_TYPES.getValue(key.location());
                 return type!=null && LivingEntity.class.isAssignableFrom(type.getBaseClass());
                 })

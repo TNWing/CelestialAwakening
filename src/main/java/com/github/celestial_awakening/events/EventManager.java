@@ -31,6 +31,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -179,14 +181,14 @@ public class EventManager {
                 LunarCrescent crescent=null;
                 if (isCrit){
                     if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
-                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90);
+                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,90,1.75f,0.35f,1.75f);
 
                         cap.changeStrikeCD(cd);
                     }
                 }
                 else{
                     if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
-                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0);
+                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),90,2.4f,hAng,0,0,1.75f,0.35f,1.75f);
                         cap.changeWaveCD(cd);
                     }
                 }
@@ -198,10 +200,9 @@ public class EventManager {
                     crescent.itemStackSource=itemStack;
 
                     if (orbs==6){
-                        System.out.println("SPAWNING");
                         if (isCrit){
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*15,0,90);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*15,0,90,1.25f,0.25f,1.25f);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());
@@ -212,7 +213,7 @@ public class EventManager {
                         }
                         else{
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*21,0,0);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,60,2.9f,hAng + i*21,0,0,1.25f,0.25f,1.25f);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());
@@ -280,10 +281,11 @@ public class EventManager {
                     int cnt=countPieces(player,material);
                     armorMaterials.get(material).onItemTooltipEvent(event, cnt);
                 }
-
             }
         }
     }
+
+
 
     @SubscribeEvent
     public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
@@ -294,6 +296,34 @@ public class EventManager {
             if (itemStack.getTag().contains("LifeFragHeal")) {
                 float heal = itemStack.getTag().getFloat("LifeFragHeal");
                 player.heal(heal);
+            }
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void onEntityCreation(EntityJoinLevelEvent event){
+        Entity entity=event.getEntity();
+        if (!event.getLevel().isClientSide){
+            ServerLevel serverLevel= (ServerLevel) event.getLevel();
+            if (entity instanceof FishingHook){
+                FishingHook hook= (FishingHook) entity;
+                if (hook.getPlayerOwner()!=null){
+                    int cnt=0;
+                    Player player=hook.getPlayerOwner();
+                    for (ItemStack armorStack : player.getInventory().armor) {
+                        if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
+                            ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                            if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                                cnt++;
+                            }
+                        }
+                    }
+                    if (cnt==4){
+                        ((LunarArmor)lunarArmor.getValue()).onFishHookCreationEvent(hook);
+                    }
+                }
+
             }
         }
 
@@ -310,13 +340,7 @@ public class EventManager {
             @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
                 cap.loadNBTAfterLevelLoad();
-                System.out.println("PREPARING TO SEND TO ");
-                for (Player p:levelAccessor.players()) {
-                    System.out.println("Player " + p.getName());
-
-                }
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
-                System.out.println("PACKET SENT to players");
             });
         }
     }
@@ -627,13 +651,7 @@ public class EventManager {
 
                 capOptional.ifPresent(cap->{
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
-                        try {
-                            solarEvents.detectPlayers(serverLevel,cap);
-                        } catch (NoSuchFieldException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
+                        solarEvents.detectPlayers(serverLevel,cap);
                     }
                     else{
                         solarEvents.canCreateDivinerEye(event);

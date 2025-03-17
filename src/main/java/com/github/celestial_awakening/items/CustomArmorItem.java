@@ -9,8 +9,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Field;
 import java.util.EnumMap;
 import java.util.UUID;
 
@@ -42,13 +42,8 @@ public class CustomArmorItem extends ArmorItem {
         if (this.getSpdBoost()>0){
             builder.put(Attributes.MOVEMENT_SPEED,new AttributeModifier(uuid,"Armor Speed",this.getSpdBoost(), AttributeModifier.Operation.ADDITION));
         }
-        try {
-            Field defaultModifiersField = ArmorItem.class.getDeclaredField("defaultModifiers");
-            defaultModifiersField.setAccessible(true);
-            defaultModifiersField.set(this, builder.build());
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        //	defaultModifiers f_40383_
+        ObfuscationReflectionHelper.setPrivateValue(ArmorItem.class,this,builder.build(),"f_40383_");
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
     }
     @Override

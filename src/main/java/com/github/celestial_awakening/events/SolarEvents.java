@@ -29,10 +29,10 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -118,12 +118,12 @@ public class SolarEvents {
     /*
     i can use this server side or client side. server side is probably easier, as if client side, the client will need to perform detections AND send messages to server, which server must verify.
      */
-    public List<Player> detectPlayers(Level level,LevelCapability cap) throws NoSuchFieldException, IllegalAccessException {
+    public List<Player> detectPlayers(Level level,LevelCapability cap){
         //also, when the player logs, does not save the diviner?
         ServerChunkCache chunkCache = (ServerChunkCache) level.getChunkSource();
-        Field visibleChunkMapField = ChunkMap.class.getDeclaredField("visibleChunkMap");
-        visibleChunkMapField.setAccessible(true);
-        Map<Long, ChunkHolder> visibleChunkMap = (Map<Long, ChunkHolder>) visibleChunkMapField.get(chunkCache.chunkMap);
+        //	visibleChunkMap f_140130_
+
+        Map<Long, ChunkHolder> visibleChunkMap = ObfuscationReflectionHelper.getPrivateValue(ChunkMap.class,chunkCache.chunkMap ,"f_140130_");
         float startingDivPower=cap.divinerEyePower;
         for (ChunkHolder chunkHolder : visibleChunkMap.values()) {
             LevelChunk chunk = chunkHolder.getFullChunk();
@@ -143,11 +143,7 @@ public class SolarEvents {
                 capDirty=true;
                 BlockPos playerBlockPos=entity.blockPosition();
                 if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
-                    /*
-                    TODO: IDEA
-                    amplifier is determined by how long the player has stood in the open consecutively?
-                   i can do that later
-                     */
+                    //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
                     int amp=0;
                     if (startingDivPower>35){
                         amp=1;
@@ -191,25 +187,23 @@ public class SolarEvents {
                         if (level.random.nextInt(0,2)==0){
                             cap.setSunControlVal ((int) (-startingDivPower/8));
                             cap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
-                            System.out.println("LEVEL STATE IS " + cap.divinerSunControlVal);
                         }
                         else{
                             cap.setSunControlVal ((int) (-startingDivPower/8));
                             cap.divinerSunControlTimer = (pts*35);
-                            System.out.println("LEVEL STATE IS " + cap.divinerSunControlVal);
                         }
                     }
                     else{
-                        System.out.println("REMOVING AoD");
                         cap.divinerSunControlTimer=10;
                     }
                 }
             }
             if (capDirty){
-                System.out.println("DIRT CAP, sending details");
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),level.dimension());
             }
         }
+
+
         return null;
     }
 }

@@ -16,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -45,6 +46,9 @@ public class CelestialAwakening
 
 
 */
+    public CelestialAwakening() {
+        this(FMLJavaModLoadingContext.get());  // Call the other constructor
+    }
     public CelestialAwakening(FMLJavaModLoadingContext context)
     {
         if (false) {
@@ -71,15 +75,15 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         MinecraftForge.EVENT_BUS.register(new AttachCapabilities());
         MinecraftForge.EVENT_BUS.register(new ClientEventsManager());
         MinecraftForge.EVENT_BUS.register(this);
-
         modEventBus.addListener(this::addCreative);
 
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,Config.SPEC);
+        //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
 
     }
     public static ResourceLocation createResourceLocation(String str){
-        return ResourceLocation.fromNamespaceAndPath(MODID,str);
+        return new ResourceLocation(MODID,str);
     }
 
     private void registerTiers(){

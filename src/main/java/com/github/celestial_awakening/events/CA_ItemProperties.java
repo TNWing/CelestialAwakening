@@ -11,7 +11,7 @@ public class CA_ItemProperties extends ItemProperties {
     }
 
     private static void bowProperties(Item item) {
-        ItemProperties.register(item, ResourceLocation.parse("pull"), (p_174635_, p_174636_, p_174637_, p_174638_) -> {
+        ItemProperties.register(item, new ResourceLocation("pull"), (p_174635_, p_174636_, p_174637_, p_174638_) -> {
             if (p_174637_ == null) {
                 return 0.0F;
             } else {
@@ -20,7 +20,7 @@ public class CA_ItemProperties extends ItemProperties {
             }
         });
 
-        ItemProperties.register(item, ResourceLocation.parse("pulling"), (p_174630_, p_174631_, p_174632_, p_174633_) -> {
+        ItemProperties.register(item,new ResourceLocation("pulling"), (p_174630_, p_174631_, p_174632_, p_174633_) -> {
             return p_174632_ != null && p_174632_.isUsingItem() && p_174632_.getUseItem() == p_174630_ ? 1.0F : 0.0F;
         });
     }

@@ -59,7 +59,6 @@ public class LevelCapability{
 
 
     public void updateData(LevelCapability data){
-        System.out.println("UPDATING lcap");
         this.divinerEyeToState=data.divinerEyeToState;
         this.divinerEyeFromState=data.divinerEyeFromState;
         this.divinerEyeCurrentChangeDelay =data.divinerEyeCurrentChangeDelay;

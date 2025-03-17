@@ -148,7 +148,11 @@ public class SolarEvents {
                     amplifier is determined by how long the player has stood in the open consecutively?
                    i can do that later
                      */
-                    CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,0,1);
+                    int amp=0;
+                    if (startingDivPower>35){
+                        amp=1;
+                    }
+                    CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
                     entity.addEffect(mobEffectInstance);
                     cap.changeDivPower(Config.divinerScanPower);
 

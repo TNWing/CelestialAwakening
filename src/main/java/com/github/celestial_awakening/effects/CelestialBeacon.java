@@ -4,6 +4,7 @@ import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
+import com.github.celestial_awakening.entity.living.transcendents.Nebure;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffect;
@@ -99,6 +100,13 @@ public class CelestialBeacon extends MobEffect {
                         break;
                     }
                     case 2:{
+                        AbstractTranscendent[] group=new AbstractTranscendent[4];
+
+                        group[0]=new Asteron(EntityInit.ASTERON.get(), level);
+                        group[1]=new Asteron(EntityInit.ASTERON.get(),level);
+                        group[2]=new Astralite(EntityInit.ASTRALITE.get(),level);
+                        group[3]=new Nebure(EntityInit.NEBURE.get(),level);
+                        groups.add(group);
                         break;
                     }
                     case 3:{

@@ -104,7 +104,7 @@
 
   "tooltip.celestial_awakening.sun_staff.ray_name": "Shining Ray",
   "tooltip.celestial_awakening.sun_staff.ray_control": "Right Click",
-  "tooltip.celestial_awakening.sun_staff.ray_desc": "Summons a ray in the direction you are looking at.\nUpon colliding with an entity or block, the ray detonates, dealing damage to enemies and healing allies in a 2 block range.\nCooldown of 11 seconds",
+  "tooltip.celestial_awakening.sun_staff.ray_desc": "Summons a ray in the direction you are looking at.\nUpon colliding with an entity or block, the ray detonates, dealing damage to enemies and healing allies within a 2 block range of the entire ray.\nCooldown of 11 seconds",
 
 
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_name": "Dangersense",

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " SC",
+    " RS",
+    "R  "
+  ],
+  "key": {
+    "C": {
+      "item": "celestial_awakening:shimmer_cube"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    },
+    "S": {
+      "item": "celestial_awakening:sunstone"
+    }
+  },
+  "result": {
+    "item": "celestial_awakening:sun_staff",
+    "count": 1
+
+  }
+}

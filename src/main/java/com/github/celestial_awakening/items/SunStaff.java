@@ -147,8 +147,6 @@ CD of 4-10 seconds, depending on how long the storm lasted.
 //TODO: trigger event at some point
     void shiningRay(ServerLevel serverLevel,LivingEntity owner, float hAng,float vAng){
         LightRay ray=LightRay.create(serverLevel,20,4.5f);
-        Player player;
-
         ray.initDims(0.4f,0,0.4f,0,0.4f,12f,0,12/4f);
         ray.setOwner(owner);
         ray.setHAng(90-hAng);

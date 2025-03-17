@@ -49,7 +49,7 @@ public class NightProwler extends AbstractCALivingEntity {
         actionIDToAnimMap.put(2,crouchAnimationState);
         actionIDToAnimMap.put(3,leapAnimationState);
         actionIDToAnimMap.put(4,leapRecoveryAnimationState);
-        this.xpReward=12;
+        this.xpReward=15;
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()

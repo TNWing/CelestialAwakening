@@ -11,7 +11,6 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -72,20 +71,6 @@ public class LunarCrescent extends CA_Projectile {
         super.onSyncedDataUpdated(accesor);
     }
 
-
-
-
-//even with f=0, the thing is still properly rotated
-    //but when zrot is blocked out, its not affected?
-    /*
-    So when ZROT is properly set, it rotates
-    but why, ZROT is only really called in renderer? unless that impacts aabb
-    no, renderer only impacts sprite, not the aabb
-    so why?
-     */
-
-
-
     @Override
     public void refreshDimensions() {
         super.refreshDimensions();
@@ -106,9 +91,6 @@ public class LunarCrescent extends CA_Projectile {
         tag.putIntArray("Entities Hit",this.entityIDs);
     }
     public void tick() {
-        if (level().isClientSide){
-            //System.out.println("before lc runs " + this.position()+ "   WITH ZR " + this.getZRot());
-        }
         Entity owner = this.getOwner();
         if (this.level().isClientSide || (owner == null || !owner.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
@@ -127,7 +109,7 @@ public class LunarCrescent extends CA_Projectile {
                     if (e.hurt(damagesource,this.getDmg())){
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);
-                            if (!e.isAlive() && itemStackSource.getItem() instanceof MoonlightReaper){
+                            if (!e.isAlive() && itemStackSource!=null && itemStackSource.getItem() instanceof MoonlightReaper){
                                 MoonlightReaper.healOnKill(itemStackSource, e, (LivingEntity) owner);
                             }
                         }
@@ -140,12 +122,7 @@ public class LunarCrescent extends CA_Projectile {
                 }
                 this.checkInsideBlocks();
             }
-
-
             this.life++;
-            if (level().isClientSide){
-                //System.out.println("after lc done " + this.position()+ "   WITH ZR " + this.getZRot());
-            }
             if (this.life>=this.getLifeTime()){
                 this.discard();
             }

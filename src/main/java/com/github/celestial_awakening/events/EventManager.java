@@ -55,6 +55,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
@@ -234,6 +235,7 @@ public class EventManager {
     //TODO: replace with loot table later
     @SubscribeEvent
     public static void onItemFished(ItemFishedEvent event){
+        int storedLuck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,event.getHookEntity(),"f_37096_");
         int cnt=0;
         Player player=event.getEntity();
         if (player!=null){
@@ -246,10 +248,33 @@ public class EventManager {
                     }
                 }
             }
+            if (cnt>0){
+                ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
+            }
         }
-        if (cnt>0){
-            ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
+
+    }
+    @SubscribeEvent
+    public static void onTrade(TradeWithVillagerEvent event){
+        Player player =event.getEntity();
+        if (!player.level().isClientSide){
+            int cnt=0;
+            for (ItemStack armorStack : player.getInventory().armor) {
+                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
+                    ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                    if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                        cnt++;
+                    }
+                }
+            }
+            if (cnt==4){
+                ServerLevel serverLevel= (ServerLevel) player.level();
+                ((LunarArmor)lunarArmor.getValue()).onTrade(serverLevel, event,player);
+            }
+
+
         }
+
     }
 
     @SubscribeEvent
@@ -320,7 +345,7 @@ public class EventManager {
                         }
                     }
                     if (cnt==4){
-                        ((LunarArmor)lunarArmor.getValue()).onFishHookCreationEvent(hook);
+                        ((LunarArmor)lunarArmor.getValue()).onFishHookCreationEvent(serverLevel,hook);
                     }
                 }
 
@@ -576,24 +601,6 @@ public class EventManager {
     }
 
 
-    @SubscribeEvent
-    public static void onTrade(TradeWithVillagerEvent event){
-        ItemStack costA=event.getMerchantOffer().getBaseCostA();
-        ItemStack costB=event.getMerchantOffer().getCostB();
-        Player player=event.getEntity();
-        if (false){//if shady deal is active for player, refund part of costs
-            if (costA.getCount()>1){
-                ItemStack refundA=costA.copy();
-                refundA.setCount((int)(costA.getCount()*0.1f));
-                player.addItem(refundA);
-            }
-            if (costB.getCount()>1){
-                ItemStack refundB=costB.copy();
-                refundB.setCount((int)(costB.getCount()*0.1f));
-                player.addItem(refundB);
-            }
-        }
-    }
 
     @SubscribeEvent
     public static void onEntityLeaveLevel(EntityLeaveLevelEvent event){

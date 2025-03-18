@@ -299,10 +299,10 @@ public class CA_Projectile extends Projectile implements CA_Entity {
 
         @NotNull LazyOptional<ProjCapability> capOptional=getProjCap();
         capOptional.ifPresent(cap->{
-                    if (cap!=null){
-                        currentMovementModifier=cap.popFromList();
-                    }
-            updateMovementFactors(cap);
+            if (currentMovementModifier==null){
+                currentMovementModifier=cap.popFromList();
+            }
+            updateMovementFactors();
         });
 
         //this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
@@ -310,6 +310,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         Vec3 dir=calculateMoveVec();
         this.setDeltaMovement(dir);
         Vec3 dm=this.getDeltaMovement();
+
 
 
         double d0 = this.getX() + dm.x;
@@ -320,12 +321,11 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     }
     //TODO: need to have v_ang affect the dir of horizontal move
     public Vec3 calculateMoveVec(){
+        System.out.println("pre clamp angs h" + getHAng() +"  v " + getVAng());
         double hAngle = MathFuncs.clampAngle(this.getHAng());
         double vAngle = MathFuncs.clampAngle(this.getVAng());
-
         double hRad = Math.toRadians(hAngle);
         double vRad = Math.toRadians(vAngle);
-
         Vec3 dir=new Vec3(Math.sin(hRad)*Math.cos(vRad),Math.sin(vRad),Math.cos(hRad)*Math.cos(vRad));
 
         return dir.scale(this.getSpd()/20f);
@@ -365,7 +365,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     }
 
 
-    public void updateMovementFactors(ProjCapability cap){
+    public void updateMovementFactors(){
         this.refreshDimensions();
         if (currentMovementModifier!=null){
 

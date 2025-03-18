@@ -5,6 +5,7 @@ import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -13,8 +14,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -68,14 +69,14 @@ public class LunarArmor extends ArmorEffect {
     public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
         if (cnt==4){
             if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
-                blessedNightEffects(event,player);
+                moonlitPath(event,player);
             }
         }
     }
     @Override
     public void onEquipmentChange(LivingEquipmentChangeEvent event,Player player,int cnt){
         if (cnt==4){
-            blessedNightEffects(event,player);
+            moonlitPath(event,player);
         }
         else{
             player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID.fromString(moonlightPath));
@@ -90,10 +91,9 @@ public class LunarArmor extends ArmorEffect {
     }
 
     public void onFishEvent(ItemFishedEvent event,int cnt){
-        Random rand=new Random();
-        if (rand.nextInt(0,100)<cnt*12){
+        if (random.nextInt(0,100)<cnt*12){
             Player player=event.getEntity();
-            int roll=rand.nextInt(0,10);
+            int roll=random.nextInt(0,10);
             ItemEntity itemEntity;
             if (roll<5){
                  itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
@@ -105,22 +105,59 @@ public class LunarArmor extends ArmorEffect {
         }
     }
 
-    public void onFishHookCreationEvent(FishingHook hook){
+    public void onFishHookCreationEvent(ServerLevel serverLevel, FishingHook hook){
         /*
-        Field luckField = FishingHook.class.getDeclaredField("luck");
-        Field spdField = FishingHook.class.getDeclaredField("lureSpeed");
-        luckField.setAccessible(true);
-        spdField.setAccessible(true);
-        int spd=spdField.getInt(hook);
 	luck f_37096_
 	lureSpeed f_37097_
          */
+        if (serverLevel.getDayTime()>=nightStart && serverLevel.getMoonPhase()==4){
+            int luck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37096_");
+            int lureSpd= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37097_");
+            ObfuscationReflectionHelper.setPrivateValue(FishingHook.class,hook,luck+1,"f_37096_");
+        }
 
-        int luck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37096_");
-        int lureSpd= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37097_");
-        ObfuscationReflectionHelper.setPrivateValue(FishingHook.class,hook,luck+1,"f_37096_");
+    }
+/*
+            if (p_9990_.addItem(itemstack)) {
+               p_9990_.level().playSound((Player)null, p_9990_.getX(), p_9990_.getY(), p_9990_.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((p_9990_.getRandom().nextFloat() - p_9990_.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+               flag = true;
+            } else {
+               ItemEntity itementity = p_9990_.drop(itemstack, false);
+               if (itementity != null) {
+                  itementity.setNoPickUpDelay();
+                  itementity.setTarget(p_9990_.getUUID());
+               }
+            }
+ */
+    public void onTrade(ServerLevel serverLevel,TradeWithVillagerEvent event,Player player){
+        ItemStack costA=event.getMerchantOffer().getBaseCostA();
+        ItemStack costB=event.getMerchantOffer().getCostB();
+        if (serverLevel.getDayTime()>=nightStart && (serverLevel.getMoonPhase()==2) || serverLevel.getMoonPhase()==6){//if shady deal is active for player, refund part of costs
+            if (costA.getCount()>1){
+                ItemStack refundA=costA.copy();
+                refundA.setCount((int) Math.ceil(costA.getCount()*0.1f));
+                if (!player.addItem(refundA)){
+                    ItemEntity itementity = player.drop(refundA, false);
+                    if (itementity != null) {
+                        itementity.setNoPickUpDelay();
+                        itementity.setTarget(player.getUUID());
+                    }
+                }
 
+            }
+            if (costB.getCount()>1){
+                ItemStack refundB=costB.copy();
+                refundB.setCount((int)(Math.ceil(costB.getCount()*0.1f)));
+                if (!player.addItem(refundB)){
+                    ItemEntity itementity = player.drop(refundB, false);
+                    if (itementity != null) {
+                        itementity.setNoPickUpDelay();
+                        itementity.setTarget(player.getUUID());
+                    }
+                }
 
+            }
+        }
     }
 
     @Override
@@ -145,17 +182,20 @@ public class LunarArmor extends ArmorEffect {
                 ToolTipBuilder.addFullSetName(event,BLESSED_NAME,boldColor);
             } else {
                 switch (level.getMoonPhase()) {
-                    case 0: {
+                    case 0: {//full
                         ToolTipBuilder.addFullSetName(event,PATH_NAME,boldColor);
                         break;
                     }
-                    case 3:
-                    case 7: {
+                    case 2://half
+                    case 6: {
                         ToolTipBuilder.addFullSetName(event,DEAL_NAME,boldColor);
                         break;
                     }
-                    case 5: {
+                    case 4: {//new
                         ToolTipBuilder.addFullSetName(event,FISH_NAME,boldColor);
+                        break;
+                    }
+                    default:{
                         break;
                     }
                 }
@@ -191,12 +231,12 @@ public class LunarArmor extends ArmorEffect {
                         ToolTipBuilder.addFullArmorSetComponent(event,PATH_NAME,boldColor,PATH_DESC,infoColor);
                         break;
                     }
-                    case 3:
-                    case 7: {
+                    case 2:
+                    case 6: {
                         ToolTipBuilder.addFullArmorSetComponent(event,DEAL_NAME,boldColor,DEAL_DESC,infoColor);
                         break;
                     }
-                    case 5: {
+                    case 4: {
                         ToolTipBuilder.addFullArmorSetComponent(event,FISH_NAME,boldColor,FISH_DESC,infoColor);
                         break;
                     }
@@ -209,39 +249,36 @@ public class LunarArmor extends ArmorEffect {
     }
     void pieceEffectBlockBreak(BlockEvent.BreakEvent event,int cnt){
         BlockState blockState=event.getState();
-        Block block=blockState.getBlock();
         if (blockState.is(BlockTags.DIRT) ){
             if (random.nextFloat(100)<cnt*0.4f){
                 Player player=event.getPlayer();
                 Level level=player.level();
                 BlockPos blockPos=player.blockPosition();
-                ItemEntity itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
+                ItemEntity itemEntity;
+                int roll=random.nextInt(0,10);
+                if (roll<3){
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
+                }
+                else if (roll<6){
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(Items.BROWN_MUSHROOM));
+                }
+                else{
+                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(Items.RED_MUSHROOM));
+                }
                 level.addFreshEntity(itemEntity);
             }
         }
     }
 
-
-    void setEffect(Player player,int cnt,Event event){
-        if (event instanceof TickEvent.PlayerTickEvent){
-        }
-        else if (cnt==4){
-            blessedNightEffects(event,player);
-        }
-    }
-
-    private void orbiter( LivingDamageEvent event,Player player){//still hits
+    private void orbiter( LivingDamageEvent event,Player player){
         if (event.getEntity() == player && event.getSource().getEntity() instanceof LivingEntity){
-            LivingEntity livingEntity= (LivingEntity) event.getSource().getEntity();
             event.setAmount(event.getAmount()*0.95f);
             OrbiterProjectile orbiterProjectile=OrbiterProjectile.create(player.level(),player,140);
             player.level().addFreshEntity(orbiterProjectile);
         }
     }
 
-
-
-    void blessedNightEffects(Event event,Player player){
+    void moonlitPath(Event event, Player player){
         Level level=player.level();
         int time=(int)level.dayTime();//ranges from 0-24k
         if (time<nightStart){//daytime
@@ -249,8 +286,7 @@ public class LunarArmor extends ArmorEffect {
         }
         else{
             int phase=level.getMoonPhase();
-
-            if ((event instanceof LivingEquipmentChangeEvent || event instanceof TickEvent.LevelTickEvent) && phase==0){//full
+            if ((event instanceof LivingEquipmentChangeEvent || event instanceof TickEvent.PlayerTickEvent) && phase==0){//full
                 //Moonlight Path: Drastically increased move speed
                 AttributeModifier attributeModifier=new AttributeModifier(UUID.fromString(moonlightPath),"Moonlight Path Buff",0.75f,AttributeModifier.Operation.MULTIPLY_BASE);
                 //works, but need to ensure that removal works
@@ -258,21 +294,9 @@ public class LunarArmor extends ArmorEffect {
                 if (player.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(UUID.fromString(moonlightPath))==null){
                     player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(attributeModifier);
                 }
-                //need to remove modifier when
-                        /*
-                        no longer has full set:
-                        daytime:done
-                        different moon phase:done
-
-                         */
             }
             else{
                 player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID.fromString("4c80d010-d025-40de-80ad-6b262763cc30"));
-                if((phase==3 || phase == 7) && event instanceof TradeWithVillagerEvent){//half
-                    //Shady Deal: Chance to improve villager trade outputs
-                }
-                //bountiful is handled via loot modifier, crescent: 4,6
-                //must also handle new moon effect via fishing loot mod, new moon:5
             }
         }
     }

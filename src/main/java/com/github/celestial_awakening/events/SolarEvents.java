@@ -185,11 +185,11 @@ public class SolarEvents {
                     if (startingDivPower>=25){
                         int pts= (int) (2500*startingDivPower/(startingDivPower+25));
                         if (level.random.nextInt(0,2)==0){
-                            cap.setSunControlVal ((int) (-startingDivPower/8));
+                            cap.setSunControlVal ((byte) (-startingDivPower/8));
                             cap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
                         }
                         else{
-                            cap.setSunControlVal ((int) (-startingDivPower/8));
+                            cap.setSunControlVal ((byte) (-startingDivPower/8));
                             cap.divinerSunControlTimer = (pts*35);
                         }
                     }

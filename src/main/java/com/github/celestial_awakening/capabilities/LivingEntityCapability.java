@@ -32,12 +32,12 @@ public class LivingEntityCapability {
 
      */
 
-    int insanityPts;
-    int navigauge;//used for diviner
-    public void increaseInsanityValue(int i){
+    short insanityPts;
+    short navigauge;//used for diviner
+    public void increaseInsanityValue(short i){
         insanityPts+=i;
     }
-    public void increaseNaviGauge(int i){
+    public void increaseNaviGauge(short i){
         navigauge+=i;
     }
     public void setUUID(UUID id){
@@ -123,7 +123,7 @@ public class LivingEntityCapability {
             abilities.add(compoundTag);
         }
         nbt.put("Abilities",abilities);
-        nbt.putInt("NaviGauge",navigauge);
+        nbt.putShort("NaviGauge",navigauge);
 
     }
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -158,7 +158,7 @@ public class LivingEntityCapability {
                 abilityDataMap.put(abilityName,new Pair<>(cd, objList.toArray()));
             }
         }
-        navigauge=nbt.getInt("NaviGauge");
+        navigauge=nbt.getShort("NaviGauge");
     }
 
     public void insertIntoAbilityMap(String abilityName, Integer cd){

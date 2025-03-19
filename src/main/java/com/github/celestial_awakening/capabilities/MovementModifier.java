@@ -23,6 +23,7 @@ the flip is adjusting the verticalvar
         this.remainingTicks=duration;
         this.initialTicks=duration;
         this.timeOfCreation= Minecraft.getInstance().level.getGameTime();
+        //maybe optimize timeofcreation
 
         this.zRMod=0;
         this.rotOperation=modOperation.SET;

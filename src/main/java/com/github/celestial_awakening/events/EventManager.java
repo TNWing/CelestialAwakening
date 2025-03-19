@@ -523,6 +523,7 @@ public class EventManager {
                     if (targetData!=null){
                         UUID id1= (UUID) targetCap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         if (!id1.equals(causingEntity.getUUID())){
+                            System.out.println("not part of duel");
                             event.setAmount(event.getAmount()*0.3f);
                         }
                     }
@@ -544,6 +545,7 @@ public class EventManager {
                     if (attackerData!=null){
                         UUID id1= (UUID) attackerCap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         if (!id1.equals(target.getUUID())){
+                            System.out.println("not part of duel");
                             event.setAmount(event.getAmount()*0.3f);
                         }
                     }

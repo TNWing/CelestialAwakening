@@ -36,12 +36,12 @@ public class LevelCapability{
     public float divinerEyeChance;
     public int divinerEyeCD;//in ticks
     public int divinerEyeTimer;//in ticks, how long the eye will persist in total for this iteration
-    public int divinerEyeFromState;
-    public int divinerEyeToState;
+    public byte divinerEyeFromState;
+    public byte divinerEyeToState;
     public int divinerEyeCurrentChangeDelay;
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
     public int divinerEyePower;//0-100, determines what abilities can be used, maybe make new cap in the thousands or 1 mil?
-    public int divinerSunControlVal;//-10 to 10
+    public byte divinerSunControlVal;//-10 to 10
     public int divinerSunControlTimer;
 
     public int pkRemainingSpawnAttempts;
@@ -91,8 +91,8 @@ public class LevelCapability{
         //then, look at level command map
         CompoundTag divEyeTag=new CompoundTag();
         divEyeTag.putInt("cd",this.divinerEyeCD);
-        divEyeTag.putInt("fromState",this.divinerEyeFromState);
-        divEyeTag.putInt("toState",this.divinerEyeToState);
+        divEyeTag.putByte("fromState",this.divinerEyeFromState);
+        divEyeTag.putByte("toState",this.divinerEyeToState);
         divEyeTag.putInt("changeDelay",this.divinerEyeCurrentChangeDelay);
 
         divEyeTag.putFloat("frameProgress",this.divinerEyeFrameProgress);
@@ -100,7 +100,7 @@ public class LevelCapability{
 
         divEyeTag.putInt("timer",this.divinerEyeTimer);
         divEyeTag.putInt("power",this.divinerEyePower);
-        divEyeTag.putInt(nbtName_DivSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putByte(nbtName_DivSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
         DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
         result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put("levelRK",encodedObj));//not savingg?
@@ -145,13 +145,13 @@ public class LevelCapability{
         if (divEye!=null){
             this.divinerEyeTimer=divEye.getInt("timer");
             this.divinerEyeCD=divEye.getInt("cd");
-            this.divinerEyeFromState=divEye.getInt("fromState");
-            this.divinerEyeToState=divEye.getInt("toState");
+            this.divinerEyeFromState=divEye.getByte("fromState");
+            this.divinerEyeToState=divEye.getByte("toState");
             this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
             this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
             this.divinerEyeChance=divEye.getFloat("chance");
             this.divinerEyePower=divEye.getInt("power");
-            this.divinerSunControlVal =divEye.getInt(nbtName_DivSunControlVal);
+            this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
             this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
             System.out.println("TIMER is " +divinerEyeTimer+ " WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
@@ -178,16 +178,15 @@ public class LevelCapability{
             CompoundTag divEye= (CompoundTag) storedNBT.get("divEye");
             this.divinerEyeTimer=divEye.getInt("timer");
             this.divinerEyeCD=divEye.getInt("cd");
-            this.divinerEyeFromState=divEye.getInt("fromState");
-            this.divinerEyeToState=divEye.getInt("toState");
+            this.divinerEyeFromState=divEye.getByte("fromState");
+            this.divinerEyeToState=divEye.getByte("toState");
             this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
             this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
             this.divinerEyeChance=divEye.getFloat("chance");
             this.divinerEyePower=divEye.getInt("power");
-            this.divinerSunControlVal =divEye.getInt(nbtName_DivSunControlVal);
+            this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
             this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
-            System.out.println("LOADING DIV Data AFTER Lvl load on levelkey " + this.levelResourceKey);
             System.out.println("TIMER after is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
@@ -259,7 +258,7 @@ public class LevelCapability{
         }
         return false;
     }
-    public void setSunControlVal(int i){
-        this.divinerSunControlVal=Math.max(-10,Math.min(10,i));
+    public void setSunControlVal(byte i){
+        this.divinerSunControlVal= (byte) Math.max(-10,Math.min(10,i));
     }
 }

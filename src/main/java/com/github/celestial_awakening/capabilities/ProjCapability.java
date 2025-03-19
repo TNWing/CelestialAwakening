@@ -64,50 +64,51 @@ public class ProjCapability {
     }
     CompoundTag mmToNBT(MovementModifier mod){
         CompoundTag nbt=new CompoundTag();
-        nbt.putInt(angFunc,mod.getAngFunction().ordinal());
-        nbt.putInt(angOp,mod.getAngOperation().ordinal());
-        nbt.putFloat(hAng,mod.getHAng());
-        nbt.putFloat(vAng,mod.getVAng());
+        nbt.putByte(mm_angFunc, (byte) mod.getAngFunction().ordinal());
+        nbt.putByte(mm_angOp, (byte) mod.getAngOperation().ordinal());
+        nbt.putFloat(mm_hAng,mod.getHAng());
+        nbt.putFloat(mm_vAng,mod.getVAng());
 
-        nbt.putInt(spdFunc,mod.getSpdFunction().ordinal());
-        nbt.putInt(spdOp,mod.getSpdOperation().ordinal());
-        nbt.putFloat(spd,mod.getSpd());
+        nbt.putByte(mm_spdFunc, (byte) mod.getSpdFunction().ordinal());
+        nbt.putByte(mm_spdOp, (byte) mod.getSpdOperation().ordinal());
+        nbt.putFloat(mm_spd,mod.getSpd());
 
-        nbt.putInt(rotFunc,mod.getRotFunction().ordinal());
-        nbt.putInt(rotOp,mod.getRotOperation().ordinal());
-        nbt.putFloat(rot,mod.getZRot());
+        nbt.putByte(mm_rotFunc, (byte) mod.getRotFunction().ordinal());
+        nbt.putByte(mm_rotOp, (byte) mod.getRotOperation().ordinal());
+        nbt.putFloat(mm_rot,mod.getZRot());
 
-        nbt.putLong(serverTime,mod.getServerTime());
+        nbt.putLong(mm_serverTime,mod.getServerTime());
 
-        nbt.putInt(delay,mod.getDelay());
-        nbt.putInt(initialTicks,mod.getStartingTicks());
-        nbt.putInt(remainingTicks,mod.getRemainingTicks());
+        nbt.putShort(mm_delay, (short) mod.getDelay());
+        nbt.putShort(mm_initialTicks, (short) mod.getStartingTicks());
+        nbt.putShort(mm_remainingTicks, (short) mod.getRemainingTicks());
         return nbt;
     }
     MovementModifier nbtToMod(CompoundTag tag){
 
-        float spdMod=tag.getFloat(spd);
-        MovementModifier.modFunction sFunc=MovementModifier.modFunction.values()[tag.getInt(spdFunc)];
-        MovementModifier.modOperation sOp=MovementModifier.modOperation.values()[tag.getInt(spdOp)];
+        float spdMod=tag.getFloat(mm_spd);
+        MovementModifier.modFunction sFunc=MovementModifier.modFunction.values()[tag.getByte(mm_spdFunc)];
+        MovementModifier.modOperation sOp=MovementModifier.modOperation.values()[tag.getByte(mm_spdOp)];
 
-        float hA=tag.getFloat(hAng);
-        float vA=tag.getFloat(vAng);
-        MovementModifier.modFunction aFunc=MovementModifier.modFunction.values()[tag.getInt(angFunc)];
-        MovementModifier.modOperation aOp=MovementModifier.modOperation.values()[tag.getInt(angOp)];
+        float hA=tag.getFloat(mm_hAng);
+        float vA=tag.getFloat(mm_vAng);
+        MovementModifier.modFunction aFunc=MovementModifier.modFunction.values()[tag.getByte(mm_angFunc)];
+        MovementModifier.modOperation aOp=MovementModifier.modOperation.values()[tag.getByte(mm_angOp)];
 
-        float zR=tag.getFloat(rot);
-        MovementModifier.modFunction rFunc=MovementModifier.modFunction.values()[tag.getInt(rotFunc)];
-        MovementModifier.modOperation rOp=MovementModifier.modOperation.values()[tag.getInt(rotOp)];
+        float zR=tag.getFloat(mm_rot);
+        MovementModifier.modFunction rFunc=MovementModifier.modFunction.values()[tag.getByte(mm_rotFunc)];
+        MovementModifier.modOperation rOp=MovementModifier.modOperation.values()[tag.getByte(mm_rotOp)];
 
-        int d=tag.getInt(delay);
-        int timer=tag.getInt(remainingTicks);
-        int i=tag.getInt(initialTicks);
-        long sTime=tag.getLong(serverTime);
+        int d=tag.getShort(mm_delay);
+        int timer=tag.getShort(mm_remainingTicks);
+        int i=tag.getShort(mm_initialTicks);
+        long sTime=tag.getLong(mm_serverTime);
 
         MovementModifier mod=new MovementModifier(sFunc,sOp,aFunc,aOp,rFunc,rOp,spdMod,hA,vA,zR,d,i,sTime,timer);
 
         return mod;
     }
+
     public void putInFrontOfList(MovementModifier mod){
         movementModificationList.add(0,mod);
     }

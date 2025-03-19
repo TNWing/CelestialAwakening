@@ -72,7 +72,7 @@ public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
             else{//pick diff spot
                 System.out.println("MOVING");
                 int time=random.nextInt(100,160);
-                cap.divinerEyeToState= MathFuncs.getRandomWithExclusion(random,1,8,cap.divinerEyeFromState);
+                cap.divinerEyeToState= (byte) MathFuncs.getRandomWithExclusion(random,1,8,cap.divinerEyeFromState);
                 if (cap.divinerEyeTimer-time<=100){
                     System.out.println("ADJUSTING TIME FOR END PHASE");
                     System.out.println(cap.divinerEyeTimer);

@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
-
+import static com.github.celestial_awakening.nbt_strings.ProjDataNBTNames.*;
 public class CA_Projectile extends Projectile implements CA_Entity {
     Vec3 rotMoveDir;
     int rmdTicks;
@@ -54,9 +54,8 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,int lt) {
         super(p_37248_, p_37249_);
         this.setLifetime(lt);
-
-
     }
+
     protected void disableTargetShields(LivingEntity target){
         if (target instanceof Player){
             Player player= (Player) target;
@@ -64,9 +63,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
                 player.getCooldowns().addCooldown(player.getUseItem().getItem(), getDisableTicks());
                 player.stopUsingItem();
                 player.level().broadcastEntityEvent(player, (byte)30);
-
             }
-
         }
     }
 
@@ -74,6 +71,9 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     public LazyOptional<ProjCapability> getProjCap() {
         return this.getCapability(ProjCapabilityProvider.ProjCap);
     }
+
+
+
     @Override
     protected void defineSynchedData() {
         this.entityData.define(H_ANG,0f);
@@ -112,36 +112,43 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setDims(tag.getFloat("Width"),tag.getFloat("Height"));
-        this.setSpd(tag.getFloat("Spd"));
-        this.setHAng(tag.getFloat("HAng"));
-        this.setVAng(tag.getFloat("VAng"));
-        this.setLifetime(tag.getInt("Lifetime"));
-        this.setCurrentLifetime(tag.getInt("Current_Life"));
-        this.setDmg(tag.getFloat("Dmg"));
-        this.setZRot(tag.getFloat("ZRot"));
-        this.setRScales(tag.getFloat("X_RScale"),tag.getFloat("Y_RScale"),tag.getFloat("Z_RScale"));
-        this.setZRot(tag.getFloat("ZRot"));
-        this.setDisableShields(tag.getBoolean("Can_Disable"));
-        this.setDisableTicks(tag.getInt("Disable_Ticks"));
+        CompoundTag data=tag.getCompound(pd_HolderName);
+        this.setDims(data.getFloat(pd_width),data.getFloat(pd_height));
+        this.setSpd(data.getFloat(pd_spd));
+        this.setHAng(data.getFloat(pd_hAng));
+        this.setVAng(data.getFloat(pd_vAng));
+        this.setLifetime(data.getShort(pd_lifetime));
+        this.setCurrentLifetime(0);
+        this.setDmg(data.getFloat(pd_dmg));
+        this.setZRot(data.getFloat(pd_zRot));
+        this.setOpacity(data.getFloat(pd_opacity));
+        this.setRScales(data.getFloat(pd_xrScale),data.getFloat(pd_yrScale),data.getFloat(pd_zrScale));
+        this.setDisableShields(data.getBoolean(pd_disableShields));
+        this.setDisableTicks(data.getShort(pd_disableTicks));
+        this.setCollision(data.getBoolean(pd_hasCollision));
+        this.setReal(data.getBoolean(pd_real));
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putFloat("ZRot",this.getZRot());
-        tag.putFloat("Spd", this.getSpd());
-        tag.putFloat("HAng", this.getHAng());
-        tag.putFloat("VAng",this.getVAng());
-        tag.putInt("Lifetime",this.getLifeTime());
-        tag.putInt("Current_Life",0);
-        tag.putFloat("Dmg",this.getDmg());
-        tag.putFloat("Width",this.getWidth());
-        tag.putFloat("Height",this.getHeight());
-        tag.putFloat("X_RScale",this.getXRScale());
-        tag.putFloat("Y_RScale",this.getYRScale());
-        tag.putFloat("Z_RScale",this.getZRScale());
-        tag.putBoolean("Can_Disable",this.canDisableShields());
-        tag.putInt("Disable_Ticks",this.getDisableTicks());
+        CompoundTag data=new CompoundTag();
+        data.putFloat(pd_zRot,this.getZRot());
+        data.putFloat(pd_spd, this.getSpd());
+        data.putFloat(pd_hAng, this.getHAng());
+        data.putFloat(pd_vAng,this.getVAng());
+        data.putFloat(pd_opacity,this.getOpactiy());
+        data.putShort(pd_lifetime, (short) (this.getLifeTime()-getCurrentLifeTime()));
+        data.putFloat(pd_dmg,this.getDmg());
+        data.putFloat(pd_width,this.getWidth());
+        data.putFloat(pd_height,this.getHeight());
+        data.putFloat(pd_xrScale,this.getXRScale());
+        data.putFloat(pd_yrScale,this.getYRScale());
+        data.putFloat(pd_zrScale,this.getZRScale());
+        data.putBoolean(pd_disableShields,this.canDisableShields());
+        data.putShort(pd_disableTicks, (short) this.getDisableTicks());
+        data.putBoolean(pd_hasCollision,this.hasCollision());
+        data.putBoolean(pd_real,this.isReal());
+        tag.put(pd_HolderName,data);
     }
     public float getWidth(){
         return this.entityData.get(WIDTH);

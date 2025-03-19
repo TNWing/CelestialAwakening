@@ -30,23 +30,23 @@ public class ProjCapS2CPacket {
         while(buf.isReadable()){
             CompoundTag tag=buf.readNbt();
             if (tag!=null){
-                float spdMod=tag.getFloat(spd);
-                MovementModifier.modFunction sFunc=MovementModifier.modFunction.values()[tag.getInt(spdFunc)];
-                MovementModifier.modOperation sOp=MovementModifier.modOperation.values()[tag.getInt(spdOp)];
+                float spdMod=tag.getFloat(mm_spd);
+                MovementModifier.modFunction sFunc=MovementModifier.modFunction.values()[tag.getInt(mm_spdFunc)];
+                MovementModifier.modOperation sOp=MovementModifier.modOperation.values()[tag.getInt(mm_spdOp)];
 
-                float hA=tag.getFloat(hAng);
-                float vA=tag.getFloat(vAng);
-                MovementModifier.modFunction aFunc=MovementModifier.modFunction.values()[tag.getInt(angFunc)];
-                MovementModifier.modOperation aOp=MovementModifier.modOperation.values()[tag.getInt(angOp)];
+                float hA=tag.getFloat(mm_hAng);
+                float vA=tag.getFloat(mm_vAng);
+                MovementModifier.modFunction aFunc=MovementModifier.modFunction.values()[tag.getInt(mm_angFunc)];
+                MovementModifier.modOperation aOp=MovementModifier.modOperation.values()[tag.getInt(mm_angOp)];
 
-                float zR=tag.getFloat(rot);
-                MovementModifier.modFunction rFunc=MovementModifier.modFunction.values()[tag.getInt(rotFunc)];
-                MovementModifier.modOperation rOp=MovementModifier.modOperation.values()[tag.getInt(rotOp)];
+                float zR=tag.getFloat(mm_rot);
+                MovementModifier.modFunction rFunc=MovementModifier.modFunction.values()[tag.getInt(mm_rotFunc)];
+                MovementModifier.modOperation rOp=MovementModifier.modOperation.values()[tag.getInt(mm_rotOp)];
 
-                int d=tag.getInt(delay);
-                int timer=tag.getInt(remainingTicks);
-                int i=tag.getInt(initialTicks);
-                long sTime=tag.getLong(serverTime);
+                int d=tag.getInt(mm_delay);
+                int timer=tag.getInt(mm_remainingTicks);
+                int i=tag.getInt(mm_initialTicks);
+                long sTime=tag.getLong(mm_serverTime);
 
                 long currentTime= Minecraft.getInstance().level.getGameTime();
                 long timeDiff=currentTime-sTime;
@@ -80,19 +80,19 @@ public class ProjCapS2CPacket {
             int aFunc=mod.getAngFunction().ordinal();
             int aOp=mod.getAngOperation().ordinal();
 
-            tag.putFloat(spd,spdChange);
-            tag.putInt(spdFunc,sFunc);
-            tag.putInt(spdOp,sOp);
+            tag.putFloat(mm_spd,spdChange);
+            tag.putInt(mm_spdFunc,sFunc);
+            tag.putInt(mm_spdOp,sOp);
 
-            tag.putFloat(hAng,hChange);
-            tag.putFloat(vAng,vChange);
-            tag.putInt(angFunc,aFunc);
-            tag.putInt(angOp,aOp);
+            tag.putFloat(mm_hAng,hChange);
+            tag.putFloat(mm_vAng,vChange);
+            tag.putInt(mm_angFunc,aFunc);
+            tag.putInt(mm_angOp,aOp);
 
-            tag.putInt(delay,mod.getDelay());
-            tag.putInt(remainingTicks,mod.getRemainingTicks());
-            tag.putLong(serverTime,mod.getServerTime());
-            tag.putInt(initialTicks,mod.getStartingTicks());
+            tag.putInt(mm_delay,mod.getDelay());
+            tag.putInt(mm_remainingTicks,mod.getRemainingTicks());
+            tag.putLong(mm_serverTime,mod.getServerTime());
+            tag.putInt(mm_initialTicks,mod.getStartingTicks());
             buf.writeNbt(tag);
         }
     }

@@ -91,6 +91,7 @@
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
 
 
+
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of %s seconds each.",
 
@@ -100,7 +101,7 @@
 
   "tooltip.celestial_awakening.sun_staff.flash_name": "Searing Flash",
   "tooltip.celestial_awakening.sun_staff.flash_control": "Left Click",
-  "tooltip.celestial_awakening.sun_staff.flash_desc": "Deals a burst of fire damage to nearby enemies.\nCooldown of 7.5 seconds",
+  "tooltip.celestial_awakening.sun_staff.flash_desc": "Deals a burst of fire damage to nearby enemies.\nCooldown of 5.5 seconds",
 
   "tooltip.celestial_awakening.sun_staff.ray_name": "Shining Ray",
   "tooltip.celestial_awakening.sun_staff.ray_control": "Right Click",

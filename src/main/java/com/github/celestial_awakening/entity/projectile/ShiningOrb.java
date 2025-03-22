@@ -38,6 +38,10 @@ public class ShiningOrb extends CA_Projectile {
     @Override
     public void setOwner(Entity e){
         super.setOwner(e);
+        if (e instanceof LivingEntity){
+            pred=CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((LivingEntity) e);
+        }
+
         damagesource=this.level().damageSources().indirectMagic(this,e);
     }
     @Override
@@ -56,7 +60,7 @@ public class ShiningOrb extends CA_Projectile {
             super.tick();
             List<LivingEntity> entities;
             if (this.getOwner() instanceof LivingEntity){
-                entities=this.entitiesToHurt(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((LivingEntity) this.getOwner()));
+                entities=this.entitiesToHurt(pred);
             }
             else{
                 entities=this.entitiesToHurt();

@@ -47,9 +47,7 @@ public class LivingEntityCapability {
     public LivingEntityCapability(){
     }
     private ConcurrentHashMap<String, Pair<Integer,Object[]>> abilityDataMap=new ConcurrentHashMap<>();
-    /*
-    instead of cd map, the above map does
-     */
+
     public CompoundTag initNBTData(CompoundTag nbt){
         ListTag abilities=new ListTag();
         for (Map.Entry<String, Pair<Integer,Object[]>> entry:abilityDataMap.entrySet()){
@@ -90,7 +88,7 @@ public class LivingEntityCapability {
         CompoundTag testNBT = new CompoundTag();
         CompoundTag cdData=new CompoundTag
         CompoundTag commandPair = new CompoundTag();
-        commandPair.putString("CommandName","Fade");
+        commandPair.putString("Name","Fade");
         commandPair.putInt("CD",5);
         cdData.put(commandPair)
         testNBT.put(cdData);
@@ -131,7 +129,7 @@ public class LivingEntityCapability {
         if (commands!=null){
             for (int i = 0; i <commands.size(); ++i) {
                 CompoundTag compoundtag = commands.getCompound(i);
-                String commandName=compoundtag.getString("CommandName");
+                String commandName=compoundtag.getString("Name");
                 Integer cd=compoundtag.getInt("CD");
                 GenericCommandPattern pattern= LivingEntityCapHelperFuncs.findPatternFromString(commandName);
             }

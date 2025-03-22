@@ -17,7 +17,6 @@ import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +37,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
@@ -480,7 +478,7 @@ public class EventManager {
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
-                if (arrow.getTags().contains("CA_FluorescentBoost") && arrow.getOwner() instanceof LivingEntity){
+                if (arrow.getTags().contains("CA_FBowBoost") && arrow.getOwner() instanceof LivingEntity){
                     Vec3 offset=new Vec3(3,0.5f,3);
                     AABB aabb=new AABB(target.position().subtract(offset),target.position().add(offset));
                     List<LivingEntity> livingEntityList= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate((LivingEntity)arrow.getOwner()));
@@ -665,9 +663,10 @@ public class EventManager {
                     else{
                         solarEvents.canCreateDivinerEye(event);
                     }
+                    if (time==12000){
+                        cap.pkRemainingSpawnAttempts=Config.pkSpawnCap;
+                    }
                     if (cap.decrementSunControlTimer()){
-                        System.out.println("DONE WITH SC");
-                        System.out.println(cap.divinerSunControlVal);
                         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
                     }
 
@@ -686,23 +685,12 @@ public class EventManager {
                     lunarEvents.detectIfLookingAtCelestialBody(serverLevel,-1);
                     if (time==18000){
                         lunarEvents.midnightIronTransformation(serverLevel);
-                        boolean didSpawnPK=lunarEvents.attemptPKSpawn(serverLevel);
+                        lunarEvents.attemptPKSpawn(serverLevel);
                     }
 
                 }
-                particleManager.generateParticles(serverLevel);
-            }
-            if (false && time%50==0 &&  level.dimensionTypeId() == BuiltinDimensionTypes.OVERWORLD){
-                capOptional.ifPresent(cap->{
-                    System.out.println("SKY DARKEN IS " + level.getSkyDarken() + " on side " + event.side + " WITH CAP STATE " + cap.divinerSunControlVal);
-                    if (level instanceof ClientLevel){
-                        ClientLevel clientLevel= (ClientLevel) level;
-                        System.out.println("CLIENTS VER RETURNS " + clientLevel.getSkyDarken(1.0F));
-                    }
-                    //level.updateSkyBrightness();
-                });
 
-                //System.out.println("LEVEL LIGHT LEVEL IS " + level.getMaxLocalRawBrightness(new BlockPos(0,100,0)));
+                particleManager.generateParticles(serverLevel);
             }
         }
     }
@@ -723,8 +711,8 @@ public class EventManager {
             ServerLevel level= (ServerLevel) player.level();
             capOptional.ifPresent(cap->{
                 cap.tickAbilityMap();
-                //forced updates in case of emergencies
-                if (player.tickCount%200==0){
+                //forced updates every 15 sec in case of emergencies
+                if (player.tickCount%300==0){
                     if (cap.hasAbility(KnightmareSuit.honorDuel)){
                         UUID targetID= (UUID) cap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         Entity target=level.getEntity(targetID);

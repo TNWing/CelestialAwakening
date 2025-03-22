@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import static com.github.celestial_awakening.nbt_strings.ProjDataNBTNames.*;
@@ -51,6 +52,17 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     private static final EntityDataAccessor<Boolean> DISABLE_SHIELDS=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DISABLE_TICKS = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     DamageSource damagesource;
+    protected ArrayList<String> entityIDs=new ArrayList<>();
+    public Predicate getPred() {
+        return pred;
+    }
+
+    public void setPred(Predicate pred) {
+        this.pred = pred;
+    }
+
+    Predicate pred= o -> true;
+
     protected CA_Projectile(EntityType<? extends Projectile> p_37248_, Level p_37249_,int lt) {
         super(p_37248_, p_37249_);
         this.setLifetime(lt);

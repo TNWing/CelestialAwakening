@@ -77,7 +77,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     int diff=target.level().getDifficulty().getId();
                     int bound=3;
                     if (diff>=2){
-                        bound=4;
+                        bound=5;
                     }
                     for (int i=-bound;i<=bound;i++){
                         float ang=baseAng+i*(24f-1.5f*i);
@@ -115,15 +115,15 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
                     0f,
                     0,0,
                     100,
-                    0,10);
+                    0,4);
             MovementModifier modifier2=new MovementModifier(
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,
                     MovementModifier.modFunction.NUM,MovementModifier.modOperation.SET,
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
-                    4.2f,
+                    4.8f,
                     0,0,
                     100,
-                    0,110);
+                    0,116);
             cap.putInBackOfList(modifier);
             cap.putInBackOfList(modifier2);
         });

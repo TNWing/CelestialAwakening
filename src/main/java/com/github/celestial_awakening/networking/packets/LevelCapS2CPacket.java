@@ -12,10 +12,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class LevelCapS2CPacket {
-
-    //this packet should contain the dimID
     private final LevelCapability cap;
-    //maybe i just have the level cap hold the dimID?
     public LevelCapS2CPacket(LevelCapability capability){
         this.cap=capability;
     }
@@ -38,8 +35,12 @@ public class LevelCapS2CPacket {
         NetworkEvent.Context context=supplier.get();
         context.enqueueWork(()->{
             //client-side
+            if (cap.levelResourceKey==null){
+                cap.levelResourceKey=Minecraft.getInstance().level.dimension();
+            }
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()-> ClientLevelData.setData( cap));
             Minecraft.getInstance().level.updateSkyBrightness();
+
         });
         return true;
     }

@@ -1,6 +1,5 @@
 package com.github.celestial_awakening.entity.projectile;
 
-import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
@@ -16,11 +15,9 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +25,6 @@ import java.util.Optional;
 public class LightRay extends CA_Projectile {
 
     //BeaconBlockEntity.BeaconBeamSection
-    int tickLiveTime=0;
-    //may not need this w/ the RoC vars
     float widthProgress;
     float heightProgress;
 
@@ -47,6 +42,7 @@ public class LightRay extends CA_Projectile {
     1:stick to block
     2:shrinks until it destroys self
      */
+    //TODO: use these vars in the future
     protected int actionWhenHitBlock;
 
     int maxTickWhenInBlock=10;
@@ -64,14 +60,6 @@ public class LightRay extends CA_Projectile {
     Vec3 rotDir;//represents the direction of movement and expansion
 
     Vec3 end;
-    //TODO:
-    /*
-    Replace XPR with VAng
-    Utilize currentlife instead of ticklivetime
-    FOR ALL ENTITIES, REMOVE ALL CONSTRUCTORS AND REPLACE WITH A STATIC CREATE METHOD
-     */
-
-    //for some reason, server calls base ray while client calls asteron ray?
     public LightRay(EntityType<LightRay> entityType, Level level) {
         super(entityType,level,20);
         this.setDmg(2f);
@@ -85,9 +73,6 @@ public class LightRay extends CA_Projectile {
         LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
         entity.setLifetime(tickLiveTime);
         entity.setDmg(dmg);
-        entity.widthProgress=1f;
-        entity.heightProgress=1f;
-        entity.setNoGravity(true);
         return entity;
     }
 
@@ -99,8 +84,7 @@ public class LightRay extends CA_Projectile {
     @Override
     public EntityDimensions getDimensions(Pose p_33113_) {//never reached
         EntityDimensions returnVal=EntityDimensions.scalable(this.getWidth(),this.getHeight());
-        //System.out.println("GETTING DIMS " + returnVal.width + " , " + returnVal.height);
-        return returnVal;//this gets changed properly but hitbox is not changing
+        return returnVal;
     }
 
     @Override
@@ -110,9 +94,6 @@ public class LightRay extends CA_Projectile {
         double d2 = this.getZ();
         super.refreshDimensions();
         this.setPos(d0, d1, d2);
-        if (this.level().isClientSide()){
-            //System.out.println("CLIENT REFRESH");
-        }
     }
 
     @Override
@@ -151,21 +132,17 @@ public class LightRay extends CA_Projectile {
         minHeight=minH;
         widthRateOfChange=wChange;
         heightRateOfChange=hChange;
-        //System.out.println("INIT DIMS TO " + this.entityData.get(WIDTH) + " , " + this.entityData.get(HEIGHT));
-        //this.refreshDimensions();
-        //this.setBoundingBox(this.updateAABB(this.position()));
-
     }
 
 
     public void hitLivingEntity(LivingEntity entity) {
         Entity entity1 = this.getOwner();
         if (entity1 == null) {
-            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC));
+            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC));
         }
 
         else {
-            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),entity1);
+            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC),entity1);
             if (entity1 instanceof LivingEntity) {
                 ((LivingEntity)entity1).setLastHurtMob(entity);
             }
@@ -191,48 +168,6 @@ public class LightRay extends CA_Projectile {
         }
     }
 
-
-    protected void onHitEntity(EntityHitResult res) {
-        Entity entity = res.getEntity();
-        Entity entity1 = this.getOwner();
-        DamageSource damagesource=null;
-        if (entity1 == null) {
-            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC));
-        }
-
-        else {
-            damagesource=new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),entity1);
-            if (entity1 instanceof LivingEntity) {
-                ((LivingEntity)entity1).setLastHurtMob(entity);
-            }
-        }
-
-        int k = entity.getRemainingFireTicks();
-        if (entity.hurt(damagesource, this.getDmg())) {
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity)entity;
-/*
-                    if (!this.level().isClientSide && entity1 instanceof LivingEntity) {
-                        EnchantmentHelper.doPostHurtEffects(livingentity, entity1);
-                        EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, livingentity);
-                    }
-
- */
-                //this.doPostHurtEffects(livingentity);
-                if (entity1 != null && livingentity != entity1 && livingentity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
-                    ((ServerPlayer)entity1).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-                }
-
-            }
-
-            //this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-        }
-        else {
-            entity.setRemainingFireTicks(k);
-        }
-        this.discard();
-    }
-
     @Override
     protected boolean canHitEntity(Entity p_37250_) {
         Entity entity = this.getOwner();
@@ -247,42 +182,16 @@ public class LightRay extends CA_Projectile {
     public void setDir(Vec3 dir){
         this.rotDir=dir;
         this.updateRotation();
-        /*code for .updateRotation();
-              double d0 = vec3.horizontalDistance();
-      this.setXRot(lerpRotation(this.xRotO, (float)(Mth.atan2(vec3.y, d0) * (double)(180F / (float)Math.PI))));
-      this.setYRot(lerpRotation(this.yRotO, (float)(Mth.atan2(vec3.x, vec3.z) * (double)(180F / (float)Math.PI))));
-         */
     }
 
 
     public void raycast(){
-        //TODO
-        /*
-        right direction now, but the value from star tto end is really small
-        so im guessing the subsequent calcs are wrong
-
-        So i need to
-        -run the mod again and look at the dir log in the piercingrays code, and compare it to what dir i get
-        -try and multiple the dir by the height entirely, as rn it just multiplies the x value by the height
-        -will likely need to add an inflate to the rayBox, but gotta study how inflate works
-         */
-        //also got to figure out why this is called even when ray is gone
-        //z is no longer used
-
         AABB rayBox=getRayBox();
-        List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox);
+        List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox,pred);
 
         ArrayList<LivingEntity> entitiesToHit=new ArrayList<>();
         //my idea for better collision is to use 4 raycasts
         for (LivingEntity entity: livingEntityList) {
-            //first 2 conds are used if the ray can buff or heal
-            if (entity==this.getOwner()){
-
-            }
-            else if(entity instanceof AbstractTranscendent){//ally
-
-            }
-            else{//TODO: modify the offsets to have more accurate collision checking
                 AABB aabb=entity.getBoundingBox();
                 Vec3[] rayOffsets = new Vec3[] {
                         new Vec3(-0 / 2, 0, 0),
@@ -304,24 +213,23 @@ public class LightRay extends CA_Projectile {
                 if (!entitiesToHit.isEmpty() && !hitMultiple){
                     break;
                 }
-            }
         }
         if (!entitiesToHit.isEmpty() ){
-            System.out.println("entities hit is " + Arrays.toString(Arrays.stream(entitiesToHit.toArray()).toArray()));
             hasHitSomething=true;
         }
         if (hasHitSomething &&  alertInterface!=null){
             this.alertInterface.onAlert();
         }
-        for (LivingEntity entity:entitiesToHit) {
-            this.hitLivingEntity(entity);
+        else{//use default hit behavior if no alert interface
+            for (LivingEntity entity:entitiesToHit) {
+                this.hitLivingEntity(entity);
+            }
         }
         if (!entitiesToHit.isEmpty() && destroyIfHitLiving){
             this.discard();
         }
     }
     public AABB getRayBox(){
-        //current xz:Math.toRadians((-1*this.getYRot())-90)
         double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
         double y=Math.toRadians(this.getVAng());
         if (this.getVAng()>=180){
@@ -333,10 +241,9 @@ public class LightRay extends CA_Projectile {
         ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
         BlockHitResult result= this.level().clip(clipContext);
 
-        if (result!=null){//this is occuring, presumably if air block
+        if (result!=null){
             //block in the way, so cut the ray short
             BlockPos hitPos=result.getBlockPos();
-
             if (!this.level().getBlockState(hitPos).isAir()){
                 end=result.getLocation();
                 System.out.println("HIT BLOCK at " + hitPos);
@@ -347,8 +254,6 @@ public class LightRay extends CA_Projectile {
         else{
 
         }
-
-        //System.out.println("LIGHT RAY " + this.getId() + " has startPos " + this.position() + " AND ENd " + end);
         AABB rayBox=new AABB(this.position(),end);
         return rayBox;
     }
@@ -365,8 +270,8 @@ public class LightRay extends CA_Projectile {
 
 
         this.setSize(this.getWidth(),this.getHeight());
-        this.tickLiveTime++;
-        if (tickLiveTime>=this.getLifeTime()){
+        this.setCurrentLifetime(this.getCurrentLifeTime()+1);
+        if (this.getCurrentLifeTime()>=this.getLifeTime()){
             this.discard();
         }
 
@@ -378,6 +283,9 @@ public class LightRay extends CA_Projectile {
                 raycast();
             }
         }
+    }
 
+    public Vec3 getEndPt(){
+        return this.end;
     }
 }

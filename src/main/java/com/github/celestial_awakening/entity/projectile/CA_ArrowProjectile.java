@@ -115,7 +115,6 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
             }
             List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,aabb,p);//why empty?
             for (LivingEntity entity:livingEntityList) {
-                System.out.println("entity is " + entity);
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,50));
                 entity.hurt(lunarDamage,0.7f);
             }

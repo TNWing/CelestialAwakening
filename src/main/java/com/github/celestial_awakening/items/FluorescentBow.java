@@ -69,7 +69,7 @@ public class FluorescentBow extends BowItem {
                         AbstractArrow abstractarrow = arrowitem.createArrow(p_40668_, arrowStack, player);
                         abstractarrow = customArrow(abstractarrow);
                         abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()*7f/8f);
-                        abstractarrow.addTag("CA_FluorescentBoost");
+                        abstractarrow.addTag("CA_FBowBoost");
                         abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {
                             abstractarrow.setCritArrow(true);

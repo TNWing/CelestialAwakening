@@ -131,6 +131,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 		if (((AbstractCALivingEntity)entity).getActionId()==0){
 			this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
 		}
+		this.animate(((PhantomKnight_Crescencia)entity).asleepAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);

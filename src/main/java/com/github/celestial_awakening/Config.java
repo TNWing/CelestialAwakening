@@ -58,16 +58,14 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =BUILDER.comment("The amount of power the diviner gets for each entity scanned.\nDefault 10").defineInRange("transcendents_div_scan_power",10,0,100);
 
 
-
-
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS=BUILDER.comment("\n\nLunar Config\n\nDimensions that moonstones can spawn in.\nDefault minecraft:overworld").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
 
     //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS=BUILDER.comment("Dimensions that Phantom Knights are allowed to spawn in. Default minecraft:overworld").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY=BUILDER.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
 
-    private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP=BUILDER.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP=BUILDER.comment("CURRENTLY NOT IMPLEMENTED\nMaximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,Integer.MAX_VALUE);
 
-    private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST=BUILDER.comment("The max distance between a phantom knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",1,1,Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST=BUILDER.comment("The max distance between a phantom knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST=BUILDER.comment("\n\nArmor Config\n\n").comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,(int)Integer.MAX_VALUE);
 
@@ -97,7 +95,7 @@ public class Config
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
-    public static int pkDmgResDist;
+    public static int pkDmgResDist=15;
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
@@ -138,6 +136,7 @@ public class Config
 
         divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
 
+        divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
 
         //pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
 

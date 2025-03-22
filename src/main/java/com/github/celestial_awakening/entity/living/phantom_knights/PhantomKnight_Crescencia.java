@@ -36,7 +36,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
     10: strikethrough start
     11: strikethrough strike
      */
-
+    public final AnimationState asleepAnimationState=new AnimationState();
     public final AnimationState idleAnimationState=new AnimationState();
     public final AnimationState wakeUpAnimationState=new AnimationState();
     public final AnimationState returnToIdleAnimationState=new AnimationState();
@@ -52,14 +52,10 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
     HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
 
-
-
-
-    public final AnimationState nightSlashStartAnimationState=new AnimationState();
-    public final AnimationState nightSlashStrikeAnimationState=new AnimationState();
     public PhantomKnight_Crescencia(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.setActionId(-1);
+        actionIDToAnimMap.put(-1,asleepAnimationState);
         actionIDToAnimMap.put(0,idleAnimationState);
         actionIDToAnimMap.put(1,wakeUpAnimationState);
         actionIDToAnimMap.put(2,returnToIdleAnimationState);
@@ -105,10 +101,6 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         super.registerGoals();
         this.goalSelector.addGoal(4,new PK_CrescenciaCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        //this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        //this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));
-        //this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
-        //this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     public void tick() {

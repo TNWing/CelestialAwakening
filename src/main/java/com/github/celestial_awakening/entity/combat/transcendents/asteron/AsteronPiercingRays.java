@@ -2,10 +2,14 @@ package com.github.celestial_awakening.entity.combat.transcendents.asteron;
 
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
+import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
+import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class AsteronPiercingRays extends GenericAbility {
     public AsteronPiercingRays(AbstractCALivingEntity mob, int castTime, int CD, int rec, int et) {
@@ -48,6 +52,7 @@ public class AsteronPiercingRays extends GenericAbility {
                         ray.setOwner(this.mob);
                         ray.initDims(0.2f,0,0.2f,0,0.2f,3.4f,0,1.8f);
                         ray.setHAng(yaw);
+                        ray.setPred(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob, List.of(AbstractTranscendent.class)));
                         ray.setVAng(200);//test w/ 70, prod should be 200
                         ray.setPos(spt);
                         level.addFreshEntity(ray);

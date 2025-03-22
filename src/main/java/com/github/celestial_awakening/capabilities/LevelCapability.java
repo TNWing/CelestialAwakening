@@ -20,8 +20,8 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.nbtName_DivSunControlTime;
-import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.nbtName_DivSunControlVal;
+import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
+
 public class LevelCapability{
     public LevelCapability(Level level){
         initVals(level);
@@ -29,7 +29,7 @@ public class LevelCapability{
 
     private CompoundTag storedNBT;
 
-    public ConcurrentHashMap<BlockPos,Integer> currentMoonstonePos=new ConcurrentHashMap<>();
+    public ConcurrentHashMap<BlockPos,Short> currentMoonstonePos=new ConcurrentHashMap<>();
 
     public ResourceKey<Level> levelResourceKey;
     Codec<ResourceKey<Level>> levelCodec = ResourceKey.codec(Registries.DIMENSION);
@@ -84,76 +84,84 @@ public class LevelCapability{
             compoundTag.putInt("x",blockPos.getX());
             compoundTag.putInt("y",blockPos.getY());
             compoundTag.putInt("z",blockPos.getZ());
-            compoundTag.putInt("timer", currentMoonstonePos.get(blockPos));
+            compoundTag.putShort(lvlCap_moonstoneTimer, currentMoonstonePos.get(blockPos));
             listTag.add(compoundTag);
         }
-        nbt.put("moonstoneData",listTag);
+        nbt.put(lvlCap_moonstoneData,listTag);
         //then, look at level command map
         CompoundTag divEyeTag=new CompoundTag();
-        divEyeTag.putInt("cd",this.divinerEyeCD);
-        divEyeTag.putByte("fromState",this.divinerEyeFromState);
-        divEyeTag.putByte("toState",this.divinerEyeToState);
-        divEyeTag.putInt("changeDelay",this.divinerEyeCurrentChangeDelay);
+        divEyeTag.putInt(lvlCap_transcendentDivCD,this.divinerEyeCD);
+        divEyeTag.putByte(lvlCap_transcendentDivFrom,this.divinerEyeFromState);
+        divEyeTag.putByte(lvlCap_transcendentDivTo,this.divinerEyeToState);
+        divEyeTag.putInt(lvlCap_transcendentDivChangeDelay,this.divinerEyeCurrentChangeDelay);
 
-        divEyeTag.putFloat("frameProgress",this.divinerEyeFrameProgress);
-        divEyeTag.putFloat("chance",this.divinerEyeChance);
+        divEyeTag.putFloat(lvlCap_transcendentDivFrameProgress,this.divinerEyeFrameProgress);
+        divEyeTag.putFloat(lvlCap_transcendentDivChance,this.divinerEyeChance);
 
-        divEyeTag.putInt("timer",this.divinerEyeTimer);
-        divEyeTag.putInt("power",this.divinerEyePower);
+        divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
         divEyeTag.putByte(nbtName_DivSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
-        DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
-        result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put("levelRK",encodedObj));//not savingg?
+        if (this.levelResourceKey!=null){
+            System.out.println("LEV RK");
+            DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
+            result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put(lvlCap_transcendentLevelRK,encodedObj));//not savingg?
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            System.out.println(this.levelResourceKey);
+            ArrayList<CommandMapValue> arrayList=DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().get(server.getLevel(this.levelResourceKey));
+            System.out.println(arrayList);
+            if (arrayList!=null){//is null for some reason
+                for (CommandMapValue val:arrayList) {
+                    GenericCommandPattern pattern=val.getPattern();
+                    if (pattern instanceof UpdateDivinerEyeCommandPattern){
+                        //System.out.println("WE ARE SAVING UCP with T " + this.divinerEyeTimer + "   CD  " + this.divinerEyeCurrentChangeDelay);
+                        int tickCnt=val.getTicks();
+                        int diff=this.divinerEyeCurrentChangeDelay-tickCnt;//how much time has actually passed
+                        this.divinerEyeTimer-=diff;
+                        this.divinerEyeCurrentChangeDelay =tickCnt;
+                    }
 
-        //its bc the keys of lcm are Levels, but i save it as the rk of the level heere
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        ArrayList<CommandMapValue> arrayList=DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().get(server.getLevel(this.levelResourceKey));
-
-        if (arrayList!=null){//is null for some reason
-            for (CommandMapValue val:arrayList) {
-                GenericCommandPattern pattern=val.getPattern();
-                if (pattern instanceof UpdateDivinerEyeCommandPattern){
-                    //System.out.println("WE ARE SAVING UCP with T " + this.divinerEyeTimer + "   CD  " + this.divinerEyeCurrentChangeDelay);
-                    int tickCnt=val.getTicks();
-                    int diff=this.divinerEyeCurrentChangeDelay-tickCnt;//how much time has actually passed
-                    this.divinerEyeTimer-=diff;
-                    this.divinerEyeCurrentChangeDelay =tickCnt;
                 }
-
             }
         }
-        //ccd 3 is 0
-        divEyeTag.putInt("changeDelay",this.divinerEyeCurrentChangeDelay);
-        divEyeTag.putInt("timer",this.divinerEyeTimer);
 
-        nbt.put("divEye",divEyeTag);
+        //its bc the keys of lcm are Levels, but i save it as the rk of the level heere
+
+        //ccd 3 is 0
+        divEyeTag.putInt(lvlCap_transcendentDivChangeDelay,this.divinerEyeCurrentChangeDelay);
+        divEyeTag.putInt(lvlCap_transcendentDivTimer,this.divinerEyeTimer);
+
+        nbt.put(lvlCap_transcendentHolder,divEyeTag);
     }
 
     public void loadNBTData(CompoundTag nbt,boolean insert){
         this.storedNBT=nbt;
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        ListTag moonstoneList= (ListTag) nbt.get("moonstoneData");
+        ListTag moonstoneList= (ListTag) nbt.get(lvlCap_moonstoneData);
         if (moonstoneList!=null){
             for (int i = 0; i < moonstoneList.size(); ++i) {
                 CompoundTag compoundtag = moonstoneList.getCompound(i);
                 BlockPos blockPos=new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z"));
-                currentMoonstonePos.put(blockPos,compoundtag.getInt("timer"));
+                currentMoonstonePos.put(blockPos,compoundtag.getShort(lvlCap_moonstoneTimer));
             }
 
         }
-        CompoundTag divEye= nbt.getCompound("divEye");
+        CompoundTag divEye= nbt.getCompound(lvlCap_transcendentHolder);
         if (divEye!=null){
-            this.divinerEyeTimer=divEye.getInt("timer");
-            this.divinerEyeCD=divEye.getInt("cd");
-            this.divinerEyeFromState=divEye.getByte("fromState");
-            this.divinerEyeToState=divEye.getByte("toState");
-            this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
-            this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
-            this.divinerEyeChance=divEye.getFloat("chance");
-            this.divinerEyePower=divEye.getInt("power");
+            this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
+            this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
+            this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);
+            this.divinerEyeToState=divEye.getByte(lvlCap_transcendentDivTo);
+            this.divinerEyeCurrentChangeDelay =divEye.getInt(lvlCap_transcendentDivChangeDelay);
+            this.divinerEyeFrameProgress=divEye.getFloat(lvlCap_transcendentDivFrameProgress);
+            this.divinerEyeChance=divEye.getFloat(lvlCap_transcendentDivChance);
+            this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
             this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
             this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
-            this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
+            this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
+            if (divinerEyeTimer<=0){
+                this.divinerEyeFromState=-2;
+                this.divinerEyeToState=-2;
+            }
             System.out.println("TIMER is " +divinerEyeTimer+ " WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (insert && this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
@@ -168,37 +176,44 @@ public class LevelCapability{
         if (storedNBT!=null){
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
             //System.out.println("We got nbt here " + nbt);
-            ListTag moonstoneList= (ListTag) storedNBT.get("moonstoneData");
-            for (int i = 0; i < moonstoneList.size(); ++i) {
-                CompoundTag compoundtag = moonstoneList.getCompound(i);
-                //currentMoonstonePos.put(new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z")),compoundtag.getInt("timer"));
-                BlockPos blockPos=new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z"));
-                currentMoonstonePos.put(blockPos,compoundtag.getInt("timer"));
-            }
-            CompoundTag divEye= (CompoundTag) storedNBT.get("divEye");
-            this.divinerEyeTimer=divEye.getInt("timer");
-            this.divinerEyeCD=divEye.getInt("cd");
-            this.divinerEyeFromState=divEye.getByte("fromState");
-            this.divinerEyeToState=divEye.getByte("toState");
-            this.divinerEyeCurrentChangeDelay =divEye.getInt("changeDelay");
-            this.divinerEyeFrameProgress=divEye.getFloat("frameProgress");
-            this.divinerEyeChance=divEye.getFloat("chance");
-            this.divinerEyePower=divEye.getInt("power");
-            this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
-            this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
-            this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get("levelRK")).result().orElse(null);
-            System.out.println("TIMER after is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
-            if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
-                if (this.divinerEyeTimer>0){
-                    Object[] params=new Object[]{this,this.levelResourceKey};
-                    DelayedFunctionManager.delayedFunctionManager.insertIntoLevelMap(ServerLifecycleHooks.getCurrentServer().getLevel(this.levelResourceKey),new UpdateDivinerEyeCommandPattern(params,0),this.divinerEyeCurrentChangeDelay,true);
+            ListTag moonstoneList= (ListTag) storedNBT.get(lvlCap_moonstoneData);
+            if (moonstoneList!=null){
+                for (int i = 0; i < moonstoneList.size(); ++i) {
+                    CompoundTag compoundtag = moonstoneList.getCompound(i);
+                    //currentMoonstonePos.put(new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z")),compoundtag.getInt(lvlCap_transcendentDivTimer));
+                    BlockPos blockPos=new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z"));
+                    currentMoonstonePos.put(blockPos,compoundtag.getShort(lvlCap_moonstoneTimer));
                 }
             }
+
+            CompoundTag divEye= (CompoundTag) storedNBT.get(lvlCap_transcendentHolder);
+            if (divEye!=null){
+                this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
+                this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
+                this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);
+                this.divinerEyeToState=divEye.getByte(lvlCap_transcendentDivTo);
+                this.divinerEyeCurrentChangeDelay =divEye.getInt(lvlCap_transcendentDivChangeDelay);
+                this.divinerEyeFrameProgress=divEye.getFloat(lvlCap_transcendentDivFrameProgress);
+                this.divinerEyeChance=divEye.getFloat(lvlCap_transcendentDivChance);
+                this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
+                this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
+                this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
+                this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
+                if (divinerEyeTimer<=0){
+                    this.divinerEyeFromState=-2;
+                    this.divinerEyeToState=-2;
+                }
+                System.out.println("TIMER after is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
+
+                if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
+                    if (this.divinerEyeTimer>0){
+                        Object[] params=new Object[]{this,this.levelResourceKey};
+                        DelayedFunctionManager.delayedFunctionManager.insertIntoLevelMap(ServerLifecycleHooks.getCurrentServer().getLevel(this.levelResourceKey),new UpdateDivinerEyeCommandPattern(params,0),this.divinerEyeCurrentChangeDelay,true);
+                    }
+                }
+            }
+
         }
-
-
-
-
     }
     public CompoundTag initNBTData(CompoundTag nbt){
         ListTag listTag=new ListTag();
@@ -207,22 +222,22 @@ public class LevelCapability{
             compoundTag.putInt("x",blockPos.getX());
             compoundTag.putInt("y",blockPos.getY());
             compoundTag.putInt("z",blockPos.getZ());
-            compoundTag.putInt("timer", currentMoonstonePos.get(blockPos));
+            compoundTag.putShort(lvlCap_moonstoneTimer, currentMoonstonePos.get(blockPos));
             listTag.add(compoundTag);
         }
-        nbt.put("moonstoneData",listTag);
+        nbt.put(lvlCap_moonstoneData,listTag);
         CompoundTag divEyeTag=new CompoundTag();
-        divEyeTag.putInt("cd",this.divinerEyeCD);
-        divEyeTag.putInt("fromState",this.divinerEyeFromState);
-        divEyeTag.putInt("toState",this.divinerEyeToState);
-        divEyeTag.putInt("changeDelay",this.divinerEyeCurrentChangeDelay);
-        divEyeTag.putFloat("frameProgress",this.divinerEyeFrameProgress);
-        divEyeTag.putFloat("chance",this.divinerEyeChance);
-        divEyeTag.putInt("timer",this.divinerEyeTimer);
-        divEyeTag.putInt("power",this.divinerEyePower);
-        divEyeTag.putInt(nbtName_DivSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putInt(lvlCap_transcendentDivCD,this.divinerEyeCD);
+        divEyeTag.putByte(lvlCap_transcendentDivFrom,this.divinerEyeFromState);
+        divEyeTag.putByte(lvlCap_transcendentDivTo,this.divinerEyeToState);
+        divEyeTag.putInt(lvlCap_transcendentDivChangeDelay,this.divinerEyeCurrentChangeDelay);
+        divEyeTag.putFloat(lvlCap_transcendentDivFrameProgress,this.divinerEyeFrameProgress);
+        divEyeTag.putFloat(lvlCap_transcendentDivChance,this.divinerEyeChance);
+        divEyeTag.putInt(lvlCap_transcendentDivTimer,this.divinerEyeTimer);
+        divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
+        divEyeTag.putByte(nbtName_DivSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
-        nbt.put("divEye",divEyeTag);
+        nbt.put(lvlCap_transcendentHolder,divEyeTag);
         return nbt;
     }
 
@@ -242,6 +257,7 @@ public class LevelCapability{
             this.levelResourceKey=level.dimension();
         }
     }
+
 
     public void changeDivPower(int i){
         this.divinerEyePower=Math.max(Math.min(this.divinerEyePower+i,100),0);

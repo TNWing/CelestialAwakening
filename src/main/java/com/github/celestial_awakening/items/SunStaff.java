@@ -138,7 +138,7 @@ CD of 4-10 seconds, depending on how long the storm lasted.
                         livingEntity.hurt(source,2.5f);
                         livingEntity.setSecondsOnFire(5);
                     }
-                    cap.setFlashCD(150);
+                    cap.setFlashCD(110);
                 }
             });
         }
@@ -156,6 +156,7 @@ CD of 4-10 seconds, depending on how long the storm lasted.
         ray.setAlertInterface(new AlertInterface() {
             @Override
             public void onAlert() {
+                Vec3 endPt=ray.getEndPt();
                 AABB aabb=ray.getRayBox();
                 aabb=aabb.inflate(2);
                 ServerLevel level= (ServerLevel) ray.level();

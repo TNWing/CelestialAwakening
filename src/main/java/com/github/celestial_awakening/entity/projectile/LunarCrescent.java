@@ -14,8 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,9 +25,7 @@ public class LunarCrescent extends CA_Projectile {
     Magic DType bypasses shield
     Need to make a custom dtype later
      */
-    private ArrayList<Integer> entityIDs=new ArrayList<>();
 
-    private HashMap<Integer,Integer> entityHitMap=new HashMap<>();
     public LunarCrescent(EntityType<LunarCrescent> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_,70);
         life=0;
@@ -64,6 +60,10 @@ public class LunarCrescent extends CA_Projectile {
     @Override
     public void setOwner(Entity e){
         super.setOwner(e);
+        if (e instanceof LivingEntity){
+            pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((LivingEntity) e);
+        }
+
         damagesource=new DamageSourceIgnoreIFrames(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this,e);
     }
     @Override
@@ -78,34 +78,23 @@ public class LunarCrescent extends CA_Projectile {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        int[] arr=tag.getIntArray("Entities Hit");
-        this.entityIDs.clear();
-        for (int i:arr){
-            this.entityIDs.add(i);
-        }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putIntArray("Entities Hit",this.entityIDs);
     }
     public void tick() {
         Entity owner = this.getOwner();
         if (this.level().isClientSide || (owner == null || !owner.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
             if (this.isReal()){
-                Predicate alreadyHitPred= o -> o instanceof Entity && !entityIDs.contains(((Entity)o).getId());
+                Predicate<Entity> alreadyHitPred= o -> o != null && !entityIDs.contains(o.getId());
                 Predicate p;
-                if (owner!=null){
-                    p=alreadyHitPred.and(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate((LivingEntity) this.getOwner()));
-                }
-                else{
-                    p=alreadyHitPred;
-                }
+                p=alreadyHitPred.and(pred);
                 List<LivingEntity> entities=this.entitiesToHurt(p);
                 for (LivingEntity e:entities) {
-                    this.entityIDs.add(e.getId());
+                    this.entityIDs.add(e.getStringUUID());
                     if (e.hurt(damagesource,this.getDmg())){
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);

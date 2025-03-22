@@ -65,9 +65,9 @@ public class ParticleManager {
         ParticleOptions particleType = ParticleTypes.ENCHANT; // Change this to the particle type you want
         @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
         capOptional.ifPresent(cap->{
-            Iterator<Map.Entry<BlockPos,Integer>> iterator = cap.currentMoonstonePos.entrySet().iterator();
+            Iterator<Map.Entry<BlockPos,Short>> iterator = cap.currentMoonstonePos.entrySet().iterator();
             while (iterator.hasNext()) {
-                Map.Entry<BlockPos, Integer> entry = iterator.next();
+                Map.Entry<BlockPos, Short> entry = iterator.next();
                 BlockPos blockPos = entry.getKey();
                 int timeLeft =entry.getValue();
                 //System.out.println("MOONSTONE IS AT " + blockPos + " with time left " + cap.currentMoonstonePos.get(blockPos) );
@@ -80,7 +80,7 @@ public class ParticleManager {
                     double speed = 0.12; // Speed of particles
                     serverLevel.sendParticles(particleType, x, y, z, count, 0, 0, 0, speed);
                 }
-                cap.currentMoonstonePos.put(blockPos,cap.currentMoonstonePos.get(blockPos)-1);
+                cap.currentMoonstonePos.put(blockPos, (short) (cap.currentMoonstonePos.get(blockPos)-1));
                 if (timeLeft<=0){
                     iterator.remove();
                 }
@@ -91,6 +91,7 @@ public class ParticleManager {
     }
 
     protected void purgingLightParticles(ServerLevel serverLevel){
+        /*
         ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK; // Change this to the particle type you want
         @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
         capOptional.ifPresent(cap->{
@@ -110,6 +111,8 @@ public class ParticleManager {
                 }
             }
         });
+
+         */
     }
 
     //rework this

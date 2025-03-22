@@ -24,11 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
+    //for the anim, maybe have
     float currentStartAngle;//angle of first crescent of each burst
     int repsRemaining;//# of crescent bursts
     float horiDiff=1.5f;
     float vertDiff=0.6f;
-    float[] crescentDmgVals={5.5f,7f,10.5f};
+    float[] crescentDmgVals={4.5f,6.5f,9f};
     float[] whirlwindDmgVals={5.5f,7f,8.5f};
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
     public PK_CrescenciaCrescentWhirlwind(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {

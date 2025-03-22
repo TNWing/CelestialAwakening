@@ -36,50 +36,52 @@ import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
 
 public class LunarEvents {
-
+    static Random rand=new Random();
     public void refreshPKSpawnAttempts(LevelCapability cap){
         cap.pkRemainingSpawnAttempts=Config.pkSpawnCap;
     }
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
-    public boolean attemptPKSpawn(ServerLevel level){
+    public void attemptPKSpawn(ServerLevel level){
 
         if (validDim(level, Config.transcendentsDimensionTypes)){
-            int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
-            if (MathFuncs.isInRange(time,18000,0)){//for now, offset will be 0
-                Random rand=new Random();
-                switch (level.getMoonPhase()) {
-                    //half
-                    case 3, 7 -> {
-                        break;
-                    }
-//gibb
-                    case 2, 8 -> {
-                        break;
-                    }
-//crescent
-                    case 4, 6 -> {
-                        if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
-                            //perform rng roll
-                            if (true) {//rand.nextInt(10)>6    30% chance
-                                PhantomKnight_Crescencia crescencia = new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level);
-                                //crescencia.setPos();
-                                level.addFreshEntity(crescencia);
-                                return true;
-                            }
+            LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+            capOptional.ifPresent(cap->{
+                int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
+                if (MathFuncs.isInRange(time,18000,0)){//for now, offset will be 0
 
+                    switch (level.getMoonPhase()) {
+                        //half
+                        case 3, 7 -> {
+                            break;
                         }
-                        break;
-                    }
-                    case 5 -> {//new moon
-                        break;
+//gibb
+                        case 2, 8 -> {
+                            break;
+                        }
+//crescent
+                        case 4, 6 -> {
+                            if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay && cap.pkRemainingSpawnAttempts>0) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
+                                //perform rng roll
+                                if (true) {//rand.nextInt(10)>6    30% chance
+                                    PhantomKnight_Crescencia crescencia = new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level);
+                                    //crescencia.setPos();
+                                    level.addFreshEntity(crescencia);
+                                    cap.pkRemainingSpawnAttempts--;
+                                }
+
+                            }
+                            break;
+                        }
+                        case 5 -> {//new moon
+                            break;
+                        }
                     }
                 }
-            }
+            });
+
 
         }
-
-        return false;
     }
     public void detectIfLookingAtCelestialBody(Level level,int isSun){
         int time=(int)level.dayTime();//ranges from 0-24k
@@ -105,7 +107,6 @@ public class LunarEvents {
                     AABB bound = new AABB(blockPos);
                     TargetingConditions conds = TargetingConditions.forNonCombat();
                     Monster monster = level.getNearestEntity(Monster.class, conds, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), bound);
-
                 }
             }
         });
@@ -155,10 +156,9 @@ public class LunarEvents {
                         }
                         //pick a random applicable block
                         if (applicableBlocks.size()>0){
-
                             BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
                             System.out.println("PLACING MOONSTONE at " + chosenSpot);
-                            cap.currentMoonstonePos.put(chosenSpot,1800);
+                            cap.currentMoonstonePos.put(chosenSpot, (short) 1800);
                         }
 
                     }

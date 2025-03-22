@@ -2,19 +2,20 @@ package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
+import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class NebureScorchingRays extends GenericAbility {
     float aChange;
     float angStartOffset;
     float angDiff;
     int dir;
-    ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK;
     LightRay[] rays;
     public NebureScorchingRays(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
@@ -51,6 +52,7 @@ public class NebureScorchingRays extends GenericAbility {
                 rays[i].setOpacity(0.25f);
                 rays[i].initDims(0.25f,0,0.25f,0,0.4f,8f,0,2f);
                 rays[i].setHAng(-(float) Math.toDegrees(ang)+90);
+                rays[i].setPred(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob, List.of(AbstractTranscendent.class)));
                 rays[i].setVAng(90);
                 rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.85f,0));
                 this.mob.level().addFreshEntity(rays[i]);

@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.function.Supplier;
 
 public enum CustomTiers implements Tier {
-    MIDNIGHT_IRON(2,333,6.7f,2.2f,16,
+    MIDNIGHT_IRON(2,333,5.8f,1.8f,16,
             ()-> Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get()));
 
     //use tiersorterregistry

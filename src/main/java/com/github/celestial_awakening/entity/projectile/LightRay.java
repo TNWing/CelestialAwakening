@@ -111,18 +111,6 @@ public class LightRay extends CA_Projectile {
         this.setHeight(h);
 
     }
-
-    public AABB updateAABB(Vec3 p_20394_) {
-        return this.updateAABB(p_20394_.x, p_20394_.y, p_20394_.z);
-    }
-
-    public AABB updateAABB(double p_20385_, double p_20386_, double p_20387_) {
-        float f = this.getWidth() / 2.0F;
-        float f1 = this.getHeight();
-        return new AABB(p_20385_ - (double)f, p_20386_, p_20387_ - (double)f, p_20385_ + (double)f, p_20386_ + (double)f1, p_20387_ + (double)f);
-    }
-
-
     public void initDims(float w,float h,float minW,float minH,float maxW,float maxH,float wChange,float hChange){
         this.setWidth(w);
         this.setHeight(h);

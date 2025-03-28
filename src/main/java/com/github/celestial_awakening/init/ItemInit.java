@@ -68,12 +68,13 @@ public class ItemInit {
 
     public static final RegistryObject<Item> LUNA_TOME=ITEMS.register("luna_tome",()->new LunaTomeItem(new Item.Properties()));
 
+    //maybe make them slightly worse than iron but have the buffs to offset the weaker stats?
     public static final RegistryObject<Item> MIDNIGHT_IRON_INGOT = ITEMS.register("midnight_iron_ingot", () ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MIDNIGHT_IRON_SWORD=ITEMS.register("midnight_iron_sword",()->new SwordItem(CustomTiers.MIDNIGHT_IRON,3,-2.f,new Item.Properties()));
-    public static final RegistryObject<Item> MIDNIGHT_IRON_PICKAXE=ITEMS.register("midnight_iron_pickaxe",()->new PickaxeItem(CustomTiers.MIDNIGHT_IRON,1, -2.8F,new Item.Properties()));
-    public static final RegistryObject<Item> MIDNIGHT_IRON_AXE=ITEMS.register("midnight_iron_axe",()->new AxeItem(CustomTiers.MIDNIGHT_IRON,5.5F, -3.0F,new Item.Properties()));
-    public static final RegistryObject<Item> MIDNIGHT_IRON_SHOVEL=ITEMS.register("midnight_iron_shovel",()->new ShovelItem(CustomTiers.MIDNIGHT_IRON,1.5F, -3.0F, new Item.Properties()));
-    public static final RegistryObject<Item> MIDNIGHT_IRON_HOE=ITEMS.register("midnight_iron_hoe",()->new HoeItem(CustomTiers.MIDNIGHT_IRON,-2, -0.7F,new Item.Properties()));
+    public static final RegistryObject<Item> MIDNIGHT_IRON_SWORD=ITEMS.register("midnight_iron_sword",()->new MidnightIronSword(CustomTiers.MIDNIGHT_IRON,3,-2.4f,new Item.Properties()));
+    public static final RegistryObject<Item> MIDNIGHT_IRON_PICKAXE=ITEMS.register("midnight_iron_pickaxe",()->new MidnightIronPickaxe(CustomTiers.MIDNIGHT_IRON,1, -2.8F,new Item.Properties()));
+    public static final RegistryObject<Item> MIDNIGHT_IRON_AXE=ITEMS.register("midnight_iron_axe",()->new MidnightIronAxe(CustomTiers.MIDNIGHT_IRON,6.0F, -3.1F,new Item.Properties()));
+    public static final RegistryObject<Item> MIDNIGHT_IRON_SHOVEL=ITEMS.register("midnight_iron_shovel",()->new MidnightIronShovel(CustomTiers.MIDNIGHT_IRON,1.5F, -3.0F, new Item.Properties()));
+    public static final RegistryObject<Item> MIDNIGHT_IRON_HOE=ITEMS.register("midnight_iron_hoe",()->new MidnightIronHoe(CustomTiers.MIDNIGHT_IRON,-2, -1.0F,new Item.Properties()));
 
     public static final RegistryObject<Item> LUNULA_ROCK = ITEMS.register("lunula_rock", () ->new CustomItem(new Item.Properties(),"tooltip.celestial_awakening.lunula_rock"));
     public static final RegistryObject<Item> KNIGHTMARE_HELMET = ITEMS.register("knightmare_helmet",
@@ -107,10 +108,4 @@ public class ItemInit {
             ITEMS.register("shade_leggings",()->new CustomArmorItem(CustomArmorMaterial.PULSATING_DARKNESS,ArmorItem.Type.LEGGINGS,new Item.Properties()));
     public static final RegistryObject<Item> SHADE_SLIPPERS=
             ITEMS.register("shade_boots",()->new CustomArmorItem(CustomArmorMaterial.PULSATING_DARKNESS,ArmorItem.Type.BOOTS,new Item.Properties(),1));
-
-    public static final RegistryObject<Item> THREAD_OF_INSANITY =
-            ITEMS.register("thread_of_insanity", () ->new Item(new Item.Properties()));
-
-
-
 }

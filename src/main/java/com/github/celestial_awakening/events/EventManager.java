@@ -380,7 +380,6 @@ public class EventManager {
         });
     }
 
-
     @SubscribeEvent
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
         Player player= event.getPlayer();
@@ -445,7 +444,6 @@ public class EventManager {
             }
         }
     }
-
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event){
         LivingEntity target=event.getEntity();

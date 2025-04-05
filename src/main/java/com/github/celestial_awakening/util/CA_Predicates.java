@@ -6,7 +6,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.scores.Team;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -15,13 +14,10 @@ public class CA_Predicates {
     //Gets all players and allied mobs
     public static Predicate getPlayersAndAlliedMobsPredicate(LivingEntity attacker){
         Predicate<Entity> predicate= o -> {
-            if (attacker.isAlliedTo(o)){
+            if (attacker.isAlliedTo(o) || o.equals(attacker)){
                 return true;
             }
             if (o instanceof Player || o instanceof SnowGolem){
-                return true;
-            }
-            if (o instanceof Wolf &&  ((Wolf) o).isAlliedTo(attacker)){
                 return true;
             }
             if (o instanceof IronGolem && !(((IronGolem) o).getTarget() instanceof Player)){
@@ -39,13 +35,8 @@ public class CA_Predicates {
     }
     //Uses vanilla teams to determine allies, and will also select all vanilla allied mobs
     public static Predicate sameTeamAndAlliesPredicate(LivingEntity attacker){
-        Predicate<Entity> predicate= o -> {
-            Team team=o.getTeam();
-            Team ownerTeam=attacker.getTeam();
-            if (o.equals(attacker)){
-                return true;
-            }
-            if (o instanceof Wolf && ((Wolf) o).getOwner().isAlliedTo(attacker)){
+        Predicate<LivingEntity> predicate= o -> {
+            if (attacker.isAlliedTo(o) || o.equals(attacker) || (o instanceof SnowGolem && ((SnowGolem) o).getTarget()!=attacker)){
                 return true;
             }
             if (o instanceof IronGolem && (((IronGolem) o).getTarget() !=attacker)){
@@ -68,8 +59,6 @@ public class CA_Predicates {
     //Uses Vanila teams to determine enemies
     public static Predicate opposingTeamsPredicate(LivingEntity attacker){
         Predicate<Entity> predicate= o -> {
-            Team team=o.getTeam();
-            Team ownerTeam=attacker.getTeam();
             if (o.equals(attacker)){
                 return false;
             }
@@ -80,8 +69,6 @@ public class CA_Predicates {
     //Uses Vanila teams to determine enemies, but will always ignore players and allied mobs
     public static Predicate opposingTeams_IgnorePlayersAndAllies_Predicate(LivingEntity attacker){
         Predicate<Entity> predicate= o -> {
-            Team team=o.getTeam();
-            Team ownerTeam=attacker.getTeam();
             if (o instanceof Player || o instanceof SnowGolem){
                 return false;
             }
@@ -100,8 +87,6 @@ public class CA_Predicates {
     //Uses Vanila teams to determine enemies, but ignores entities of the same class.
     public static Predicate opposingTeams_IgnoreSameClass_Predicate(LivingEntity attacker){
         Predicate<Entity> predicate= o -> {
-            Team team=o.getTeam();
-            Team ownerTeam=attacker.getTeam();
             if (o.equals(attacker)  || o.getClass()==attacker.getClass()){
                 return false;
             }
@@ -113,8 +98,6 @@ public class CA_Predicates {
     //Uses Vanila teams to determine enemies, but ignores entities that are listed in the provided parameter
     public static <T extends Entity> Predicate opposingTeams_IgnoreProvidedClasses_Predicate(LivingEntity attacker, List<Class<T>> classes){
         Predicate<Entity> predicate= o -> {
-            Team team=o.getTeam();
-            Team ownerTeam=attacker.getTeam();
             if (o.equals(attacker)  || classes.contains(o.getClass())){
                 return false;
             }

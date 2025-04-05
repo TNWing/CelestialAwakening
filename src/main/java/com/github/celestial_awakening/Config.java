@@ -103,6 +103,7 @@ public class Config
 
     public static double honorDuelDist;
 
+    public static boolean useVanillaTeams;
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
                 .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,new ResourceLocation(obj)))

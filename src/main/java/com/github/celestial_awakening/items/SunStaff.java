@@ -5,6 +5,7 @@ import com.github.celestial_awakening.capabilities.SunStaffCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.projectile.LightRay;
+import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
@@ -16,10 +17,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -33,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SunStaff extends CustomItem{
     protected int abilityNameColor=0xe7e82c;
     protected int abilityDescColor =0xe2e2e1;
+    Ingredient ingredient= Ingredient.of(ItemInit.SHIMMER_CUBE.get());
     public SunStaff(Properties properties) {
         super(properties);
     }
@@ -70,7 +74,10 @@ CD of 4-10 seconds, depending on how long the storm lasted.
         components.add(Component.translatable("tooltip.celestial_awakening.sun_staff.ray_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
-
+    @Override
+    public boolean isValidRepairItem(ItemStack p_41402_, ItemStack p_41403_) {
+        return ingredient.test(p_41403_) || super.isValidRepairItem(p_41402_, p_41403_);
+    }
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         AtomicInteger abilityCastType= new AtomicInteger();
@@ -89,6 +96,7 @@ CD of 4-10 seconds, depending on how long the storm lasted.
                     float vAng=MathFuncs.getVertAngFromVec(dir);
                     shiningRay((ServerLevel) level,player,hAng,vAng);
                     cap.setRayCD(220);
+                    itemStack.hurtAndBreak(2,player,(p_40992_) -> {p_40992_.broadcastBreakEvent(EquipmentSlot.MAINHAND);});
                 }
             });
         }
@@ -129,7 +137,6 @@ CD of 4-10 seconds, depending on how long the storm lasted.
             capOptional.ifPresent(cap->{
 
                 if (cap.getFlashCD()==0){
-
                     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(serverLevel.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FIREBALL),entity);
                     AABB aabb=new AABB(entity.position(),entity.position());
                     aabb=aabb.inflate(5f,1.2f,5f);
@@ -139,6 +146,12 @@ CD of 4-10 seconds, depending on how long the storm lasted.
                         livingEntity.setSecondsOnFire(5);
                     }
                     cap.setFlashCD(110);
+                    /*
+                          p_40994_.hurtAndBreak(2, p_40996_, (p_41007_) -> {
+         p_41007_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+      });
+                     */
+                    itemStack.hurtAndBreak(1,entity,(p_40992_) -> {p_40992_.broadcastBreakEvent(EquipmentSlot.MAINHAND);});
                 }
             });
         }

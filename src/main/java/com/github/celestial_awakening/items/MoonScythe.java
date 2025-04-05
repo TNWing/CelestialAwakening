@@ -3,6 +3,7 @@ package com.github.celestial_awakening.items;
 import com.github.celestial_awakening.capabilities.MoonScytheCapability;
 import com.github.celestial_awakening.capabilities.MoonScytheCapabilityProvider;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
+import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.MathFuncs;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
@@ -47,6 +49,7 @@ public class MoonScythe extends Item implements IForgeItem {
     protected int abilityNameColor=0xbfbfbd;
     protected int abilityDescColor=0xd8d7d5;
     float displayCD;
+    Ingredient ingredient= Ingredient.of(ItemInit.MOONSTONE.get());
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
         this.attackDamage=5.5f;
@@ -75,7 +78,10 @@ public class MoonScythe extends Item implements IForgeItem {
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", asp, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
-
+    @Override
+    public boolean isValidRepairItem(ItemStack p_41402_, ItemStack p_41403_) {
+        return ingredient.test(p_41403_) || super.isValidRepairItem(p_41402_, p_41403_);
+    }
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         Component abilityName=Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));

@@ -29,10 +29,13 @@ public class MoonlightReaper extends MoonScythe {
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
-        Component abilityName=Component.translatable("tooltip.celestial_awakening.moonlight_reaper.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
+        Component abilityName=Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(abilityName);
+        components.add(Component.translatable("tooltip.celestial_awakening.moon_scythe.ability_desc",new Object[]{displayCD}).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
+        Component abilityName2=Component.translatable("tooltip.celestial_awakening.moonlight_reaper.ability_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
+        components.add(abilityName2);
         components.add(Component.translatable("tooltip.celestial_awakening.moonlight_reaper.ability_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
-        super.appendHoverText(itemStack, level, components, tooltipFlag);
+        superAppendHoverText(itemStack, level, components, tooltipFlag);
     }
 
     @Override
@@ -68,7 +71,6 @@ public class MoonlightReaper extends MoonScythe {
             player.getFoodData().eat(1,1);
             @NotNull LazyOptional<MoonScytheCapability> capOptional=itemStack.getCapability(MoonScytheCapabilityProvider.ScytheCap);
             capOptional.ifPresent(cap->{
-                System.out.println(attacker.level().isClientSide + " ON CLIENT");
                 cap.incrementLunarOrbs(attacker.level().getServer().getTickCount());
             });
         }

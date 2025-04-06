@@ -68,7 +68,7 @@ public class LunarArmor extends ArmorEffect {
     @Override
     public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
         if (cnt==4){
-            if (event.phase== TickEvent.Phase.END && player.tickCount%100==0){
+            if (player.tickCount%100==0){
                 moonlitPath(event,player);
             }
         }

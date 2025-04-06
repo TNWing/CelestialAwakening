@@ -89,13 +89,16 @@ public class LunarCrescent extends CA_Projectile {
         if (this.level().isClientSide || (owner == null || !owner.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
             if (this.isReal()){
-                Predicate<Entity> alreadyHitPred= o -> o != null && !entityIDs.contains(o.getId());
+                System.out.println("test on tick " + this.tickCount);
+                Predicate<Entity> alreadyHitPred= o -> o != null && !entityIDs.contains(o.getStringUUID());
                 Predicate p;
                 p=alreadyHitPred.and(pred);
                 List<LivingEntity> entities=this.entitiesToHurt(p);
                 for (LivingEntity e:entities) {
                     this.entityIDs.add(e.getStringUUID());
+                    System.out.println("E " + e.getStringUUID() + " has name " + e.getName() + "  start hp is " + e.getHealth());
                     if (e.hurt(damagesource,this.getDmg())){
+                        System.out.println("CRES ID    " + this.getStringUUID() + "    has hit ent   " + e.getStringUUID() + " for  " + this.getDmg() +" and now e has hp " + e.getHealth());
                         if (owner instanceof LivingEntity){
                             ((LivingEntity) owner).setLastHurtMob(e);
                             if (!e.isAlive() && itemStackSource!=null && itemStackSource.getItem() instanceof MoonlightReaper){

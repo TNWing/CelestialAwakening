@@ -338,9 +338,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
 
         this.setPos(d0, d1, d2);
     }
-    //TODO: need to have v_ang affect the dir of horizontal move
     public Vec3 calculateMoveVec(){
-        System.out.println("pre clamp angs h" + getHAng() +"  v " + getVAng());
         double hAngle = MathFuncs.clampAngle(this.getHAng());
         double vAngle = MathFuncs.clampAngle(this.getVAng());
         double hRad = Math.toRadians(hAngle);

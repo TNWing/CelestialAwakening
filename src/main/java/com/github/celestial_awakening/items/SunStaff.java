@@ -173,7 +173,7 @@ CD of 4-10 seconds, depending on how long the storm lasted.
                 AABB aabb=ray.getRayBox();
                 aabb=aabb.inflate(2);
                 ServerLevel level= (ServerLevel) ray.level();
-                List<LivingEntity> entitiesToHurt=level.getEntitiesOfClass(LivingEntity.class,aabb,CA_Predicates.opposingTeams_IgnorePlayersAndAllies_Predicate((LivingEntity) ray.getOwner()));
+                List<LivingEntity> entitiesToHurt=level.getEntitiesOfClass(LivingEntity.class,aabb,CA_Predicates.opposingTeams_IgnorePlayers_Allies_Passive_Predicate((LivingEntity) ray.getOwner()));
                 List<LivingEntity> entitiesToHeal=level.getEntitiesOfClass(LivingEntity.class,aabb,CA_Predicates.sameTeamAndAlliesPredicate((LivingEntity) ray.getOwner()));
                 for (LivingEntity livingEntity:entitiesToHurt){
                     ray.hitLivingEntity(livingEntity);

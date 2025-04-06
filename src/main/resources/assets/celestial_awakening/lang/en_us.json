@@ -96,10 +96,10 @@
 
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
-  "tooltip.celestial_awakening.moon_scythe.ability_desc": "Landing a fully charged attack will unleash either a strike (if the attack was a critical hit) or a wave (if not)\nStrike and wave have individual cooldowns of %s seconds each.",
+  "tooltip.celestial_awakening.moon_scythe.ability_desc": "Executing a fully charged attack will launch a projectile based on the hit type: a vertical strike if the attack is a critical hit, or a horizontal wave otherwise.\nStrike and Wave each have independent cooldowns of %s seconds each.",
 
   "tooltip.celestial_awakening.moonlight_reaper.ability_name": "Harvest Moon",
-  "tooltip.celestial_awakening.moonlight_reaper.ability_desc": "Kills restore hunger and saturation, and grant 1 Lunar Orb (up to 6).\nEach Lunar Orb reduces the cooldown of strike and wave by 0.25 seconds.\nAt 6 orbs, summon 2 weaker crescents when performing a strike or wave.\nLose 1 Lunar Orb 10 seconds after not gaining or losing an orb.",
+  "tooltip.celestial_awakening.moonlight_reaper.ability_desc": "Kills restore hunger and saturation, and grant 1 Lunar Orb (up to 6).\nEach Lunar Orb reduces the cooldown of Strike and Wave by 0.25 seconds.\nAt 6 orbs, summon 2 weaker crescents when performing a Strike or Wave.\nLose 1 Lunar Orb 10 seconds after not gaining or losing an orb.",
 
 
   "tooltip.celestial_awakening.sun_staff.flash_name": "Searing Flash",
@@ -127,9 +127,10 @@
   "tooltip.celestial_awakening.everlight_armor.unyielding_name": "Unyielding Flame",
   "tooltip.celestial_awakening.everlight_armor.unyielding_desc": "Upon killing an enemy, ignite nearby enemies and gain absorption.",
   "tooltip.celestial_awakening.everlight_armor.star_gazer_name": "Star Gazer",
-  "tooltip.celestial_awakening.everlight_armor.star_gazer_desc": "Applies glowing to attackers.\nIf the attacker cannot receive glowing, instead heal 0.1 HP.\nReduces incoming damage for each nearby glowing entity.",
-  "tooltip.celestial_awakening.everlight_armor.resurgence_name": "Resurgence",
-  "tooltip.celestial_awakening.everlight_armor.resurgence_desc": "Every 5 seconds, recover HP scaling with your current HP.",
+  "tooltip.celestial_awakening.everlight_armor.star_gazer_desc": "Applies glowing to attackers.\nIf the attacker cannot receive glowing, instead heal 0.2 HP.\nReduces incoming damage for each nearby glowing entity.",
+  "tooltip.celestial_awakening.everlight_armor.photon_cycle_name": "Photon Cycle",
+  "tooltip.celestial_awakening.everlight_armor.photon_cycle_desc": "While in combat, channel the power of light.\n  If you are above half health, ignite nearby enemies and deal a burst of additional fire damage.\n  If below half health, reduce the duration of burning and glowing effects on nearby entities. You are healed based on the total time removed across all targets.\nCooldown of 10 seconds",
+
 
   "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
   "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had for 15 seconds.",

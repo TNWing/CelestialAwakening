@@ -2,9 +2,11 @@ package com.github.celestial_awakening.util;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
@@ -66,9 +68,9 @@ public class CA_Predicates {
         };
         return predicate;
     }
-    //Uses Vanila teams to determine enemies, but will always ignore players and allied mobs
+    //Uses Vanila teams to determine enemies, but will always ignore players, allied mobs
     public static Predicate opposingTeams_IgnorePlayersAndAllies_Predicate(LivingEntity attacker){
-        Predicate<Entity> predicate= o -> {
+        Predicate<LivingEntity> predicate= o -> {
             if (o instanceof Player || o instanceof SnowGolem){
                 return false;
             }
@@ -83,6 +85,55 @@ public class CA_Predicates {
         return predicate;
     }
 
+    //Uses Vanila teams to determine enemies, but will always ignore players, allied mobs, and any passive mobs
+    public static Predicate opposingTeams_IgnorePlayers_Allies_Passive_Predicate(LivingEntity attacker){
+        Predicate<LivingEntity> predicate= o -> {
+            if (o instanceof Player || o instanceof SnowGolem){
+                return false;
+            }
+            if (o instanceof Wolf &&  (((Wolf) o).getOwner()==attacker || ((Wolf) o).getOwner().isAlliedTo(attacker))){
+                return false;
+            }
+            if (o instanceof AbstractVillager){
+                return false;
+            }
+            if (o instanceof Animal){
+                LivingEntity target=((Animal) o).getTarget();
+                System.out.println("animal target is " + target);
+                return target!=null && !(target instanceof Player);
+            }
+
+            if (o instanceof IronGolem && !(((IronGolem) o).getTarget() instanceof Player)){
+                return false;
+            }
+            return !o.isAlliedTo(attacker);
+        };
+        return predicate;
+    }
+
+    //ignores players, allied mobs, and mobs with no target
+    public static Predicate opposingTeams_IgnorePlayers_Allies_NoTarget_Predicate(LivingEntity attacker){
+        Predicate<LivingEntity> predicate= o -> {
+            if (o instanceof Player || o instanceof SnowGolem){
+                return false;
+            }
+            if (o instanceof Wolf &&  (((Wolf) o).getOwner()==attacker || ((Wolf) o).getOwner().isAlliedTo(attacker))){
+                return false;
+            }
+            if (o instanceof AbstractVillager){
+                return false;
+            }
+            if (o instanceof Animal){
+                return !(((Animal) o).getTarget() instanceof Player);
+            }
+
+            if (o instanceof IronGolem && !(((IronGolem) o).getTarget() instanceof Player)){
+                return false;
+            }
+            return !o.isAlliedTo(attacker);
+        };
+        return predicate;
+    }
 
     //Uses Vanila teams to determine enemies, but ignores entities of the same class.
     public static Predicate opposingTeams_IgnoreSameClass_Predicate(LivingEntity attacker){

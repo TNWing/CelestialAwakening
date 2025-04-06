@@ -167,7 +167,7 @@ CD of 8 seconds
                     ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,1));
                     AABB aabb=new AABB(player.position(),player.position());
                     aabb=aabb.inflate(3f,1,3);
-                    List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate(player));
+                    List<LivingEntity> entities=player.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnorePlayers_Allies_Passive_Predicate(player));
                     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),player);
                     for (LivingEntity living:entities) {
                         living.hurt(source,1f);

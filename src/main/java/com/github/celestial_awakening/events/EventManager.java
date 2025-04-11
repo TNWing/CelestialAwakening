@@ -57,12 +57,9 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
+import static com.github.celestial_awakening.nbt_strings.NBTStrings.*;
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
 public class EventManager {
     protected static final RandomSource randomSource=RandomSource.create();
@@ -149,9 +146,11 @@ public class EventManager {
     public static void onPlayerClone(PlayerEvent.Clone event){
         if (event.isWasDeath()){//Saves any necessary capability data
             event.getOriginal().reviveCaps();
+            System.out.println(event.getOriginal().getStringUUID() + " is og uuid");
             event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
                     oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
             event.getOriginal().invalidateCaps();
+            System.out.println(event.getEntity().getStringUUID() + " is new uuid");
         }
 
     }
@@ -319,8 +318,8 @@ public class EventManager {
         LivingEntity player=event.getEntity();
         if (player instanceof Player && itemStack.getFoodProperties(null) != null && itemStack.hasTag()) {
             assert itemStack.getTag() != null;
-            if (itemStack.getTag().contains("LifeFragHeal")) {
-                float heal = itemStack.getTag().getFloat("LifeFragHeal");
+            if (itemStack.getTag().contains(lifeFrag)) {
+                float heal = itemStack.getTag().getFloat(lifeFrag);
                 player.heal(heal);
             }
         }
@@ -479,7 +478,7 @@ public class EventManager {
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
-                if (arrow.getTags().contains("CA_FBowBoost") && arrow.getOwner() instanceof LivingEntity){
+                if (arrow.getTags().contains(fBowBoost) && arrow.getOwner() instanceof LivingEntity){
                     Vec3 offset=new Vec3(3,0.5f,3);
                     AABB aabb=new AABB(target.position().subtract(offset),target.position().add(offset));
                     List<LivingEntity> livingEntityList= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate((LivingEntity)arrow.getOwner()));
@@ -495,7 +494,6 @@ public class EventManager {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event){
-        Entity directEntity=event.getSource().getDirectEntity();
         Entity causingEntity=event.getSource().getEntity();
         LivingEntity target=event.getEntity();
         if (!target.level().isClientSide && causingEntity!=null){
@@ -514,6 +512,9 @@ public class EventManager {
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
+                            targetCapOptional.ifPresent(cap->{
+                                cap.changeInsanityVal((short) 10);
+                            });
                         }
                     }
                 }
@@ -522,7 +523,6 @@ public class EventManager {
                     if (targetData!=null){
                         UUID id1= (UUID) targetCap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         if (!id1.equals(causingEntity.getUUID())){
-                            System.out.println("not part of duel");
                             event.setAmount(event.getAmount()*0.3f);
                         }
                     }
@@ -544,7 +544,6 @@ public class EventManager {
                     if (attackerData!=null){
                         UUID id1= (UUID) attackerCap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         if (!id1.equals(target.getUUID())){
-                            System.out.println("not part of duel");
                             event.setAmount(event.getAmount()*0.3f);
                         }
                     }
@@ -632,7 +631,6 @@ public class EventManager {
 
     @SubscribeEvent
     public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){
-        BlockPos blockPos=event.getPos();
         LevelAccessor levelAccessor=event.getLevel();
         if (levelAccessor instanceof Level level){
             @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
@@ -646,15 +644,23 @@ public class EventManager {
             });
         }
     }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event){
+        if (event.phase== TickEvent.Phase.START){
+            lunarEvents.decrementMoonGazeMap();
+        }
+    }
+
     @SubscribeEvent
     public static void onServerLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase== TickEvent.Phase.START){
-            Level level=event.level;
-            int time= (int) (level.getDayTime()%24000L);
-            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
 
             if (event.side.isServer()){
-                ServerLevel serverLevel = (ServerLevel) level;
+
+                ServerLevel serverLevel = (ServerLevel) event.level;
+                @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+                int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);//this is called twice
 
                 capOptional.ifPresent(cap->{
@@ -690,7 +696,6 @@ public class EventManager {
                     }
 
                 }
-
                 particleManager.generateParticles(serverLevel);
             }
         }

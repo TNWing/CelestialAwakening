@@ -10,6 +10,8 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import static com.github.celestial_awakening.nbt_strings.LivingEntityNBTNames.*;
+import static com.github.celestial_awakening.nbt_strings.LivingEntityNBTNames.leCap_abilityData;
 
 public class LivingEntityCapability {
     /**
@@ -34,7 +36,10 @@ public class LivingEntityCapability {
 
     short insanityPts;
     short navigauge;//used for diviner
-    public void increaseInsanityValue(short i){
+    public void setInsanityValue(short i){
+        insanityPts=i;
+    }
+    public void changeInsanityVal(short i){
         insanityPts+=i;
     }
     public void increaseNaviGauge(short i){
@@ -52,8 +57,8 @@ public class LivingEntityCapability {
         ListTag abilities=new ListTag();
         for (Map.Entry<String, Pair<Integer,Object[]>> entry:abilityDataMap.entrySet()){
             CompoundTag compoundTag=new CompoundTag();
-            compoundTag.putString("Name",entry.getKey());
-            compoundTag.putInt("CD",entry.getValue().getFirst());
+            compoundTag.putString(leCap_abilityName,entry.getKey());
+            compoundTag.putInt(leCap_abilityCD,entry.getValue().getFirst());
 
 
             ListTag dataList=new ListTag();
@@ -69,10 +74,11 @@ public class LivingEntityCapability {
                     dataList.add(IntTag.valueOf((Integer) obj));
                 }
             }
-            compoundTag.put("Data",dataList);
+            compoundTag.put(leCap_abilityData,dataList);
             abilities.add(compoundTag);
         }
-        nbt.put("Abilities",abilities);
+        nbt.put(leCap_abilities,abilities);
+        nbt.putShort(leCap_insanity,insanityPts);
         return nbt;
     }
 
@@ -80,9 +86,7 @@ public class LivingEntityCapability {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (uuid !=null && DelayedFunctionManager.delayedFunctionManager.getPlayerCommandMap().containsKey(uuid)){
             ArrayList<CommandMapValue> arrayList= DelayedFunctionManager.delayedFunctionManager.getPlayerCommandMap().get(server.getPlayerList().getPlayer(uuid));
-
         }
-
         //TODO: code below is just to visualize process
         /*
         CompoundTag testNBT = new CompoundTag();
@@ -92,7 +96,6 @@ public class LivingEntityCapability {
         commandPair.putInt("CD",5);
         cdData.put(commandPair)
         testNBT.put(cdData);
-
          */
 
         /*
@@ -101,8 +104,8 @@ public class LivingEntityCapability {
         ListTag abilities=new ListTag();
         for (Map.Entry<String, Pair<Integer,Object[]>> entry:abilityDataMap.entrySet()){
             CompoundTag compoundTag=new CompoundTag();
-            compoundTag.putString("Name",entry.getKey());
-            compoundTag.putInt("CD",entry.getValue().getFirst());
+            compoundTag.putString(leCap_abilityName,entry.getKey());
+            compoundTag.putInt(leCap_abilityCD,entry.getValue().getFirst());
 
 
             ListTag dataList=new ListTag();
@@ -117,11 +120,12 @@ public class LivingEntityCapability {
                 }
             }
             System.out.println("WE ARE saving data for " + entry.getKey() +  ", data is as follows" +  dataList.toString());
-            compoundTag.put("Data",dataList);
+            compoundTag.put(leCap_abilityData,dataList);
             abilities.add(compoundTag);
         }
-        nbt.put("Abilities",abilities);
-        nbt.putShort("NaviGauge",navigauge);
+        nbt.put(leCap_abilities,abilities);
+        nbt.putShort(leCap_navigauge,navigauge);
+        nbt.putShort(leCap_insanity,insanityPts);
 
     }
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -134,19 +138,19 @@ public class LivingEntityCapability {
                 GenericCommandPattern pattern= LivingEntityCapHelperFuncs.findPatternFromString(commandName);
             }
         }
-        ListTag abilities=(ListTag) nbt.get("Abilities");
+        ListTag abilities=(ListTag) nbt.get(leCap_abilities);
         if (abilities!=null){
             for (int i = 0; i <abilities.size(); ++i) {
                 CompoundTag compoundtag = abilities.getCompound(i);
-                String abilityName=compoundtag.getString("Name");
-                Integer cd=compoundtag.getInt("CD");
-                ListTag data= (ListTag) compoundtag.get("Data");
+                String abilityName=compoundtag.getString(leCap_abilityName);
+                Integer cd=compoundtag.getInt(leCap_abilityCD);
+                ListTag data= (ListTag) compoundtag.get(leCap_abilityData);
                 List<Object> objList = new ArrayList<>();
                 for (int a = 0; a < data.size(); ++a) {
                     Tag abilityTag = data.get(a);
                     if (abilityTag instanceof StringTag){
-                        objList.add(UUID.fromString(((StringTag)abilityTag).getAsString()));
-                        System.out.println("LOADING UUID " + UUID.fromString(((StringTag)abilityTag).getAsString()));
+                        objList.add(UUID.fromString(abilityTag.getAsString()));
+                        System.out.println("LOADING UUID " + UUID.fromString(abilityTag.getAsString()));
                     }
                     else if (abilityTag instanceof IntTag){
                         objList.add(((IntTag)abilityTag).getAsInt());
@@ -156,7 +160,8 @@ public class LivingEntityCapability {
                 abilityDataMap.put(abilityName,new Pair<>(cd, objList.toArray()));
             }
         }
-        navigauge=nbt.getShort("NaviGauge");
+        navigauge=nbt.getShort(leCap_navigauge);
+        insanityPts=nbt.getShort(leCap_insanity);
     }
 
     public void insertIntoAbilityMap(String abilityName, Integer cd){
@@ -222,14 +227,14 @@ public class LivingEntityCapability {
 
     public void copy(LivingEntityCapability data){
         this.abilityDataMap=data.abilityDataMap;
-        this.insanityPts=data.insanityPts;
         this.navigauge=data.navigauge;
+        this.insanityPts=data.insanityPts;
     }
 
     public void copyForRespawn(LivingEntityCapability data){
-        this.abilityDataMap=data.abilityDataMap;
-        this.abilityDataMap.clear();
-        this.insanityPts=data.insanityPts;
+        //this.abilityDataMap=data.abilityDataMap;
+        this.abilityDataMap=new ConcurrentHashMap<>();
         this.navigauge=data.navigauge;
+        this.insanityPts=data.insanityPts;
     }
 }

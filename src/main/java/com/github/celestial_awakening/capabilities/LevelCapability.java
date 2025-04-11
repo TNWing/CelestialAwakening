@@ -99,8 +99,8 @@ public class LevelCapability{
         divEyeTag.putFloat(lvlCap_transcendentDivChance,this.divinerEyeChance);
 
         divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
-        divEyeTag.putByte(nbtName_DivSunControlVal,this.divinerSunControlVal);
-        divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
+        divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         if (this.levelResourceKey!=null){
             System.out.println("LEV RK");
             DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
@@ -155,8 +155,8 @@ public class LevelCapability{
             this.divinerEyeFrameProgress=divEye.getFloat(lvlCap_transcendentDivFrameProgress);
             this.divinerEyeChance=divEye.getFloat(lvlCap_transcendentDivChance);
             this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
-            this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
-            this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
+            this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
+            this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
             this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
             if (divinerEyeTimer<=0){
                 this.divinerEyeFromState=-2;
@@ -196,8 +196,8 @@ public class LevelCapability{
                 this.divinerEyeFrameProgress=divEye.getFloat(lvlCap_transcendentDivFrameProgress);
                 this.divinerEyeChance=divEye.getFloat(lvlCap_transcendentDivChance);
                 this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
-                this.divinerSunControlVal =divEye.getByte(nbtName_DivSunControlVal);
-                this.divinerSunControlTimer =divEye.getInt(nbtName_DivSunControlTime);
+                this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
+                this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
                 this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
                 if (divinerEyeTimer<=0){
                     this.divinerEyeFromState=-2;
@@ -235,8 +235,8 @@ public class LevelCapability{
         divEyeTag.putFloat(lvlCap_transcendentDivChance,this.divinerEyeChance);
         divEyeTag.putInt(lvlCap_transcendentDivTimer,this.divinerEyeTimer);
         divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
-        divEyeTag.putByte(nbtName_DivSunControlVal,this.divinerSunControlVal);
-        divEyeTag.putInt(nbtName_DivSunControlTime,this.divinerSunControlTimer);
+        divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
+        divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
         return nbt;
     }

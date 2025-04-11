@@ -27,9 +27,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.celestial_awakening.util.MathFuncs.angBtwnVec;
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
@@ -37,9 +36,6 @@ import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
 public class LunarEvents {
     static Random rand=new Random();
-    public void refreshPKSpawnAttempts(LevelCapability cap){
-        cap.pkRemainingSpawnAttempts=Config.pkSpawnCap;
-    }
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
     public void attemptPKSpawn(ServerLevel level){
@@ -62,8 +58,7 @@ public class LunarEvents {
 //crescent
                         case 4, 6 -> {
                             if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay && cap.pkRemainingSpawnAttempts>0) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
-                                //perform rng roll
-                                if (true) {//rand.nextInt(10)>6    30% chance
+                                if (true) {//in the future, perform rng roll?
                                     PhantomKnight_Crescencia crescencia = new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level);
                                     //crescencia.setPos();
                                     level.addFreshEntity(crescencia);
@@ -83,6 +78,10 @@ public class LunarEvents {
 
         }
     }
+    /*
+    add players to this when they are added to level?
+     */
+    static ConcurrentHashMap<UUID, Short> timeSpentLookingAtMoon=new ConcurrentHashMap<>();
     public void detectIfLookingAtCelestialBody(Level level,int isSun){
         int time=(int)level.dayTime();//ranges from 0-24k
         float sunAngle = level.getSunAngle(time) + isSun * (float) Math.PI / 2; //-pi/2 for the moon, pi/2 for sun
@@ -92,7 +91,22 @@ public class LunarEvents {
             Vec3 view = player.getViewVector(1.0f);
             if (angBtwnVec(view,sun)<7D){
                 //System.out.println("LOOKING AT CELESTIAL BODY  " + isSun);
+                if (isSun<0){
+                    UUID uuid=player.getUUID();
+                    short val=1;
+                    if (timeSpentLookingAtMoon.containsKey(uuid)){
+                        val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)+1);
+                    }
+                    timeSpentLookingAtMoon.put(uuid,val);
+                    //looking at moon
+                }
             }
+        }
+    }
+
+    public void decrementMoonGazeMap(){
+        for (Map.Entry<UUID,Short> entry:timeSpentLookingAtMoon.entrySet()) {
+            entry.setValue((short) (Math.min(0,entry.getValue()-1)));
         }
     }
 

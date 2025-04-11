@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.recipes;
 
 import com.github.celestial_awakening.init.ItemInit;
+import com.github.celestial_awakening.nbt_strings.NBTStrings;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.FloatTag;
@@ -66,7 +67,7 @@ public class LifeFragFood extends ShapedRecipe {
         if (properties!=null){
             float healAmt=calcHeal(properties.getNutrition(),properties.getSaturationModifier());
             FloatTag healTag=FloatTag.valueOf(healAmt);
-            stackToReturn.addTagElement("LifeFragHeal",healTag);
+            stackToReturn.addTagElement(NBTStrings.lifeFrag,healTag);
         }
         else{
             stackToReturn=ItemStack.EMPTY;

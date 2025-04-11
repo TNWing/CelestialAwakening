@@ -2,8 +2,6 @@ package com.github.celestial_awakening.capabilities;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,27 +13,6 @@ import static com.github.celestial_awakening.nbt_strings.MovementModifierNBTName
 public class ProjCapability {
     int entityID;
     List<MovementModifier> movementModificationList = Collections.synchronizedList(new LinkedList<MovementModifier>());
-    /*
-
-        List<MovementModifier> spdModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
-        List<MovementModifier> angModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
-        List<MovementModifier> rotModList = Collections.synchronizedList(new LinkedList<MovementModifier>());
-
-        having 3 separate lists (1 for each kind of mm) has several benefits but also downsides
-        Pros
-        -allows for a bit more flexibility when multiple modifiers are present
-        -less data sent via packets
-        -looks cleaner, and easier to debug most likely
-
-        Cons
-        -have to refactor and redo a bunch of stuff
-        -more data can be stored (a minor issue)
-        -managing mm in the projectile class can be more time consuming
-
-        If i were to do this, general structure would be
-        MovementModifier as a parent class
-        SpdMM, AngMM, RotMM as children classes
-     */
     public ProjCapability(int id){
         this.entityID=id;
     }
@@ -52,7 +29,7 @@ public class ProjCapability {
         nbt.put(movementMods,listTag);
     }
     void loadNBTData(CompoundTag nbt){
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        //MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         ListTag mmList= (ListTag) nbt.get(movementMods);
         if (mmList!=null){
             for (int i = 0; i < mmList.size(); ++i) {
@@ -84,6 +61,7 @@ public class ProjCapability {
         nbt.putShort(mm_remainingTicks, (short) mod.getRemainingTicks());
         return nbt;
     }
+
     MovementModifier nbtToMod(CompoundTag tag){
 
         float spdMod=tag.getFloat(mm_spd);

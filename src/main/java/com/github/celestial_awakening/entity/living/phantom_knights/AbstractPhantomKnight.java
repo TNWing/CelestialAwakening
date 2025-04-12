@@ -57,7 +57,7 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
     protected void customServerAiStep() {
         super.customServerAiStep();
         if (isCombatActive){
-            if (bossBarWindup>=100){
+            if (true||bossBarWindup>=100){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
             }
             else{
@@ -121,9 +121,9 @@ public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
 
     public void startSeenByPlayer(ServerPlayer serverPlayer) {
         super.startSeenByPlayer(serverPlayer);
-        if (isCombatActive || this.bossBarWindup>=10){
+        if (isCombatActive || this.bossBarWindup>=10 || true){
             this.bossEvent.addPlayer(serverPlayer);
-            if (bossBarWindup>=100){
+            if (bossBarWindup>=100 || true){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
             }
             else{

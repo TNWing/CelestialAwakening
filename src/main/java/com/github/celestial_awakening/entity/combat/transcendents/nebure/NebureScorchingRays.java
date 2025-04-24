@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -17,7 +17,7 @@ public class NebureScorchingRays extends GenericAbility {
     float angDiff;
     int dir;
     LightRay[] rays;
-    public NebureScorchingRays(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public NebureScorchingRays(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         if (mob.level().getRandom().nextInt(2)==0){
             dir=-1;

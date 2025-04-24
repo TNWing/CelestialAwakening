@@ -1,12 +1,12 @@
 package com.github.celestial_awakening.entity.living.transcendents;
 
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
-public abstract class AbstractTranscendent extends AbstractCALivingEntity {
+public abstract class AbstractTranscendent extends AbstractCAMonster {
     /*
 how goals block other goals from being used (i think
 say two goals have the same condition (if cond==true, then canuse)

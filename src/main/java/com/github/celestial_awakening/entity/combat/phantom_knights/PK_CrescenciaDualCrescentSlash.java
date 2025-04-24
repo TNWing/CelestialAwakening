@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -9,7 +9,7 @@ import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PK_CrescenciaDualCrescentSlash extends GenericAbility {
-    public PK_CrescenciaDualCrescentSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaDualCrescentSlash(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Dual Crescent Slash";
     }

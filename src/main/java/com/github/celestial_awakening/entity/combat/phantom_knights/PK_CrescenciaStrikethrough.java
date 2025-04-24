@@ -2,7 +2,7 @@ package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -26,7 +26,7 @@ The knight will always reach the target first, and will attempt a single, powerf
 
  */
 public class PK_CrescenciaStrikethrough extends GenericAbility {
-    public PK_CrescenciaStrikethrough(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaStrikethrough(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Strikethrough";
     }

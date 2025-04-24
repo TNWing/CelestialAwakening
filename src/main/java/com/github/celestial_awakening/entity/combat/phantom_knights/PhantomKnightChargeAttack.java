@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
@@ -16,7 +16,7 @@ import java.util.List;
 public class PhantomKnightChargeAttack extends GenericAbility {
     Vec3 targetDir;
     int maxExecTime;
-    public PhantomKnightChargeAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PhantomKnightChargeAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         maxExecTime=executeTime;
     }

@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
@@ -11,9 +11,9 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,20,200,125,30);
     PK_CrescenciaNightSlash nightSlash=new PK_CrescenciaNightSlash(this.mob,20,120,120,30);
     PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36);
-    PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,15,160,0,10);
+    PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,160,0,10);
 
-    public PK_CrescenciaCombatAIGoal(AbstractCALivingEntity mob) {
+    public PK_CrescenciaCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     public void tick(){//this tick occurs ever 2 standard ticks

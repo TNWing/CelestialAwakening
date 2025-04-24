@@ -88,7 +88,7 @@ public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
         this.setDelay(cap.divinerEyeCurrentChangeDelay);
         System.out.println("OUR remaining time is IS " + cap.divinerEyeTimer);
         //it changes to 0 there for some reason
-
+        cap.divinerEyeFrameProgress=0;
         System.out.println("DIVINER EYE IS MOVING FROM STATE " + cap.divinerEyeFromState + " TO " + cap.divinerEyeToState + " WITH a change delay of " + cap.divinerEyeCurrentChangeDelay);
 
         if (cap.divinerEyeTimer>0){

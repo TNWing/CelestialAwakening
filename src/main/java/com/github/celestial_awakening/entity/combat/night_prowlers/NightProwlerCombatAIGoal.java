@@ -1,12 +1,12 @@
 package com.github.celestial_awakening.entity.combat.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.NightProwler;
 import net.minecraft.world.entity.LivingEntity;
 
 public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
-    public NightProwlerCombatAIGoal(AbstractCALivingEntity mob) {
+    public NightProwlerCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,15,0,0);

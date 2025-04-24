@@ -17,14 +17,11 @@ public class LevelCapS2CPacket {
         this.cap=capability;
     }
     public LevelCapS2CPacket(FriendlyByteBuf buf){
-        //dimID= ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf(32767)));\
-        //need to init levelcap
         this.cap=new LevelCapability(null);
         CompoundTag tag=buf.readNbt();
         //okay so the tag does contain the data
 
-        cap.loadNBTData(tag,false);//produces nptr exception
-        //the load above is causing issues due to being executed server side annd adding it to
+        cap.loadNBTData(tag,false);
     }
     public void toBytes(FriendlyByteBuf buf){//claims cap is null
         CompoundTag nbt=cap.initNBTData(new CompoundTag());

@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
@@ -9,7 +9,7 @@ public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
     NebureLightEntanglement lightEntanglement=new NebureLightEntanglement(this.mob,25,250,80,0);
     NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,30,200,15,0);
     NebureSolarExpansion solarExpansion=new NebureSolarExpansion(this.mob,20,100,48,20);
-    public NebureCombatAIGoal(AbstractCALivingEntity mob) {
+    public NebureCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     public void tick(){

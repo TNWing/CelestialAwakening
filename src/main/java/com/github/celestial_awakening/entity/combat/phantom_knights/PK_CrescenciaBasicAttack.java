@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class PK_CrescenciaBasicAttack extends GenericAbility {
 
 
-    public PK_CrescenciaBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="PK Basic";
     }
@@ -23,13 +23,11 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (this.getCurrentCD()==0){
             if (abilityRange>=dist){
-                System.out.println("VALD RANGE");
                 mob.canMove=false;
                 super.startAbility(target,dist);
                 setMoveVals(0,this.getAbilityRange(target),false);
             }
             else if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
-                System.out.println("LOW ON HP, summon crescent ");
                 mob.canMove=false;
                 super.startAbility(target,dist);
                 setMoveVals(0,this.getAbilityRange(target),false);
@@ -47,7 +45,6 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                     state++;
                     currentStateTimer=abilityExecuteTime;
                     if (target.distanceTo(this.mob)<getAbilityRange(target)){
-                        System.out.println("HURT TARGETY VIA BASIC");
                         this.mob.doHurtTarget(target);
                     }
 
@@ -56,9 +53,9 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                         Vec3 dir= MathFuncs.getDirVec(this.mob.position(),target.position());
                         float hAng= MathFuncs.getAngFrom2DVec(dir);
                         float vAng= MathFuncs.getVertAngFromVec(dir);
-                        float spd=1.1f;
+                        float spd=1.8f;
                         if (target.distanceToSqr(this.mob)>4f){
-                            spd=3.5f;
+                            spd=4.2f;
                         }
                         LunarCrescent crescent=LunarCrescent.create(lvl, (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.8f,70,spd,hAng,vAng,90,1f,0.25f,1f);
                         int id=crescent.getId();

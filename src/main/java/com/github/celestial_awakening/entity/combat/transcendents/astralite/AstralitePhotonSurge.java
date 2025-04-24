@@ -2,7 +2,7 @@ package com.github.celestial_awakening.entity.combat.transcendents.astralite;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.init.MobEffectInit;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 public class AstralitePhotonSurge extends GenericAbility {
     private BlockPos targetBlockPos;
-    public AstralitePhotonSurge(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public AstralitePhotonSurge(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),this.mob);

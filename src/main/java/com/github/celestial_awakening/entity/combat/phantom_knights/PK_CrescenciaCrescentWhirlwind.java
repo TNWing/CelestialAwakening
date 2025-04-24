@@ -5,7 +5,7 @@ import com.github.celestial_awakening.capabilities.ProjCapability;
 import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
@@ -32,7 +32,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     float[] crescentDmgVals={4.5f,6.5f,9f};
     float[] whirlwindDmgVals={5.5f,7f,8.5f};
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
-    public PK_CrescenciaCrescentWhirlwind(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaCrescentWhirlwind(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Crescent Whirlwind";
     }

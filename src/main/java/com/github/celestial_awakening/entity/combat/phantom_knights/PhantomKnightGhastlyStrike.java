@@ -1,11 +1,11 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PhantomKnightGhastlyStrike extends GenericAbility {
-    public PhantomKnightGhastlyStrike(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PhantomKnightGhastlyStrike(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
 

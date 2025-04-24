@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.combat.transcendents.asteron;
 
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class AsteronPiercingRays extends GenericAbility {
-    public AsteronPiercingRays(AbstractCALivingEntity mob, int castTime, int CD, int rec, int et) {
+    public AsteronPiercingRays(AbstractCAMonster mob, int castTime, int CD, int rec, int et) {
         super(mob,castTime, CD,et,rec);
     }
 

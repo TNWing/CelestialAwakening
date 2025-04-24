@@ -1,5 +1,7 @@
 package com.github.celestial_awakening.util;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -105,4 +107,10 @@ public class MathFuncs {
         return entityList;
     }
 
+    public static BlockPos vec3ToBlockPos(Vec3 vec){
+        int i = Mth.floor(vec.x);
+        int j = Mth.floor(vec.y);
+        int k = Mth.floor(vec.z);
+        return new BlockPos(i,j,k);
+    }
 }

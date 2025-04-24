@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -15,7 +15,7 @@ public class PK_CrescenciaNightSlash extends GenericAbility {
     float smallCrescentDmgVals[]={3,3.75f,4.5f};
     float ang=0;
     Vec3 dir=Vec3.ZERO;
-    public PK_CrescenciaNightSlash(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public PK_CrescenciaNightSlash(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     @Override

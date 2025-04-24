@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
@@ -102,11 +103,9 @@ public class LevelCapability{
         divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         if (this.levelResourceKey!=null){
-            System.out.println("LEV RK");
             DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
             result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put(lvlCap_transcendentLevelRK,encodedObj));//not savingg?
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            System.out.println(this.levelResourceKey);
             ArrayList<CommandMapValue> arrayList=DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().get(server.getLevel(this.levelResourceKey));
             System.out.println(arrayList);
             if (arrayList!=null){//is null for some reason
@@ -147,6 +146,7 @@ public class LevelCapability{
         }
         CompoundTag divEye= nbt.getCompound(lvlCap_transcendentHolder);
         if (divEye!=null){
+            System.out.println("our lrk is " + this.levelResourceKey);
             this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
             this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
             this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);
@@ -157,12 +157,16 @@ public class LevelCapability{
             this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
             this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
             this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
-            this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
+            levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().ifPresent(data->{
+                if (data!=null){
+                    this.levelResourceKey=data;
+                }
+
+            });
             if (divinerEyeTimer<=0){
                 this.divinerEyeFromState=-2;
                 this.divinerEyeToState=-2;
             }
-            System.out.println("TIMER is " +divinerEyeTimer+ " WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
             if (insert && this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                 if (this.divinerEyeTimer>0){
                     Object[] params=new Object[]{this,this.levelResourceKey};
@@ -188,6 +192,7 @@ public class LevelCapability{
 
             CompoundTag divEye= (CompoundTag) storedNBT.get(lvlCap_transcendentHolder);
             if (divEye!=null){
+                System.out.println(Arrays.toString(divEye.getAllKeys().toArray()));
                 this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
                 this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
                 this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);
@@ -198,13 +203,16 @@ public class LevelCapability{
                 this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
                 this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
                 this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
-                this.levelResourceKey=levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().orElse(null);
-                if (divinerEyeTimer<=0){
+                levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().ifPresent(data->{
+                    if (data!=null){
+                        this.levelResourceKey=data;
+                    }
+
+                });
+                if (divinerEyeTimer<=0 ){
                     this.divinerEyeFromState=-2;
                     this.divinerEyeToState=-2;
                 }
-                System.out.println("TIMER after is " +divinerEyeTimer +" WITH STATES " + this.divinerEyeFromState +"   " + this.divinerEyeToState);
-
                 if (this.levelResourceKey!=null && server.getLevel(this.levelResourceKey)!=null){
                     if (this.divinerEyeTimer>0){
                         Object[] params=new Object[]{this,this.levelResourceKey};

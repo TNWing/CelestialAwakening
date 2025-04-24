@@ -26,6 +26,7 @@ import java.util.List;
 public class ClientEventsManager {
     private static List<ResourceLocation> divinerEyeBase=new ArrayList<>();
     private String divienrEyeStr="textures/environment/diviner_eye";
+    private static ResourceLocation transcendentAoDSprite=CelestialAwakening.createResourceLocation("textures/environment/transcendent_aod_overlay.png");
 
     public ClientEventsManager(){
         divinerEyeBase.add(CelestialAwakening.createResourceLocation(divienrEyeStr+"/diviner_eye_closed.png"));
@@ -58,11 +59,15 @@ public class ClientEventsManager {
                 if (level!=null && level.dimension()==Level.OVERWORLD){
                     LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
                     capOptional.ifPresent(cap->{
+
                         if (cap.divinerEyeToState>-2){
-                            if (!minecraft.isPaused()) { // Check if the game is not paused
+                            if (!minecraft.isPaused()) {
                                 //System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
                             }
                             renderDivinerEye(event.getPoseStack(),level,cap,event);
+                        }
+                        else if (cap.divinerSunControlTimer>0){
+                            renderTransAoDOverlay(event.getPoseStack(),level,cap,event);
                         }
 
                     });
@@ -72,6 +77,28 @@ public class ClientEventsManager {
             }
 
     }
+    public void renderTransAoDOverlay(PoseStack poseStack,ClientLevel level,LevelCapability cap,RenderLevelStageEvent event){
+        float f12 = 15.0F;//f12=30 for a 32 by 32
+        FogRenderer.levelFogColor();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        poseStack=poseStackModificationForSun(level,poseStack,event.getPartialTick());
+
+        Matrix4f matrix4f1=poseStack.last().pose();//posestack
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, transcendentAoDSprite);
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        float a=0.5f+0.5f*cap.divinerEyePower/100f;
+        bufferbuilder.vertex(matrix4f1, -f12, 100.0F, -f12).uv(0.0F, 0.0F).color(1.0f,1.0f,1.0f,a).endVertex();
+        bufferbuilder.vertex(matrix4f1, f12, 100.0F, -f12).uv(1.0F, 0.0F).color(1.0f,1.0f,1.0f,a).endVertex();
+        bufferbuilder.vertex(matrix4f1, f12, 100.0F, f12).uv(1.0F, 1.0F).color(1.0f,1.0f,1.0f,a).endVertex();
+        bufferbuilder.vertex(matrix4f1, -f12, 100.0F, f12).uv(0.0F, 1.0F).color(1.0f,1.0f,1.0f,a).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+        RenderSystem.disableBlend();
+        poseStack.popPose();
+    }
+
 //also, whenever a transition to state starts, theres a brief moment of glitched texture
     public void renderDivinerEye(PoseStack poseStack,ClientLevel level, LevelCapability cap,RenderLevelStageEvent event){
         //System.out.println("rendering on time " + level.getDayTime());
@@ -100,14 +127,17 @@ public class ClientEventsManager {
         uv: maps 2d texture onto model
          */
         //for now, dont use intermediate images
+        System.out.println(cap.divinerEyeFrameProgress  + " Is our div eye prog");
+
         //System.out.println("TO STATE is " + toState);
         if (toState>0){
             ind=toState+5;
+            ind=4;
             //eye is looking around
         }
 
         else if (toState==0){
-            if (fromState==-1){//my guess is its going here and calling eyelidrender
+            if (fromState==-1){
                 //eye opening
                 cap.divinerEyeFrameProgress+=100/32f;
                 if (cap.divinerEyeFrameProgress>100f){
@@ -118,12 +148,11 @@ public class ClientEventsManager {
             else{
                 //recentering
                 ind=5;
+                ind=4;
             }
         }
         else{
-            //eye closing or closed
             if (fromState==-1){
-                //eye is just shut,
                 ind=0;
             }
             else{
@@ -154,9 +183,9 @@ public class ClientEventsManager {
 
     public int eyeLidRender(float progress, boolean opening){
         int index=0;
-        index= (int) (progress/20);
+        index= (int) (progress/25);
         if (!opening){
-            index=5-index;
+            index=4-index;//prev was 5-ind
         }
         //index goes very hiogh for some reason
         //System.out.println("IND IS " + index + " WITH OPENING BOOL IS " + opening);

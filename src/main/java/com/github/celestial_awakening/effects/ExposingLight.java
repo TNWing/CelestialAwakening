@@ -4,11 +4,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
 public class ExposingLight extends MobEffect {
-    /*
-    Purifying Flames
-Fire damage taken bypasses i frames and does not trigger I frames
 
-     */
 
     /*
     REWORK IDEAS

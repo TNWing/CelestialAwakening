@@ -24,7 +24,7 @@ import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
 import java.util.HashMap;
 
-public class NightProwler extends AbstractCALivingEntity {
+public class NightProwler extends AbstractCAMonster {
 
     static double baseHP=28.0D;
     static double baseDmg=5.0D;

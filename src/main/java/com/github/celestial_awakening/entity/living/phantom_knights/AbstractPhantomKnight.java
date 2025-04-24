@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.living.phantom_knights;
 
 import com.github.celestial_awakening.Config;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public abstract class AbstractPhantomKnight extends AbstractCALivingEntity {
+public abstract class AbstractPhantomKnight extends AbstractCAMonster {
 
 
     private final ServerBossEvent bossEvent=new ServerBossEvent(Component.translatable("entity.celestial_awakening.pk_crescencia"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);

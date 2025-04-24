@@ -1,11 +1,11 @@
 package com.github.celestial_awakening.entity.combat.transcendents.asteron;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AsteronBasicAttack extends GenericAbility {
-    public AsteronBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int rec, int et) {
+    public AsteronBasicAttack(AbstractCAMonster mob, int castTime, int CD, int rec, int et) {
         super(mob,castTime, CD,rec,et);
     }
 

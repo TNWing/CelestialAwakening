@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -21,14 +22,16 @@ import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
-public abstract class AbstractCALivingEntity extends Monster implements CA_Entity {
+public abstract class AbstractCAMonster extends Monster implements CA_Entity {
+    String kbImmuneUUID="4d80d010-d025-40de-80ad-6b262763cc30";
+    public AttributeModifier kbImmune=new AttributeModifier(UUID.fromString(kbImmuneUUID),"KB Immune",1d,AttributeModifier.Operation.ADDITION);
 
-
-    protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BYTE);
-    protected static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.FLOAT);
-    protected static final EntityDataAccessor<Boolean> HAS_COLLISION = SynchedEntityData.defineId(AbstractCALivingEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Boolean> HAS_COLLISION = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BOOLEAN);
 
     protected Integer ACTION_FRAME=0;
     public int animTime;
@@ -60,7 +63,7 @@ public abstract class AbstractCALivingEntity extends Monster implements CA_Entit
     public int getBossBarWindup(){
         return this.bossBarWindup;
     }
-    protected AbstractCALivingEntity(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+    protected AbstractCAMonster(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 
         super(p_33002_, p_33003_);
         nextActionTickCount=0;

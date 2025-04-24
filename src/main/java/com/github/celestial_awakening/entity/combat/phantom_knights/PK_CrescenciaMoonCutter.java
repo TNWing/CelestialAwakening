@@ -4,13 +4,14 @@ import com.github.celestial_awakening.capabilities.MovementModifier;
 import com.github.celestial_awakening.capabilities.ProjCapability;
 import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
@@ -32,10 +33,13 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             /teleport Dev -245.0 90 -232.4
     /teleport Dev -245.0 90 -233.0
      */
+
     float crescentDmgVals[]={7f,9.5f,12f};
-    public PK_CrescenciaMoonCutter(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+
+    public PK_CrescenciaMoonCutter(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
+    Vec3 stepDir;
     @Override
     public void startAbility(LivingEntity target,double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
@@ -43,20 +47,35 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             this.mob.getDirection();
             this.mob.canMove=false;
             super.startAbility(target,dist);
+            this.mob.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addTransientModifier(this.mob.kbImmune);
+            if (dist<9){
+                stepDir=MathFuncs.getDirVec(target.position(),this.mob.position());
 
+            }
+            else{
+                stepDir=Vec3.ZERO;
+            }
         }
 
     }
 
     @Override
     public void executeAbility(LivingEntity target) {
-        if (state==0 && this.currentStateTimer==12){
-            this.mob.setActionId(9);
+        if (state==0){
+            if (this.currentStateTimer==8){
+                this.mob.setActionId(9);
+            }
+            Vec3 newPos=this.mob.position().add(stepDir.scale(0.3f));
+            //BlockPos blockPos=new BlockPos(new Vec3i(newPos.x,newPos.y,newPos.z));
+            if (false){
+
+            }
         }
         this.currentStateTimer--;
         if (currentStateTimer<=0) {
             switch (state) {
                 case 0:{
+                    this.mob.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(this.mob.kbImmune);
                     changeToState1();
 
                     int diffMod=this.mob.level().getDifficulty().getId();

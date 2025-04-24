@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.combat;
 
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public abstract class GenericAbility {
@@ -11,7 +11,7 @@ public abstract class GenericAbility {
 
     protected int currentCD;
     protected String name;
-    protected final AbstractCALivingEntity mob;
+    protected final AbstractCAMonster mob;
 
     protected int state;//0 for casting, 1 for executing, 2 for recovery
     protected int currentStateTimer;//used for the 3 state timers
@@ -34,7 +34,7 @@ public abstract class GenericAbility {
 
     public abstract void executeAbility(LivingEntity target);
 
-    public GenericAbility(AbstractCALivingEntity mob, int castTime, int CD,int executeTime,int recoveryTime){
+    public GenericAbility(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime){
         this.mob=mob;
         this.isInUse=false;
         this.abilityExecuteTime=executeTime;

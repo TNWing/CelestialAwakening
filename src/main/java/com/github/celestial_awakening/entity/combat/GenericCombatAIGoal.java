@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.combat;
 
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 
 public abstract class GenericCombatAIGoal extends Goal {
 
-    protected final AbstractCALivingEntity mob;
+    protected final AbstractCAMonster mob;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -30,7 +30,7 @@ public abstract class GenericCombatAIGoal extends Goal {
     -movement controller
      */
 
-    protected GenericCombatAIGoal(AbstractCALivingEntity mob) {
+    protected GenericCombatAIGoal(AbstractCAMonster mob) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.mob = mob;
     }

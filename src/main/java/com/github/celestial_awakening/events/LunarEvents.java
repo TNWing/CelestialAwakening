@@ -6,10 +6,13 @@ import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
+import com.github.celestial_awakening.init.MobEffectInit;
+import com.github.celestial_awakening.util.LevelFuncs;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -23,14 +26,12 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.github.celestial_awakening.util.MathFuncs.angBtwnVec;
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
 
@@ -82,51 +83,47 @@ public class LunarEvents {
     add players to this when they are added to level?
      */
     static ConcurrentHashMap<UUID, Short> timeSpentLookingAtMoon=new ConcurrentHashMap<>();
-    public void detectIfLookingAtCelestialBody(Level level,int isSun){
-        int time=(int)level.dayTime();//ranges from 0-24k
-        float sunAngle = level.getSunAngle(time) + isSun * (float) Math.PI / 2; //-pi/2 for the moon, pi/2 for sun
-
-        Vec3 sun = new Vec3(Math.cos(sunAngle), Math.sin(sunAngle), 0f);
+    public void detectIfLookingAtMoon(Level level){
         for (Player player:level.players()){
-            Vec3 view = player.getViewVector(1.0f);
-            if (angBtwnVec(view,sun)<7D){
-                //System.out.println("LOOKING AT CELESTIAL BODY  " + isSun);
-                if (isSun<0){
-                    UUID uuid=player.getUUID();
-                    short val=1;
-                    if (timeSpentLookingAtMoon.containsKey(uuid)){
-                        val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)+1);
-                    }
+            UUID uuid=player.getUUID();
+            short val=1;
+            if (LevelFuncs.detectIfLookingAtCelestialBody(level,player,-1)){
+                if (timeSpentLookingAtMoon.containsKey(uuid)){
+                    val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)+1);
+                }
+                timeSpentLookingAtMoon.put(uuid,val);
+                //looking at moon
+            }
+            else{
+                if (timeSpentLookingAtMoon.containsKey(uuid)){
+                    val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)-1);
                     timeSpentLookingAtMoon.put(uuid,val);
-                    //looking at moon
                 }
             }
         }
     }
-
-    public void decrementMoonGazeMap(){
-        for (Map.Entry<UUID,Short> entry:timeSpentLookingAtMoon.entrySet()) {
-            entry.setValue((short) (Math.min(0,entry.getValue()-1)));
-        }
-    }
-
-
 
     public void moonstoneMark(Level level){
-        Random rand = new Random();
-        @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
-        capOptional.ifPresent(cap-> {
-            if (!cap.currentMoonstonePos.isEmpty()) {
-                for (BlockPos blockPos : cap.currentMoonstonePos.keySet()) {
-                    AABB bound = new AABB(blockPos);
-                    TargetingConditions conds = TargetingConditions.forNonCombat();
-                    Monster monster = level.getNearestEntity(Monster.class, conds, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), bound);
+        if (level.getDayTime() % 20==0){
+            @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+            capOptional.ifPresent(cap-> {
+                if (!cap.currentMoonstonePos.isEmpty()) {
+                    MobEffectInstance instance=new MobEffectInstance(MobEffectInit.MARK_OF_HAUNTING.get(),2400);
+                    for (BlockPos blockPos : cap.currentMoonstonePos.keySet()) {
+                        AABB bound = new AABB(blockPos);
+                        TargetingConditions conds = TargetingConditions.forNonCombat();
+                        Monster monster = level.getNearestEntity(Monster.class, conds, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), bound);
+                        if (monster!=null){
+                            monster.addEffect(instance);
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
-    public void revealMoonstone(Level level){
+    public void createMoonstone(Level level){
         Random rand = new Random();
         @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
         capOptional.ifPresent(cap-> {

@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.astralite;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.ShiningOrb;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.particles.ParticleOptions;
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class AstraliteBasicAttack extends GenericAbility {
     ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK;
-    public AstraliteBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public AstraliteBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
 
     }

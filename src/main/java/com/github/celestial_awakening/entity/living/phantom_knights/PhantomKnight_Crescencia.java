@@ -105,6 +105,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
     public void tick() {
         super.tick();
+        System.out.println("ENT POS " + this.position() + " blockPos " + this.blockPosition());//so the y values do match
     }
 
     @Override

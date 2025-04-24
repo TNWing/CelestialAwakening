@@ -648,7 +648,6 @@ public class EventManager {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event){
         if (event.phase== TickEvent.Phase.START){
-            lunarEvents.decrementMoonGazeMap();
         }
     }
 
@@ -662,7 +661,9 @@ public class EventManager {
                 @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
                 int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);//this is called twice
+                if (time==0){
 
+                }
                 capOptional.ifPresent(cap->{
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
                         solarEvents.detectPlayers(serverLevel,cap);
@@ -682,14 +683,14 @@ public class EventManager {
                     int phase=serverLevel.getMoonPhase();
                     switch(phase){
                         case 0:{
-                            lunarEvents.revealMoonstone(serverLevel);
+                            lunarEvents.createMoonstone(serverLevel);
                             break;
                         }
                         default:{
                             break;
                         }
                     }
-                    lunarEvents.detectIfLookingAtCelestialBody(serverLevel,-1);
+                    lunarEvents.detectIfLookingAtMoon(serverLevel);
                     if (time==18000){
                         lunarEvents.midnightIronTransformation(serverLevel);
                         lunarEvents.attemptPKSpawn(serverLevel);

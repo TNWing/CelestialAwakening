@@ -2,7 +2,7 @@ package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -40,7 +40,7 @@ public class NebureSolarExpansion extends GenericAbility {
     int donutAreaInterval=8;
     int donutIntervalDiv=4;
 
-    public NebureSolarExpansion(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public NebureSolarExpansion(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
 

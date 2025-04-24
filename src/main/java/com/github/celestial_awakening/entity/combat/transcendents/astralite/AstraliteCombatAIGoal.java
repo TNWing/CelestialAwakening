@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.astralite;
 
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AstraliteCombatAIGoal extends GenericCombatAIGoal {
@@ -9,7 +9,7 @@ public class AstraliteCombatAIGoal extends GenericCombatAIGoal {
     AstralitePhotonSurge photonSurge =new AstralitePhotonSurge(this.mob,10,110,80,30);
     AstraliteBasicAttack basicAttack=new AstraliteBasicAttack(this.mob,18,30,0,0);
 
-    public AstraliteCombatAIGoal(AbstractCALivingEntity mob) {
+    public AstraliteCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     public void tick(){

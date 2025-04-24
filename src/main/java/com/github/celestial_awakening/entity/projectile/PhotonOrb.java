@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.projectile;
 
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -12,11 +12,11 @@ public class PhotonOrb extends Projectile {
     //an entity that spawns other entities (such as projectiles)
     Vec3 dest;
 
-    AbstractCALivingEntity owner;
+    AbstractCAMonster owner;
     Entity entityToSpawn;
 
 
-    public PhotonOrb(Level p_37249_,AbstractCALivingEntity owner, Entity entityToSpawn) {
+    public PhotonOrb(Level p_37249_, AbstractCAMonster owner, Entity entityToSpawn) {
         super(EntityInit.PHOTON_ORB.get(), p_37249_);
         this.owner=owner;
         this.entityToSpawn=entityToSpawn;

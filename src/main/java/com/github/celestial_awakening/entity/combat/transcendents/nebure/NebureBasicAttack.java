@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class NebureBasicAttack extends GenericAbility {
     ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK;
-    public NebureBasicAttack(AbstractCALivingEntity mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public NebureBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     @Override

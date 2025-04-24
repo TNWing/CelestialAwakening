@@ -5,7 +5,7 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.rendering.client.animations.PK_CrescenciaAnimations;
-import com.github.celestial_awakening.entity.living.AbstractCALivingEntity;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -128,7 +128,7 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.model.getAllParts().forEach(ModelPart::resetPose);
-		if (((AbstractCALivingEntity)entity).getActionId()==0){
+		if (((AbstractCAMonster)entity).getActionId()==0){
 			this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
 		}
 		this.animate(((PhantomKnight_Crescencia)entity).asleepAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);

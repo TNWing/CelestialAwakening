@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.transcendents.asteron;
 
-import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
+import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -49,6 +49,7 @@ public class AsteronPiercingRays extends GenericAbility {
 
                         spt=spt.add(dir.scale(i));
                         LightRay ray=LightRay.create(level,30,3.5f);
+                        ray.setPred(o -> !(o instanceof AbstractTranscendent));
                         ray.setOwner(this.mob);
                         ray.initDims(0.2f,0,0.2f,0,0.2f,3.4f,0,1.8f);
                         ray.setHAng(yaw);

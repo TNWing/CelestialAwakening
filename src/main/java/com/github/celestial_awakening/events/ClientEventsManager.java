@@ -11,6 +11,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -62,7 +63,7 @@ public class ClientEventsManager {
 
                         if (cap.divinerEyeToState>-2){
                             if (!minecraft.isPaused()) {
-                                //System.out.println("RENDERING FROM " +cap.divinerEyeFromState + " TO " + cap.divinerEyeToState);
+                                System.out.println("RENDERING level on time " + level.getDayTime());
                             }
                             renderDivinerEye(event.getPoseStack(),level,cap,event);
                         }
@@ -112,6 +113,7 @@ public class ClientEventsManager {
         Matrix4f matrix4f1=poseStack.last().pose();//posestack
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         int ind=0;
+        Shulker
         /*
 
         Frames
@@ -127,8 +129,11 @@ public class ClientEventsManager {
         uv: maps 2d texture onto model
          */
         //for now, dont use intermediate images
-        System.out.println(cap.divinerEyeFrameProgress  + " Is our div eye prog");
 
+        //TODO: move the calcs to a method that isn't reliant on the render event since that render event is called multiple times per tick
+        if (!minecraft.isPaused() && level.getDayTime()%10==0) {
+            System.out.println(cap.divinerEyeFrameProgress + " Is our div eye prog");
+        }
         //System.out.println("TO STATE is " + toState);
         if (toState>0){
             ind=toState+5;
@@ -139,7 +144,9 @@ public class ClientEventsManager {
         else if (toState==0){
             if (fromState==-1){
                 //eye opening
-                cap.divinerEyeFrameProgress+=100/32f;
+                System.out.println("old PROG IS " + cap.divinerEyeFrameProgress);
+                cap.divinerEyeFrameProgress+=100f/32f;
+                System.out.println("NEW PROG IS " + cap.divinerEyeFrameProgress);
                 if (cap.divinerEyeFrameProgress>100f){
                     cap.divinerEyeFrameProgress=100f;
                 }
@@ -156,15 +163,17 @@ public class ClientEventsManager {
                 ind=0;
             }
             else{
+                System.out.println("old PROG IS " + cap.divinerEyeFrameProgress);
                 //frame prog shouldnt increase if server is paused
-                cap.divinerEyeFrameProgress+=100/32f;
+                cap.divinerEyeFrameProgress+=100f/32f;
+                System.out.println("NEW PROG IS " + cap.divinerEyeFrameProgress);
                 if (cap.divinerEyeFrameProgress>100f){
                     cap.divinerEyeFrameProgress=100f;
                 }
                 ind=eyeLidRender(cap.divinerEyeFrameProgress,false);
             }
         }
-        if (!minecraft.isPaused() && level.getDayTime()%100==0) {
+        if (!minecraft.isPaused() && level.getDayTime()%10==0) {
             System.out.println("rendering on time " + level.getDayTime());
             System.out.println("STATES ARE " + fromState + " TO " + toState);
             System.out.println("ind is " + ind);

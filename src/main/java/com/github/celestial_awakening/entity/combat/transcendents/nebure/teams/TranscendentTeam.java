@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.teams;
+package com.github.celestial_awakening.entity.combat.transcendents.nebure.teams;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

@@ -66,7 +66,6 @@ public class LivingEntityCapability {
             Object[] data=entry.getValue().getSecond();
 
             for (Object obj:data) {
-                System.out.println("DATA TO SAVE IS " + obj);
                 if (obj instanceof UUID){
                     dataList.add(StringTag.valueOf(((UUID)obj).toString()));
                 }
@@ -119,7 +118,6 @@ public class LivingEntityCapability {
                     dataList.add(IntTag.valueOf((Integer) obj));
                 }
             }
-            System.out.println("WE ARE saving data for " + entry.getKey() +  ", data is as follows" +  dataList.toString());
             compoundTag.put(leCap_abilityData,dataList);
             abilities.add(compoundTag);
         }
@@ -150,13 +148,11 @@ public class LivingEntityCapability {
                     Tag abilityTag = data.get(a);
                     if (abilityTag instanceof StringTag){
                         objList.add(UUID.fromString(abilityTag.getAsString()));
-                        System.out.println("LOADING UUID " + UUID.fromString(abilityTag.getAsString()));
                     }
                     else if (abilityTag instanceof IntTag){
                         objList.add(((IntTag)abilityTag).getAsInt());
                     }
                 }
-                System.out.println("WE got ability " + abilityName + " WITH TIME " + cd);
                 abilityDataMap.put(abilityName,new Pair<>(cd, objList.toArray()));
             }
         }

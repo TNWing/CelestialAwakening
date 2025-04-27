@@ -52,11 +52,8 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
 
     @Override
     public CompoundTag save(CompoundTag tag) {
-        System.out.println("SAVE EFFECT");
         super.save(tag);
         tag.putInt("Stage",stage);
-        System.out.println("BEACON STAGE " + tag.getInt("Stage"));
-        System.out.println("TAg to save " + tag);
         return tag;
     }
     //cant override, metyhod is static

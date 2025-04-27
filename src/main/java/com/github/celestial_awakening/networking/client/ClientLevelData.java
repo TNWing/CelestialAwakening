@@ -10,8 +10,6 @@ public class ClientLevelData {
     public static void setData(LevelCapability newData){
         @NotNull LazyOptional<LevelCapability> capOptional=Minecraft.getInstance().player.level().getCapability(LevelCapabilityProvider.LevelCap);
         capOptional.ifPresent(cap->{
-            //new data not updated?
-            System.out.println("NEW DATA " + newData.divinerEyeFromState + " TO " + newData.divinerEyeToState + " WITH LS " + newData.divinerSunControlVal);
             cap.updateData(newData);
         });
     }

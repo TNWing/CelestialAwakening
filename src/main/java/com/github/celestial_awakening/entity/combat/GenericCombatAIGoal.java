@@ -46,7 +46,6 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void start(){
         super.start();
-        System.out.println("STA5rting combat");
         this.mob.setCombatActive(true);
         this.mob.setActionId(1);
     }

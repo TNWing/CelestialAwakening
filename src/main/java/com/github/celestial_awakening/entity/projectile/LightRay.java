@@ -234,7 +234,6 @@ public class LightRay extends CA_Projectile {
             BlockPos hitPos=result.getBlockPos();
             if (!this.level().getBlockState(hitPos).isAir()){
                 end=result.getLocation();
-                System.out.println("HIT BLOCK at " + hitPos);
                 hasHitSomething=true;
             }
 

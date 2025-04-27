@@ -69,7 +69,6 @@ public abstract class GenericAbility {
         this.mob.setActionId(0);
         this.mob.spdMod=1f;
         this.isInUse=false;
-        System.out.println("RESETTING ACT ID");
     }
 
     protected void changeToState1(){

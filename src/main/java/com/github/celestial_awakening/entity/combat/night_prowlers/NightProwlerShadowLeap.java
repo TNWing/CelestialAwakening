@@ -144,13 +144,10 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 this.mob.lookAt(target,30,30);
                                 LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                                 if (entity!=null){
-                                    System.out.println("FOUND");
                                     entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
                                     currentStateTimer=1;
                                     this.mob.setDeltaMovement(Vec3.ZERO);
                                 }
-
-                                System.out.println("NOW AT POS " + this.mob.position());
                                 this.mob.setOpacity(1f);
 
                             }
@@ -161,7 +158,6 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 aabb=aabb.inflate(aabbInflate);
                                 LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                                 if (entity!=null){
-                                    System.out.println("FOUND");
                                     entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
                                     currentStateTimer=1;
                                     this.mob.setDeltaMovement(Vec3.ZERO);
@@ -173,7 +169,6 @@ public class NightProwlerShadowLeap extends GenericAbility {
                             aabb=aabb.inflate(aabbInflate);
                             LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                             if (entity!=null){
-                                System.out.println("FOUND");
                                 boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
                                 this.mob.setDeltaMovement(Vec3.ZERO);
                                 currentStateTimer=1;

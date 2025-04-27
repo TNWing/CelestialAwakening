@@ -80,7 +80,7 @@ public class ShadeRobes extends ArmorEffect {
             //0 to 5 dist
             //0 to 54% dmg reduction
             float dmgMult= (100f-(float) (4.5f*Math.pow(dist,1.55D)))/100f;
-            System.out.println("WE ARE GOING FADE TO REDUCE FROM " + dmg + " TO " + dmg*dmgMult);
+            //System.out.println("WE ARE GOING FADE TO REDUCE FROM " + dmg + " TO " + dmg*dmgMult);
             player.setHealth(player.getHealth()-dmg*dmgMult);
             return false;
         }

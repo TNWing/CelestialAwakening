@@ -110,7 +110,6 @@ public class SolarEvents {
         cap.divinerEyeCurrentChangeDelay =120;
         cap.divinerEyeFrameProgress=0;
         cap.divinerEyeTimer=rand.nextInt(401)+460;
-        System.out.println("DIV EYE HAS INIT TIME " + cap.divinerEyeTimer);
         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),dimID);
         Object[] params=new Object[]{cap,dimID};
         DelayedFunctionManager.delayedFunctionManager.insertIntoLevelMap(ServerLifecycleHooks.getCurrentServer().getLevel(dimID), new UpdateDivinerEyeCommandPattern(params,0),120,true);//6 seconds before it opens
@@ -206,4 +205,5 @@ public class SolarEvents {
 
         return null;
     }
+
 }

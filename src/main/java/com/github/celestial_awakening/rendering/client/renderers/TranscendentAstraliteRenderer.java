@@ -5,7 +5,6 @@ import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.TranscendentAstraliteModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -20,10 +19,6 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
     @Override
     public ResourceLocation getTextureLocation(Astralite entity) {
         if (entity.getActionId()==3){
-
-            if (!Minecraft.getInstance().isPaused()){
-                System.out.println("BASIC");
-            }
             int index=entity.getActionFrame()/2;
 
             if (index>0){

@@ -129,7 +129,6 @@ public class NightProwler extends AbstractCAMonster {
             }
         }
         else if (id!=-1){
-            System.out.println("HELLO switching anim, id is " + id);
             actionIDToAnimMap.get(currentAction).stop();
             currentAction=id;
             currentState.start(this.tickCount);

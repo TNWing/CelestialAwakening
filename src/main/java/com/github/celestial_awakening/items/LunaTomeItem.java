@@ -11,7 +11,6 @@ public class LunaTomeItem extends BookItem {
 
     @Override
     public int getEnchantmentValue() {
-        System.out.println("LUNA TOME enchant");
         return 12;
     }
     @Override

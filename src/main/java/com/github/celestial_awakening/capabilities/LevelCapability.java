@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
@@ -52,10 +51,6 @@ public class LevelCapability{
     -1: eye closed
     0: eye fully open, pupil in center
     1-8:pupil is in position at edge of eye. Upward dir: 1, clockwise
-    wondering if i can do an overlay style
-    instead of a separate file for each unique frame, i instead have a few image files for each general state (closed, half open, open.
-    Then, i have a separate img file overlayed on it for the open states, which results in less img files.
-    furthermore, this overlayed file doesnt need to be anything special. it can be a really tiny img whose position is shifted.
      */
 
 
@@ -104,10 +99,11 @@ public class LevelCapability{
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         if (this.levelResourceKey!=null){
             DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
-            result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->divEyeTag.put(lvlCap_transcendentLevelRK,encodedObj));//not savingg?
+            result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->{
+                divEyeTag.put(lvlCap_transcendentLevelRK,encodedObj);
+            });
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
             ArrayList<CommandMapValue> arrayList=DelayedFunctionManager.delayedFunctionManager.getLevelCommandMap().get(server.getLevel(this.levelResourceKey));
-            System.out.println(arrayList);
             if (arrayList!=null){//is null for some reason
                 for (CommandMapValue val:arrayList) {
                     GenericCommandPattern pattern=val.getPattern();
@@ -122,10 +118,6 @@ public class LevelCapability{
                 }
             }
         }
-
-        //its bc the keys of lcm are Levels, but i save it as the rk of the level heere
-
-        //ccd 3 is 0
         divEyeTag.putInt(lvlCap_transcendentDivChangeDelay,this.divinerEyeCurrentChangeDelay);
         divEyeTag.putInt(lvlCap_transcendentDivTimer,this.divinerEyeTimer);
 
@@ -146,7 +138,6 @@ public class LevelCapability{
         }
         CompoundTag divEye= nbt.getCompound(lvlCap_transcendentHolder);
         if (divEye!=null){
-            System.out.println("our lrk is " + this.levelResourceKey);
             this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
             this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
             this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);
@@ -184,7 +175,6 @@ public class LevelCapability{
             if (moonstoneList!=null){
                 for (int i = 0; i < moonstoneList.size(); ++i) {
                     CompoundTag compoundtag = moonstoneList.getCompound(i);
-                    //currentMoonstonePos.put(new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z")),compoundtag.getInt(lvlCap_transcendentDivTimer));
                     BlockPos blockPos=new BlockPos(compoundtag.getInt("x"),compoundtag.getInt("y"),compoundtag.getInt("z"));
                     currentMoonstonePos.put(blockPos,compoundtag.getShort(lvlCap_moonstoneTimer));
                 }
@@ -192,7 +182,6 @@ public class LevelCapability{
 
             CompoundTag divEye= (CompoundTag) storedNBT.get(lvlCap_transcendentHolder);
             if (divEye!=null){
-                System.out.println(Arrays.toString(divEye.getAllKeys().toArray()));
                 this.divinerEyeTimer=divEye.getInt(lvlCap_transcendentDivTimer);
                 this.divinerEyeCD=divEye.getInt(lvlCap_transcendentDivCD);
                 this.divinerEyeFromState=divEye.getByte(lvlCap_transcendentDivFrom);

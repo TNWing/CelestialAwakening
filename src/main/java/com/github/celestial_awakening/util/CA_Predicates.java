@@ -99,7 +99,6 @@ public class CA_Predicates {
             }
             if (o instanceof Animal){
                 LivingEntity target=((Animal) o).getTarget();
-                System.out.println("animal target is " + target);
                 return target!=null && !(target instanceof Player);
             }
 

@@ -138,7 +138,6 @@ public class EventManager {
     //TODO: spawn multiple prowlers in here, base it off the cel beacon spawning
     @SubscribeEvent
     public static void onMobFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event){
-
     }
 
 
@@ -146,11 +145,9 @@ public class EventManager {
     public static void onPlayerClone(PlayerEvent.Clone event){
         if (event.isWasDeath()){//Saves any necessary capability data
             event.getOriginal().reviveCaps();
-            System.out.println(event.getOriginal().getStringUUID() + " is og uuid");
             event.getOriginal().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(
                     oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.playerCapability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
             event.getOriginal().invalidateCaps();
-            System.out.println(event.getEntity().getStringUUID() + " is new uuid");
         }
 
     }
@@ -652,9 +649,9 @@ public class EventManager {
     }
 
     @SubscribeEvent
-    public static void onServerLevelTick(TickEvent.LevelTickEvent event) {
+    public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase== TickEvent.Phase.START){
-
+            //server side stuff only
             if (event.side.isServer()){
 
                 ServerLevel serverLevel = (ServerLevel) event.level;
@@ -667,6 +664,7 @@ public class EventManager {
                 capOptional.ifPresent(cap->{
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
                         solarEvents.detectPlayers(serverLevel,cap);
+
                     }
                     else{
                         solarEvents.canCreateDivinerEye(event);
@@ -681,9 +679,10 @@ public class EventManager {
                 });
                 if (time>12000){
                     int phase=serverLevel.getMoonPhase();
+                    lunarEvents.createMoonstone(serverLevel);
                     switch(phase){
                         case 0:{
-                            lunarEvents.createMoonstone(serverLevel);
+
                             break;
                         }
                         default:{
@@ -699,6 +698,16 @@ public class EventManager {
                 }
                 particleManager.generateParticles(serverLevel);
             }
+            //both sides
+            LazyOptional<LevelCapability> capOptional=event.level.getCapability(LevelCapabilityProvider.LevelCap);
+            capOptional.ifPresent(cap->{
+                if (cap.divinerEyeToState>-2 && cap.divinerEyeFrameProgress<100f){
+                    cap.divinerEyeFrameProgress+=100f/32f;
+                    if (cap.divinerEyeFrameProgress>100f){
+                        cap.divinerEyeFrameProgress=100f;
+                    }
+                }
+            });
         }
     }
 

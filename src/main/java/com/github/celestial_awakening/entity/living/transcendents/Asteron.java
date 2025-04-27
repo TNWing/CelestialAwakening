@@ -75,7 +75,6 @@ public class Asteron extends AbstractTranscendent {
     }
 
     public static void updateAttributesFromConfig(){
-        System.out.println("UPDATE " + Config.mobHPScale);
         maxHealthMult =Config.mobHPScale;
         dmgMult =  Config.mobDmgScale;
         armorPtMult = Config.armorPtScale;

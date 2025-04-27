@@ -167,6 +167,6 @@ public class Config
 
     public static void refreshMobAttributes(){
         //Asteron.updateAttributesFromConfig();
-        System.out.println("new HP SCALE IS " + mobHPScale);
+        //System.out.println("new HP SCALE IS " + mobHPScale);
     }
 }

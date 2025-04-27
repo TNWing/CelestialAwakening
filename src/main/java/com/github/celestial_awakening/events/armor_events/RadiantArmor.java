@@ -153,7 +153,6 @@ public class RadiantArmor extends ArmorEffect {
                         Block block=blockState.getBlock();
                         if (block instanceof CropBlock||
                         block instanceof SaplingBlock){
-                            System.out.println("OUR BLOCK IS "  + block.getName());
                             blockState.randomTick(serverLevel,blockPos,serverLevel.random);
                         }
                     }
@@ -162,7 +161,6 @@ public class RadiantArmor extends ArmorEffect {
             AABB aabb=new AABB(player.getX()-3,player.getY()-3,player.getZ()-3,player.getX()+3,player.getY()+3,player.getZ()+3);
             List<Animal> animals=serverLevel.getEntitiesOfClass(Animal.class,aabb);
             for (Animal animal:animals) {
-                System.out.println(animal);
                 if (animal.getAge()<0){
                     animal.ageUp(1);//adds 1 sec (20 ticks) of age
                 }

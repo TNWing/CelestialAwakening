@@ -39,6 +39,11 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_FIRE_MULT;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_GLOW_MULT;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_FINAL_MULT;
+
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_DMG_MULT;
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_ATK_SPD_MULT;
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_MINING_SPD_MULT;
+
     static{
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -66,12 +71,20 @@ public class Config
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
             builder.pop();
             builder.push("Everlight_Armor");
-                PHOTON_CYCLE_FIRE_MULT=builder.comment("Photon Cycle\nThe formula for calculating the heal amount is m * ( (Burning Time Reduced)*a + (Glowing Time Reduced)*b ), with time being measured in ticks.").
-                comment("Value of a.\nDefault: 0.6").defineInRange("photon_cycle_fire",0.6d,0,100);
+                PHOTON_CYCLE_FIRE_MULT=builder.comment("Photon Cycle\nThe formula for calculating the heal amount is m * ( (Burning Time Reduced)*a + (Glowing Time Reduced)*b ), with time being measured in ticks.")
+                        .comment("Value of a.\nDefault: 0.6").defineInRange("photon_cycle_fire",0.6d,0,100);
                 PHOTON_CYCLE_GLOW_MULT=builder.
                 comment("Value of b.\nDefault: 0.9").defineInRange("photon_cycle_glow",0.9d,0,100);
                 PHOTON_CYCLE_FINAL_MULT=builder.
                 comment("Value of m.\nDefault: 0.05").defineInRange("photon_cycle_final",0.05d,0,100);
+            builder.pop();
+        builder.pop();
+
+        builder.push("Weapons_&_Tools_Config");
+            builder.push("Midnight_Iron_Tools");
+                MIDNIGHT_IRON_DMG_MULT=builder.comment("The damage multiplier midnight iron tools receive at night.\nDefault:1.15").defineInRange("midnight_iron_dmg_mult",1.15d,1,100);
+                MIDNIGHT_IRON_ATK_SPD_MULT=builder.comment("The attack speed multiplier midnight iron tools receive at night. Lower values means faster attack speed.\nDefault: 0.95").defineInRange("midnight_iron_atk_spd_mult",0.95d,0.1,1);
+                MIDNIGHT_IRON_MINING_SPD_MULT=builder.comment("The mining speed multiplier midnight iron tools receive at night.\nDefault: 1.2").defineInRange("midnight_iron_mining_spd_mult",1.2d,1,100);
             builder.pop();
         builder.pop();
         BUILDER=builder;
@@ -126,6 +139,10 @@ public class Config
     public static double photonCycleGlowMult;
     public static double photonCycleFinalMult;
 
+    public static double midnightIronDmgMult;
+    public static double midnightIronAtkSpdMult;
+    public static double midnightIronMiningSpdMult;
+
     public static boolean useVanillaTeams;
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
@@ -176,7 +193,9 @@ public class Config
         photonCycleGlowMult=PHOTON_CYCLE_GLOW_MULT.get();
         photonCycleFinalMult=PHOTON_CYCLE_FINAL_MULT.get();
 
-
+        midnightIronDmgMult=MIDNIGHT_IRON_DMG_MULT.get();
+        midnightIronAtkSpdMult =MIDNIGHT_IRON_ATK_SPD_MULT.get();
+        midnightIronMiningSpdMult=MIDNIGHT_IRON_MINING_SPD_MULT.get();
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();

@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.Config;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
@@ -34,7 +35,7 @@ public class MidnightIronAxe extends AxeItem implements MidnightIronTool {
         Multimap<Attribute,AttributeModifier> modifiersToReturn;
         if (isNight){
             newBuilder.put(Attributes.ATTACK_DAMAGE,new AttributeModifier(BASE_ATTACK_DAMAGE_UUID,"Weapon modifier", getAttackDamage(), AttributeModifier.Operation.ADDITION));
-            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd*14f/15f, AttributeModifier.Operation.ADDITION));
+            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd* Config.midnightIronAtkSpdMult, AttributeModifier.Operation.ADDITION));
             modifiersToReturn=newBuilder.build();
         }
         else{
@@ -45,12 +46,13 @@ public class MidnightIronAxe extends AxeItem implements MidnightIronTool {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         addSharedAbilities(components);
+        System.out.println("DMG MULT IN CONF " + Config.midnightIronDmgMult +" vs stored mult " + Config.midnightIronDmgMult);
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
     @Override
     public float getAttackDamage() {
         float dmg=super.getAttackDamage();
-        return (isNight ? dmg*1.15f : dmg);
+        return isNight ? (float) (dmg * Config.midnightIronDmgMult) : dmg;
     }
     @Override
     public boolean hurtEnemy(ItemStack p_43278_, LivingEntity p_43279_, LivingEntity p_43280_) {
@@ -81,7 +83,7 @@ public class MidnightIronAxe extends AxeItem implements MidnightIronTool {
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd=super.getDestroySpeed(itemStack, blockState);
         if (isNight){
-            spd*=1.2f;
+            spd*=Config.midnightIronMiningSpdMult;
         }
         return spd;
     }

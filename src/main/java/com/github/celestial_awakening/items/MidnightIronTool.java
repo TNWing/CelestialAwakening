@@ -24,4 +24,6 @@ public interface MidnightIronTool{
         Component midnightOilEffect=Component.translatable("tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_effect").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(descColor)));
         components.add(midnightOilEffect);
     }
+
+
 }

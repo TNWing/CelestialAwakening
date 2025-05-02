@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.Config;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
@@ -35,7 +36,7 @@ public class MidnightIronSword extends SwordItem implements MidnightIronTool, IF
         Multimap<Attribute,AttributeModifier> modifiersToReturn;
         if (isNight){
             newBuilder.put(Attributes.ATTACK_DAMAGE,new AttributeModifier(BASE_ATTACK_DAMAGE_UUID,"Weapon modifier", getDamage(), AttributeModifier.Operation.ADDITION));
-            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd*14f/15f, AttributeModifier.Operation.ADDITION));
+            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd* Config.midnightIronAtkSpdMult, AttributeModifier.Operation.ADDITION));
             modifiersToReturn=newBuilder.build();
         }
         else{
@@ -52,7 +53,7 @@ public class MidnightIronSword extends SwordItem implements MidnightIronTool, IF
     @Override
     public float getDamage() {
         float dmg=super.getDamage();
-        return (isNight ? dmg*1.15f : dmg);
+        return isNight ? (float) (dmg * Config.midnightIronDmgMult) : dmg;
     }
     @Override
     public boolean hurtEnemy(ItemStack p_43278_, LivingEntity p_43279_, LivingEntity attacker) {
@@ -83,7 +84,7 @@ public class MidnightIronSword extends SwordItem implements MidnightIronTool, IF
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd=super.getDestroySpeed(itemStack, blockState);
         if (isNight){
-            spd*=1.2f;
+            spd*= Config.midnightIronMiningSpdMult;
         }
         return spd;
     }

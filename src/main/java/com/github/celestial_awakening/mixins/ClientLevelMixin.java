@@ -22,19 +22,10 @@ public abstract class ClientLevelMixin {
             boolean b=level.getDayTime()%100==0 && !Minecraft.getInstance().isPaused();
             int sunControl=cap.divinerSunControlVal;
             Vec3 returnVal=cir.getReturnValue();
-
-
             if (sunControl<0){
                 float mult=(11f+sunControl)/11f;
 
                 cir.setReturnValue(returnVal.multiply(mult,mult,mult));
-                if (b){
-                    //System.out.println("MULT IS " + mult);
-                    //System.out.println("RET VAL FOR SKY COLOR  was " + returnVal  + "  and now is  " + cir.getReturnValue());
-                }
-            }
-            else if (b){
-                //System.out.println("RET VAL FOR SKY COLOR  was " + returnVal);
             }
         });
     }
@@ -49,19 +40,8 @@ public abstract class ClientLevelMixin {
             float returnVal=cir.getReturnValue();
             boolean b=level.getDayTime()%100==0 && !Minecraft.getInstance().isPaused();
             if (sunControl<0){
-                if (b){
-                    //System.out.println("DARKEN OLD RETURN IS " + returnVal);
-                }
-
                 returnVal*=(11f+sunControl)/11f;
-                if (b){
-                    //System.out.println("DARKEN RETURN IS NOW " + returnVal);
-                }
-
                 cir.setReturnValue(returnVal);
-            }
-            else if (b){
-                //System.out.println("DARKEN OLD RETURN IS " + returnVal);
             }
         });
     }

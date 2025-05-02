@@ -91,7 +91,6 @@ public class MidnightIronShovel extends ShovelItem implements MidnightIronTool {
         if (!p_41405_.isClientSide){
             isNight =isValidTime(p_41405_);
         }
-
     }
 
 }

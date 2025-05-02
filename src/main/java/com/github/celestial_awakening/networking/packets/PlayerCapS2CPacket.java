@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.networking.packets;
 
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
-import com.github.celestial_awakening.networking.client.ClientPlayerData;
+import com.github.celestial_awakening.networking.packets.client.ClientPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

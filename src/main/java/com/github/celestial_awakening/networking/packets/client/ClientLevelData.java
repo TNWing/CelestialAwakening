@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.networking.client;
+package com.github.celestial_awakening.networking.packets.client;
 
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;

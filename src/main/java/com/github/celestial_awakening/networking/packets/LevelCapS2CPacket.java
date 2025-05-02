@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.networking.packets;
 
 import com.github.celestial_awakening.capabilities.LevelCapability;
-import com.github.celestial_awakening.networking.client.ClientLevelData;
+import com.github.celestial_awakening.networking.packets.client.ClientLevelData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

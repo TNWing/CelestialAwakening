@@ -27,18 +27,12 @@ public abstract class LevelLightEngineMixin {
     private int testModVar(int i, BlockPos p_75832_, int p_75833_){
         final int[] returnVal={i};
         if (levelHeightAccessor instanceof Level level){
-            if (level.getDayTime()%50==0){
-                int testI= this.skyEngine == null ? 0 : this.skyEngine.getLightValue(p_75832_) - p_75833_;
-                //System.out.println("Initial i: " + i + " ON LEVEL DIM " + level.dimensionTypeId() + " AND TI IS " + testI);
-            }
             LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
                 int levelState = cap.divinerSunControlVal;
                 if (levelState < 0) {
                     int maxLight = level.getMaxLightLevel();
                     int newLightLevel=Math.min(i, maxLight + levelState);
-
-                    //System.out.println("Changing from " + i + "  TO LOWER LIGGHT LEVEL " + newLightLevel);
                     returnVal[0]=newLightLevel;
                 }
             });

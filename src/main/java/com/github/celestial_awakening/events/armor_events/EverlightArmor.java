@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
@@ -173,11 +174,11 @@ public class EverlightArmor extends ArmorEffect{
                                     livingEntity.removeEffect(MobEffects.GLOWING);
                                 }
                             }
-                            totalVal+=fireTimeTaken*0.6f + glowTimeTaken*0.9f;
+                            totalVal+=fireTimeTaken*Config.photonCycleFireMult+ glowTimeTaken*Config.photonCycleGlowMult;
                         }
 
                         if (totalVal>0){
-                            player.heal(totalVal*0.05f);
+                            player.heal((float) (totalVal* Config.photonCycleFinalMult));
                             cap.insertIntoAbilityMap(abilityPhotonCycle,240);
                         }
                         //so at most, for each entity, a player can heal 1.5 hp

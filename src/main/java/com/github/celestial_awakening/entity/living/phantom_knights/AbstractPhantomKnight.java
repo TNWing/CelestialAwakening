@@ -4,7 +4,9 @@ import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.*;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,8 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
 
 public abstract class AbstractPhantomKnight extends AbstractCAMonster {
 
@@ -57,10 +57,11 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
     protected void customServerAiStep() {
         super.customServerAiStep();
         if (isCombatActive){
-            if (true||bossBarWindup>=100){
+            if (bossBarWindup>=100){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
             }
             else{
+                /*
                 if (bossBarWindup<10){
                     ServerLevel serverLevel= (ServerLevel) this.level();
                     ServerChunkCache chunkSource=serverLevel.getChunkSource();
@@ -73,7 +74,10 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
                         }
                     }
                 }
-                this.bossEvent.setProgress(bossBarWindup/100f);
+
+                 */
+                this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+                //this.bossEvent.setProgress(bossBarWindup/100f);
                 bossBarWindup++;
             }
         }

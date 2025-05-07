@@ -159,6 +159,9 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
     public void setCombatActive(boolean b){
         this.isCombatActive=b;
     }
+    public boolean isCombatActive(){
+        return this.isCombatActive;
+    }
     public abstract void updateAnim();
 
     public void setActionId(int i) {

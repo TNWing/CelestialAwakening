@@ -46,7 +46,9 @@ public abstract class GenericCombatAIGoal extends Goal {
 
     public void start(){
         super.start();
+        System.out.println("before COMBat "+ this.mob.isCombatActive());
         this.mob.setCombatActive(true);
+        System.out.println("IS NOW COMBat "+ this.mob.isCombatActive());
         this.mob.setActionId(1);
     }
 

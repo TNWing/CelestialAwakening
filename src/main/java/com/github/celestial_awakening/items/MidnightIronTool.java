@@ -6,13 +6,10 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.UUID;
 
 //maybe make this an interface
 //especially since some code, such as mobs replacing weapons, hardcode the item types
 public interface MidnightIronTool{
-    UUID OIL_ATTACK_DAMAGE_UUID = UUID.fromString("BC3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    UUID OIL_ATTACK_SPEED_UUID = UUID.fromString("AF233E1C-4180-4865-B01B-BCCE9785ACA3");
     int nameColor =0xa9a9a9;
     int descColor =0xE5E5E5;
     default boolean isValidTime(Level level){

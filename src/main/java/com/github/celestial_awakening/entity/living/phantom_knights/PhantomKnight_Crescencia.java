@@ -107,6 +107,8 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
         super.tick();
     }
 
+
+
     @Override
     public void updateAnim() {
         int id=this.entityData.get(ACTION_ID);

@@ -1,4 +1,3 @@
-// Save this class in your mod and generate all required imports
 package com.github.celestial_awakening.rendering.client.animations;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;

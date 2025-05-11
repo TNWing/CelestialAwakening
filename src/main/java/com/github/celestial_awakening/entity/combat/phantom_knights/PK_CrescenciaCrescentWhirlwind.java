@@ -16,6 +16,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,12 +30,15 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     int repsRemaining;//# of crescent bursts
     float horiDiff=1.5f;
     float vertDiff=0.6f;
+    float[] crescentDmgMult={0.7f,1f,1.4f};
+    float[] whirlwindDmgMult={0.85f,1.1f,1.35f};
     float[] crescentDmgVals={4.5f,6.5f,9f};
     float[] whirlwindDmgVals={5.5f,7f,8.5f};
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
     public PK_CrescenciaCrescentWhirlwind(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
         this.name="Crescent Whirlwind";
+
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {
@@ -63,11 +67,13 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                 diffMod-=1;
             }
             if (this.currentStateTimer%10==0){
+                double atkPow=mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                float dmg= (float) (atkPow*whirlwindDmgMult[diffMod]);
                 Vec3 pos=this.mob.position();
                 AABB aabb=new AABB(pos.x-horiDiff,1f + pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,1f + pos.y+vertDiff,pos.z+horiDiff);
                 List<LivingEntity> entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
                 for (LivingEntity entity:entities) {
-                    entity.hurt(whirlwindSource,whirlwindDmgVals[diffMod]);
+                    entity.hurt(whirlwindSource,dmg);
                 }
             }
 
@@ -101,9 +107,11 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
 
     public void crescentSpawn(int diffMod){
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
+        double atkPow=mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float dmg= (float) (atkPow*crescentDmgMult[diffMod]);
         for (int i=0;i<4;i++){
             float ang=currentStartAngle+90*i;
-            LunarCrescent crescent=LunarCrescent.create(serverLevel,crescentDmgVals[diffMod],85,7f,ang,0,0,1.75f,0.35f,1.75f);
+            LunarCrescent crescent=LunarCrescent.create(serverLevel,dmg,85,7f,ang,0,0,1.75f,0.35f,1.75f);
             int id=crescent.getId();
             @NotNull LazyOptional<ProjCapability> capOptional=crescent.getCapability(ProjCapabilityProvider.ProjCap);
 

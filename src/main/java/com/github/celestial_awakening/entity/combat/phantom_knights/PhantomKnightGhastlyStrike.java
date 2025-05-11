@@ -11,7 +11,6 @@ public class PhantomKnightGhastlyStrike extends GenericAbility {
 
     @Override
     public void executeAbility(LivingEntity target) {
-
     }
 
     @Override

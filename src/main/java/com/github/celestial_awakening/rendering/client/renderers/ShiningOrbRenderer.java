@@ -27,7 +27,7 @@ public class ShiningOrbRenderer <T extends Entity> extends EntityRenderer<Shinin
         return null;
     }
 
-    public void render(ShiningOrb entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(ShiningOrb entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
         poseStack.scale(6f,6f,6f);

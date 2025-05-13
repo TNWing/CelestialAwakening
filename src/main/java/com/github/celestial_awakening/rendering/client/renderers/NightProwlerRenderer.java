@@ -25,21 +25,21 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
         super(context,new NightProwlerModel<>(context.bakeLayer(ModelLayerInit.NIGHT_PROWLER_LAYER)),2);
     }
 
-    public void render(NightProwler entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(NightProwler entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, M>(entity, (LivingEntityRenderer)this, particleTicks, poseStack, bufferSource, packedLight))) return;
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, M>(entity, (LivingEntityRenderer)this, partialTicks, poseStack, bufferSource, packedLight))) return;
         poseStack.pushPose();
-        this.model.attackTime = this.getAttackAnim(entity, particleTicks);
+        this.model.attackTime = this.getAttackAnim(entity, partialTicks);
 
         boolean shouldSit = entity.isPassenger() && (entity.getVehicle() != null && entity.getVehicle().shouldRiderSit());
         this.model.riding = shouldSit;
         this.model.young = entity.isBaby();
-        float f = Mth.rotLerp(particleTicks, entity.yBodyRotO, entity.yBodyRot);
-        float f1 = Mth.rotLerp(particleTicks, entity.yHeadRotO, entity.yHeadRot);
+        float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+        float f1 = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
         float f2 = f1 - f;
         if (shouldSit && entity.getVehicle() instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity)entity.getVehicle();
-            f = Mth.rotLerp(particleTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
+            f = Mth.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
             f2 = f1 - f;
             float f3 = Mth.wrapDegrees(f2);
             if (f3 < -85.0F) {
@@ -58,7 +58,7 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
             f2 = f1 - f;
         }
 
-        float f6 = Mth.lerp(particleTicks, entity.xRotO, entity.getXRot());
+        float f6 = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
         if (isEntityUpsideDown(entity)) {
             f6 *= -1.0F;
             f2 *= -1.0F;
@@ -72,16 +72,16 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
             }
         }
 
-        float f7 = this.getBob(entity, particleTicks);
-        this.setupRotations(entity, poseStack, f7, f, particleTicks);
+        float f7 = this.getBob(entity, partialTicks);
+        this.setupRotations(entity, poseStack, f7, f, partialTicks);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
-        this.scale(entity, poseStack, particleTicks);
+        this.scale(entity, poseStack, partialTicks);
         poseStack.translate(0.0F, -1.501F, 0.0F);
         float f8 = 0.0F;
         float f5 = 0.0F;
         if (!shouldSit && entity.isAlive()) {
-            f8 = entity.walkAnimation.speed(particleTicks);
-            f5 = entity.walkAnimation.position(particleTicks);
+            f8 = entity.walkAnimation.speed(partialTicks);
+            f5 = entity.walkAnimation.position(partialTicks);
             if (entity.isBaby()) {
                 f5 *= 3.0F;
             }
@@ -91,7 +91,7 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
             }
         }
 
-        this.model.prepareMobModel(entity, f5, f8, particleTicks);
+        this.model.prepareMobModel(entity, f5, f8, partialTicks);
         this.model.setupAnim(entity, f5, f8, f7, f2, f6);
         Minecraft minecraft = Minecraft.getInstance();
         boolean flag = this.isBodyVisible(entity);
@@ -102,24 +102,24 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
         this.shadowStrength=1*alpha;
         if (rendertype != null) {
             VertexConsumer vertexconsumer =  bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-            int i = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, particleTicks));
+            int i = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
             this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, i, 1.0F, 1.0F, 1.0F, flag1 ? 0.15F : alpha);
         }
 
         if (!entity.isSpectator()) {
             for(RenderLayer<NightProwler, NightProwlerModel<NightProwler>> renderlayer : this.layers) {
-                renderlayer.render(poseStack, bufferSource, packedLight, entity, f5, f8, particleTicks, f7, f2, f6);
+                renderlayer.render(poseStack, bufferSource, packedLight, entity, f5, f8, partialTicks, f7, f2, f6);
             }
         }
 
         poseStack.popPose();
-        var renderNameTagEvent = new net.minecraftforge.client.event.RenderNameTagEvent(entity, entity.getDisplayName(), this, poseStack, bufferSource, packedLight, particleTicks);
+        var renderNameTagEvent = new net.minecraftforge.client.event.RenderNameTagEvent(entity, entity.getDisplayName(), this, poseStack, bufferSource, packedLight, partialTicks);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameTagEvent);
         if (renderNameTagEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameTagEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entity))) {
             this.renderNameTag(entity, renderNameTagEvent.getContent(), poseStack, bufferSource ,packedLight);
         }
         LivingEntityRenderer<T,M> rendererToPass= (LivingEntityRenderer<T, M>) this;
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<T, M>(entity,rendererToPass, particleTicks, poseStack, bufferSource, packedLight));
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<T, M>(entity,rendererToPass, partialTicks, poseStack, bufferSource, packedLight));
     }
 
     protected RenderType getRenderType2(NightProwler p_115322_, boolean p_115323_, boolean p_115324_, boolean p_115325_) {

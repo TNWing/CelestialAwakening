@@ -27,7 +27,7 @@ public class OrbiterRenderer<T extends Entity> extends EntityRenderer<OrbiterPro
         return null;
     }
 
-    public void render(OrbiterProjectile entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(OrbiterProjectile entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
         poseStack.scale(1.3f,1.3f,1.3f);

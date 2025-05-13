@@ -6,6 +6,7 @@ import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.MathFuncs;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -42,6 +43,7 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
         if (currentStateTimer<=0){
             switch (state){
                 case 0:{
+                    this.mob.swing(InteractionHand.MAIN_HAND);
                     state++;
                     currentStateTimer=abilityExecuteTime;
                     if (target.distanceTo(this.mob)<getAbilityRange(target)){

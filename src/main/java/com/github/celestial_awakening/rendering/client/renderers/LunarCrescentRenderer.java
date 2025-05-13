@@ -28,7 +28,7 @@ public class LunarCrescentRenderer<T extends Entity> extends EntityRenderer<Luna
         return null;
     }
 
-    public void render(LunarCrescent entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(LunarCrescent entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
 

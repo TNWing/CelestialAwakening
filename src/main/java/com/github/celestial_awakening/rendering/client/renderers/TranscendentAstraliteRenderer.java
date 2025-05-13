@@ -34,11 +34,11 @@ public class TranscendentAstraliteRenderer extends MobRenderer<Astralite, Transc
     }
 
     @Override
-    public void render(Astralite entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(Astralite entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         //VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
         poseStack.scale(scale,scale,scale);
-        super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
+        super.render(entity, entityYaw, partialTicks,poseStack, bufferSource, packedLight);
         poseStack.popPose();
     }
 

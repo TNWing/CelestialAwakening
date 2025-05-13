@@ -16,8 +16,9 @@ public class PKCrescenciaRenderer extends MobRenderer<PhantomKnight_Crescencia, 
     }
 
     //@Override
-    public void render(PhantomKnight_Crescencia entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
+    public void render(PhantomKnight_Crescencia entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        super.render(entity, entityYaw, partialTicks,poseStack, bufferSource, packedLight);
+        this.model.attackTime = this.getAttackAnim(entity, partialTicks);
     }
     @Override
     public ResourceLocation getTextureLocation(PhantomKnight_Crescencia entity) {

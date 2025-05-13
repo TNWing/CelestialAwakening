@@ -41,7 +41,7 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
     }
 
 
-    public void render(LightRay entity, float entityYaw, float particleTicks,PoseStack poseStack, MultiBufferSource bufferSource, int packedLight){
+    public void render(LightRay entity, float entityYaw, float partialTicks,PoseStack poseStack, MultiBufferSource bufferSource, int packedLight){
         poseStack.pushPose();
         RenderSystem.disableCull();
         RenderSystem.disableDepthTest();

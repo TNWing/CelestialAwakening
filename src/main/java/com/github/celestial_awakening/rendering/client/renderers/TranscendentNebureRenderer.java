@@ -22,11 +22,11 @@ public class TranscendentNebureRenderer extends MobRenderer<Nebure, Transcendent
     }
 
     @Override
-    public void render(Nebure entity, float entityYaw, float particleTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(Nebure entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         //VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
         poseStack.scale(scale,scale,scale);
-        super.render(entity, entityYaw, particleTicks,poseStack, bufferSource, packedLight);
+        super.render(entity, entityYaw, partialTicks,poseStack, bufferSource, packedLight);
         poseStack.popPose();
     }
 }

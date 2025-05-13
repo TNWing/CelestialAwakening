@@ -4,9 +4,9 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.rendering.client.animations.PK_CrescenciaAnimations;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.rendering.client.animations.PK_CrescenciaAnimations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -14,6 +14,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
@@ -137,8 +138,31 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
 		this.animate(((PhantomKnight_Crescencia)entity).moonCutterAnimationState, PK_CrescenciaAnimations.mooncutter,ageInTicks,1f);
+		setupAttackAnimation((T) entity,limbSwing);
 	}
-
+	protected void setupAttackAnimation(T p_102858_, float p_102859_) {
+		if (!(this.attackTime <= 0.0F)) {
+			ModelPart modelpart = this.armRPivot;
+			float f = this.attackTime;
+			this.upperbody.yRot = Mth.sin(Mth.sqrt(f) * ((float)Math.PI * 2F)) * 0.2F;
+			this.armRPivot.z = Mth.sin(this.upperbody.yRot) * 5.0F;
+			this.armRPivot.x = -Mth.cos(this.upperbody.yRot) * 5.0F;
+			this.armLPivot.z = -Mth.sin(this.upperbody.yRot) * 5.0F;
+			this.armLPivot.x = Mth.cos(this.upperbody.yRot) * 5.0F;
+			this.armRPivot.yRot += this.upperbody.yRot;
+			this.armLPivot.yRot += this.upperbody.yRot;
+			this.armLPivot.xRot += this.upperbody.yRot;
+			f = 1.0F - this.attackTime;
+			f *= f;
+			f *= f;
+			f = 1.0F - f;
+			float f1 = Mth.sin(f * (float)Math.PI);
+			float f2 = Mth.sin(this.attackTime * (float)Math.PI) * -(this.headPivot.xRot - 0.7F) * 0.75F;
+			modelpart.xRot -= f1 * 1.2F + f2;
+			modelpart.yRot += this.upperbody.yRot * 2.0F;
+			modelpart.zRot += Mth.sin(this.attackTime * (float)Math.PI) * -0.4F;
+		}
+	}
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		model.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

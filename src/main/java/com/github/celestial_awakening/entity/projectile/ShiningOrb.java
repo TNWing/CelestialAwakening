@@ -4,7 +4,10 @@ import com.github.celestial_awakening.entity.living.transcendents.AbstractTransc
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,10 +18,13 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.github.celestial_awakening.nbt_strings.ProjDataNBTNames.pd_HolderName;
+
 public class ShiningOrb extends CA_Projectile {
     private int life;
 
     double explosionRadius =2.25D;
+    private static final EntityDataAccessor<Boolean> SHOULD_EXPLODE= SynchedEntityData.defineId(ShiningOrb.class, EntityDataSerializers.BOOLEAN);
     public ShiningOrb(EntityType<ShiningOrb> shiningOrbEntityType, Level level) {
         super(shiningOrbEntityType,level,80);
         damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
@@ -47,6 +53,23 @@ public class ShiningOrb extends CA_Projectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(SHOULD_EXPLODE,true);
+    }
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        CompoundTag data=tag.getCompound(pd_HolderName);
+        this.entityData.set(SHOULD_EXPLODE,data.getBoolean("Explode"));
+    }
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {//TODO: check to make sure this is fine
+        super.addAdditionalSaveData(tag);
+        CompoundTag data=tag.getCompound(pd_HolderName);
+        data.putBoolean("Explode",this.entityData.get(SHOULD_EXPLODE));
+    }
+
+    public void setShouldExplode(boolean b){
+        this.entityData.set(SHOULD_EXPLODE,b);
     }
 
     @Override
@@ -56,6 +79,7 @@ public class ShiningOrb extends CA_Projectile {
 
     public void tick(){
         Entity entity = this.getOwner();
+
         if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
             List<LivingEntity> entities;
@@ -72,6 +96,9 @@ public class ShiningOrb extends CA_Projectile {
             this.life++;
             if (this.life>=this.getLifeTime()){
                 explode();
+            }
+            if (!this.level().isClientSide){
+                System.out.println("ORB WITH ID " + this.getStringUUID() + " has hang " + this.getHAng());
             }
         } else {
             this.discard();
@@ -90,6 +117,12 @@ public class ShiningOrb extends CA_Projectile {
             pred= CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate((LivingEntity)this.getOwner(),List.of(AbstractTranscendent.class));
         }
         AABB aabb=new AABB(this.getX()- explosionRadius,this.getY()- explosionRadius,this.getZ()- explosionRadius,this.getX()+explosionRadius,this.getY()+explosionRadius,this.getZ()+explosionRadius);
+        if (this.entityData.get(SHOULD_EXPLODE)){
+            aabb=new AABB(this.getX()- explosionRadius,this.getY()- explosionRadius,this.getZ()- explosionRadius,this.getX()+explosionRadius,this.getY()+explosionRadius,this.getZ()+explosionRadius);
+        }
+        else{
+            aabb=this.getBoundingBox();
+        }
         List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class,aabb,pred);
         for(int ind = 0; ind < list.size(); ind++) {
             LivingEntity entity = list.get(ind);

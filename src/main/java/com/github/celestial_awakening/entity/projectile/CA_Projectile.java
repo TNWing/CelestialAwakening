@@ -106,18 +106,18 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         this.entityData.define(DISABLE_TICKS,0);
         this.entityData.define(HAS_COLLISION,true);
     }
-    protected void setRScales(float r){
+    public void setRScales(float r){
         this.entityData.set(RENDERER_XSCALING,r);
         this.entityData.set(RENDERER_YSCALING,r);
         this.entityData.set(RENDERER_ZSCALING,r);
     }
-    protected void setRScales(float x,float y,float z){
+    public void setRScales(float x,float y,float z){
         this.entityData.set(RENDERER_XSCALING,x);
         this.entityData.set(RENDERER_YSCALING,y);
         this.entityData.set(RENDERER_ZSCALING,z);
     }
 
-    protected void setDims(float w,float h){
+    public void setDims(float w,float h){
         this.entityData.set(WIDTH,w);
         this.entityData.set(HEIGHT,h);
     }
@@ -392,7 +392,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
                 float vAng=currentMovementModifier.getVAng();
                 float zRot=currentMovementModifier.getZRot();
 
-                if (spdVal!=0){
+                if (spdVal!=0){//TODO: change/remove since setting spdVal to 0 can be used for some stuff
                     MovementModifier.modOperation spdOp=currentMovementModifier.getSpdOperation();
                     MovementModifier.modFunction spdFunc=currentMovementModifier.getSpdFunction();
                     float spdMod=0;

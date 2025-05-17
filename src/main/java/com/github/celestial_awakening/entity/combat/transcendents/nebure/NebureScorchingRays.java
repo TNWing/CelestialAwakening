@@ -1,13 +1,19 @@
 package com.github.celestial_awakening.entity.combat.transcendents.nebure;
 
+import com.github.celestial_awakening.capabilities.MovementModifier;
+import com.github.celestial_awakening.capabilities.ProjCapability;
+import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
+import com.github.celestial_awakening.entity.projectile.ShiningOrb;
 import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,6 +22,8 @@ public class NebureScorchingRays extends GenericAbility {
     float angStartOffset;
     float angDiff;
     int dir;
+
+    int orbCnt;
     LightRay[] rays;
     public NebureScorchingRays(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
@@ -58,6 +66,7 @@ public class NebureScorchingRays extends GenericAbility {
                 rays[i].setPos(new Vec3(Math.cos(ang),0,Math.sin(ang)).add(this.mob.position()).add(0,1.85f,0));
                 this.mob.level().addFreshEntity(rays[i]);
             }
+            orbCnt=0;
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
         }
     }
@@ -75,8 +84,34 @@ public class NebureScorchingRays extends GenericAbility {
                 angStartOffset+=Math.cos(Math.toRadians(aChange))*15;
             }
         }
-        else if (state==1){
+        else if (state==1 && target.level().getDifficulty().getId()>2){
+            if (currentStateTimer%5==0){
+                for (int i=0;i<rays.length;i++){
+                    if (i%2==0){
+                        float ang=rays[i].getHAng();
+                        Vec3 spt=rays[i].getEndPt();
+                        for (int d=-1;d<=1;d+=2){
+                            //maybe not use shining orbs since they explode, or alternatively modify orbs such that they have an explosion toggle
+                            ShiningOrb orb=ShiningOrb.create(this.mob.level(),100,3,ang+d*10,0,3.5f);
+                            @NotNull LazyOptional<ProjCapability> capOptional=orb.getCapability(ProjCapabilityProvider.ProjCap);
+                            int finalD = d;
+                            orb.setPos(spt);
+                            orb.setOwner(this.mob);
+                            capOptional.ifPresent(cap->{
+                                MovementModifier angularMod=new MovementModifier
+                                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.ADD,1.3f, finalD *(12.5f*orbCnt+100),0,0,40);
+                                cap.putInBackOfList(angularMod);
+                            });
+                            orb.setDims(0.25f,0.25f);
+                            orb.setRScales(0.25f);
+                            orb.setShouldExplode(false);
+                            //orb.getEntityData().set
+                            this.mob.level().addFreshEntity(orb);
+                        }
+                    }
 
+                }
+            }
         }
         currentStateTimer--;
 

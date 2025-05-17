@@ -8,7 +8,7 @@ public class NebureCombatAIGoal extends GenericCombatAIGoal {//how is it moving
     NebureBasicAttack basicAttack=new NebureBasicAttack(this.mob,20,40,0,15);
     NebureLightEntanglement lightEntanglement=new NebureLightEntanglement(this.mob,25,250,80,0);
     NebureScorchingRays scorchingRays=new NebureScorchingRays(this.mob,30,200,15,0);
-    NebureSolarExpansion solarExpansion=new NebureSolarExpansion(this.mob,20,100,48,20);
+    NebureSolarExpansion solarExpansion=new NebureSolarExpansion(this.mob,20,100,32,20);
     public NebureCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }

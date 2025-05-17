@@ -30,7 +30,7 @@ public class ShiningOrbRenderer <T extends Entity> extends EntityRenderer<Shinin
     public void render(ShiningOrb entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer =bufferSource.getBuffer(this.model.renderType(TEXTURE_LOCATION));
-        poseStack.scale(6f,6f,6f);
+        poseStack.scale(6f*entity.getXRScale(),6f*entity.getYRScale(),6f*entity.getZRScale());
         poseStack.translate(0,-1.35f,0);
         //need to translate
         this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

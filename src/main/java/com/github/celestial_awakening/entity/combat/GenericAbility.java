@@ -4,7 +4,12 @@ import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
 
 public abstract class GenericAbility {
-    protected final int abilityCastTime;
+    enum AbilityState{
+        CASTING,
+        EXECUTING,
+        RECOVERING
+    };
+    protected final int abilityCastTime;//windup time
     protected final int abilityExecuteTime;//time spent using an ability
     protected final int abilityRecoveryTime;//time to recover after using ability
     protected final int abilityCD;
@@ -13,7 +18,7 @@ public abstract class GenericAbility {
     protected String name;
     protected final AbstractCAMonster mob;
 
-    protected int state;//0 for casting, 1 for executing, 2 for recovery
+    protected int state;//0 for casting, 1 for executing, 2 for recovery, maybe use an ENUM?
     protected int currentStateTimer;//used for the 3 state timers
     protected boolean isInUse;
 

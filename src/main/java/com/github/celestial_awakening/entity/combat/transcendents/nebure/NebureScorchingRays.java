@@ -91,30 +91,28 @@ public class NebureScorchingRays extends GenericAbility {
                         float ang=rays[i].getHAng();
                         Vec3 spt=rays[i].getEndPt();
                         for (int d=-1;d<=1;d+=2){
-                            //maybe not use shining orbs since they explode, or alternatively modify orbs such that they have an explosion toggle
-                            ShiningOrb orb=ShiningOrb.create(this.mob.level(),100,3,ang+d*10,0,3.5f);
+                            ShiningOrb orb=ShiningOrb.create(this.mob.level(),70,3,ang+d*10,0,3.5f);
                             @NotNull LazyOptional<ProjCapability> capOptional=orb.getCapability(ProjCapabilityProvider.ProjCap);
                             int finalD = d;
                             orb.setPos(spt);
                             orb.setOwner(this.mob);
                             capOptional.ifPresent(cap->{
                                 MovementModifier angularMod=new MovementModifier
-                                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.ADD,1.3f, finalD *(12.5f*orbCnt+100),0,0,40);
+                                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.ADD,1.3f, finalD *(14f*orbCnt+100),0,0,40);
                                 cap.putInBackOfList(angularMod);
                             });
-                            orb.setDims(0.25f,0.25f);
-                            orb.setRScales(0.25f);
+                            orb.setDims(0.5f,0.5f);
+                            orb.setRScales(0.5f);
                             orb.setShouldExplode(false);
-                            //orb.getEntityData().set
                             this.mob.level().addFreshEntity(orb);
                         }
                     }
 
                 }
+                orbCnt++;
             }
         }
         currentStateTimer--;
-
         if (currentStateTimer<=0){
             switch (state){
                 case 0:{

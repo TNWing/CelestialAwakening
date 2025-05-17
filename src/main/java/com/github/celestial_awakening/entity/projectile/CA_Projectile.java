@@ -33,6 +33,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     int rmdTicks;
     MovementModifier currentMovementModifier;
     AlertInterface alertInterface;
+    private static final EntityDataAccessor<Boolean> DELETE_ON_OWNER_DEATH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> REAL = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> RENDERER_XSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RENDERER_YSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);

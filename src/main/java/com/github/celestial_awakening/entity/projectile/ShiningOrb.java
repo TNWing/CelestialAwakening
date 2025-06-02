@@ -97,9 +97,6 @@ public class ShiningOrb extends CA_Projectile {
             if (this.life>=this.getLifeTime()){
                 explode();
             }
-            if (!this.level().isClientSide){
-                System.out.println("ORB WITH ID " + this.getStringUUID() + " has hang " + this.getHAng());
-            }
         } else {
             this.discard();
         }
@@ -117,20 +114,19 @@ public class ShiningOrb extends CA_Projectile {
             pred= CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate((LivingEntity)this.getOwner(),List.of(AbstractTranscendent.class));
         }
         AABB aabb=new AABB(this.getX()- explosionRadius,this.getY()- explosionRadius,this.getZ()- explosionRadius,this.getX()+explosionRadius,this.getY()+explosionRadius,this.getZ()+explosionRadius);
-        if (this.entityData.get(SHOULD_EXPLODE)){
-            aabb=new AABB(this.getX()- explosionRadius,this.getY()- explosionRadius,this.getZ()- explosionRadius,this.getX()+explosionRadius,this.getY()+explosionRadius,this.getZ()+explosionRadius);
-        }
-        else{
+        float kb=1.75f;
+        if (!this.entityData.get(SHOULD_EXPLODE)){
             aabb=this.getBoundingBox();
+            kb=0.1f;
         }
         List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class,aabb,pred);
         for(int ind = 0; ind < list.size(); ind++) {
             LivingEntity entity = list.get(ind);
-            if (entity.hurt(damagesource,2.5f)){
+            if (entity.hurt(damagesource,this.getDmg())){
                 double rad= Math.toRadians(MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(this.position(),entity.position())));
                 double xDir=Math.sin(rad);
                 double zDir=Math.cos(rad);
-                entity.knockback(1.75f,-xDir,-zDir);
+                entity.knockback(kb,-xDir,-zDir);
                 entity.setSecondsOnFire(3);
             }
         }

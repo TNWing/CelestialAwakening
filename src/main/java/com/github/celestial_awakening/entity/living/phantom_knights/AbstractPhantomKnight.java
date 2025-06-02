@@ -56,6 +56,9 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        if (Config.pkDayDespawn && this.level().isDay()){
+            this.discard();
+        }
         if (isCombatActive){
             if (bossBarWindup>=100){
                 this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());

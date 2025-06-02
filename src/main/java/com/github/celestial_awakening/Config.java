@@ -35,6 +35,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST;
+    private static final ForgeConfigSpec.ConfigValue<Boolean> PK_DAY_DESPAWN;
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_FIRE_MULT;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_GLOW_MULT;
@@ -65,6 +66,7 @@ public class Config
             PK_CRESCENCIA_MIN_DAY=builder.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
             PK_SPAWN_CAP=builder.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,100);
             PK_RMG_RES_DIST=builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
+            PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault:true").define("pk_day_despawn",true);
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Knightmare_Suit");
@@ -130,6 +132,7 @@ public class Config
     public static int pkDmgResDist=15;
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
+    public static boolean pkDayDespawn;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
 
 
@@ -186,6 +189,8 @@ public class Config
         pkSpawnCap=PK_SPAWN_CAP.get();
 
         pkDmgResDist=PK_RMG_RES_DIST.get();
+
+        pkDayDespawn=PK_DAY_DESPAWN.get();
 
         honorDuelDist= HONOR_DUEL_DIST.get();
 

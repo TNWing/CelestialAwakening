@@ -91,14 +91,14 @@ public class NebureScorchingRays extends GenericAbility {
                         float ang=rays[i].getHAng();
                         Vec3 spt=rays[i].getEndPt();
                         for (int d=-1;d<=1;d+=2){
-                            ShiningOrb orb=ShiningOrb.create(this.mob.level(),70,3,ang+d*10,0,3.5f);
+                            ShiningOrb orb=ShiningOrb.create(this.mob.level(),60,7,ang+d*25,0,3.5f);
                             @NotNull LazyOptional<ProjCapability> capOptional=orb.getCapability(ProjCapabilityProvider.ProjCap);
                             int finalD = d;
                             orb.setPos(spt);
                             orb.setOwner(this.mob);
                             capOptional.ifPresent(cap->{
                                 MovementModifier angularMod=new MovementModifier
-                                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.ADD,1.3f, finalD *(14f*orbCnt+100),0,0,40);
+                                        (MovementModifier.modFunction.NUM, MovementModifier.modOperation.MULT,MovementModifier.modFunction.NUM,MovementModifier.modOperation.ADD,1f, finalD *(-6f*orbCnt+180),0,0,20);
                                 cap.putInBackOfList(angularMod);
                             });
                             orb.setDims(0.5f,0.5f);

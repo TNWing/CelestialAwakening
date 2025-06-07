@@ -164,9 +164,7 @@ public class EverlightArmor extends ArmorEffect{
                                 if (newDura>20){
                                     glowTimeTaken=20;
                                     newDura-=20;
-                                    //maybe just use reflection to modify the dura?
                                     //dura:f_19503_
-
                                     ObfuscationReflectionHelper.setPrivateValue(MobEffectInstance.class,glowInstance,newDura,"f_19503_");
                                 }
                                 else{

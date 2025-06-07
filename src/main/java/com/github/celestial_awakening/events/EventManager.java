@@ -711,6 +711,17 @@ public class EventManager {
         }
     }
 
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event){
+        LivingEntity entity=event.getEntity();
+        if (entity.tickCount%100==0){
+            LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            optional.ifPresent(cap->{
+                cap.changeNaviGauge((short) -1);
+            });
+        }
+
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){

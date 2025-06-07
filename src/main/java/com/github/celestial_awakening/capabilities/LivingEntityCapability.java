@@ -42,8 +42,14 @@ public class LivingEntityCapability {
     public void changeInsanityVal(short i){
         insanityPts+=i;
     }
+    public void changeNaviGauge(short i){
+        navigauge= (short) Math.max(0,Math.min(navigauge+i,(short)100));
+    }
     public void increaseNaviGauge(short i){
         navigauge+=i;
+    }
+    public short getNavigauge(){
+        return navigauge;
     }
     public void setUUID(UUID id){
         this.uuid =id;

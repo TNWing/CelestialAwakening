@@ -3,6 +3,8 @@ package com.github.celestial_awakening.events;
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
+import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import com.github.celestial_awakening.effects.CelestialBeaconMobEffectInstance;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
@@ -117,13 +119,13 @@ public class SolarEvents {
     /*
     i can use this server side or client side. server side is probably easier, as if client side, the client will need to perform detections AND send messages to server, which server must verify.
      */
-    public List<Player> detectPlayers(Level level,LevelCapability cap){
+    public List<Player> detectPlayers(Level level,LevelCapability levelCap){
         //also, when the player logs, does not save the diviner?
         ServerChunkCache chunkCache = (ServerChunkCache) level.getChunkSource();
         //	visibleChunkMap f_140130_
 
         Map<Long, ChunkHolder> visibleChunkMap = ObfuscationReflectionHelper.getPrivateValue(ChunkMap.class,chunkCache.chunkMap ,"f_140130_");
-        float startingDivPower=cap.divinerEyePower;
+        float startingDivPower=levelCap.divinerEyePower;
         for (ChunkHolder chunkHolder : visibleChunkMap.values()) {
             LevelChunk chunk = chunkHolder.getFullChunk();
             if (chunk==null){
@@ -136,6 +138,8 @@ public class SolarEvents {
             List<Player> entities = level.getEntitiesOfClass(Player.class, chunkBoundingBox);
             boolean capDirty=false;
             for (Player entity:entities){
+
+
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }
@@ -143,62 +147,71 @@ public class SolarEvents {
                 BlockPos playerBlockPos=entity.blockPosition();
                 if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
                     //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
-                    int amp=0;
-                    if (startingDivPower>35){
-                        amp=1;
-                    }
-                    CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
-                    entity.addEffect(mobEffectInstance);
-                    cap.changeDivPower(Config.divinerScanPower);
 
-                    if (Config.divinerHeatWaveBlockMod && startingDivPower>=10){//perform heatwave
-                        BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
-                        BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
-                        BlockState dirtState= Blocks.DIRT.defaultBlockState();
-                        entity.setSecondsOnFire(4);
-                        BlockPos centerBlockPos=entity.blockPosition();
-                        int vOffset=9;
-                        int hOffset=6;
-                        for (int y=centerBlockPos.getY()-vOffset;y<centerBlockPos.getY()+vOffset;y++){
-                            for (int x=centerBlockPos.getX()-hOffset;x<centerBlockPos.getX()+hOffset;x++){
-                                for (int z=centerBlockPos.getZ()-hOffset;z<centerBlockPos.getZ()+hOffset;z++){
-                                    BlockPos blockPos=new BlockPos(x,y,z);
-                                    BlockState blockState=level.getBlockState(blockPos);
-                                    List<TagKey<Block>> tags=blockState.getTags().toList();
-                                    if (tags.contains(BlockTags.LEAVES)){
-                                        level.destroyBlock(blockPos,true);
-                                    }
-                                    else if (tags.contains(BlockTags.CROPS)){
-                                        level.setBlockAndUpdate(blockPos,bushState);
-                                    }
-                                    else if (blockState.getBlock() instanceof FarmBlock || tags.contains(BlockTags.DIRT)){
-                                        level.setBlockAndUpdate(blockPos,dirtState);
-                                    }
-                                    else if (tags.contains(Tags.Blocks.COBBLESTONE) || tags.contains(Tags.Blocks.STONE)){
-                                        level.setBlockAndUpdate(blockPos,magmaState);
+                    LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                    //TODO: test this
+                    optional.ifPresent(cap->{
+                        int amp=0;
+                        if (startingDivPower>35){
+                            amp=1;
+                        }
+                        cap.increaseNaviGauge((short) 2);
+                        if (cap.getNavigauge()>60){//so takes 1.5 sec of being exposed to trigger
+                            CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
+                            entity.addEffect(mobEffectInstance);
+                            levelCap.changeDivPower(Config.divinerScanPower);
+
+                            if (Config.divinerHeatWaveBlockMod && startingDivPower>=10){//perform heatwave
+                                BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
+                                BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
+                                BlockState dirtState= Blocks.DIRT.defaultBlockState();
+                                entity.setSecondsOnFire(4);
+                                BlockPos centerBlockPos=entity.blockPosition();
+                                int vOffset=9;
+                                int hOffset=6;
+                                for (int y=centerBlockPos.getY()-vOffset;y<centerBlockPos.getY()+vOffset;y++){
+                                    for (int x=centerBlockPos.getX()-hOffset;x<centerBlockPos.getX()+hOffset;x++){
+                                        for (int z=centerBlockPos.getZ()-hOffset;z<centerBlockPos.getZ()+hOffset;z++){
+                                            BlockPos blockPos=new BlockPos(x,y,z);
+                                            BlockState blockState=level.getBlockState(blockPos);
+                                            List<TagKey<Block>> tags=blockState.getTags().toList();
+                                            if (tags.contains(BlockTags.LEAVES)){
+                                                level.destroyBlock(blockPos,true);
+                                            }
+                                            else if (tags.contains(BlockTags.CROPS)){
+                                                level.setBlockAndUpdate(blockPos,bushState);
+                                            }
+                                            else if (blockState.getBlock() instanceof FarmBlock || tags.contains(BlockTags.DIRT)){
+                                                level.setBlockAndUpdate(blockPos,dirtState);
+                                            }
+                                            else if (tags.contains(Tags.Blocks.COBBLESTONE) || tags.contains(Tags.Blocks.STONE)){
+                                                level.setBlockAndUpdate(blockPos,magmaState);
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            if (startingDivPower>=25){
+                                int pts= (int) (2500*startingDivPower/(startingDivPower+25));
+                                if (level.random.nextInt(0,2)==0){
+                                    levelCap.setSunControlVal ((byte) (-startingDivPower/8));
+                                    levelCap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
+                                }
+                                else{
+                                    levelCap.setSunControlVal ((byte) (-startingDivPower/8));
+                                    levelCap.divinerSunControlTimer = (pts*35);
+                                }
+                            }
+                            else{
+                                levelCap.divinerSunControlTimer=10;
+                            }
                         }
-                    }
-                    if (startingDivPower>=25){
-                        int pts= (int) (2500*startingDivPower/(startingDivPower+25));
-                        if (level.random.nextInt(0,2)==0){
-                            cap.setSunControlVal ((byte) (-startingDivPower/8));
-                            cap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
-                        }
-                        else{
-                            cap.setSunControlVal ((byte) (-startingDivPower/8));
-                            cap.divinerSunControlTimer = (pts*35);
-                        }
-                    }
-                    else{
-                        cap.divinerSunControlTimer=10;
-                    }
+                    });
+
                 }
             }
             if (capDirty){
-                ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),level.dimension());
+                ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(levelCap),level.dimension());
             }
         }
 

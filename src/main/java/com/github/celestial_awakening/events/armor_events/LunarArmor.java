@@ -52,15 +52,7 @@ public class LunarArmor extends ArmorEffect {
     public static final String DEAL_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_deal_desc";
     public static final String FISH_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_fish_name";
     public static final String FISH_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_fish_desc";
-/*  TODO:
-    piece effect should trigger on
-    -trade
-    -fish
-    -block break
 
-
-    also, should use loottables instead of modifying these events
- */
     @Override
     public void onBlockBreak(BlockEvent.BreakEvent event,Player player,int cnt){
         pieceEffectBlockBreak(event,cnt);
@@ -106,29 +98,12 @@ public class LunarArmor extends ArmorEffect {
     }
 
     public void onFishHookCreationEvent(ServerLevel serverLevel, FishingHook hook){
-        /*
-	luck f_37096_
-	lureSpeed f_37097_
-         */
         if (serverLevel.getDayTime()>=nightStart && serverLevel.getMoonPhase()==4){
             int luck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37096_");
-            int lureSpd= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37097_");
             ObfuscationReflectionHelper.setPrivateValue(FishingHook.class,hook,luck+1,"f_37096_");
         }
 
     }
-/*
-            if (p_9990_.addItem(itemstack)) {
-               p_9990_.level().playSound((Player)null, p_9990_.getX(), p_9990_.getY(), p_9990_.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((p_9990_.getRandom().nextFloat() - p_9990_.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-               flag = true;
-            } else {
-               ItemEntity itementity = p_9990_.drop(itemstack, false);
-               if (itementity != null) {
-                  itementity.setNoPickUpDelay();
-                  itementity.setTarget(p_9990_.getUUID());
-               }
-            }
- */
     public void onTrade(ServerLevel serverLevel,TradeWithVillagerEvent event,Player player){
         ItemStack costA=event.getMerchantOffer().getBaseCostA();
         ItemStack costB=event.getMerchantOffer().getCostB();
@@ -280,8 +255,7 @@ public class LunarArmor extends ArmorEffect {
 
     void moonlitPath(Event event, Player player){
         Level level=player.level();
-        int time=(int)level.dayTime();//ranges from 0-24k
-        if (time<nightStart){//daytime
+        if (level.isDay()){//daytime
             player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID.fromString(moonlightPath));
         }
         else{

@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.entity.living.transcendents;
 
 import com.github.celestial_awakening.Config;
+import com.github.celestial_awakening.entity.combat.NearestAttackableTargetOfEntityTypeGoal;
 import com.github.celestial_awakening.entity.combat.transcendents.asteron.AsteronCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.AnimationState;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -102,7 +102,7 @@ public class Asteron extends AbstractTranscendent {
         this.goalSelector.addGoal(4,new AsteronCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetOfEntityTypeGoal(this, Config.transcendentsTargets, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));

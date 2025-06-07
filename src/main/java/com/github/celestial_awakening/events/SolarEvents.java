@@ -10,6 +10,7 @@ import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
+import com.github.celestial_awakening.util.ResourceCheckerFuncs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ChunkHolder;
@@ -18,6 +19,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
@@ -131,15 +134,12 @@ public class SolarEvents {
             if (chunk==null){
                 continue;
             }
-            //chunk is null?
             ChunkPos chunkPos=chunk.getPos();
-            //int chunkSize = 16;
             AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
-            List<Player> entities = level.getEntitiesOfClass(Player.class, chunkBoundingBox);
+            Predicate<LivingEntity> pred=o -> ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets);
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, chunkBoundingBox,pred);
             boolean capDirty=false;
-            for (Player entity:entities){
-
-
+            for (LivingEntity entity:entities){
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }

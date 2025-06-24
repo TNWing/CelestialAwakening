@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "celestial_awakening:shimmer_cube"
+    }
+  ],
+  "result": {
+    "count": 16,
+    "item": "minecraft:torch"
+  }
+}

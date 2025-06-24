@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "moonstone",
+  "ingredients": [
+    {
+      "item": "celestial_awakening:lunula_rock"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "item": "celestial_awakening:moonstone"
+  }
+}

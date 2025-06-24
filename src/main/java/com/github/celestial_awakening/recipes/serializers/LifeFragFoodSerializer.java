@@ -31,12 +31,12 @@ public class LifeFragFoodSerializer implements RecipeSerializer<LifeFragFood> {
                 shapedRecipe.getWidth(),
                 shapedRecipe.getHeight(),
                 shapedRecipe.getIngredients(),
-                shapedRecipe.getResultItem(null) // Pass `null` for RegistryAccess
+                shapedRecipe.getResultItem(null)
         );
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, LifeFragFood recipe) {
-        RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe); // Write as normal
+        RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe);
     }
 }

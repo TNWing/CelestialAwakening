@@ -200,11 +200,13 @@ public class LivingEntityCapability {
         }
         return null;
     }
+
     public void changeAbilityData(String abilityName,Object[] data){
         if (abilityDataMap.containsKey(abilityName)){
             abilityDataMap.put(abilityName, new Pair<>(abilityDataMap.get(abilityName).getFirst(), data));
         }
     }
+
     public void tickAbilityMap(){
         Iterator<Map.Entry<String, Pair<Integer,Object[]>>> iterator = abilityDataMap.entrySet().iterator();
         while (iterator.hasNext()) {

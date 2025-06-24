@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "sunstone",
+  "ingredients": [
+    {
+      "item": "celestial_awakening:shimmer_cube"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "celestial_awakening:sunstone"
+  }
+}

@@ -87,6 +87,12 @@
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
 
+  "advancement.celestial_awakening.kill_transcendent_elite.title":"Awaking Threat",
+  "advancement.celestial_awakening.kill_transcendent_elite.description":"Slay an elite transcendent.",
+
+  "advancement.celestial_awakening.kill_ph.title":"Test of Skill",
+  "advancement.celestial_awakening.kill_ph.description":"Duel a phantom knight.",
+
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",

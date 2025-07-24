@@ -1,0 +1,34 @@
+{
+  "parent":  "celestial_awakening:root",
+  "criteria": {
+    "celestial_awakening:pk_crescencia": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "celestial_awakening:pk_crescencia"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.celestial_awakening.kill_pk.description"
+    },
+    "icon": {
+      "item": "minecraft:bucket"
+    },
+    "title": {
+      "translate": "advancement.celestial_awakening.kill_pk.title"
+    }
+  },
+  "requirements": [
+    ["celestial_awakening:transcendent_nebure"]
+  ],
+  "sends_telemetry_event": true
+}

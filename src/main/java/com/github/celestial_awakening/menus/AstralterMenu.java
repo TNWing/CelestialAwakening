@@ -22,8 +22,11 @@ public class AstralterMenu extends AbstractContainerMenu {
     SlotItemHandler sunstoneSlot;
     SlotItemHandler moonstoneSlot;
 
+
+
     public AstralterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId,inv,inv.player.level().getBlockEntity(extraData.readBlockPos()));
+
     }
 
     public AstralterMenu(int containerId, Inventory inv, BlockEntity entity) {
@@ -78,6 +81,14 @@ public class AstralterMenu extends AbstractContainerMenu {
         return stillValid(ContainerLevelAccess.create(level,astralterBlockEntity.getBlockPos()),player, BlockInit.ASTRALTER_BLOCK.get());
     }
 
+
+    public void setStones(int s,int m){
+        System.out.println("set stone prev  " + this.sunstoneSlot.getItem().getCount() + "   " +  this.moonstoneSlot.getItem().getCount());
+        this.sunstoneSlot.getItem().setCount(s);
+        this.moonstoneSlot.getItem().setCount(m);
+        System.out.println("set stone NEW   " + this.sunstoneSlot.getItem().getCount() + "   " +  this.moonstoneSlot.getItem().getCount());
+    }
+
     private static final int HOTBAR_SLOTS = 9;
     private static final int ROWS = 3;
     private static final int COLUMNS = 9;
@@ -85,7 +96,7 @@ public class AstralterMenu extends AbstractContainerMenu {
     private static final int TOTAL_SLOT_COUNT = HOTBAR_SLOTS + INVENTORY_SLOTS;
     private static final int INV_FIRST_SLOT_INDEX = 0;
     private static final int ASTRALTER_FIRST_SLOT_INDEX = INV_FIRST_SLOT_INDEX + TOTAL_SLOT_COUNT;
-    private int ASTRALTER_SLOT_COUNT = 0;
+    private int ASTRALTER_SLOT_COUNT = 2;
     public int getSlotCnt(){
         return ASTRALTER_SLOT_COUNT;
     }

@@ -45,6 +45,11 @@ public class ModNetwork {
                 .encoder(ProjCapS2CPacket::toBytes)
                 .consumerMainThread(ProjCapS2CPacket::handle)
                 .add();
+        channel.messageBuilder(AstralterTransmuteC2SPacket.class,id(),NetworkDirection.PLAY_TO_SERVER)
+                .decoder(AstralterTransmuteC2SPacket::new)
+                .encoder(AstralterTransmuteC2SPacket::toBytes)
+                .consumerMainThread(AstralterTransmuteC2SPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToClientsInDim(MSG message, ResourceKey<Level> type){

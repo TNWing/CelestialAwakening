@@ -84,7 +84,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
                 bossBarWindup++;
             }
         }
-        else{
+        else if (Config.mobCombatRegen){
             this.heal(0.1f);
         }
     }

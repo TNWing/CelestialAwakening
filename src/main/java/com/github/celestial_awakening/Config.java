@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER;
+
+    static final ForgeConfigSpec.BooleanValue OUTOFCOMBAT_HEAL;
+
     static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_DIMENSIONS;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_MULTIPLE_DIVINER;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DELAY;
@@ -49,6 +52,12 @@ public class Config
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
         builder.comment("Celestial Awakening Config");
+
+        builder.push("Global_Enemy_Config");
+
+        builder.pop();
+            OUTOFCOMBAT_HEAL=builder.comment("Allows some enemies to heal when not in combat.\nDefault: true").define("enemy_combat_regen",true);
+
         builder.push("Transcendents_Config");
             TRANSCENDENTS_DIMENSIONS =builder.comment("Dimensions that the Transcendents are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             TRANSCENDENTS_MULTIPLE_DIVINER=builder.comment("If the Transcendents's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault false").define("transcendents_diviner_shared_dim",false);
@@ -107,6 +116,8 @@ public class Config
 
     static final ForgeConfigSpec SPEC =  BUILDER.build();
 
+    public static boolean mobCombatRegen=true;
+
 
     public static double mobHPScale=1;
     public static double mobDmgScale=1;
@@ -164,6 +175,8 @@ public class Config
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        mobCombatRegen= OUTOFCOMBAT_HEAL.get();
+
         transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
 
         lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());

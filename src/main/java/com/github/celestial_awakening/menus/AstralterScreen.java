@@ -4,8 +4,10 @@ import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.AstralterTransmuteC2SPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,10 +35,20 @@ public class AstralterScreen extends AbstractContainerScreen<AstralterMenu> {
         });
     }
 
+    protected void init() {
+        super.init();
+        this.addRenderableWidget(new AstralterTransmuteButton(0,0,0,0, CommonComponents.GUI_DONE));
+        //this.leftPos + 164, this.topPos + 107
+        // super(p_97992_, p_97993_, 90, 220, CommonComponents.GUI_DONE);
+    }
+
+
     @Override
     protected void renderBg(GuiGraphics p_283065_, float p_97788_, int p_97789_, int p_97790_) {
 
     }
+
+
 
     abstract static class AstralterBaseButton extends AbstractButton{
 
@@ -68,14 +80,14 @@ public class AstralterScreen extends AbstractContainerScreen<AstralterMenu> {
 
         public AstralterTransmuteButton(int p_93365_, int p_93366_, int p_93367_, int p_93368_, Component p_93369_) {
             super(p_93365_, p_93366_, p_93367_, p_93368_, p_93369_);
+            this.setTooltip(Tooltip.create(this.createDescription(), (Component)null));
         }
         @Override
         public void onPress() {
             ModNetwork.sendToServer(new AstralterTransmuteC2SPacket(AstralterScreen.this.sunstoneAmt,AstralterScreen.this.moonstoneAmt));
-            //ModNetwork.sendToClient(new MSG(),player);
         }
         protected MutableComponent createDescription() {
-            return Component.translatable("Transmute Stones");
+            return Component.translatable("astralter.transmute");
         }
     }
 }

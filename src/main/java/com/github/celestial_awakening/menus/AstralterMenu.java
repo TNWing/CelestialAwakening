@@ -6,9 +6,7 @@ import com.github.celestial_awakening.init.MenuInit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,11 +23,11 @@ public class AstralterMenu extends AbstractContainerMenu {
 
 
     public AstralterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId,inv,inv.player.level().getBlockEntity(extraData.readBlockPos()));
+        this(pContainerId,inv,inv.player.level().getBlockEntity(extraData.readBlockPos()),new SimpleContainerData(2),ContainerLevelAccess.NULL);
 
     }
 
-    public AstralterMenu(int containerId, Inventory inv, BlockEntity entity) {
+    public AstralterMenu(int containerId, Inventory inv, BlockEntity entity, ContainerData data,ContainerLevelAccess levelAccess) {
         super(MenuInit.ASTRALTER_MENU.get(),containerId);
         checkContainerSize(inv, 2);
         level=inv.player.level();

@@ -11,6 +11,7 @@ public class ExposingLight extends MobEffect {
     1. Exposing Light
     Part of taken damage that is negated is dealt as true damage
     say i get hit for 10 damage. I reduce it to 6 damage. 25% of the negated damage is taken as true damage, so i take 6 + 1 damage.
+    THIS will need to store the info regarding the damage values, likely in the livingentity cap
 
     2. Debilitating Light
     Target takes increased damage the lower their current HP % is

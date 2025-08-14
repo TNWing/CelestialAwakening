@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,6 +22,10 @@ import org.jetbrains.annotations.Nullable;
 public class AstralterBlockEntity extends BlockEntity implements MenuProvider, Nameable {
     private Component name;
     private static final Component DEFAULT_NAME = Component.translatable("container.astralter");
+
+    int sunVal;
+    int moonVal;
+
     public AstralterBlockEntity(BlockEntityType<?> p_155228_, BlockPos p_155229_, BlockState p_155230_) {
         super(p_155228_, p_155229_, p_155230_);
     }
@@ -29,12 +34,14 @@ public class AstralterBlockEntity extends BlockEntity implements MenuProvider, N
     }
     public void load(CompoundTag tag) {
         super.load(tag);
+        this.sunVal=tag.getInt("SunValue");
+        this.moonVal=tag.getInt("MoonValue");
     }
 
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putInt("SunValue", 0);
-        tag.putInt("MoonValue", 0);
+        tag.putInt("SunValue", this.sunVal);
+        tag.putInt("MoonValue", this.moonVal);
     }
 
     private final ContainerData dataAccess = new ContainerData() {
@@ -43,7 +50,10 @@ public class AstralterBlockEntity extends BlockEntity implements MenuProvider, N
         public int get(int p_39284_) {
             switch(p_39284_){
                 case 0:{
-                    break;
+                    return AstralterBlockEntity.this.sunVal;
+                }
+                case 1:{
+                    return AstralterBlockEntity.this.moonVal;
                 }
                 default:{
                     break;
@@ -56,6 +66,11 @@ public class AstralterBlockEntity extends BlockEntity implements MenuProvider, N
         public void set(int p_39285_, int p_39286_) {
             switch(p_39285_){
                 case 0:{
+                    AstralterBlockEntity.this.sunVal=p_39286_;
+                    break;
+                }
+                case 1:{
+                    AstralterBlockEntity.this.moonVal=p_39286_;
                     break;
                 }
                 default:{
@@ -91,6 +106,7 @@ public class AstralterBlockEntity extends BlockEntity implements MenuProvider, N
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new AstralterMenu(p_39954_,p_39955_,this);
+        //(int p_39039_, Container p_39040_, ContainerData p_39041_, ContainerLevelAccess p_39042_) {
+        return new AstralterMenu(p_39954_,p_39955_,this,this.dataAccess, ContainerLevelAccess.create(this.level, this.getBlockPos()));
     }
 }

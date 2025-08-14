@@ -187,7 +187,7 @@ public class EverlightArmor extends ArmorEffect{
         });
     }
     //slap a cd on the glow applying
-    private void starGazer(LivingDamageEvent event,Player player){
+    private void starGazer(LivingDamageEvent event,Player player){//rework to use livinghurt to avoid abs hearts being consumed
         /*
         @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
         capOptional.ifPresent(cap->{

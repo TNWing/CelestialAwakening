@@ -29,7 +29,7 @@ public abstract class ClientLevelMixin {
             }
         });
     }
-//(0.47058823704719543, 0.6549019813537598, 1.0) to (0.1516672521829605, 0.211070254445076, 0.32229289412498474), day to night (aka daytime to sunset)
+    //(0.47058823704719543, 0.6549019813537598, 1.0) to (0.1516672521829605, 0.211070254445076, 0.32229289412498474), day to night (aka daytime to sunset)
     //affects ground darkness level
     @Inject(method="getSkyDarken" , at=@At("TAIL"),cancellable = true)
     public void getSkyDarken(float p_104806_, CallbackInfoReturnable<Float> cir) {

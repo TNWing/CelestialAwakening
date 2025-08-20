@@ -12,7 +12,7 @@ public class ResourceCheckerFuncs {
     public static boolean validDim(Level level, Set<ResourceKey<DimensionType>> dimSet) {
         return dimSet.contains(level.dimensionTypeId());
     }
-    public static boolean validEntityType(LivingEntity entity, Set<ResourceKey<EntityType<?>>> eTypeSet) {
+    public static boolean validEntityType(LivingEntity entity, Set<EntityType<?>> eTypeSet) {
         return eTypeSet.contains(entity.getType());
         //return dimSet.contains(level.dimensionTypeId());
     }

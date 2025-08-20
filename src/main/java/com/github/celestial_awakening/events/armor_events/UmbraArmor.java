@@ -110,7 +110,7 @@ Reduces CD by 1/2/3/4 sec on kill
         if (cnt>0){
             LivingEntity entity=event.getEntity();
             if (entity.getHealth()>=entity.getMaxHealth()){
-                @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
                 capOptional.ifPresent(cap->{
                     if (cap.getAbilityCD(abilityDread)==null){
                         event.setAmount(event.getAmount()+dreadVals[cnt-1]);
@@ -129,7 +129,7 @@ hitting an enemy below 50% max HP will grant a speed boost to the player.
 CD of 15 seconds, resets on kill
  */
     public void cdModifier(LivingDeathEvent event,Player player, int cnt){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
         capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityDread)!=null){
                 cap.changeAbilityCD(abilityDread,-20*cnt);
@@ -142,7 +142,7 @@ CD of 15 seconds, resets on kill
 
     public void pursuit(LivingHurtEvent event,Player player){
         LivingEntity target=event.getEntity();
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
         capOptional.ifPresent(cap->{
             if(cap.getAbilityCD(abilityPursuit)==null && event.getSource().getEntity() == player){
                 if (target.getHealth()-event.getAmount()<0.5f*target.getMaxHealth()){
@@ -161,7 +161,7 @@ CD of 8 seconds
     public void cursedLight(LivingHurtEvent event,Player player){
         Entity entity=event.getSource().getEntity();
         if (entity instanceof LivingEntity && event.getEntity()==player){
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
             capOptional.ifPresent(cap->{
                 if (cap.getAbilityCD(abilityCursedLight)==null){
                     ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS,60,1));

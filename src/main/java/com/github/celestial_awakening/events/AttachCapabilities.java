@@ -10,8 +10,7 @@ import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
@@ -55,7 +54,7 @@ public class AttachCapabilities {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         UUID playerID = player.getUUID();
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
         capOptional.ifPresent(cap->{
             cap.setUUID(playerID);
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);
@@ -65,7 +64,7 @@ public class AttachCapabilities {
     public void onEntityJoinWorld(EntityJoinLevelEvent event) {
         Entity entity =  event.getEntity();
         UUID uuID = entity.getUUID();
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
         capOptional.ifPresent(cap->{
             cap.setUUID(uuID);
         });
@@ -85,9 +84,9 @@ public class AttachCapabilities {
             }
         }
 
-        else if (entity instanceof Player || entity instanceof Monster){
-            if (!event.getCapabilities().containsValue(LivingEntityCapabilityProvider.playerCapability)){
-                event.addCapability(CelestialAwakening.createResourceLocation("player_data"),new LivingEntityCapabilityProvider());
+        else if (entity instanceof LivingEntity){
+            if (!event.getCapabilities().containsValue(LivingEntityCapabilityProvider.livingEntityCapability)){
+                event.addCapability(CelestialAwakening.createResourceLocation("living_entity_data"),new LivingEntityCapabilityProvider());
             }
         }
     }

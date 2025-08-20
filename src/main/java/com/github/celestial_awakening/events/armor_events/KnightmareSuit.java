@@ -118,7 +118,7 @@ public class KnightmareSuit extends ArmorEffect{
     private void infamy(LivingDeathEvent event,Player player,int cnt){
         if(event.getSource().getEntity()==player){
 
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
             capOptional.ifPresent(cap->{
                 Object[] data= cap.getAbilityData(infamy);
                 float mHp=event.getEntity().getMaxHealth();
@@ -139,7 +139,7 @@ public class KnightmareSuit extends ArmorEffect{
     private void infamyBoost(LivingHurtEvent event,Player player){
         if(event.getSource().getEntity()==player){
 
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
             capOptional.ifPresent(cap->{
                 if (cap.hasAbility(infamy)){
                     Object[] data= cap.getAbilityData(infamy);
@@ -155,8 +155,8 @@ public class KnightmareSuit extends ArmorEffect{
     private void applyHonorDuel(LivingHurtEvent event,Player player){
         if(event.getSource().getEntity()==player){
             LivingEntity target=event.getEntity();
-            @NotNull LazyOptional<LivingEntityCapability> pCapOptional=player.getCapability(LivingEntityCapabilityProvider.playerCapability);
-            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.playerCapability);
+            @NotNull LazyOptional<LivingEntityCapability> pCapOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
             pCapOptional.ifPresent(pCap->{
                 targetCapOptional.ifPresent(targetCap->{
                     if (targetCap.getAbilityData(honorDuel)==null &&

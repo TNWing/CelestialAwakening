@@ -4,7 +4,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -54,9 +53,9 @@ public class Config
         builder.comment("Celestial Awakening Config");
 
         builder.push("Global_Enemy_Config");
-
-        builder.pop();
             OUTOFCOMBAT_HEAL=builder.comment("Allows some enemies to heal when not in combat.\nDefault: true").define("enemy_combat_regen",true);
+        builder.pop();
+
 
         builder.push("Transcendents_Config");
             TRANSCENDENTS_DIMENSIONS =builder.comment("Dimensions that the Transcendents are allowed to be active in.\nDefault minecraft:overworld").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
@@ -64,7 +63,7 @@ public class Config
             TRANSCENDENTS_DELAY=builder.comment("Upon creating a world, block the Transcendents from doing anything until a set amount of time has passed.\nDefault 240000 ticks(10 in game days)").defineInRange("transcendents_init_delay",240000,0,Integer.MAX_VALUE);
             TRANSCENDENTS_MIN_CD =builder.comment("Minimum cooldown for the diviner's scrying. Does not restrict other factors from hastening the next scry.\nDefault 36000 ticks (1.5 in game days)").defineInRange("transcendents_div_min_cd",36000,0,Integer.MAX_VALUE);
             TRANSCENDENTS_MAX_CD =builder.comment("Maximum cooldown for the diviner's scrying. Does not restrict other factors from impeding the next scry.\nDefault 72000 ticks (3 in game days)").defineInRange("transcendents_div_max_cd",72000,0,Integer.MAX_VALUE);
-            TRANSCENDENTS_ENEMIES =builder.comment("(CURRENTLY NOT FUNCTIONAL)\nNon-player living entities that the Transcendents will intentionally target.\nDefault: None.\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(), obj->obj instanceof String);
+            TRANSCENDENTS_ENEMIES =builder.comment("List of living entities that the Transcendents will intentionally target.\nDefault: minecraft:player.\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(Arrays.asList("minecraft:player")), obj->obj instanceof String);
             TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =builder.comment("Determines whether or not the diviner's heatwave can modify the terrain.\nDefault true").define("transcendents_diviner_heatwave",true);
             TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault 10").defineInRange("transcendents_div_scan_power",10,0,100);
         builder.pop();
@@ -135,7 +134,7 @@ public class Config
     public static int transcendentsInitDelay;
     public static int transcendentsDivMinCD;
     public static int transcendentsDivMaxCD;
-    public static Set<ResourceKey<EntityType<?>>> transcendentsTargets;
+    public static Set<EntityType<?>> transcendentsTargets;
 
 
     public static int pkSpawnCap;
@@ -164,13 +163,10 @@ public class Config
                 .collect(Collectors.toSet());
     }
 
-    static Set<ResourceKey<EntityType<?>>> strToEntities(List<? extends String> list){
+
+    static Set<EntityType<?>> strToEntities(List<? extends String> list){
         return list.stream().map(
-          obj->ResourceKey.create(Registries.ENTITY_TYPE,new ResourceLocation(obj)))
-                .filter(key->{EntityType<?> type= ForgeRegistries.ENTITY_TYPES.getValue(key.location());
-                return type!=null && LivingEntity.class.isAssignableFrom(type.getBaseClass());
-                })
-                .collect(Collectors.toSet());
+          obj-> ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(obj))).collect(Collectors.toSet());
     }
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
@@ -190,6 +186,7 @@ public class Config
         transcendentsDivMaxCD = TRANSCENDENTS_MAX_CD.get();
 
         transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
+
 
         divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
 

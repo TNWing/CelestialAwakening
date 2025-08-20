@@ -21,7 +21,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -122,7 +121,7 @@ public class SolarEvents {
     /*
     i can use this server side or client side. server side is probably easier, as if client side, the client will need to perform detections AND send messages to server, which server must verify.
      */
-    public List<Player> detectPlayers(Level level,LevelCapability levelCap){
+    public void detectTargets(Level level, LevelCapability levelCap){
         //also, when the player logs, does not save the diviner?
         ServerChunkCache chunkCache = (ServerChunkCache) level.getChunkSource();
         //	visibleChunkMap f_140130_
@@ -135,20 +134,20 @@ public class SolarEvents {
                 continue;
             }
             ChunkPos chunkPos=chunk.getPos();
-            AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
-            Predicate<LivingEntity> pred=o -> ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets);
+            AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(),  level.getMinBuildHeight(), chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
+            Predicate<LivingEntity> pred=o ->ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets);
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, chunkBoundingBox,pred);
             boolean capDirty=false;
             for (LivingEntity entity:entities){
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }
-                capDirty=true;
-                BlockPos playerBlockPos=entity.blockPosition();
-                if(level.canSeeSky(playerBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
-                    //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
 
-                    LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.playerCapability);
+                capDirty=true;
+                BlockPos entityBlockPos=entity.blockPosition();
+                if(level.canSeeSky(entityBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
+                    //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
+                    LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
                     //TODO: test this
                     optional.ifPresent(cap->{
                         int amp=0;
@@ -156,8 +155,11 @@ public class SolarEvents {
                             amp=1;
                         }
                         cap.increaseNaviGauge((short) 2);
+                        System.out.println("navigauge entity " + entity + "  " + cap.getNavigauge() );
                         if (cap.getNavigauge()>60){//so takes 1.5 sec of being exposed to trigger
+                            System.out.println("beacon   entity " + entity );
                             CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
+
                             entity.addEffect(mobEffectInstance);
                             levelCap.changeDivPower(Config.divinerScanPower);
 
@@ -201,6 +203,7 @@ public class SolarEvents {
                                     levelCap.setSunControlVal ((byte) (-startingDivPower/8));
                                     levelCap.divinerSunControlTimer = (pts*35);
                                 }
+                                System.out.println("OUr level has sunctrl " + levelCap.divinerSunControlVal + "  and timer " + levelCap.divinerSunControlTimer);
                             }
                             else{
                                 levelCap.divinerSunControlTimer=10;
@@ -214,9 +217,6 @@ public class SolarEvents {
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(levelCap),level.dimension());
             }
         }
-
-
-        return null;
     }
 
 }

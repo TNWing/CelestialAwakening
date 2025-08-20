@@ -21,7 +21,7 @@ public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> ex
     protected LivingEntity target;
     protected TargetingConditions targetConditions;
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26060_, Set<EntityType<?>> types, boolean p_26062_) {
+    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26060_,  Set<EntityType<?>>types, boolean p_26062_) {
         this(p_26060_, types, 10, p_26062_, false, (Predicate<LivingEntity>)null);
     }
 
@@ -29,7 +29,7 @@ public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> ex
         this(p_199891_, p_199892_, 10, p_199893_, false, p_199894_);
     }
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26064_, Set<EntityType<?>> types, boolean p_26066_, boolean p_26067_) {
+    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26064_,  Set<EntityType<?>> types, boolean p_26066_, boolean p_26067_) {
         this(p_26064_, types, 10, p_26066_, p_26067_, (Predicate<LivingEntity>)null);
     }
 
@@ -56,8 +56,9 @@ public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> ex
     }
 
     protected void findTarget() {
+        Predicate<LivingEntity> pred= o-> entityTypes.contains(o.getType());
         this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(LivingEntity.class,
-                this.getTargetSearchArea(this.getFollowDistance()), (livingEntity) -> entityTypes.contains(livingEntity.getType())),
+                this.getTargetSearchArea(this.getFollowDistance()), pred),
                 this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
     }
 

@@ -63,7 +63,7 @@ public class ClientEventsManager {
                         if (cap.divinerEyeToState>-2){
                             renderDivinerEye(event.getPoseStack(),level,cap,event);
                         }
-                        else if (cap.divinerSunControlTimer>0){
+                        else if (cap.divinerSunControlTimer>0){//this is fine
                             renderTransAoDOverlay(event.getPoseStack(),level,cap,event);
                         }
 

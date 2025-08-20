@@ -262,7 +262,9 @@ public class LevelCapability{
 
 
     public boolean decrementSunControlTimer(){
+        //System.out.println("sun control timer  is " + divinerSunControlTimer + " and val is " + divinerSunControlVal);//so timer and val are fine
         if (divinerSunControlTimer>0){
+
             this.divinerSunControlTimer =Math.max(0,this.divinerSunControlTimer-1);
             if (this.divinerSunControlTimer ==0){
                 this.divinerSunControlVal=0;

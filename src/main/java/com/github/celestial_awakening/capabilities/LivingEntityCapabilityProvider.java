@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LivingEntityCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<LivingEntityCapability> playerCapability= CapabilityManager.get(new CapabilityToken<>() {
+    public static Capability<LivingEntityCapability> livingEntityCapability = CapabilityManager.get(new CapabilityToken<>() {
     });
     private LivingEntityCapability playerData=null;
     private final LazyOptional<LivingEntityCapability> optional=LazyOptional.of(this::createPlayerCap);
@@ -27,7 +27,7 @@ public class LivingEntityCapabilityProvider implements ICapabilityProvider, INBT
     }
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap==playerCapability){
+        if (cap== livingEntityCapability){
             return optional.cast();
         }
         return LazyOptional.empty();

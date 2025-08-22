@@ -127,7 +127,6 @@ public class LunarEvents {
         if (type!=null){
             for (ServerPlayer player:serverPlayers) {
                 for (int i=0;i<10;i++){//10 attempts to spawn per player
-
                     int x=rand.nextInt(24,49);
                     int z=rand.nextInt(24,49);
                     BlockPos.MutableBlockPos mutableBlockPos=new BlockPos.MutableBlockPos(x,0,z);

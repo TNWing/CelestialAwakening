@@ -4,6 +4,7 @@ import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.projectile.ArrowType;
 import com.github.celestial_awakening.items.*;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -108,4 +109,5 @@ public class ItemInit {
             ITEMS.register("shade_leggings",()->new CustomArmorItem(CustomArmorMaterial.PULSATING_DARKNESS,ArmorItem.Type.LEGGINGS,new Item.Properties()));
     public static final RegistryObject<Item> SHADE_SLIPPERS=
             ITEMS.register("shade_boots",()->new CustomArmorItem(CustomArmorMaterial.PULSATING_DARKNESS,ArmorItem.Type.BOOTS,new Item.Properties(),1));
+
 }

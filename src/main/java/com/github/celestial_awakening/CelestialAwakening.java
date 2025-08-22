@@ -61,6 +61,7 @@ public class CelestialAwakening
         CREATIVE_MODE_TABS.register(modEventBus);
 
         ItemInit.ITEMS.register(modEventBus);
+        PotionInit.POTIONS.register(modEventBus);
         EnchantmentInit.ENCHANTMENTS.register(modEventBus);
         LootInit.LOOT_SERIALIZER.register(modEventBus);
         EntityInit.ENTITY_TYPES.register(modEventBus);

@@ -637,6 +637,7 @@ public class EventManager {
                 int sunControl=cap.divinerSunControlVal;
                 if (sunControl<0){
                     if (randomSource.nextInt(1-sunControl)<10){
+                        System.out.println("deny crop growth");
                         event.setResult(Event.Result.DENY);
                     }
                 }

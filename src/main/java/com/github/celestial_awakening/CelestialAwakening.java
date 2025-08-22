@@ -16,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -67,6 +68,7 @@ public class CelestialAwakening
         EntityInit.ENTITY_TYPES.register(modEventBus);
         LootInit.registerLootConditions();
         RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
+
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
         registerTiers();
 /*
@@ -92,9 +94,11 @@ optimize eventmanager later, theres probably  some stuff eating up performance
                 Arrays.stream(new Object[]{Tiers.WOOD,Tiers.STONE}).toList(),Arrays.stream(new Object[]{Tiers.DIAMOND,Tiers.NETHERITE}).toList());
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
+    @SubscribeEvent
+    public void commonSetup(final FMLCommonSetupEvent event)
     {
         ModNetwork.register();
+        RecipeInit.registerBrewingRecipes();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

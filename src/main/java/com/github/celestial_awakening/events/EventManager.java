@@ -591,7 +591,6 @@ public class EventManager {
         }
     }
 
-
     @SubscribeEvent
     public static void onPlayerChangeDim(PlayerEvent.PlayerChangedDimensionEvent event){
         if (event.getTo() == null){

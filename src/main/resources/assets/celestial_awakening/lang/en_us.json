@@ -69,9 +69,22 @@
   "item.minecraft.lingering_potion.effect.photogenic": "Lingering Photogenic Potion",
   "item.minecraft.tipped_arrow.effect.photogenic": "Photogenic Arrow",
 
+  "item.minecraft.potion.effect.photosynthesis": "Potion of Photosynthesis",
+  "item.minecraft.splash_potion.effect.photosynthesis": "Splash Potion of Photosynthesis",
+  "item.minecraft.lingering_potion.effect.photosynthesis": "Lingering Potion of Photosynthesis",
+  "item.minecraft.tipped_arrow.effect.photosynthesis": "Arrow of Photosynthesis",
+
+  "item.minecraft.potion.effect.lunar_restoration": "Potion of Lunar Restoration",
+  "item.minecraft.splash_potion.effect.lunar_restoration": "Splash Potion of Lunar Restoration",
+  "item.minecraft.lingering_potion.effect.lunar_restoration": "Lingering Potion of Lunar Restoration",
+  "item.minecraft.tipped_arrow.effect.lunar_restoration": "Arrow of Lunar Restoration",
+
   "effect.celestial_awakening.exposing_light": "Exposing Light",
   "effect.celestial_awakening.purging_light": "Purging Light",
   "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
+  "effect.celestial_awakening.lunar_restoration": "Lunar Restoration",
+  "effect.celestial_awakening.photosynthesis": "Photosynthesis",
+
 
   "entity.celestial_awakening.transcendent_asteron": "Asteron",
   "entity.celestial_awakening.transcendent_astralite": "Astralite",

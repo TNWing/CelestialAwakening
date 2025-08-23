@@ -28,6 +28,8 @@ public class RecipeInit {
     public static void registerBrewingRecipes(){
         createBrewingRecipeVariants(Potions.THICK,ItemInit.MOONSTONE.get(),PotionInit.LUNAR_GLEAM.get());
         createBrewingRecipeVariants(Potions.MUNDANE,ItemInit.SUNSTONE.get(),PotionInit.PHOTOGENIC.get());
+        createBrewingRecipeVariants(PotionInit.PHOTOGENIC.get(),ItemInit.LIFE_FRAG.get(),PotionInit.PHOTOSYNTHESIS.get());
+        createBrewingRecipeVariants(PotionInit.LUNAR_GLEAM.get(),ItemInit.LUNAR_SCALE.get(),PotionInit.LUNAR_RESTORATION.get());
     }
 
 

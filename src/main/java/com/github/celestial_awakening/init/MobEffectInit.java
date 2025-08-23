@@ -28,6 +28,9 @@ public class MobEffectInit {
 
     public static final RegistryObject<MobEffect> PHOTOSYNTHESIS=MOB_EFFECTS.register("photosynthesis",()->
             new Photosynthesis(MobEffectCategory.BENEFICIAL,16750848));
+    public static final RegistryObject<MobEffect> LUNAR_RESTORATION=MOB_EFFECTS.register("lunar_restoration",()->
+            new LunarRestoration(MobEffectCategory.BENEFICIAL,16750848));
+
     public static final RegistryObject<MobEffect> MARK_OF_HAUNTING=MOB_EFFECTS.register("mark_of_haunting",()->
             new MarkOfHaunting(MobEffectCategory.NEUTRAL,16750848));
 }

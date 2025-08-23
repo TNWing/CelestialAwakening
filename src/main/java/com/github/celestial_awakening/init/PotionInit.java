@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import com.mojang.blaze3d.shaders.Effect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -23,5 +24,13 @@ public class PotionInit {
             new MobEffectInstance(MobEffects.BLINDNESS, 60),
             new MobEffectInstance(MobEffects.NIGHT_VISION, 600),
             new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300)
+    ));
+
+    public static final RegistryObject<Potion> PHOTOSYNTHESIS=POTIONS.register("photosynthesis",()->new Potion(
+            new MobEffectInstance(MobEffectInit.PHOTOSYNTHESIS.get(), 2400)
+    ));
+
+    public static final RegistryObject<Potion> LUNAR_RESTORATION=POTIONS.register("lunar_restoration",()->new Potion(
+            new MobEffectInstance(MobEffectInit.LUNAR_RESTORATION.get(), 2400)
     ));
 }

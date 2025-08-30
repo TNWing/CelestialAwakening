@@ -33,4 +33,12 @@ public class PotionInit {
     public static final RegistryObject<Potion> LUNAR_RESTORATION=POTIONS.register("lunar_restoration",()->new Potion(
             new MobEffectInstance(MobEffectInit.LUNAR_RESTORATION.get(), 2400)
     ));
+    public static final RegistryObject<Potion> LUNAR_RENEWAL=POTIONS.register("lunar_renewal",()->new Potion(
+            new MobEffectInstance(MobEffectInit.LUNAR_RENEWAL.get(), 2400)
+    ));
+
+
+    public static void addEnhancedVersions(boolean amp, boolean length){
+
+    }
 }

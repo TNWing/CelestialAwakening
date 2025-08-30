@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.recipes.serializers;
 
-import com.github.celestial_awakening.recipes.LifeFragFood;
+import com.github.celestial_awakening.recipes.LifeFragFoodRecipe;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -8,11 +8,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
-public class LifeFragFoodSerializer implements RecipeSerializer<LifeFragFood> {
+public class LifeFragFoodSerializer implements RecipeSerializer<LifeFragFoodRecipe> {
     @Override
-    public LifeFragFood fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
+    public LifeFragFoodRecipe fromJson(ResourceLocation resourceLocation, JsonObject jsonObject) {
         ShapedRecipe shapedRecipe = RecipeSerializer.SHAPED_RECIPE.fromJson(resourceLocation,jsonObject); // Read as a normal ShapedRecipe
-        return new LifeFragFood(resourceLocation,
+        return new LifeFragFoodRecipe(resourceLocation,
                 shapedRecipe.getGroup(),
                 shapedRecipe.category(),
                 shapedRecipe.getWidth(),
@@ -22,9 +22,9 @@ public class LifeFragFoodSerializer implements RecipeSerializer<LifeFragFood> {
     }
 
     @Override
-    public @Nullable LifeFragFood fromNetwork(ResourceLocation resourceLocation,  FriendlyByteBuf buf) {
+    public @Nullable LifeFragFoodRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buf) {
         ShapedRecipe shapedRecipe = RecipeSerializer.SHAPED_RECIPE.fromNetwork(resourceLocation, buf); // Read as normal
-        return new LifeFragFood(
+        return new LifeFragFoodRecipe(
                 resourceLocation,
                 shapedRecipe.getGroup(),
                 shapedRecipe.category(),
@@ -36,7 +36,7 @@ public class LifeFragFoodSerializer implements RecipeSerializer<LifeFragFood> {
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, LifeFragFood recipe) {
+    public void toNetwork(FriendlyByteBuf buffer, LifeFragFoodRecipe recipe) {
         RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe);
     }
 }

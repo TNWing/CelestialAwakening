@@ -15,9 +15,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
-public class LifeFragFood extends ShapedRecipe {
-    public LifeFragFood(ResourceLocation p_273203_, String p_272759_, CraftingBookCategory p_273506_,
-                        int p_272952_, int p_272920_, NonNullList<Ingredient> p_273650_, ItemStack p_272852_) {
+public class LifeFragFoodRecipe extends ShapedRecipe {
+    public LifeFragFoodRecipe(ResourceLocation p_273203_, String p_272759_, CraftingBookCategory p_273506_,
+                              int p_272952_, int p_272920_, NonNullList<Ingredient> p_273650_, ItemStack p_272852_) {
 
         super(p_273203_, p_272759_, p_273506_, p_272952_, p_272920_, p_273650_, p_272852_);
     }

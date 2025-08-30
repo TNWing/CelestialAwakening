@@ -14,10 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Level.class)
 public abstract class LevelMixin {
-    int counter=0;
     @Shadow
     private int skyDarken;
-    @Inject(method="updateSkyBrightness" , at=@At("TAIL"))
+    @Inject(method="updateSkyBrightness" , at=@At("TAIL"))//not sure if i need this at all
     public void updateSkyBrightness(CallbackInfo ci) {//only called once on client level
         Level level=(Level) (Object) this;
         LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);

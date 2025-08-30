@@ -155,55 +155,59 @@ public class SolarEvents {
                             amp=1;
                         }
                         cap.increaseNaviGauge((short) 2);
-                        System.out.println("navigauge entity " + entity + "  " + cap.getNavigauge() );
+                        //System.out.println("navigauge entity " + entity + "  " + cap.getNavigauge() );
                         if (cap.getNavigauge()>60){//so takes 1.5 sec of being exposed to trigger
-                            System.out.println("beacon   entity " + entity );
+                            //System.out.println("beacon   entity " + entity );
                             CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
 
                             entity.addEffect(mobEffectInstance);
                             levelCap.changeDivPower(Config.divinerScanPower);
 
-                            if (Config.divinerHeatWaveBlockMod && startingDivPower>=10){//perform heatwave
-                                BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
-                                BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
-                                BlockState dirtState= Blocks.DIRT.defaultBlockState();
+                            if (Config.divinerHeatwaveEnabled && startingDivPower>=10){
                                 entity.setSecondsOnFire(4);
-                                BlockPos centerBlockPos=entity.blockPosition();
-                                int vOffset=9;
-                                int hOffset=6;
-                                for (int y=centerBlockPos.getY()-vOffset;y<centerBlockPos.getY()+vOffset;y++){
-                                    for (int x=centerBlockPos.getX()-hOffset;x<centerBlockPos.getX()+hOffset;x++){
-                                        for (int z=centerBlockPos.getZ()-hOffset;z<centerBlockPos.getZ()+hOffset;z++){
-                                            BlockPos blockPos=new BlockPos(x,y,z);
-                                            BlockState blockState=level.getBlockState(blockPos);
-                                            List<TagKey<Block>> tags=blockState.getTags().toList();
-                                            if (tags.contains(BlockTags.LEAVES)){
-                                                level.destroyBlock(blockPos,true);
-                                            }
-                                            else if (tags.contains(BlockTags.CROPS)){
-                                                level.setBlockAndUpdate(blockPos,bushState);
-                                            }
-                                            else if (blockState.getBlock() instanceof FarmBlock || tags.contains(BlockTags.DIRT)){
-                                                level.setBlockAndUpdate(blockPos,dirtState);
-                                            }
-                                            else if (tags.contains(Tags.Blocks.COBBLESTONE) || tags.contains(Tags.Blocks.STONE)){
-                                                level.setBlockAndUpdate(blockPos,magmaState);
+                                if(Config.divinerHeatWaveBlockMod){//perform heatwave
+                                    BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
+                                    BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
+                                    BlockState dirtState= Blocks.DIRT.defaultBlockState();
+
+                                    BlockPos centerBlockPos=entity.blockPosition();
+                                    int vOffset=9;
+                                    int hOffset=6;
+                                    for (int y=centerBlockPos.getY()-vOffset;y<centerBlockPos.getY()+vOffset;y++){
+                                        for (int x=centerBlockPos.getX()-hOffset;x<centerBlockPos.getX()+hOffset;x++){
+                                            for (int z=centerBlockPos.getZ()-hOffset;z<centerBlockPos.getZ()+hOffset;z++){
+                                                BlockPos blockPos=new BlockPos(x,y,z);
+                                                BlockState blockState=level.getBlockState(blockPos);
+                                                List<TagKey<Block>> tags=blockState.getTags().toList();
+                                                if (tags.contains(BlockTags.LEAVES)){
+                                                    level.destroyBlock(blockPos,true);
+                                                }
+                                                else if (tags.contains(BlockTags.CROPS)){
+                                                    level.setBlockAndUpdate(blockPos,bushState);
+                                                }
+                                                else if (blockState.getBlock() instanceof FarmBlock || tags.contains(BlockTags.DIRT)){
+                                                    level.setBlockAndUpdate(blockPos,dirtState);
+                                                }
+                                                else if (tags.contains(Tags.Blocks.COBBLESTONE) || tags.contains(Tags.Blocks.STONE)){
+                                                    level.setBlockAndUpdate(blockPos,magmaState);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                            if (startingDivPower>=25){
+
+                            if (startingDivPower>=25 && Config.divinerAoDEnabled){
                                 int pts= (int) (2500*startingDivPower/(startingDivPower+25));
                                 if (level.random.nextInt(0,2)==0){
                                     levelCap.setSunControlVal ((byte) (-startingDivPower/8));
-                                    levelCap.divinerSunControlTimer = (pts*35);//every power point adds 20 sec?. alternatively, use a log func or smth
+                                    levelCap.divinerSunControlTimer = (pts*35);
                                 }
                                 else{
                                     levelCap.setSunControlVal ((byte) (-startingDivPower/8));
                                     levelCap.divinerSunControlTimer = (pts*35);
                                 }
-                                System.out.println("OUr level has sunctrl " + levelCap.divinerSunControlVal + "  and timer " + levelCap.divinerSunControlTimer);
+                                //System.out.println("OUr level has sunctrl " + levelCap.divinerSunControlVal + "  and timer " + levelCap.divinerSunControlTimer);
                             }
                             else{
                                 levelCap.divinerSunControlTimer=10;

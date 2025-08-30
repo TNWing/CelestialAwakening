@@ -16,8 +16,8 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class LunarScaleRepair extends CustomRecipe {
-    public LunarScaleRepair(ResourceLocation p_252125_, CraftingBookCategory p_249010_) {
+public class LunarScaleRepairRecipe extends CustomRecipe {
+    public LunarScaleRepairRecipe(ResourceLocation p_252125_, CraftingBookCategory p_249010_) {
         super(p_252125_, p_249010_);
     }
 

@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events.armor_events;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.core.BlockPos;
@@ -142,7 +143,7 @@ public class RadiantArmor extends ArmorEffect {
 
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
-        if (player instanceof ServerPlayer && player.tickCount % 50==0){
+        if (player instanceof ServerPlayer && player.tickCount % Config.excitedParticlesTickInterval==0){
             ServerLevel serverLevel= (ServerLevel) player.level();
             for (int x=-3;x<=3;x++){
                 for (int z=-3;z<=3;z++){

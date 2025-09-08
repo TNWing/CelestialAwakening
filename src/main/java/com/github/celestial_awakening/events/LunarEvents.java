@@ -212,7 +212,7 @@ public class LunarEvents {
                     //for each player, attempt to create a moonstone in a nearby chunk
                     List<? extends Player> pList=level.players();
                     for (Player p:pList) {
-                        if (cap.currentMoonstonePos.keySet().size()>15){
+                        if (Config.moonstoneDimLim>-1 && cap.currentMoonstonePos.keySet().size()>Config.moonstoneDimLim){
                             break;
                         }
                         ChunkPos chunkPos=p.chunkPosition();

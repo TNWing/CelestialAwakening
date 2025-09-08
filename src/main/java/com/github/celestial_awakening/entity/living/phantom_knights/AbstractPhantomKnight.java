@@ -107,7 +107,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
         }
         if (source.getEntity()!=null){
             if (this.distanceTo(source.getEntity())> Config.pkDmgResDist){
-                amt*=0.2f;
+                amt*=Config.pkDmgResDistVal;
             }
         }
         if (this.getActionId()<=0){

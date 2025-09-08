@@ -80,10 +80,16 @@
   "item.minecraft.tipped_arrow.effect.lunar_restoration": "Arrow of Lunar Restoration",
 
   "effect.celestial_awakening.exposing_light": "Exposing Light",
+  "effect.celestial_awakening.exposing_light.description": "Exposing Light",
   "effect.celestial_awakening.purging_light": "Purging Light",
+  "effect.celestial_awakening.purging_light.description": "Upon expiring, removes a random buff and damages the afflicted depending on the number of debuffs on them.",
   "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
   "effect.celestial_awakening.lunar_restoration": "Lunar Restoration",
+  "effect.celestial_awakening.lunar_restoration.description":"Periodically repairs worn armor and items held in either hand.",
+  "effect.celestial_awakening.lunar_renewal": "Lunar Renewal",
+  "effect.celestial_awakening.lunar_renewal.description":"Instantly repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.photosynthesis": "Photosynthesis",
+  "effect.celestial_awakening.photosynthesis.description": "Periodically grants small amounts of hunger.",
 
 
   "entity.celestial_awakening.transcendent_asteron": "Asteron",
@@ -161,7 +167,7 @@
   "tooltip.celestial_awakening.everlight_armor.star_gazer_name": "Star Gazer",
   "tooltip.celestial_awakening.everlight_armor.star_gazer_desc": "Applies glowing to attackers.\nIf the attacker cannot receive glowing, instead heal 0.2 HP.\nReduces incoming damage for each nearby glowing entity.",
   "tooltip.celestial_awakening.everlight_armor.photon_cycle_name": "Photon Cycle",
-  "tooltip.celestial_awakening.everlight_armor.photon_cycle_desc": "While in combat, channel the power of light.\n  If you are above half health, ignite nearby enemies and deal a burst of additional fire damage.\n  If below half health, reduce the duration of burning and glowing effects on nearby entities. You are healed based on the total time removed across all targets.\nCooldown of 12 seconds",
+  "tooltip.celestial_awakening.everlight_armor.photon_cycle_desc": "While in combat, channel the power of light.\n  If you are above half health, ignite nearby enemies and deal a burst of additional fire damage.\n  If below half health, reduce the duration of burning and glowing effects on nearby entities. You are healed based on the total time removed across all targets.\nCooldown of 12 seconds.",
 
   "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
   "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had for 15 seconds.",

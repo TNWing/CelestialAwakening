@@ -35,7 +35,11 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
     9: moon cutter start
     10: strikethrough start
     11: strikethrough strike
+
+    TODO:
+    -adjust whirlwind to not look so goofy & make sure the start animation timer lines up w/ the skill cast time
      */
+
     public final AnimationState asleepAnimationState=new AnimationState();
     public final AnimationState idleAnimationState=new AnimationState();
     public final AnimationState wakeUpAnimationState=new AnimationState();

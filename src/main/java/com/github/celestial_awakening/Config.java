@@ -79,7 +79,7 @@ public class Config
             TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED=builder.comment("Determines whether or not the diviner can use the heatwave ability.\nThis ability strikes exposed targets with fire, igniting them and damaging nearby terrain.\nDefault: true").define("transcendents_diviner_heatwave_active",true);
             TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =builder.comment("Allows the heatwave ability to modify terrain.\nDefault: true").define("transcendents_diviner_heatwave",true);
             TRANSCENDENTS_DIVINER_AOD_ENABLED =builder.comment("Determines whether or not the diviner can use the Age of Darkness ability.\nAge of Darkness causes the world's sky to darken.\nDefault - true").define("transcendents_diviner_aod_active",true);
-            TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY=builder.comment("(UNTESTED CONFIG)\nIf Age of Darkness is enabled, sets whether or not the effects are cosmetic only.\nIf false, the changes in light levels can allow hostile mobs to spawn whenever and prevent undead mobs from burning during the day.\nDefault: false").define("transcendents_diviner_aod_cosmetic",false);
+            TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY=builder.comment("If Age of Darkness is enabled, sets whether or not the effects are cosmetic only.\nIf false, the changes in light levels can allow hostile mobs to spawn whenever and prevent undead mobs from burning during the day.\nDefault: false").define("transcendents_diviner_aod_cosmetic",false);
             TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
         builder.pop();
 

@@ -27,7 +27,7 @@ public abstract class LevelLightEngineMixin {
     @ModifyVariable(method="getRawBrightness", at=@At(value = "LOAD"),name = "i")
     private int testModVar(int i, BlockPos p_75832_, int p_75833_){
         final int[] returnVal={i};
-        if (levelHeightAccessor instanceof Level level && Config.divinerAoDCosmetic){
+        if (levelHeightAccessor instanceof Level level && !Config.divinerAoDCosmetic){
             LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
                 int levelState = cap.divinerSunControlVal;

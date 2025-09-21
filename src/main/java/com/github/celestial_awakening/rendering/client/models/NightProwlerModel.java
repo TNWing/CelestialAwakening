@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.rendering.client.models;
 
-import com.github.celestial_awakening.entity.living.NightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.rendering.client.animations.NightProwlerAnimations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -114,11 +114,11 @@ public class NightProwlerModel<T extends Entity>  extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.model.getAllParts().forEach(ModelPart::resetPose);
-		this.animate(((NightProwler)entity).idleAnimationState, NightProwlerAnimations.idle,ageInTicks,1f);
+		this.animate(((ProwlerWhelp)entity).idleAnimationState, NightProwlerAnimations.idle,ageInTicks,1f);
 		this.animateWalk(NightProwlerAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
-		this.animate(((NightProwler)entity).crouchAnimationState, NightProwlerAnimations.crouch,ageInTicks,1f);
-		this.animate(((NightProwler)entity).leapAnimationState,NightProwlerAnimations.leap,ageInTicks,1f);
-		this.animate(((NightProwler)entity).leapRecoveryAnimationState,NightProwlerAnimations.leapEnd,ageInTicks,1f);
+		this.animate(((ProwlerWhelp)entity).crouchAnimationState, NightProwlerAnimations.crouch,ageInTicks,1f);
+		this.animate(((ProwlerWhelp)entity).leapAnimationState,NightProwlerAnimations.leap,ageInTicks,1f);
+		this.animate(((ProwlerWhelp)entity).leapRecoveryAnimationState,NightProwlerAnimations.leapEnd,ageInTicks,1f);
 	}
 
 	@Override

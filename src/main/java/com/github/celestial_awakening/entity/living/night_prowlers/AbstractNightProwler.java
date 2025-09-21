@@ -1,7 +1,11 @@
 package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
+import com.github.celestial_awakening.entity.projectile.CA_Projectile;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.HashMap;
 
 public abstract class AbstractNightProwler extends AbstractCAMonster {
+    private static final EntityDataAccessor<Integer> INFUSE = SynchedEntityData.defineId(AbstractNightProwler.class, EntityDataSerializers.INT);
     protected HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public AABB standardAABB;
 
@@ -23,13 +28,16 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(INFUSE,0);
     }
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        tag.putInt("Infuse",this.entityData.get(INFUSE));
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        this.entityData.set(INFUSE,tag.getInt("Infuse"));
     }
 
     public void travel(Vec3 vec3){
@@ -60,5 +68,9 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     @Override
     public boolean hurt(DamageSource source, float amt){
         return super.hurt(source,amt);
+    }
+
+    public int getInfuse(){
+        return this.entityData.get(INFUSE);
     }
 }

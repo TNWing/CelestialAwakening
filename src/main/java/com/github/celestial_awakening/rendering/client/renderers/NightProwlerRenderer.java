@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.rendering.client.renderers;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.entity.living.NightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.NightProwlerModel;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,12 +20,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 
-public class NightProwlerRenderer<T extends LivingEntity, M extends HierarchicalModel<T>> extends MobRenderer<NightProwler, NightProwlerModel<NightProwler>> {
+public class NightProwlerRenderer<T extends LivingEntity, M extends HierarchicalModel<T>> extends MobRenderer<ProwlerWhelp, NightProwlerModel<ProwlerWhelp>> {
     public NightProwlerRenderer(EntityRendererProvider.Context context) {
         super(context,new NightProwlerModel<>(context.bakeLayer(ModelLayerInit.NIGHT_PROWLER_LAYER)),2);
     }
 
-    public void render(NightProwler entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(ProwlerWhelp entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, M>(entity, (LivingEntityRenderer)this, partialTicks, poseStack, bufferSource, packedLight))) return;
         poseStack.pushPose();
@@ -107,7 +107,7 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
         }
 
         if (!entity.isSpectator()) {
-            for(RenderLayer<NightProwler, NightProwlerModel<NightProwler>> renderlayer : this.layers) {
+            for(RenderLayer<ProwlerWhelp, NightProwlerModel<ProwlerWhelp>> renderlayer : this.layers) {
                 renderlayer.render(poseStack, bufferSource, packedLight, entity, f5, f8, partialTicks, f7, f2, f6);
             }
         }
@@ -122,7 +122,7 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<T, M>(entity,rendererToPass, partialTicks, poseStack, bufferSource, packedLight));
     }
 
-    protected RenderType getRenderType2(NightProwler p_115322_, boolean p_115323_, boolean p_115324_, boolean p_115325_) {
+    protected RenderType getRenderType2(ProwlerWhelp p_115322_, boolean p_115323_, boolean p_115324_, boolean p_115325_) {
         ResourceLocation resourcelocation = this.getTextureLocation(p_115322_);
         if (p_115324_) {
             return RenderType.itemEntityTranslucentCull(resourcelocation);
@@ -134,7 +134,7 @@ public class NightProwlerRenderer<T extends LivingEntity, M extends Hierarchical
     }
 
     @Override
-    public ResourceLocation getTextureLocation(NightProwler p_114482_) {
+    public ResourceLocation getTextureLocation(ProwlerWhelp p_114482_) {
         return CelestialAwakening.createResourceLocation("textures/entity/night_prowler.png");
     }
 }

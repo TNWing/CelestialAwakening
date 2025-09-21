@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.entity.combat.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
-import com.github.celestial_awakening.entity.living.NightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
@@ -33,7 +33,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
     Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob);
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
 
-    public NightProwlerShadowLeap(NightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public NightProwlerShadowLeap(AbstractNightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     @Override
@@ -138,27 +138,47 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 this.mob.teleportTo(teleportPos.x,teleportPos.y,teleportPos.z);
 
                                 this.mob.setCollision(true);
-                                this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
+                                this.mob.setBoundingBox(((AbstractNightProwler) mob).standardAABB);
                                 AABB aabb=new AABB(this.mob.position(),this.mob.position());
                                 aabb=aabb.inflate(1.4f);
                                 this.mob.lookAt(target,30,30);
+                                int infuse=((AbstractNightProwler)this.mob).getInfuse();
                                 LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                                 if (entity!=null){
                                     entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                    if (infuse==-1){
+
+                                    }
+                                    else if (infuse==1){
+
+                                    }
                                     currentStateTimer=1;
                                     this.mob.setDeltaMovement(Vec3.ZERO);
+                                }
+                                if (infuse==-1){
+
+                                }
+                                else if (infuse==1){
+
                                 }
                                 this.mob.setOpacity(1f);
 
                             }
                             else if (currentStateTimer<4){
 
-                                this.mob.setBoundingBox(((NightProwler) mob).standardAABB);
+                                this.mob.setBoundingBox(((AbstractNightProwler) mob).standardAABB);
                                 AABB aabb=new AABB(this.mob.position(),this.mob.position());
                                 aabb=aabb.inflate(aabbInflate);
+                                int infuse=((AbstractNightProwler)this.mob).getInfuse();
                                 LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                                 if (entity!=null){
                                     entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                    if (infuse==-1){
+
+                                    }
+                                    else if (infuse==1){
+
+                                    }
                                     currentStateTimer=1;
                                     this.mob.setDeltaMovement(Vec3.ZERO);
                                 }
@@ -167,9 +187,16 @@ public class NightProwlerShadowLeap extends GenericAbility {
                         else{
                             AABB aabb=new AABB(this.mob.position(),this.mob.position());
                             aabb=aabb.inflate(aabbInflate);
+                            int infuse=((AbstractNightProwler)this.mob).getInfuse();
                             LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
                             if (entity!=null){
-                                boolean b=entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                entity.hurt(this.mob.damageSources().mobAttack(this.mob), dmg);
+                                if (infuse==-1){
+
+                                }
+                                else if (infuse==1){
+
+                                }
                                 this.mob.setDeltaMovement(Vec3.ZERO);
                                 currentStateTimer=1;
                                 this.mob.setOpacity(1f);

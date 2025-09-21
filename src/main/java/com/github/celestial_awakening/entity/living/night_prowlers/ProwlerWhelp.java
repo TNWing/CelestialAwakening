@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.living;
+package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
-public class NightProwler extends AbstractNightProwler {
+public class ProwlerWhelp extends AbstractNightProwler {
 
     static double baseHP=28.0D;
     static double baseDmg=5.0D;
@@ -36,7 +36,7 @@ public class NightProwler extends AbstractNightProwler {
     public final AnimationState leapAnimationState=new AnimationState();
     public final AnimationState leapRecoveryAnimationState=new AnimationState();
 
-    public NightProwler(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+    public ProwlerWhelp(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.standardAABB=this.getBoundingBox();
         actionIDToAnimMap.put(0,idleAnimationState);

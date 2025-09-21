@@ -2,7 +2,7 @@ package com.github.celestial_awakening.entity.combat.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
-import com.github.celestial_awakening.entity.living.NightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import net.minecraft.world.entity.LivingEntity;
 
 public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
@@ -10,7 +10,7 @@ public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
         super(mob);
     }
     NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,15,0,0);
-    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((NightProwler) this.mob,15,70,12,5);
+    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((ProwlerWhelp) this.mob,15,70,12,5);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         basicAttack.decreaseCD(1);

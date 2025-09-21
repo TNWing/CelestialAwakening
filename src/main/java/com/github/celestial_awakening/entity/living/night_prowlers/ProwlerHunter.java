@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.living;
+package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
@@ -17,11 +17,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class EliteNightProwler extends AbstractNightProwler{
-    static double baseHP=28.0D;
-    static double baseDmg=5.0D;
-    static double baseArmor=1D;
-    static double baseTough=1D;
+public class ProwlerHunter extends AbstractNightProwler{
+    static double baseHP=35.0D;
+    static double baseDmg=6.5D;
+    static double baseArmor=4D;
+    static double baseTough=2D;
     //Animation
     //SpawnPlacements
     public final AnimationState idleAnimationState=new AnimationState();
@@ -30,7 +30,7 @@ public class EliteNightProwler extends AbstractNightProwler{
     public final AnimationState leapAnimationState=new AnimationState();
     public final AnimationState leapRecoveryAnimationState=new AnimationState();
 
-    public EliteNightProwler(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+    public ProwlerHunter(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
     }
     public static AttributeSupplier.Builder createAttributes() {

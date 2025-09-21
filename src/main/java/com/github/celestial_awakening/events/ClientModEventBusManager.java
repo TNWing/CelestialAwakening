@@ -25,7 +25,7 @@ public class ClientModEventBusManager {
         EntityRenderers.register(EntityInit.SHINING_ORB.get(), ShiningOrbRenderer::new);
         EntityRenderers.register(EntityInit.LUNAR_CRESCENT.get(), LunarCrescentRenderer::new);
         EntityRenderers.register(EntityInit.ORBITER.get(), OrbiterRenderer::new);
-        EntityRenderers.register(EntityInit.NIGHT_PROWLER.get(), NightProwlerRenderer::new);
+        EntityRenderers.register(EntityInit.NIGHT_PROWLER_WHELP.get(), NightProwlerRenderer::new);
         EntityRenderers.register(EntityInit.CUSTOM_ARROW.get(), CArrowRenderer::new);
 
         EntityRenderers.register(EntityInit.PK_CRESCENCIA.get(), PKCrescenciaRenderer::new);

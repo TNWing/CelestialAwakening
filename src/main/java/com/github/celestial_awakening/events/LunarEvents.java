@@ -8,8 +8,10 @@ import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnigh
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
+import com.github.celestial_awakening.util.CA_Triggers;
 import com.github.celestial_awakening.util.LevelFuncs;
 import com.github.celestial_awakening.util.MathFuncs;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
@@ -94,6 +97,42 @@ public class LunarEvents {
         } else {
             return Objects.equals(new ChunkPos(p_47027_), p_47026_.getPos()) || p_47025_.isNaturalSpawningAllowed(p_47027_);
         }
+    }
+
+    /*
+    a prowler raid triggers every A-B days
+    once a successful chance has been rolled, picks a player to start a raid on.
+    targets must be near surface
+    prefers selecting targets who haven't experienced a raid recently?
+    by default, only 1 raid at a time
+
+     */
+    public void prowlerRaid(ServerLevel level){
+        List<ServerPlayer> serverPlayers=level.players();
+        List<ServerPlayer> validTargets=level.getPlayers(serverPlayer -> {
+            int pY = serverPlayer.getBlockY();
+            int lY = level.getHeight(Heightmap.Types.WORLD_SURFACE, serverPlayer.getBlockX(), serverPlayer.getBlockZ());
+            if (Math.abs(lY - pY) <= 10) {
+                return true;
+            }
+            return false;
+        });
+        if (false){
+            for (ServerPlayer serverPlayer:validTargets) {
+                CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
+            }
+        }
+        else{
+            //List<Pair<ServerPlayer,Integer>>
+            for (int i=0;i<1;i++){
+                ServerPlayer serverPlayer=validTargets.get(level.random.nextInt(validTargets.size()));
+                CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
+                //List<Player> nearbyPlayers=level.getNearbyPlayers(null,null,null);
+                validTargets.remove(serverPlayer);
+            }
+        }
+
+
     }
 
     //MobCategory.MONSTER

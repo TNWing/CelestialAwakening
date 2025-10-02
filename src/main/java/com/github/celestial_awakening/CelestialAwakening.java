@@ -7,6 +7,7 @@ import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomTiers;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.mojang.logging.LogUtils;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -99,6 +100,9 @@ optimize eventmanager later, theres probably  some stuff eating up performance
     {
         ModNetwork.register();
         RecipeInit.registerBrewingRecipes();
+        event.enqueueWork(() -> {
+            CriteriaTriggers.register(null);
+        });
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

@@ -60,7 +60,7 @@ public class SolarEvents {
                 capOptional.ifPresent(cap->{
                     if (validDim(level, Config.transcendentsDimensionTypes)){
                         if (cap.divinerEyeCD>0){
-                            cap.divinerEyeCD--;
+                            cap.divinerEyeCD-=100;
                         }
                         else{
                             Random rand = new Random();

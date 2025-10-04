@@ -32,6 +32,8 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
     protected static final EntityDataAccessor<Byte> ACTION_ID = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Float> OPACITY = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Boolean> HAS_COLLISION = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> HAS_XRAY = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BOOLEAN);
+    //protected static final EntityDataAccessor<Boolean> TARGET_PERSISTANCE = SynchedEntityData.defineId(AbstractCAMonster.class, EntityDataSerializers.BOOLEAN);
 
     protected Integer ACTION_FRAME=0;
     public int animTime;
@@ -44,7 +46,7 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
     public boolean fixedHeadRot;
     public double minRange;
     public double maxRange;
-    public boolean keepDist;//if true, instead of mob moving towards target, target tries to stay at least X blocks away
+    public boolean keepDist;//if true, instead of mob moving towards target, target tries to stay at least X blocks away, not used currently tho
     public float spdMod;
 
     protected static Double maxHealthMult =Config.mobHPScale;
@@ -54,7 +56,6 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
     protected boolean isCombatActive;
     protected int bossBarWindup=0;
     protected int genericAbilityCD;//after using an ability, how long until can use another non-basic ability
-    protected int genericAbilityUseCnt;//# of times can use a non-basic ability before relying on CD
 
     boolean hasSpawned=false;
 
@@ -114,6 +115,7 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
         this.entityData.define(ACTION_ID,(byte)0);
         this.entityData.define(OPACITY,1f);
         this.entityData.define(HAS_COLLISION,true);
+        this.entityData.define(HAS_XRAY,false);
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
@@ -121,11 +123,13 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
         if (tag.contains("HasSpawned")){
             hasSpawned=tag.getBoolean("HasSpawned");
         }
+        setXRay(tag.getBoolean("XRay"));
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("HasSpawned",hasSpawned);
+        tag.putBoolean("XRay",hasXRay());
     }
 
     @Override
@@ -184,6 +188,13 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
     }
     public boolean hasCollision() {
         return this.entityData.get(HAS_COLLISION);
+    }
+    public void setXRay(boolean b){
+        this.entityData.set(HAS_XRAY,b);
+    }
+
+    public boolean hasXRay(){
+        return this.entityData.get(HAS_XRAY);
     }
 
 

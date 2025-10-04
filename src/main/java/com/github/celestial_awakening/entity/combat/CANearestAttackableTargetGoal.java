@@ -1,41 +1,40 @@
 package com.github.celestial_awakening.entity.combat;
 
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.Predicate;
 
-public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> extends CATargetGoal {
-    private static final int DEFAULT_RANDOM_INTERVAL = 10;
-    protected final Set<EntityType<?>> entityTypes;
+public class CANearestAttackableTargetGoal <T extends LivingEntity> extends CATargetGoal {
+    protected final Class<T> targetType;
     protected final int randomInterval;
     @Nullable
     protected LivingEntity target;
     protected TargetingConditions targetConditions;
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26060_,  Set<EntityType<?>>types, boolean p_26062_) {
-        this(p_26060_, types, 10, p_26062_, false, (Predicate<LivingEntity>)null);
+    public CANearestAttackableTargetGoal(Mob p_26060_, Class<T> p_26061_, boolean p_26062_) {
+        this(p_26060_, p_26061_, 10, p_26062_, false, (Predicate<LivingEntity>)null);
     }
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_199891_, Set<EntityType<?>>  p_199892_, boolean p_199893_, Predicate<LivingEntity> p_199894_) {
+    public CANearestAttackableTargetGoal(Mob p_199891_, Class<T> p_199892_, boolean p_199893_, Predicate<LivingEntity> p_199894_) {
         this(p_199891_, p_199892_, 10, p_199893_, false, p_199894_);
     }
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26064_,  Set<EntityType<?>> types, boolean p_26066_, boolean p_26067_) {
-        this(p_26064_, types, 10, p_26066_, p_26067_, (Predicate<LivingEntity>)null);
+    public CANearestAttackableTargetGoal(Mob p_26064_, Class<T> p_26065_, boolean p_26066_, boolean p_26067_) {
+        this(p_26064_, p_26065_, 10, p_26066_, p_26067_, (Predicate<LivingEntity>)null);
     }
 
-    public NearestAttackableTargetOfEntityTypeGoal(Mob p_26053_, Set<EntityType<?>> types, int p_26055_, boolean p_26056_, boolean p_26057_, @Nullable Predicate<LivingEntity> p_26058_) {
+    public CANearestAttackableTargetGoal(Mob p_26053_, Class<T> p_26054_, int p_26055_, boolean p_26056_, boolean p_26057_, @Nullable Predicate<LivingEntity> p_26058_) {
         super(p_26053_, p_26056_, p_26057_);
-        this.entityTypes=types;
+        this.targetType = p_26054_;
         this.randomInterval = reducedTickDelay(p_26055_);
         this.setFlags(EnumSet.of(Goal.Flag.TARGET));
         this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(p_26058_);
@@ -44,8 +43,7 @@ public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> ex
     public boolean canUse() {
         if (this.randomInterval > 0 && this.mob.getRandom().nextInt(this.randomInterval) != 0) {
             return false;
-        }
-        else {
+        } else {
             this.findTarget();
             return this.target != null;
         }
@@ -56,10 +54,14 @@ public class NearestAttackableTargetOfEntityTypeGoal <T extends LivingEntity> ex
     }
 
     protected void findTarget() {
-        Predicate<LivingEntity> pred= o-> entityTypes.contains(o.getType());
-        this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(LivingEntity.class,
-                this.getTargetSearchArea(this.getFollowDistance()), pred),
-                this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+        if (this.targetType != Player.class && this.targetType != ServerPlayer.class) {
+            this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {
+                return true;
+            }), this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+        } else {
+            this.target = this.mob.level().getNearestPlayer(this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+        }
+
     }
 
     public void start() {

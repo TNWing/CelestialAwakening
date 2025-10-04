@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.living.night_prowlers;
 
+import com.github.celestial_awakening.entity.combat.CANearestAttackableTargetGoal;
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import net.minecraft.world.entity.AnimationState;
@@ -88,7 +89,7 @@ public class ProwlerHunter extends AbstractNightProwler{
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(3, new NightProwlerCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new CANearestAttackableTargetGoal<>(this, Player.class, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));

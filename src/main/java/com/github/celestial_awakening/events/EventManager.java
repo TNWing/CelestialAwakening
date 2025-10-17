@@ -180,14 +180,14 @@ public class EventManager {
                 LunarCrescent crescent=null;
                 if (isCrit){
                     if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
-                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),lifeVal,spd,hAng,0,90,1.75f,0.35f,1.75f);
+                        crescent=LunarCrescent.create(serverLevel,(float)event.getDmg(),lifeVal,spd,hAng,0,90,1.75f,0.35f,1.75f);
 
                         cap.changeStrikeCD(cd);
                     }
                 }
                 else{
                     if (cap.getWaveCD()<=0){//performs a sweeping 180-arc wave
-                        crescent=LunarCrescent.create(serverLevel,event.getDmg(),lifeVal,spd,hAng,0,0,1.75f,0.35f,1.75f);
+                        crescent=LunarCrescent.create(serverLevel,(float)event.getDmg(),lifeVal,spd,hAng,0,0,1.75f,0.35f,1.75f);
                         cap.changeWaveCD(cd);
                     }
                 }
@@ -202,7 +202,7 @@ public class EventManager {
                         int sideLife= (int) (lifeVal*0.8f);
                         if (isCrit){
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,sideLife,spd*0.8f,hAng + i*15,0,90,1.25f,0.25f,1.25f);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,(float)event.getDmg()*0.4f,sideLife,spd*0.8f,hAng + i*15,0,90,1.25f,0.25f,1.25f);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());
@@ -213,7 +213,7 @@ public class EventManager {
                         }
                         else{
                             for(int i=-1;i<=1;i+=2){
-                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,event.getDmg()*0.4f,sideLife,spd*0.8f,hAng + i*32,0,0,1.25f,0.25f,1.25f);
+                                LunarCrescent sideCresent=LunarCrescent.create(serverLevel,(float)event.getDmg()*0.4f,sideLife,spd*0.8f,hAng + i*32,0,0,1.25f,0.25f,1.25f);
                                 sideCresent.setPos(event.getSpawnpoint());
                                 sideCresent.setYRot(owner.getYRot());
                                 sideCresent.setOwner(event.getOwner());

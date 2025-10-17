@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.events.armor_events;
 
 import com.github.celestial_awakening.events.DelayedFunctionManager;
-import com.github.celestial_awakening.events.GenericCommandPattern;
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
 import com.github.celestial_awakening.util.CA_UUIDs;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -68,7 +68,7 @@ public class ShadeRobes extends ArmorEffect {
         dmge amount
         location of the einitial damage instance
          */
-        protected boolean execute(){
+        public boolean execute(){
             Player player= (Player) this.params[0];
             float dmg= (float) this.params[1];
             Vec3 prevPos= (Vec3) this.params[2];

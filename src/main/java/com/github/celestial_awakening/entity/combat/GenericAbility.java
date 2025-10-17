@@ -13,7 +13,9 @@ public abstract class GenericAbility {
     protected final int abilityExecuteTime;//time spent using an ability
     protected final int abilityRecoveryTime;//time to recover after using ability
     protected final int abilityCD;
+    protected final int basePriority;
 
+    protected int tempPriority=0;
     protected int currentCD;
     protected String name;
     protected final AbstractCAMonster mob;
@@ -47,8 +49,18 @@ public abstract class GenericAbility {
         this.abilityCD=CD;
         this.currentCD=0;
         this.abilityRecoveryTime=recoveryTime;
+        this.basePriority=1;
     }
-
+    public GenericAbility(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int basePriority){
+        this.mob=mob;
+        this.isInUse=false;
+        this.abilityExecuteTime=executeTime;
+        this.abilityCastTime=castTime;
+        this.abilityCD=CD;
+        this.currentCD=0;
+        this.abilityRecoveryTime=recoveryTime;
+        this.basePriority=basePriority;
+    }
     public void decreaseCD(int i){
         if (!isInUse){
             currentCD=Math.max(currentCD-i,0);

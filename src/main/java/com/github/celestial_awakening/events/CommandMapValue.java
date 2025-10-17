@@ -1,5 +1,7 @@
 package com.github.celestial_awakening.events;
 
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
+
 public class CommandMapValue {
     int ticks;
     GenericCommandPattern pattern;

@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.MoonScytheCapability;
 import com.github.celestial_awakening.capabilities.MoonScytheCapabilityProvider;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
@@ -36,23 +37,24 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 import static net.minecraftforge.common.ToolActions.SWORD_SWEEP;
 
 public class MoonScythe extends Item implements IForgeItem {
-    protected final float attackDamage;
-    protected final float waveDamage;
-    protected final float strikeDamage;
-    protected final float attackSpd;
+    protected double attackDamage;
+    protected double waveDamage;
+    protected double strikeDamage;
+    protected double attackSpd;
     protected final int cd;
-    protected final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    protected Multimap<Attribute, AttributeModifier> defaultModifiers;
     protected int abilityNameColor=0x6D6D6D;
     protected int abilityDescColor=0xd8d7d5;
     float displayCD;
     Ingredient ingredient= Ingredient.of(ItemInit.MOONSTONE.get());
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
-        this.attackDamage=5.5f;
+        this.attackDamage= Config.moonScytheBaseDmg-1;
         this.waveDamage=2.5f;
         this.strikeDamage=4.5f;
         this.attackSpd=-2.8f;
@@ -67,7 +69,7 @@ public class MoonScythe extends Item implements IForgeItem {
     public MoonScythe(Properties p_41383_,float atk,float wave,float strike,float asp,int coolDown) {
         super(p_41383_);
 
-        this.attackDamage=atk;
+        this.attackDamage=Config.moonScytheBaseDmg-1;
         this.waveDamage=wave;
         this.strikeDamage=strike;
         this.attackSpd=asp;
@@ -81,6 +83,33 @@ public class MoonScythe extends Item implements IForgeItem {
     @Override
     public boolean isValidRepairItem(ItemStack p_41402_, ItemStack p_41403_) {
         return ingredient.test(p_41403_) || super.isValidRepairItem(p_41402_, p_41403_);
+    }
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+
+        if (slot == EquipmentSlot.MAINHAND) {
+            ImmutableMultimap.Builder<Attribute,AttributeModifier> builder=ImmutableMultimap.builder();
+            for (Map.Entry<Attribute, AttributeModifier> entry : modifiers.entries()) {
+                Attribute attribute = entry.getKey();
+                AttributeModifier modifier = entry.getValue();
+
+                // skip the vanilla attack damage modifier (same UUID)
+                if (attribute == Attributes.ATTACK_DAMAGE && modifier.getId().equals(BASE_ATTACK_DAMAGE_UUID)) {
+                    continue;
+                }
+                builder.put(attribute, modifier);
+            }
+            double damage = Config.moonScytheBaseDmg; // Fetch from config
+            if (stack.getItem() instanceof MoonlightReaper){
+                damage+=1;
+            }
+            builder.put(Attributes.ATTACK_DAMAGE,
+                    new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", damage-1, AttributeModifier.Operation.ADDITION));
+            return builder.build();
+        }
+
+        return modifiers;
     }
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
@@ -139,7 +168,7 @@ public class MoonScythe extends Item implements IForgeItem {
 
             dir.multiply(1,0,1);//TODO: replace later (maybe)
             float hAng= MathFuncs.getAngFrom2DVec(dir);
-            float dmg=waveDamage;
+            double dmg=waveDamage;
             if (isCrit){
                 dmg=strikeDamage;
             }
@@ -168,7 +197,7 @@ public class MoonScythe extends Item implements IForgeItem {
 
     }
 
-    public float getDamage() {
+    public double getDamage() {
         return this.attackDamage;
     }
 

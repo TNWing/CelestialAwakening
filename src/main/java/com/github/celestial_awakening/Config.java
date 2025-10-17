@@ -59,6 +59,10 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_ATK_SPD_MULT;
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_MINING_SPD_MULT;
 
+    private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_BASE_DMG;
+    private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_STRIKE_DMG;
+    private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_WAVE_DMG;
+
     static{
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -114,6 +118,11 @@ public class Config
                 MIDNIGHT_IRON_DMG_MULT=builder.comment("The damage multiplier midnight iron tools receive at night.\nDefault: 1.15").defineInRange("midnight_iron_dmg_mult",1.15d,1,100);
                 MIDNIGHT_IRON_ATK_SPD_MULT=builder.comment("The attack speed multiplier midnight iron tools receive at night. Lower values means faster attack speed.\nDefault: 0.95").defineInRange("midnight_iron_atk_spd_mult",0.95d,0.1,1);
                 MIDNIGHT_IRON_MINING_SPD_MULT=builder.comment("The mining speed multiplier midnight iron tools receive at night.\nDefault: 1.2").defineInRange("midnight_iron_mining_spd_mult",1.2d,1,100);
+            builder.pop();
+            builder.push("Moon_Scythe&Midnight_Reaper");
+                MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5f").defineInRange("moon_scythe_base_damage",6.5f,0,Double.MAX_VALUE);
+                MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5f").defineInRange("moon_scythe_wave_damage",2.5f,0,Double.MAX_VALUE);
+                MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5f").defineInRange("moon_scythe_strike_damage",4.5f,0,Double.MAX_VALUE);
             builder.pop();
         builder.pop();
         BUILDER=builder;
@@ -183,6 +192,10 @@ public class Config
     public static double midnightIronAtkSpdMult;
     public static double midnightIronMiningSpdMult;
 
+    public static double moonScytheBaseDmg=5.5f;
+    public static double moonScytheWaveDmg;
+    public static double moonScytheStrikeDmg;
+
     public static boolean useVanillaTeams;
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
@@ -247,6 +260,10 @@ public class Config
         midnightIronDmgMult=MIDNIGHT_IRON_DMG_MULT.get();
         midnightIronAtkSpdMult =MIDNIGHT_IRON_ATK_SPD_MULT.get();
         midnightIronMiningSpdMult=MIDNIGHT_IRON_MINING_SPD_MULT.get();
+
+        moonScytheBaseDmg=MOON_SCYTHE_BASE_DMG.get();
+        moonScytheStrikeDmg=MOON_SCYTHE_STRIKE_DMG.get();
+        moonScytheWaveDmg=MOON_SCYTHE_WAVE_DMG.get();
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();

@@ -1,20 +1,13 @@
-package com.github.celestial_awakening.events.CommandPatterns;
-
-import com.github.celestial_awakening.events.GenericCommandPattern;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.levelgen.Heightmap;
-
-import java.util.ArrayList;
+package com.github.celestial_awakening.events.command_patterns;
 
 public class ProwlerRaidCommandPattern extends GenericCommandPattern {
     public ProwlerRaidCommandPattern(Object[] params,int delay) {
         super(params,delay);
     }
 
+
     @Override
-    protected boolean execute() {
+    public boolean execute() {
         /*
         ChunkPos chunkPos=chunkAccess.getPos();
         ArrayList<BlockPos> applicableBlocks=new ArrayList<>();

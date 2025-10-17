@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.events;
+package com.github.celestial_awakening.events.command_patterns;
 
 public abstract class GenericCommandPattern {
     protected Object[] params;
@@ -28,5 +28,5 @@ public abstract class GenericCommandPattern {
         delay=i;
     }
     //abstract protected void execute();
-    abstract protected boolean execute();
+    abstract public boolean execute();
 }

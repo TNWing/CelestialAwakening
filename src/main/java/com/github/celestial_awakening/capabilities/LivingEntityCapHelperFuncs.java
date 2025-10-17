@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.capabilities;
 
-import com.github.celestial_awakening.events.GenericCommandPattern;
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
 
 import java.util.UUID;
 

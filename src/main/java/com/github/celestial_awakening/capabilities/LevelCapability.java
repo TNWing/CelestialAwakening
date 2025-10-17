@@ -2,8 +2,9 @@ package com.github.celestial_awakening.capabilities;
 
 import com.github.celestial_awakening.events.CommandMapValue;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
-import com.github.celestial_awakening.events.GenericCommandPattern;
-import com.github.celestial_awakening.events.UpdateDivinerEyeCommandPattern;
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
+import com.github.celestial_awakening.events.command_patterns.UpdateDivinerEyeCommandPattern;
+import com.github.celestial_awakening.events.raids.CARaids;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.core.BlockPos;
@@ -52,6 +53,7 @@ public class LevelCapability{
     0: eye fully open, pupil in center
     1-8:pupil is in position at edge of eye. Upward dir: 1, clockwise
      */
+    public CARaids raids;
 
 
     public void updateData(LevelCapability data){

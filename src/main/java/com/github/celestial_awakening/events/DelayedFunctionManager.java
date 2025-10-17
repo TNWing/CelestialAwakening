@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events;
 
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -25,7 +26,7 @@ public class DelayedFunctionManager {
         return playerCommandMap;
     }
 
-    public void insertIntoLevelMap(Level level,GenericCommandPattern command, Integer ticks, Boolean bool){
+    public void insertIntoLevelMap(Level level, GenericCommandPattern command, Integer ticks, Boolean bool){
         //prevent modification on client side?
         if (level!=null && !levelCommandMap.containsKey(level)){
             levelCommandMap.put(level,new ArrayList<>());

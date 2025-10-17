@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.events;
+package com.github.celestial_awakening.events.command_patterns;
 
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -27,7 +27,7 @@ public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
 
     //As there is no pause for this, moving from/to opening/closing is instant
     @Override
-    protected boolean execute() {;
+    public boolean execute() {;
         LevelCapability cap= (LevelCapability) params[0];
         ResourceKey<Level > dimID= (ResourceKey<Level>) params[1];
         cap.divinerEyeTimer-=cap.divinerEyeCurrentChangeDelay;//change delay is how much time has passed since the last change

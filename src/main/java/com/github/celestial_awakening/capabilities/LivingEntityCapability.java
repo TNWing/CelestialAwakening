@@ -2,7 +2,7 @@ package com.github.celestial_awakening.capabilities;
 
 import com.github.celestial_awakening.events.CommandMapValue;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
-import com.github.celestial_awakening.events.GenericCommandPattern;
+import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;

@@ -52,7 +52,7 @@ public class MoonlightReaper extends MoonScythe {
 
             dir.multiply(1,0,1);//TODO: replace later (maybe)
             float hAng= MathFuncs.getAngFrom2DVec(dir);
-            float dmg=waveDamage;
+            double dmg=waveDamage;
             if (isCrit){
                 dmg=strikeDamage;
             }

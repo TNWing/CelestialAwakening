@@ -101,7 +101,7 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         ModNetwork.register();
         RecipeInit.registerBrewingRecipes();
         event.enqueueWork(() -> {
-            CriteriaTriggers.register(null);
+            //CriteriaTriggers.register(null);
         });
     }
 

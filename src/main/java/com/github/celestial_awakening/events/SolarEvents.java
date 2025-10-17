@@ -6,6 +6,7 @@ import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import com.github.celestial_awakening.effects.CelestialBeaconMobEffectInstance;
+import com.github.celestial_awakening.events.command_patterns.UpdateDivinerEyeCommandPattern;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.networking.ModNetwork;

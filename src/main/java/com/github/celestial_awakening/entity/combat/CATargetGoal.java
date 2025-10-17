@@ -47,7 +47,7 @@ public abstract class CATargetGoal extends TargetGoal {
                 if (this.mob.distanceToSqr(livingentity) > d0 * d0) {
                     return false;
                 } else {
-                    if (this.mustSee || !((AbstractCAMonster)mob).hasXRay() ) {
+                    if (this.mustSee && !((AbstractCAMonster)mob).hasXRay() ) {
 
                         if (this.mob.getSensing().hasLineOfSight(livingentity)) {
                             this.unseenCATicks = 0;

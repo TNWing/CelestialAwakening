@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.items;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.MoonScytheCapability;
 import com.github.celestial_awakening.capabilities.MoonScytheCapabilityProvider;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class MoonlightReaper extends MoonScythe {
     public MoonlightReaper(Properties p_41383_) {
-        super(p_41383_,6.5f,3.5f,5.5f,-2.7f,90);
+        super(p_41383_, 90);
     }
 
     @Override
@@ -52,9 +53,9 @@ public class MoonlightReaper extends MoonScythe {
 
             dir.multiply(1,0,1);//TODO: replace later (maybe)
             float hAng= MathFuncs.getAngFrom2DVec(dir);
-            double dmg=waveDamage;
+            double dmg=Config.midnightReaperWaveDmg;
             if (isCrit){
-                dmg=strikeDamage;
+                dmg=Config.midnightReaperStrikeDmg;
             }
             if (isFullyCharged){
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd,true));

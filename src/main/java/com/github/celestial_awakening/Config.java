@@ -60,8 +60,14 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_IRON_MINING_SPD_MULT;
 
     private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_BASE_DMG;
+    private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_BASE_SPD;
     private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_STRIKE_DMG;
     private static final ForgeConfigSpec.DoubleValue MOON_SCYTHE_WAVE_DMG;
+
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_BASE_DMG;
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_BASE_SPD;
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_STRIKE_DMG;
+    private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_WAVE_DMG;
 
     static{
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -121,8 +127,15 @@ public class Config
             builder.pop();
             builder.push("Moon_Scythe&Midnight_Reaper");
                 MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5f").defineInRange("moon_scythe_base_damage",6.5f,0,Double.MAX_VALUE);
+                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nLower values equals faster attack speed.\nDefault: -2.8f").defineInRange("moon_scythe_base_spd",-2.8F,-Double.MAX_VALUE,Double.MAX_VALUE);
                 MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5f").defineInRange("moon_scythe_wave_damage",2.5f,0,Double.MAX_VALUE);
                 MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5f").defineInRange("moon_scythe_strike_damage",4.5f,0,Double.MAX_VALUE);
+
+                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.5f").defineInRange("midnight_reaper_base_damage",7.5f,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nLower values equals faster attack speed.\nDefault: -2.7f").defineInRange("midnight_reaper_base_spd",-2.7f,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5f").defineInRange("moon_scythe_wave_damage",3.5f,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5f").defineInRange("moon_scythe_strike_damage",5.5f,0,Double.MAX_VALUE);
+
             builder.pop();
         builder.pop();
         BUILDER=builder;
@@ -192,9 +205,15 @@ public class Config
     public static double midnightIronAtkSpdMult;
     public static double midnightIronMiningSpdMult;
 
-    public static double moonScytheBaseDmg=5.5f;
+    public static double moonScytheBaseDmg=6.5f;
+    public static double moonScytheBaseSpd=-2.8f;
     public static double moonScytheWaveDmg;
     public static double moonScytheStrikeDmg;
+
+    public static double midnightReaperBaseDmg=7.5f;
+    public static double midnightReaperBaseSpd=-2.7f;;
+    public static double midnightReaperWaveDmg;
+    public static double midnightReaperStrikeDmg;
 
     public static boolean useVanillaTeams;
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
@@ -262,8 +281,14 @@ public class Config
         midnightIronMiningSpdMult=MIDNIGHT_IRON_MINING_SPD_MULT.get();
 
         moonScytheBaseDmg=MOON_SCYTHE_BASE_DMG.get();
+        moonScytheBaseSpd=MOON_SCYTHE_BASE_SPD.get();
         moonScytheStrikeDmg=MOON_SCYTHE_STRIKE_DMG.get();
         moonScytheWaveDmg=MOON_SCYTHE_WAVE_DMG.get();
+
+        midnightReaperBaseDmg=MIDNIGHT_REAPER_BASE_DMG.get();
+        midnightReaperBaseSpd=MIDNIGHT_REAPER_BASE_SPD.get();
+        midnightReaperStrikeDmg=MIDNIGHT_REAPER_STRIKE_DMG.get();
+        midnightReaperWaveDmg=MIDNIGHT_REAPER_WAVE_DMG.get();
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();

@@ -33,15 +33,8 @@ public class LivingEntityCapability {
     anytime a CD is added, it adds a string for the associated CD and the CD amt to the capability (IF NEEDED, can also just add it when a player logs or smth)
 
      */
-
-    short insanityPts;
     short navigauge;//used for diviner
-    public void setInsanityValue(short i){
-        insanityPts=i;
-    }
-    public void changeInsanityVal(short i){
-        insanityPts+=i;
-    }
+
     public void changeNaviGauge(short i){
         navigauge= (short) Math.max(0,Math.min(navigauge+i,(short)100));
     }
@@ -83,7 +76,6 @@ public class LivingEntityCapability {
             abilities.add(compoundTag);
         }
         nbt.put(leCap_abilities,abilities);
-        nbt.putShort(leCap_insanity,insanityPts);
         return nbt;
     }
 
@@ -129,7 +121,6 @@ public class LivingEntityCapability {
         }
         nbt.put(leCap_abilities,abilities);
         nbt.putShort(leCap_navigauge,navigauge);
-        nbt.putShort(leCap_insanity,insanityPts);
 
     }
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -163,7 +154,6 @@ public class LivingEntityCapability {
             }
         }
         navigauge=nbt.getShort(leCap_navigauge);
-        insanityPts=nbt.getShort(leCap_insanity);
     }
 
     public void insertIntoAbilityMap(String abilityName, Integer cd){
@@ -232,13 +222,11 @@ public class LivingEntityCapability {
     public void copy(LivingEntityCapability data){
         this.abilityDataMap=data.abilityDataMap;
         this.navigauge=data.navigauge;
-        this.insanityPts=data.insanityPts;
     }
 
     public void copyForRespawn(LivingEntityCapability data){
         //this.abilityDataMap=data.abilityDataMap;
         this.abilityDataMap=new ConcurrentHashMap<>();
         this.navigauge=data.navigauge;
-        this.insanityPts=data.insanityPts;
     }
 }

@@ -1,11 +1,6 @@
 package com.github.celestial_awakening.events.raids;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
-
-import java.util.UUID;
 
 public class AbstractCARaid {
     public int getRaidID() {
@@ -16,12 +11,12 @@ public class AbstractCARaid {
         this.raidID = raidID;
     }
 
-    public int getRaidLvl() {
-        return raidLvl;
+    public int getRaidStrength() {
+        return raidStrength;
     }
 
-    public void setRaidLvl(int raidLvl) {
-        this.raidLvl = raidLvl;
+    public void setRaidStrength(int raidStrength) {
+        this.raidStrength = raidStrength;
     }
 
     public ServerLevel getServerLevel() {
@@ -33,7 +28,7 @@ public class AbstractCARaid {
     }
 
     private ServerLevel serverLevel;
-    private int raidLvl;
+    private int raidStrength;
     private int raidID;
 /*
     public CompoundTag save(CompoundTag p_37748_) {

@@ -11,17 +11,14 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LivingEntityCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<LivingEntityCapability> capability = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    private LivingEntityCapability data =null;
-    private final LazyOptional<LivingEntityCapability> optional=LazyOptional.of(this::createPlayerCap);
-    public LivingEntityCapabilityProvider(){
-    }
-    private LivingEntityCapability createPlayerCap(){
+    public static Capability<PlayerCapability> capability = CapabilityManager.get(new CapabilityToken<>() {});
+    private PlayerCapability data=null;
+    private final LazyOptional<PlayerCapability> optional=LazyOptional.of(this::createPlayerCap);
+    private PlayerCapability createPlayerCap(){
         if (this.data ==null){
-            this.data =new LivingEntityCapability();
+            this.data =new PlayerCapability();
         }
         return this.data;
     }
@@ -42,6 +39,6 @@ public class LivingEntityCapabilityProvider implements ICapabilityProvider, INBT
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerCap().loadNBTData(nbt,true);
+        createPlayerCap().loadNBTData(nbt);
     }
 }

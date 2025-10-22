@@ -1,20 +1,25 @@
 package com.github.celestial_awakening.items;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.Util;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraftforge.common.extensions.IForgeItem;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class CustomArmorItem extends ArmorItem {
+public class CustomArmorItem extends ArmorItem implements IForgeItem {
     private static final EnumMap<Type, UUID> ARMOR_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
         p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"));
         p_266744_.put(ArmorItem.Type.LEGGINGS, UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"));
@@ -57,5 +62,30 @@ public class CustomArmorItem extends ArmorItem {
 
     public float getSpdBoost() {
         return ((CustomArmorMaterial)this.material).getSpdBoost();
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+        if (slot==this.getType().getSlot()){
+            UUID uuid=ARMOR_MODIFIER_UUID_PER_TYPE.get(this.getType());
+            ImmutableMultimap.Builder<Attribute,AttributeModifier> builder=ImmutableMultimap.builder();
+            for (Map.Entry<Attribute, AttributeModifier> entry : modifiers.entries()) {
+                Attribute attribute = entry.getKey();
+                AttributeModifier modifier = entry.getValue();
+/*
+                if ((attribute == Attributes.ARMOR && modifier.getId().equals(BASE_ATTACK_DAMAGE_UUID)) ||
+                        (attribute==Attributes.ARMOR_TOUGHNESS && modifier.getId().equals(BASE_ATTACK_SPEED_UUID))) {
+                    continue;
+                }
+
+ */
+
+
+                builder.put(attribute, modifier);
+            }
+            return builder.build();
+        }
+        return modifiers;
     }
 }

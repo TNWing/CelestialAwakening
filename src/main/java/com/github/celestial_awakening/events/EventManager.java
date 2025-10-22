@@ -147,8 +147,8 @@ public class EventManager {
     public static void onPlayerClone(PlayerEvent.Clone event){
         if (event.isWasDeath()){//Saves any necessary capability data
             event.getOriginal().reviveCaps();
-            event.getOriginal().getCapability(LivingEntityCapabilityProvider.livingEntityCapability).ifPresent(
-                    oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.livingEntityCapability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
+            event.getOriginal().getCapability(LivingEntityCapabilityProvider.capability).ifPresent(
+                    oldStore->event.getEntity().getCapability(LivingEntityCapabilityProvider.capability).ifPresent(newStore->newStore.copyForRespawn(oldStore)));
             event.getOriginal().invalidateCaps();
         }
 
@@ -411,7 +411,7 @@ public class EventManager {
     public static void onLivingConversionPre(LivingConversionEvent.Pre event){
         LivingEntity entity= event.getEntity();
         if (!entity.level().isClientSide){
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.capability);
             capOptional.ifPresent(cap->{
                 UUID[] data= (UUID[]) cap.getAbilityData(KnightmareSuit.honorDuel);
                 if (data!=null){
@@ -432,13 +432,13 @@ public class EventManager {
             UUID outcomeUUID=outcome.getUUID();
             if (conversionDataStorage.containsKey(originalUUID)){
                 UUID[] dataUUIDs=conversionDataStorage.get(originalUUID);
-                @NotNull LazyOptional<LivingEntityCapability> outcomeCapOptional=outcome.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+                @NotNull LazyOptional<LivingEntityCapability> outcomeCapOptional=outcome.getCapability(LivingEntityCapabilityProvider.capability);
                 outcomeCapOptional.ifPresent(cap->{
                     cap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,dataUUIDs);
                 });
                 UUID otherUUID=dataUUIDs[0];//this will always be the other entity in the duel
                 LivingEntity otherEntity= (LivingEntity) level.getEntity(otherUUID);
-                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=otherEntity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=otherEntity.getCapability(LivingEntityCapabilityProvider.capability);
                 otherCapOptional.ifPresent(cap->{
                     cap.insertIntoAbilityMap(KnightmareSuit.honorDuel,-10,new Object[]{outcomeUUID,dataUUIDs[1]});
                 });
@@ -496,8 +496,9 @@ public class EventManager {
         Entity causingEntity=event.getSource().getEntity();
         LivingEntity target=event.getEntity();
         if (!target.level().isClientSide && causingEntity!=null){
-            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional= target.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
-            @NotNull LazyOptional<LivingEntityCapability> attackerCapOptional= causingEntity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> targetCapOptional= target.getCapability(LivingEntityCapabilityProvider.capability);
+            @NotNull LazyOptional<LivingEntityCapability> attackerCapOptional= causingEntity.getCapability(LivingEntityCapabilityProvider.capability);
+            LazyOptional<PlayerCapability> playerCapOptional=target.getCapability(PlayerCapabilityProvider.capability);
             if (target instanceof Player){
                 Player player=(Player) target;
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
@@ -511,7 +512,7 @@ public class EventManager {
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
-                            targetCapOptional.ifPresent(cap->{
+                            playerCapOptional.ifPresent(cap->{
                                 cap.changeInsanityVal((short) 10);
                             });
                         }
@@ -558,7 +559,7 @@ public class EventManager {
         LivingEntity deadEntity=event.getEntity();
         if (!deadEntity.level().isClientSide){
             ServerLevel level= (ServerLevel) deadEntity.level();
-            @NotNull LazyOptional<LivingEntityCapability> deadEntityCapOptional=deadEntity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> deadEntityCapOptional=deadEntity.getCapability(LivingEntityCapabilityProvider.capability);
             deadEntityCapOptional.ifPresent(deadEntityCap->{
                 Object[] honorDuelData=deadEntityCap.getAbilityData(KnightmareSuit.honorDuel);
                 UUID deadID=deadEntity.getUUID();
@@ -567,13 +568,13 @@ public class EventManager {
                     UUID id2= (UUID) honorDuelData[1];
                     if (id2.equals(deadID)){//source of duel died
                         if (level.getEntity(id1)!=null){
-                            level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.livingEntityCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                            level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.capability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
                         }
                     }
                     else{//target of duel died
                         Entity duelSource=level.getEntity(id2);
                         if (duelSource!=null){
-                            duelSource.getCapability(LivingEntityCapabilityProvider.livingEntityCapability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
+                            duelSource.getCapability(LivingEntityCapabilityProvider.capability).ifPresent(cap->cap.removeFromAbilityMap(KnightmareSuit.honorDuel));
                         }
                     }
                 }
@@ -610,13 +611,13 @@ public class EventManager {
         }
         ServerLevel level= (ServerLevel) event.getLevel();
         LivingEntity entity = (LivingEntity) event.getEntity();
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             if (cap.hasAbility(KnightmareSuit.honorDuel)){//Needs to remove honor duel
                 Object[] honorDuelData=cap.getAbilityData(KnightmareSuit.honorDuel);
                 UUID id1= (UUID) honorDuelData[0];
 
-                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.capability);
                 otherCapOptional.ifPresent(otherCap->{
                     if (otherCap.hasAbility(KnightmareSuit.honorDuel) && otherCap.getAbilityData(KnightmareSuit.honorDuel)[0]==entity.getUUID()){
                         otherCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
@@ -727,7 +728,7 @@ public class EventManager {
     public static void onLivingTick(LivingEvent.LivingTickEvent event){
         LivingEntity entity=event.getEntity();
         if (entity.tickCount%100==0){
-            LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.capability);
             optional.ifPresent(cap->{
                 cap.changeNaviGauge((short) -1);
             });
@@ -746,7 +747,7 @@ public class EventManager {
                     entry.getValue().onPlayerTick(event, player, cnt);
                 }
             }
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
             ServerLevel level= (ServerLevel) player.level();
             capOptional.ifPresent(cap->{
                 cap.tickAbilityMap();
@@ -758,7 +759,7 @@ public class EventManager {
                         if (target==null || target.distanceTo(player)> Config.honorDuelDist){
                             cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
                             if (target!=null){
-                                @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+                                @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.capability);
                                 targetCapOptional.ifPresent(targetCap->{
                                     if (targetCap.hasAbility(KnightmareSuit.honorDuel)){
                                         Object[] targetData=targetCap.getAbilityData(KnightmareSuit.honorDuel);

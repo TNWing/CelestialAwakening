@@ -110,7 +110,7 @@ public class RemnantArmor extends ArmorEffect {
     }
 
     public void finalLight(Player player,float amt){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityFLCD)==null&& player.getHealth()-amt<=0.2f*player.getMaxHealth()){
                 player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,5,1));
@@ -122,7 +122,7 @@ public class RemnantArmor extends ArmorEffect {
     }
 
     public void collapse(LivingHurtEvent event,Player player){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityCollapse) ==null && event.getSource().getEntity()==player){//off CD
 

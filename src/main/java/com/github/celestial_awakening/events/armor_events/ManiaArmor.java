@@ -30,7 +30,7 @@ public class ManiaArmor extends ArmorEffect {
 
     }
     private void frenzy(Player player,Event event){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
 
         });
@@ -38,7 +38,7 @@ public class ManiaArmor extends ArmorEffect {
 
     private void hysteria(Player player, LivingDamageEvent event){
         if (event.getEntity()==player){
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
             capOptional.ifPresent(cap->{
 
             });

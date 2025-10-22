@@ -125,7 +125,7 @@ public class EverlightArmor extends ArmorEffect{
     }
 
     private void photonCycle(Player player){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             if (cap.getAbilityCD(abilityPhotonCycle)==null){
                 AABB aabb=player.getBoundingBox();

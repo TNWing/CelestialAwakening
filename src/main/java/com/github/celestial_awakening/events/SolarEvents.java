@@ -148,7 +148,7 @@ public class SolarEvents {
                 BlockPos entityBlockPos=entity.blockPosition();
                 if(level.canSeeSky(entityBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
                     //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
-                    LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+                    LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.capability);
                     //TODO: test this
                     optional.ifPresent(cap->{
                         int amp=0;

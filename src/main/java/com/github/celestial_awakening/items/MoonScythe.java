@@ -87,21 +87,18 @@ public class MoonScythe extends Item implements IForgeItem {
             for (Map.Entry<Attribute, AttributeModifier> entry : modifiers.entries()) {
                 Attribute attribute = entry.getKey();
                 AttributeModifier modifier = entry.getValue();
-
-                // skip the vanilla attack damage modifier (same UUID)
                 if ((attribute == Attributes.ATTACK_DAMAGE && modifier.getId().equals(BASE_ATTACK_DAMAGE_UUID)) ||
                         (attribute==Attributes.ATTACK_SPEED && modifier.getId().equals(BASE_ATTACK_SPEED_UUID))) {
                     continue;
                 }
                 builder.put(attribute, modifier);
             }
-            double damage = Config.moonScytheBaseDmg; // Fetch from config
+            double damage = Config.moonScytheBaseDmg;
             double atkSpd=Config.moonScytheBaseSpd;
             if (stack.getItem() instanceof MoonlightReaper){
                 damage=Config.midnightReaperBaseDmg;
                 atkSpd=Config.midnightReaperBaseSpd;
             }
-            System.out.println(this.getClass() + "    spd   " + atkSpd);
             builder.put(Attributes.ATTACK_DAMAGE,
                     new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", damage-1, AttributeModifier.Operation.ADDITION));
             builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", atkSpd, AttributeModifier.Operation.ADDITION));

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientPlayerData {
     public static void setData(LivingEntityCapability newData){
-        @NotNull LazyOptional<LivingEntityCapability> capOptional= Minecraft.getInstance().player.getCapability(LivingEntityCapabilityProvider.livingEntityCapability);
+        @NotNull LazyOptional<LivingEntityCapability> capOptional= Minecraft.getInstance().player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             cap.updateData(newData);
         });

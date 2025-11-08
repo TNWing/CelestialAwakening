@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events.raids;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 
 public class AbstractCARaid {
@@ -30,6 +31,11 @@ public class AbstractCARaid {
     private ServerLevel serverLevel;
     private int raidStrength;
     private int raidID;
+    public CompoundTag save(CompoundTag tag) {
+        tag.putInt("Id",this.getRaidID());
+        tag.putInt("Strength",this.getRaidStrength());
+        return tag;
+    }
 /*
     public CompoundTag save(CompoundTag p_37748_) {
         /*

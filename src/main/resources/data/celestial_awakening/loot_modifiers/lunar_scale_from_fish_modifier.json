@@ -1,0 +1,8 @@
+{
+  "type": "celestial_awakening:moonstone_fishing",
+  "conditions": [
+  ],
+  "prop1": "val1",
+  "prop2": 10,
+  "prop3": "minecraft:dirt"
+}

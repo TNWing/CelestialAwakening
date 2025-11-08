@@ -206,7 +206,7 @@
   "tooltip.celestial_awakening.shade_robes.range_name": "Expanding Darkness",
   "tooltip.celestial_awakening.shade_robes.range_desc": "Increases attack range by %s",
   "tooltip.celestial_awakening.shade_robes.fade_name": "Fade",
-  "tooltip.celestial_awakening.shade_robes.fade_desc":"Each instance of damage taken is delayed by 5 seconds.\nWhen an instance of damage is dealt, the amount is reduced based on how far the wearer is from when they were hit.\n",
+  "tooltip.celestial_awakening.shade_robes.fade_desc":"Each instance of damage taken is delayed by 5 seconds.\nWhen an instance of damage is dealt, the amount is reduced based on how far the wearer is from when they were hit.",
   "tooltip.celestial_awakening.shade_robes.strike_name": "Shadow Strike",
   "tooltip.celestial_awakening.shade_robes.strike_desc":"Increases damage dealt based on distance from the target.",
 

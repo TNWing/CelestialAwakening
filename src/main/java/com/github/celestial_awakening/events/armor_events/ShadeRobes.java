@@ -3,6 +3,8 @@ package com.github.celestial_awakening.events.armor_events;
 import com.github.celestial_awakening.events.DelayedFunctionManager;
 import com.github.celestial_awakening.events.command_patterns.GenericCommandPattern;
 import com.github.celestial_awakening.util.CA_UUIDs;
+import com.github.celestial_awakening.util.ToolTipBuilder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -11,6 +13,9 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShadeRobes extends ArmorEffect {
 
@@ -45,18 +50,61 @@ public class ShadeRobes extends ArmorEffect {
         }
     }
 
-    @Override
-    public void onItemTooltipEvent(ItemTooltipEvent event, int cnt) {
+    /*
+  "tooltip.celestial_awakening.shade_robes.range_name": "Expanding Darkness",
+"tooltip.celestial_awakening.shade_robes.range_desc": "Increases attack range by %s",
+"tooltip.celestial_awakening.shade_robes.fade_name": "Fade",
+"tooltip.celestial_awakening.shade_robes.fade_desc":"Each instance of damage taken is delayed by 5 seconds.\nWhen an instance of damage is dealt, the amount is reduced based on how far the wearer is from when they were hit.\n",
+"tooltip.celestial_awakening.shade_robes.strike_name": "Shadow Strike",
+"tooltip.celestial_awakening.shade_robes.strike_desc":"Increases damage dealt based on distance from the target.",
 
-    }
+ */
+    int boldColor=0xC0c0c0;
+    int infoColor=0xC3c3c3;
+    public static final String STRIKE_NAME = "tooltip.celestial_awakening.shade_robes.strike_name";
+    public static final String STRIKE_DESC = "tooltip.celestial_awakening.shade_robes.strike_desc";
+    public static final String FADE_NAME = "tooltip.celestial_awakening.shade_robes.fade_name";
+    public static final String FADE_DESC = "tooltip.celestial_awakening.shade_robes.fade_desc";
+    public static final String ED_NAME = "tooltip.celestial_awakening.shade_robes.range_name";
+    public static final String ED_DESC = "tooltip.celestial_awakening.shade_robes.range_desc";
     @Override
     void effectNames(ItemTooltipEvent event, int cnt) {
-
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
+        ToolTipBuilder.addShiftInfo(event);
+        ToolTipBuilder.addFullSetName(event, FADE_NAME,boldColor);
+        ToolTipBuilder.addFullSetName(event, STRIKE_NAME,boldColor);
+        ToolTipBuilder.addPieceBonusName(event, ED_NAME,boldColor);
+        event.getToolTip().addAll(savedToolTip);
     }
 
     @Override
     void longDesc(ItemTooltipEvent event, int cnt) {
-
+        List<Component> savedToolTip=new ArrayList<>();
+        Component name=null;
+        for (Component c:event.getToolTip()){
+            if (c.getString().equals(event.getItemStack().getHoverName().getString())){
+                name=c;
+                continue;
+            }
+            savedToolTip.add(c.copy());
+        }
+        event.getToolTip().clear();
+        event.getToolTip().add(name);
+        ToolTipBuilder.addFullArmorSetComponent(event, FADE_NAME,boldColor, FADE_DESC,infoColor);
+        ToolTipBuilder.addFullArmorSetComponent(event, STRIKE_NAME,boldColor, STRIKE_DESC,infoColor);
+        float rangeIncrease= (float) (0.1f*Math.pow(2,cnt-1));
+        ToolTipBuilder.addArmorPieceComponent(event, ED_NAME,boldColor, ED_DESC,new Object[]{rangeIncrease},infoColor);
+        event.getToolTip().addAll(savedToolTip);
     }
     class FadeMitigationCommandPattern extends GenericCommandPattern {//might replace this and just put it into abilityMap
         public FadeMitigationCommandPattern(Object[] params) {

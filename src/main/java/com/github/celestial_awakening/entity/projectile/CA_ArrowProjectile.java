@@ -3,12 +3,17 @@ package com.github.celestial_awakening.entity.projectile;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.CA_Entity;
+import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -27,6 +32,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
+    private static final EntityDataAccessor<Integer> ARROW_TYPE = SynchedEntityData.defineId(CA_ArrowProjectile.class, EntityDataSerializers.INT);
+
     AlertInterface alertInterface;
     ArrowType type;
     ParticleOptions particleOptions;
@@ -37,6 +44,20 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
     }
     public CA_ArrowProjectile(Level p_36866_, LivingEntity p_36867_) {
         super(EntityInit.CUSTOM_ARROW.get(), p_36867_, p_36866_);
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ARROW_TYPE,0);
+    }
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(ARROW_TYPE,tag.getInt("AType"));
+
+    }
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("AType",this.entityData.get(ARROW_TYPE));
     }
 
 
@@ -52,6 +73,9 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
             case LUNAR -> {
                 entity.particleOptions =ParticleTypes.CRIT;
                 entity.setBaseDamage(1.8f);
+            }
+            case SINGULARITY -> {
+                entity.particleOptions=ParticleTypes.END_ROD;
             }
         }
         return entity;
@@ -75,11 +99,25 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
         return new ItemStack(Items.ARROW);
     }
 
+    public ParticleOptions getParticleOptionsFromType(ArrowType at){
+        switch (at){
+            case LUNAR -> {
+                return ParticleTypes.CRIT;
+            }
+            case SOLAR -> {
+                return ParticleTypes.FLAME;
+            }
+            case SINGULARITY -> {
+                return ParticleTypes.END_ROD;
+            }
+        }
+        return null;
+    }
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
             if(!this.inGround && !hasHitBlock){
-                this.level().addParticle(particleOptions, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(getParticleOptionsFromType(ArrowType.values()[this.entityData.get(ARROW_TYPE)]), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
             }
 
         }
@@ -104,10 +142,11 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
 
         if (type==ArrowType.LUNAR){
             Vec3 dir=this.getDeltaMovement().normalize();
-            //dir=new Vec3(dir.x,0,dir.z);
+            dir=new Vec3(dir.x,0,dir.z);
             Vec3 targetPos=hitResult.getEntity().getBoundingBox().getCenter();
             targetPos=this.position();
-            AABB aabb=new AABB(targetPos,targetPos.add(dir.scale(3)));
+            AABB aabb=new AABB(targetPos.subtract(0,1,0),targetPos.add(dir.scale(5)).add(0,1,0));
+
             //hitResult.getEntity().position()
             Predicate p=null;
             if (this.getOwner() instanceof LivingEntity){

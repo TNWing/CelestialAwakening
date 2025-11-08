@@ -1,5 +1,6 @@
 package com.github.celestial_awakening;
 
+import com.github.celestial_awakening.events.raids.ProwlerRaid;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -68,6 +69,19 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_BASE_SPD;
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_STRIKE_DMG;
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_WAVE_DMG;
+
+/*
+maybe use json files instead since it'll look neater?
+ */
+    private static final ForgeConfigSpec.ConfigValue<List<Integer>> WHELP_WAVE1_VALS=null;
+    private static final ForgeConfigSpec.ConfigValue<Integer[]> WHELP_WAVE2_VALS=null;
+    /*
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> WHELP_WAVE2_VALS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> WHELP_WAVE3_VALS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> WHELP_WAVE4_VALS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> WHELP_WAVE5_VALS;
+
+     */
 
     static{
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -216,6 +230,10 @@ public class Config
     public static double midnightReaperStrikeDmg;
 
     public static boolean useVanillaTeams;
+
+    public static List<Integer> whelpWave1Vals;
+
+
     static Set<ResourceKey<DimensionType>> strToDimTypeKey(List<? extends String> list){
         return list.stream()
                 .map(obj-> ResourceKey.create(Registries.DIMENSION_TYPE,new ResourceLocation(obj)))
@@ -300,12 +318,23 @@ public class Config
         armorToughnessScale=ARMOR_T_SCALE.get();
 
          */
-        refreshMobAttributes();
+        /*
+        only update the
+         */
+        /*
+        if (WHELP_WAVE1_VALS.get().size()==5){
+            whelpWave1Vals= WHELP_WAVE1_VALS.get();
+        }
 
+         */
+        refreshMobAttributes();
+        ProwlerRaid.initProwlerRaidData();
     }
 
     public static void refreshMobAttributes(){
         //Asteron.updateAttributesFromConfig();
         //System.out.println("new HP SCALE IS " + mobHPScale);
     }
+
+
 }

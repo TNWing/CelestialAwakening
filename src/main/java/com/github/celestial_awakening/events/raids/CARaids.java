@@ -18,8 +18,8 @@ public class CARaids {
 
     }
 
-    public ProwlerRaid getProwlerRaid(){
-        return null;
+    public ProwlerRaid getProwlerRaidFromID(int id){
+        return prowlerRaids.get(id);
     }
 
     public ProwlerRaid getOrCreateProwlerRaid(LevelCapability cap, BlockPos pos){

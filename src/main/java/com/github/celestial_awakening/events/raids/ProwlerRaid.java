@@ -1,5 +1,10 @@
 package com.github.celestial_awakening.events.raids;
 
+import com.github.celestial_awakening.capabilities.PlayerCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
+import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
+import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -8,13 +13,18 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.IExtensibleEnum;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProwlerRaid extends AbstractCARaid{
     public BlockPos getCenterPos() {
@@ -39,7 +49,96 @@ public class ProwlerRaid extends AbstractCARaid{
 
     private int warningTriggerTime;
 
+    private List<AbstractNightProwler> prowlers=new ArrayList<>();
+
     private int delayTicks=60;
+
+    private int currentWave=1;
+
+
+    /*
+strength determines possible units to spawn, each unit also has a var called Reps
+wave # determines the # of units & max unit value
+
+ex:
+base prowler has unit val of 5
+w/ infusement, it gains +4 val
+
+to determine what units to spawn, rolls for unit that has most base val first
+then, perform rolls to determine infusement
+afterwords, repeats with next unit with highest base val
+
+so if we got Hunter,Whelp. Hunter has 1 rep, whelp has 2 rep
+adds Hunter to spawn group, rolls to set infusement, then adds whelp if it fits, rolls to set infusement.
+Adds another whelp if theres space, roll infusement. loop back to hunter.
+when it loops, adds an additional roll to determine if the unit is added to group (in order to reduce likelyhood of excess elites)
+
+     */
+/*
+make this a separate class and init the values based on config vals later down the line
+ */
+    public enum ProwlerType{
+        WHELP(EntityInit.NIGHT_PROWLER_WHELP.get());
+        /*
+        should include
+        -entity type
+        -hashmap that maps wave val to the following (Prowler Vals)
+            -reps
+            -base val
+            -infusement bonus val
+            -roll chance (for loops)
+            -max amt (-1 for none)
+         */
+        ;
+        EntityType type;
+        HashMap<Integer,ProwlerVals> waveMap;
+        ProwlerType(EntityType t){
+            this.type=t;
+            waveMap=new HashMap<>();
+        }
+        public void setWaveVals(Integer num,ProwlerVals vals){
+            waveMap.put(num,vals);
+        }
+
+    }
+    //ProwlerType Whelp=new ProwlerType(EntityInit.NIGHT_PROWLER_WHELP.get());
+
+
+
+    public static class ProwlerVals{
+        int reps;
+        int baseVal;
+        int infusementBonus;
+        int rollChance;
+        int maxAmt;
+        public ProwlerVals(){
+            reps=0;
+        }
+        public ProwlerVals(int r,int bV, int i, int rC, int max){
+            reps=r;
+            baseVal=bV;
+            infusementBonus=i;
+            rollChance=rC;
+            maxAmt=max;
+        }
+        public ProwlerVals(Integer[] vals){
+            reps=vals[0];
+            baseVal=vals[1];
+            infusementBonus=vals[2];
+            rollChance=vals[3];
+            maxAmt=vals[4];
+        }
+    }
+    /*
+    maps wave to prowlerType
+     */
+    private HashMap<Integer,List<ProwlerType>> prowlerMap=new HashMap<>();
+
+    public static void initProwlerRaidData(){
+        ProwlerRaid.ProwlerType.WHELP.setWaveVals(0,new ProwlerVals());
+    }
+
+
     public ProwlerRaid(int p_37692_, ServerLevel p_37693_, BlockPos p_37694_) {
         this.setRaidID(p_37692_);
         this.setServerLevel(p_37693_);
@@ -68,7 +167,12 @@ Config should have these settings
 -raid warnings prevent sleeping
 -raid prowlers despawn during day
  */
-    public CompoundTag save(CompoundTag p_37748_) {
+
+    public CompoundTag save(CompoundTag tag) {
+        super.save(tag);
+        tag.putInt("CX",this.getCenterPos().getX());
+        tag.putInt("CY",this.getCenterPos().getY());
+        tag.putInt("CZ",this.getCenterPos().getZ());
         /*
         Vanilla raid data
 
@@ -97,7 +201,7 @@ Config should have these settings
         p_37748_.put("HeroesOfTheVillage", listtag);
 
          */
-        return p_37748_;
+        return tag;
     }
 
     public boolean attemptToStart(Player target){
@@ -105,17 +209,27 @@ Config should have these settings
         DifficultyInstance difficultyInstance= level.getCurrentDifficultyAt(target.blockPosition());
         float effectiveDifficulty=difficultyInstance.getEffectiveDifficulty();
         System.out.println("Effective diff is " + difficultyInstance);
-        if (effectiveDifficulty>1.5f){
-            int lY = level.getHeight(Heightmap.Types.WORLD_SURFACE, target.getBlockX(), target.getBlockZ());
-            if (this.getCenterPos()!=null && this.getCenterPos().getY()>=lY-20){//will not attempt spawn if too far underground
-
-                return true;
+        LazyOptional<PlayerCapability> pCapOptional=target.getCapability(PlayerCapabilityProvider.capability);
+        AtomicBoolean result= new AtomicBoolean(false);
+        pCapOptional.ifPresent(cap->{
+            if (effectiveDifficulty>1.5f && cap.getProwlerRaidCounter()>5){
+                int lY = level.getHeight(Heightmap.Types.WORLD_SURFACE, target.getBlockX(), target.getBlockZ());
+                if (this.getCenterPos()!=null){//will not attempt spawn if too far underground
+                    // && this.getCenterPos().getY()>=lY-20
+                    result.set(true);
+                }
             }
-        }
-        return false;
+        });
+
+        return result.get();
     }
 
+    public List<AbstractNightProwler> prowlersToSpawn(){
+        int strength=this.getRaidStrength();
+        List<AbstractNightProwler> prowlers=new ArrayList<>();
 
+        return prowlers;
+    }
     /*
     code used to determine valid spawning blocks for illager raids
      */
@@ -144,5 +258,9 @@ Config should have these settings
         }
 
         return null;
+    }
+
+    public void tick() {
+
     }
 }

@@ -14,8 +14,8 @@ import net.minecraft.world.phys.Vec3;
 public class PK_CrescenciaBasicAttack extends GenericAbility {
 
 
-    public PK_CrescenciaBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+    public PK_CrescenciaBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int pri) {
+        super(mob, castTime, CD, executeTime, recoveryTime,pri);
         this.name="PK Basic";
     }
 

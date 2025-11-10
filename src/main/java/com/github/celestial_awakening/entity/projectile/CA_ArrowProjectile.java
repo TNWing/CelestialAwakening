@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.projectile;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.CA_Entity;
@@ -68,11 +69,11 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
         switch(t){
             case SOLAR -> {
                 entity.particleOptions =ParticleTypes.FLAME;
-                entity.setBaseDamage(1.5f);
+                entity.setBaseDamage(Config.arrowSolarDmg);
             }
             case LUNAR -> {
                 entity.particleOptions =ParticleTypes.CRIT;
-                entity.setBaseDamage(1.8f);
+                entity.setBaseDamage(Config.arrowLunarDmg);
             }
             case SINGULARITY -> {
                 entity.particleOptions=ParticleTypes.END_ROD;
@@ -111,7 +112,7 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
                 return ParticleTypes.END_ROD;
             }
         }
-        return null;
+        return ParticleTypes.CRIT;
     }
     public void tick() {
         super.tick();
@@ -139,20 +140,16 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
 
     @Override
     protected void onHitEntity(EntityHitResult hitResult) {
-
         if (type==ArrowType.LUNAR){
             Vec3 dir=this.getDeltaMovement().normalize();
             dir=new Vec3(dir.x,0,dir.z);
-            Vec3 targetPos=hitResult.getEntity().getBoundingBox().getCenter();
-            targetPos=this.position();
+            Vec3 targetPos=this.position();//hitResult.getEntity().getBoundingBox().getCenter();
             AABB aabb=new AABB(targetPos.subtract(0,1,0),targetPos.add(dir.scale(5)).add(0,1,0));
-
-            //hitResult.getEntity().position()
             Predicate p=null;
             if (this.getOwner() instanceof LivingEntity){
                 p=CA_Predicates.opposingTeamsPredicate((LivingEntity) this.getOwner());
             }
-            List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,aabb,p);//why empty?
+            List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,aabb,p);
             for (LivingEntity entity:livingEntityList) {
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,50));
                 entity.hurt(lunarDamage,0.7f);
@@ -160,6 +157,9 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
         }
         else if(type==ArrowType.SINGULARITY){
 
+        }
+        else if (type==ArrowType.SOLAR){
+            hitResult.getEntity().setSecondsOnFire(6);
         }
         super.onHitEntity(hitResult);
     }

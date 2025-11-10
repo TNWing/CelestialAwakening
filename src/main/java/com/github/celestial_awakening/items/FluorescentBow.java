@@ -31,6 +31,7 @@ public class FluorescentBow extends BowItem {
     }
     int nameColor =0xe7e82c;
     int descColor =0xe2e2e1;
+    float dmgMult=0.85f;
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         Component dangerSenseName=Component.translatable("tooltip.celestial_awakening.fluorescent_bow.dangersense_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(nameColor)));
@@ -50,6 +51,7 @@ public class FluorescentBow extends BowItem {
     @Override
     public void releaseUsing(ItemStack bowStack, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         if (p_40669_ instanceof Player player) {
+            boolean upgradedBowFlag=bowStack.getItem() instanceof Stargazer;
             boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bowStack) > 0;
             ItemStack arrowStack = player.getProjectile(bowStack);
 
@@ -69,8 +71,11 @@ public class FluorescentBow extends BowItem {
                         ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
                         AbstractArrow abstractarrow = arrowitem.createArrow(p_40668_, arrowStack, player);
                         abstractarrow = customArrow(abstractarrow);
-                        abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()*7f/8f);
+                        abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()*dmgMult);
                         abstractarrow.addTag(NBTStrings.fBowBoost);
+                        if (upgradedBowFlag){
+
+                        }
                         abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {
                             abstractarrow.setCritArrow(true);

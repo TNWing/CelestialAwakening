@@ -70,6 +70,9 @@ public class Config
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_STRIKE_DMG;
     private static final ForgeConfigSpec.DoubleValue MIDNIGHT_REAPER_WAVE_DMG;
 
+    private static final ForgeConfigSpec.DoubleValue LUNAR_ARROW_BASE_DMG;
+    private static final ForgeConfigSpec.DoubleValue SOLAR_ARROW_BASE_DMG;
+
 /*
 maybe use json files instead since it'll look neater?
  */
@@ -150,6 +153,12 @@ maybe use json files instead since it'll look neater?
                 MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5f").defineInRange("moon_scythe_wave_damage",3.5f,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5f").defineInRange("moon_scythe_strike_damage",5.5f,0,Double.MAX_VALUE);
 
+
+            builder.pop();
+            builder.push("Arrows");
+                builder.comment("For reference, vanilla arrows have a base damage of 2.");
+                LUNAR_ARROW_BASE_DMG=builder.comment("Base damage of lunar arrows.\nDefault: 1.8f").defineInRange("lunar_arrow_base_dmg",1.8f,0,Double.MAX_VALUE);
+                SOLAR_ARROW_BASE_DMG=builder.comment("Base damage of solar arrows.\nDefault: 1.5f").defineInRange("solar_arrow_base_dmg",1.5f,0,Double.MAX_VALUE);
             builder.pop();
         builder.pop();
         BUILDER=builder;
@@ -229,6 +238,9 @@ maybe use json files instead since it'll look neater?
     public static double midnightReaperWaveDmg;
     public static double midnightReaperStrikeDmg;
 
+    public static double arrowSolarDmg;
+    public static double arrowLunarDmg;
+
     public static boolean useVanillaTeams;
 
     public static List<Integer> whelpWave1Vals;
@@ -307,6 +319,9 @@ maybe use json files instead since it'll look neater?
         midnightReaperBaseSpd=MIDNIGHT_REAPER_BASE_SPD.get();
         midnightReaperStrikeDmg=MIDNIGHT_REAPER_STRIKE_DMG.get();
         midnightReaperWaveDmg=MIDNIGHT_REAPER_WAVE_DMG.get();
+
+        arrowLunarDmg=LUNAR_ARROW_BASE_DMG.get();
+        arrowSolarDmg=SOLAR_ARROW_BASE_DMG.get();
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();

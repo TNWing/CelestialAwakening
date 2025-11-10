@@ -35,8 +35,8 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     float[] crescentDmgVals={4.5f,6.5f,9f};
     float[] whirlwindDmgVals={5.5f,7f,8.5f};
     DamageSourceIgnoreIFrames whirlwindSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
-    public PK_CrescenciaCrescentWhirlwind(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+    public PK_CrescenciaCrescentWhirlwind(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int pri) {
+        super(mob, castTime, CD, executeTime, recoveryTime,pri);
         this.name="Crescent Whirlwind";
 
     }
@@ -142,5 +142,19 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     @Override
     protected double getAbilityRange(LivingEntity target) {
         return 5.25D;
+    }
+
+    @Override
+    public int calcPriority(){
+        if (this.getCurrentCD()>0){
+            return -1;
+        }
+        int p= this.getBasePriority();
+        List<LivingEntity> list=mob.level().getNearbyEntities(LivingEntity.class,null,mob,new AABB(0,0,0,0,0,0));
+        if (list.size()<3){
+            System.out.println("Too few targets, whirlwind less likely");
+            p+=20;
+        }
+        return p;
     }
 }

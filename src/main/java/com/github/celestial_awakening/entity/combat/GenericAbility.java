@@ -109,4 +109,11 @@ public abstract class GenericAbility {
     }
 
     protected abstract double getAbilityRange(LivingEntity target);
+
+    public int getBasePriority(){
+        return this.basePriority;
+    }
+    public int calcPriority(){
+        return this.basePriority;
+    }
 }

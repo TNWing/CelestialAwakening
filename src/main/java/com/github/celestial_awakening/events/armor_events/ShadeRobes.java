@@ -114,7 +114,7 @@ public class ShadeRobes extends ArmorEffect {
         params consist of
         player entity to damage
         dmge amount
-        location of the einitial damage instance
+        location of the initial damage instance
          */
         public boolean execute(){
             Player player= (Player) this.params[0];

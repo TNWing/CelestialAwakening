@@ -26,8 +26,8 @@ The knight will always reach the target first, and will attempt a single, powerf
 
  */
 public class PK_CrescenciaStrikethrough extends GenericAbility {
-    public PK_CrescenciaStrikethrough(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+    public PK_CrescenciaStrikethrough(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
+        super(mob, castTime, CD, executeTime, recoveryTime,p);
         this.name="Strikethrough";
     }
 
@@ -159,5 +159,19 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
     @Override
     protected double getAbilityRange(LivingEntity target) {
         return 7;
+    }
+
+
+    @Override
+    public int calcPriority(){
+        if (this.getCurrentCD()>0){
+            return -1;
+        }
+        int p=this.getBasePriority();
+        if (mob.getPerceivedTargetDistanceSquareForMeleeAttack(mob.getTarget())<10){
+            System.out.println("player too close, strikethrough less likely");
+            p+=10;
+        }
+        return p;
     }
 }

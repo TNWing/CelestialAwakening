@@ -36,8 +36,8 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
 
     float crescentDmgVals[]={7f,9.5f,12f};
 
-    public PK_CrescenciaMoonCutter(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+    public PK_CrescenciaMoonCutter(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
+        super(mob, castTime, CD, executeTime, recoveryTime,p);
     }
     Vec3 stepDir;
     @Override
@@ -153,5 +153,18 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
         crescent.setDisableTicks(60);
         lvl.addFreshEntity(crescent);
         ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),lvl.dimension());
+    }
+
+    @Override
+    public int calcPriority(){
+        if (this.getCurrentCD()>0){
+            return -1;
+        }
+        int p=this.getBasePriority();
+        if (mob.getPerceivedTargetDistanceSquareForMeleeAttack(mob.getTarget())>36){
+            System.out.println("Player is far, mooncutter is less likely");
+            p+=10;
+        }
+        return p;
     }
 }

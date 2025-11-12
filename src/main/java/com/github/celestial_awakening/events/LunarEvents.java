@@ -3,8 +3,11 @@ package com.github.celestial_awakening.events;
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
+import com.github.celestial_awakening.capabilities.PlayerCapability;
+import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.entity.living.phantom_knights.AbstractPhantomKnight;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.events.raids.ProwlerRaid;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
@@ -16,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -50,6 +54,49 @@ public class LunarEvents {
     static Random rand=new Random();
     //.then(Commands.literal("day").executes((p_288689_) -> {
     //         return queryTime(p_288689_.getSource(), (int)(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L));
+    public void attemptProwlerRaid(ServerLevel level){
+        /*
+        attempts to create a raid, cannot create a raid 10 days after creating one
+         */
+        /*
+        alternative method: do it the vanilla way
+        for each player, create a raid if needed. however, if there exists a raid within range, instead add to it
+        add to a raid strength slightly if the counter is not enough to create a raid, but otherwise add a lot to raid strength
+         */
+        LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
+        capOptional.ifPresent(levelCap->{
+            List<ServerPlayer> serverPlayers=level.players();
+            Iterator<ServerPlayer> iter=serverPlayers.iterator();
+            while (iter.hasNext()){
+                ServerPlayer player=iter.next();
+                LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
+                optional.ifPresent(cap->{
+                    short counter=cap.incrementAndGetProwlerRaidCounter();
+                    BlockPos pos=player.blockPosition();
+                    boolean create=counter>=10;
+                    ProwlerRaid raid=levelCap.raids.getNearbyProwlerRaid(level,levelCap,pos);
+                    if (raid!=null){
+                        cap.setProwlerRaidCounter((short) 0);
+                        int waves=0;
+                        int str= (int) (Math.floor(Math.max(counter,10)*1.5f) + Math.floor((counter-10)*2.1));
+                        raid.setRaidStrength(raid.getRaidStrength()+str);
+                    }
+                    else if (create){
+                        cap.setProwlerRaidCounter((short) 0);
+                        DifficultyInstance difficultyInstance= level.getCurrentDifficultyAt(pos);
+                        float effectiveDifficulty=difficultyInstance.getEffectiveDifficulty();
+                        int maxWaves=1;
+                        int strength=100;
+                        raid=levelCap.raids.createProwlerRaid(level,pos,maxWaves,strength);
+                        levelCap.raids.addRaidToMap(raid);
+                    }
+
+                });
+            }
+        });
+    }
+
+
     public void attemptPKSpawn(ServerLevel level){
 
         if (validDim(level, Config.transcendentsDimensionTypes)){

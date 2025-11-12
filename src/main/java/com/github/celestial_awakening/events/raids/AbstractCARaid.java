@@ -4,8 +4,21 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 
 public class AbstractCARaid {
+    enum RaidStatus{
+        WAITING,
+        ACTIVE,
+        DONE
+    }
     public int getRaidID() {
         return raidID;
+    }
+    RaidStatus status;
+    public RaidStatus getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(RaidStatus status){
+        this.status=status;
     }
 
     public void setRaidID(int raidID) {

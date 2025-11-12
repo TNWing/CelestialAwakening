@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events.raids;
 
+import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.capabilities.PlayerCapability;
 import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
@@ -13,6 +14,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
@@ -27,6 +29,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProwlerRaid extends AbstractCARaid{
+    /*
+    Mechanics
+    -periodically, increment a player-specific counter at night
+    -if the counter is above a given value, store the player as a target and reset the counter
+    -for each player stored in the target list
+        -create a raid
+        -check for any nearby players. remove players in target list that are nearby the current player target
+
+     */
     public BlockPos getCenterPos() {
         return centerPos;
     }
@@ -54,6 +65,10 @@ public class ProwlerRaid extends AbstractCARaid{
     private int delayTicks=60;
 
     private int currentWave=1;
+
+    private int maxWave;
+
+    private int nextWaveInterval;
 
 
     /*
@@ -129,6 +144,10 @@ make this a separate class and init the values based on config vals later down t
             maxAmt=vals[4];
         }
     }
+
+    public boolean isDone(){
+        return currentWave>=maxWave;
+    }
     /*
     maps wave to prowlerType
      */
@@ -139,16 +158,23 @@ make this a separate class and init the values based on config vals later down t
     }
 
 
-    public ProwlerRaid(int p_37692_, ServerLevel p_37693_, BlockPos p_37694_) {
+    public ProwlerRaid(int p_37692_, ServerLevel p_37693_, BlockPos p_37694_, int maxWaves,int str) {
         this.setRaidID(p_37692_);
         this.setServerLevel(p_37693_);
         this.active = true;
+        this.setRaidStrength(str);
         //this.raidCooldownTicks = 300;
         //this.raidEvent.setProgress(0.0F);
         this.setCenterPos(p_37694_);
+        this.maxWave=maxWaves;
         //this.numGroups = this.getNumGroups(p_37693_.getDifficulty());
         //this.status = Raid.RaidStatus.ONGOING;
     }
+    /*
+    raid strength scaaling works like this
+    wave 1 uses 50% of strength compared to max wave (100% strength)
+    strength: linear scaling between the waves
+     */
 
     /*
 Data to store
@@ -173,6 +199,7 @@ Config should have these settings
         tag.putInt("CX",this.getCenterPos().getX());
         tag.putInt("CY",this.getCenterPos().getY());
         tag.putInt("CZ",this.getCenterPos().getZ());
+        tag.putInt("MW",this.maxWave);
         /*
         Vanilla raid data
 
@@ -261,6 +288,29 @@ Config should have these settings
     }
 
     public void tick() {
+        if (isActive())
+        if (this.getServerLevel().getGameTime()>=warningTriggerTime+delayTicks){
+
+        }
+        nextWaveInterval--;
+        if (prowlers.isEmpty() && nextWaveInterval>80){
+            nextWaveInterval=80;
+            /*
+            expedite the spawning if all prowlers are dead
+             */
+        }
+        if (nextWaveInterval<=0){
+            nextWaveInterval=700;
+            currentWave++;
+/*
+            if (currentWave>=maxWave){
+                this.getServerLevel().getCapability(LevelCapabilityProvider.LevelCap).ifPresent(cap->{
+                    cap.raids.removeProwlerRaid(this.getRaidID());
+                });
+            }
+
+ */
+        }
 
     }
 }

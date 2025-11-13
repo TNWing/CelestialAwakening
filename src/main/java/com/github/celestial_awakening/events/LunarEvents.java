@@ -8,13 +8,12 @@ import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.entity.living.phantom_knights.AbstractPhantomKnight;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.events.raids.ProwlerRaid;
+import com.github.celestial_awakening.events.triggers.CA_Triggers;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
-import com.github.celestial_awakening.util.CA_Triggers;
 import com.github.celestial_awakening.util.LevelFuncs;
 import com.github.celestial_awakening.util.MathFuncs;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +44,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
@@ -80,6 +78,7 @@ public class LunarEvents {
                         int waves=0;
                         int str= (int) (Math.floor(Math.max(counter,10)*1.5f) + Math.floor((counter-10)*2.1));
                         raid.setRaidStrength(raid.getRaidStrength()+str);
+                        CA_Triggers.PROWLER_RAID_TRIGGER.trigger(player);
                     }
                     else if (create){
                         cap.setProwlerRaidCounter((short) 0);
@@ -89,8 +88,9 @@ public class LunarEvents {
                         int strength=100;
                         raid=levelCap.raids.createProwlerRaid(level,pos,maxWaves,strength);
                         levelCap.raids.addRaidToMap(raid);
+                        //level.playLocalSound(pos,null,null,0,0,false);
+                        CA_Triggers.PROWLER_RAID_TRIGGER.trigger(player);
                     }
-
                 });
             }
         });
@@ -166,14 +166,14 @@ public class LunarEvents {
         });
         if (false){
             for (ServerPlayer serverPlayer:validTargets) {
-                CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
+                //CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
             }
         }
         else{
             //List<Pair<ServerPlayer,Integer>>
             for (int i=0;i<1;i++){
                 ServerPlayer serverPlayer=validTargets.get(level.random.nextInt(validTargets.size()));
-                CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
+                //CA_Triggers.PROWLER_RAID.trigger(serverPlayer);
                 //List<Player> nearbyPlayers=level.getNearbyPlayers(null,null,null);
                 validTargets.remove(serverPlayer);
             }

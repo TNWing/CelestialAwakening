@@ -3,6 +3,8 @@ package com.github.celestial_awakening;
 import com.github.celestial_awakening.events.AttachCapabilities;
 import com.github.celestial_awakening.events.ClientEventsManager;
 import com.github.celestial_awakening.events.EventManager;
+import com.github.celestial_awakening.events.triggers.CA_Triggers;
+import com.github.celestial_awakening.events.triggers.ProwlerRaidTrigger;
 import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomTiers;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -101,7 +103,7 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         ModNetwork.register();
         RecipeInit.registerBrewingRecipes();
         event.enqueueWork(() -> {
-            //CriteriaTriggers.register(null);
+            CriteriaTriggers.register(CA_Triggers.PROWLER_RAID_TRIGGER);
         });
     }
 

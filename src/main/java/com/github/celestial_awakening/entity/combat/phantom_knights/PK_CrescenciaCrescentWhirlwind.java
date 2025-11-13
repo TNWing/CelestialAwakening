@@ -7,6 +7,7 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
+import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -15,6 +16,7 @@ import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
@@ -72,8 +74,14 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
                 Vec3 pos=this.mob.position();
                 AABB aabb=new AABB(pos.x-horiDiff,1f + pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,1f + pos.y+vertDiff,pos.z+horiDiff);
                 List<LivingEntity> entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
+                boolean b= this.mob.level().getDifficulty().getId()>1;
+
                 for (LivingEntity entity:entities) {
-                    entity.hurt(whirlwindSource,dmg);
+
+                    if (b && entity.hurt(whirlwindSource,dmg)){
+                        MobEffectInstance curse=new MobEffectInstance(MobEffectInit.MOON_CURSE.get(),600,0);
+                        entity.addEffect(curse);
+                    }
                 }
             }
 

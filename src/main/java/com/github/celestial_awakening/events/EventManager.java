@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -37,6 +38,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
@@ -56,6 +58,7 @@ import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -607,6 +610,19 @@ public class EventManager {
         }
     }
 
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingHeal(LivingHealEvent event){
+        LivingEntity entity=event.getEntity();
+        if (entity.hasEffect(MobEffectInit.MOON_CURSE.get())){
+            LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.capability);
+            optional.ifPresent(cap->{
+                float amt= Mth.clamp(event.getAmount(),0,entity.getMaxHealth()-entity.getHealth());
+                cap.changeMoonCurseVal(amt);
+            });
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerChangeDim(PlayerEvent.PlayerChangedDimensionEvent event){
         if (event.getTo() == null){
@@ -643,7 +659,7 @@ public class EventManager {
         });
     }
 
-    @SubscribeEvent
+
     public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){
         LevelAccessor levelAccessor=event.getLevel();
         if (levelAccessor instanceof Level level){
@@ -695,6 +711,18 @@ public class EventManager {
                     }
                     if (cap.decrementSunControlTimer()){
                         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
+                    }
+                    if (time % 100==0 && time<12000 && cap.divinerSunControlVal>0){
+                        List<ServerPlayer> players=serverLevel.players();
+                        for (ServerPlayer player:players) {
+                            if (!player.isInWaterRainOrBubble()){
+                                float temp=serverLevel.getBiome(player.blockPosition()).get().getBaseTemperature();
+                                float tempMod=Math.max((temp-0.25f)*0.4f,-0.1f);
+                                int localLight=Math.max(serverLevel.getBrightness(LightLayer.BLOCK,player.blockPosition()),5)-5;
+                                player.causeFoodExhaustion(0.25f + localLight*0.075f + tempMod);
+                                //
+                            }
+                        }
                     }
 
                 });

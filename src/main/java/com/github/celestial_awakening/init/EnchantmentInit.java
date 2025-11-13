@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import net.minecraft.world.entity.ai.behavior.declarative.Trigger;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;

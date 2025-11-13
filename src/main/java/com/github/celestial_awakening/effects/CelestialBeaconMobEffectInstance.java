@@ -59,6 +59,7 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
     //cant override, metyhod is static
     //@Override
     public static MobEffectInstance load(CompoundTag p_19561_) {
+
         int i = p_19561_.getByte("Id") & 0xFF;
         MobEffect mobeffect = MobEffect.byId(i);
         mobeffect = net.minecraftforge.common.ForgeHooks.loadMobEffect(p_19561_, "forge:id", mobeffect);

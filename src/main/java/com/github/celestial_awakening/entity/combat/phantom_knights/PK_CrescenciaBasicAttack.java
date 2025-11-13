@@ -3,10 +3,12 @@ package com.github.celestial_awakening.entity.combat.phantom_knights;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
+import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -47,7 +49,11 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
                     state++;
                     currentStateTimer=abilityExecuteTime;
                     if (target.distanceTo(this.mob)<getAbilityRange(target)){
-                        this.mob.doHurtTarget(target);
+                        boolean b=this.mob.doHurtTarget(target) && this.mob.level().getDifficulty().getId()>1;
+                        if (b){
+                            MobEffectInstance curse=new MobEffectInstance(MobEffectInit.MOON_CURSE.get(),600,0);
+                            target.addEffect(curse);
+                        }
                     }
 
                     if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){

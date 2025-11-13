@@ -198,15 +198,16 @@ public class SolarEvents {
                                 }
                             }
 
-                            if (startingDivPower>=25 && Config.divinerAoDEnabled){
-                                int pts= (int) (2500*startingDivPower/(startingDivPower+25));
-                                if (level.random.nextInt(0,2)==0){
-                                    levelCap.setSunControlVal ((byte) (-startingDivPower/8));
-                                    levelCap.divinerSunControlTimer = (pts*35);
-                                }
-                                else{
-                                    levelCap.setSunControlVal ((byte) (-startingDivPower/8));
-                                    levelCap.divinerSunControlTimer = (pts*35);
+                            if (startingDivPower>=25){
+                                if(Config.divinerAoDEnabled) {
+                                    int pts = (int) (2500 * startingDivPower / (startingDivPower + 25));
+                                    if (level.random.nextInt(0, 2) == 0) {
+                                        levelCap.setSunControlVal((byte) (-startingDivPower / 8));
+                                        levelCap.divinerSunControlTimer = (pts * 35);
+                                    } else {
+                                        levelCap.setSunControlVal((byte) (-startingDivPower / 8));
+                                        levelCap.divinerSunControlTimer = (pts * 35);
+                                    }
                                 }
                                 //System.out.println("OUr level has sunctrl " + levelCap.divinerSunControlVal + "  and timer " + levelCap.divinerSunControlTimer);
                             }

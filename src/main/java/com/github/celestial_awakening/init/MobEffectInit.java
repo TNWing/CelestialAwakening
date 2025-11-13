@@ -36,5 +36,7 @@ public class MobEffectInit {
 
     public static final RegistryObject<MobEffect> MARK_OF_HAUNTING=MOB_EFFECTS.register("mark_of_haunting",()->
             new MarkOfHaunting(MobEffectCategory.NEUTRAL,16750848));
+
+    public static final RegistryObject<MobEffect> MOON_CURSE=MOB_EFFECTS.register("moon_curse",()->new CurseOfTheMoon(MobEffectCategory.HARMFUL,16750848));
 }
 

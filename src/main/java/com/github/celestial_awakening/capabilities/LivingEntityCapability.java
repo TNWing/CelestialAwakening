@@ -35,6 +35,19 @@ public class LivingEntityCapability {
      */
     short navigauge;//used for diviner
 
+    public float getMoonCurseVal() {
+        return moonCurseVal;
+    }
+    public void changeMoonCurseVal(float f) {
+        this.moonCurseVal=Math.max(0,moonCurseVal+f);
+    }
+    public void setMoonCurseVal(float moonCurseVal) {
+        this.moonCurseVal = Math.max(0,moonCurseVal);
+    }
+
+    float moonCurseVal;//used for curse of the moon effect
+
+
     public void changeNaviGauge(short i){
         navigauge= (short) Math.max(0,Math.min(navigauge+i,(short)100));
     }
@@ -76,6 +89,8 @@ public class LivingEntityCapability {
             abilities.add(compoundTag);
         }
         nbt.put(leCap_abilities,abilities);
+        nbt.putShort(leCap_navigauge,navigauge);
+        nbt.putFloat(leCap_moonCurse,moonCurseVal);
         return nbt;
     }
 
@@ -121,7 +136,7 @@ public class LivingEntityCapability {
         }
         nbt.put(leCap_abilities,abilities);
         nbt.putShort(leCap_navigauge,navigauge);
-
+        nbt.putFloat(leCap_moonCurse,moonCurseVal);
     }
     public void loadNBTData(CompoundTag nbt,boolean insert){
         ListTag commands=(ListTag)nbt.get("CommandPatterns");
@@ -154,6 +169,7 @@ public class LivingEntityCapability {
             }
         }
         navigauge=nbt.getShort(leCap_navigauge);
+        moonCurseVal=nbt.getFloat(leCap_moonCurse);
     }
 
     public void insertIntoAbilityMap(String abilityName, Integer cd){

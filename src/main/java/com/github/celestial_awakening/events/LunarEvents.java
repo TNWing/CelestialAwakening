@@ -242,6 +242,24 @@ public class LunarEvents {
     add players to this when they are added to level?
      */
     static ConcurrentHashMap<UUID, Short> timeSpentLookingAtMoon=new ConcurrentHashMap<>();
+
+    int moonSanMin=400;
+    public void moonSanity(Level level){
+        level.players().forEach(player->{
+            Short val=timeSpentLookingAtMoon.get(player.getUUID());
+            if (val>moonSanMin){
+                LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
+                optional.ifPresent(cap->{
+                    //max of 1.8k, use exponential func
+                    /*
+                    1 + 1800/1000
+                     */
+                    int insChange= (int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400));
+                    cap.changeInsanityVal(insChange);
+                });
+            }
+        });
+    }
     public void detectIfLookingAtMoon(Level level){
         for (Player player:level.players()){
             UUID uuid=player.getUUID();
@@ -268,12 +286,15 @@ public class LunarEvents {
             capOptional.ifPresent(cap-> {
                 if (!cap.currentMoonstonePos.isEmpty()) {
                     MobEffectInstance instance=new MobEffectInstance(MobEffectInit.MARK_OF_HAUNTING.get(),2400);
-                    for (BlockPos blockPos : cap.currentMoonstonePos.keySet()) {
+                    Iterator<BlockPos> iter=cap.currentMoonstonePos.keySet().iterator();
+                    while (iter.hasNext()){
+                        BlockPos blockPos=iter.next();
                         AABB bound = new AABB(blockPos);
                         TargetingConditions conds = TargetingConditions.forNonCombat();
                         Monster monster = level.getNearestEntity(Monster.class, conds, null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), bound);
                         if (monster!=null){
                             monster.addEffect(instance);
+                            iter.remove();
                         }
                     }
                 }

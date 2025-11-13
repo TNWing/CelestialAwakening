@@ -531,7 +531,7 @@ public class EventManager {
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
                             playerCapOptional.ifPresent(cap->{
-                                cap.changeInsanityVal((short) 10);
+                                cap.changeInsanityVal((short) 100);
                             });
                         }
                     }
@@ -739,6 +739,9 @@ public class EventManager {
                         }
                     }
                     lunarEvents.detectIfLookingAtMoon(serverLevel);
+                    if (time%100==0){
+                        lunarEvents.moonSanity(serverLevel);
+                    }
                     if (time==18000){
                         lunarEvents.midnightIronTransformation(serverLevel);
                         lunarEvents.attemptPKSpawn(serverLevel);
@@ -746,6 +749,7 @@ public class EventManager {
 
                 }
                 particleManager.generateParticles(serverLevel);
+                lunarEvents.moonstoneMark(serverLevel);
             }
             //both sides
             LazyOptional<LevelCapability> capOptional=event.level.getCapability(LevelCapabilityProvider.LevelCap);
@@ -791,7 +795,14 @@ public class EventManager {
                 }
             }
             @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+            LazyOptional<PlayerCapability> playerOptional=player.getCapability(PlayerCapabilityProvider.capability);
             ServerLevel level= (ServerLevel) player.level();
+            playerOptional.ifPresent(cap->{
+                if (player.tickCount%200==0){
+                    cap.changeInsanityVal((short) -4);
+                }
+
+            });
             capOptional.ifPresent(cap->{
                 cap.tickAbilityMap();
                 //forced updates every 15 sec in case of emergencies

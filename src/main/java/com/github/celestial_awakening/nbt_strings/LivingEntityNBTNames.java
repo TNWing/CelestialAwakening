@@ -8,4 +8,7 @@ public class LivingEntityNBTNames {
     public static String leCap_abilityName="Name";
     public static String leCap_abilityCD="CD";
     public static String leCap_abilityData="Data";
+
+    public static String pCap_prowlerCnt="CA_PR_Cnt";
+
 }

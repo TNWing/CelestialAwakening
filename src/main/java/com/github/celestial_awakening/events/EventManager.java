@@ -31,6 +31,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -45,6 +46,8 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
+import net.minecraftforge.event.entity.item.ItemEvent;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -140,6 +143,18 @@ public class EventManager {
     //TODO: spawn multiple prowlers in here, base it off the cel beacon spawning
     @SubscribeEvent
     public static void onMobFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event){
+    }
+
+    @SubscribeEvent
+    public static void onItemDespawn(ItemExpireEvent event){
+        ItemEntity itemEntity= event.getEntity();
+        FoodProperties foodProperties=itemEntity.getItem().getFoodProperties(null);
+        if (foodProperties!=null && foodProperties.isMeat()){
+            itemEntity.setItem(new ItemStack(ItemInit.LIFE_FRAG.get()));
+            event.setExtraLife(1200);
+            event.setCanceled(true);
+
+        }
     }
 
 

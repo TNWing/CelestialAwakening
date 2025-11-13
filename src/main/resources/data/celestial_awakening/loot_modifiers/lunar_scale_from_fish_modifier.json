@@ -2,13 +2,6 @@
   "type": "celestial_awakening:scale_from_fish",
   "conditions": [
     {
-      "condition": "minecraft:entity_properties",
-      "predicate": {
-        "type": "minecraft:cod"
-      },
-      "entity": "this"
-    },
-    {
       "condition": "minecraft:killed_by_player"
     },
     {

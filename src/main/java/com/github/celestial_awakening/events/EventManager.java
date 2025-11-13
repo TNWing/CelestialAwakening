@@ -133,7 +133,7 @@ public class EventManager {
             .put(radiantArmor).put(remnantArmor).put(umbraArmor).put(knightmareSuit).put(everlightArmor)
             .build();
 
-    private static ParticleManager particleManager=ParticleManager.createParticleManager();
+    private static final ParticleManager particleManager=ParticleManager.createParticleManager();
 
     private static int currentDay;
     @SubscribeEvent
@@ -252,14 +252,12 @@ public class EventManager {
     //TODO: replace with loot table later
     @SubscribeEvent
     public static void onItemFished(ItemFishedEvent event){
-        int storedLuck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,event.getHookEntity(),"f_37096_");
         int cnt=0;
         Player player=event.getEntity();
         if (player!=null){
 
             for (ItemStack armorStack : player.getInventory().armor) {
-                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
-                    ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
                     if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
                         cnt++;
                     }
@@ -297,8 +295,7 @@ public class EventManager {
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event){
         EquipmentSlot slot=event.getSlot();
-        if (event.getEntity() instanceof Player){
-            Player player= (Player) event.getEntity();
+        if (event.getEntity() instanceof Player player){
             if (slot.isArmor() ){
 
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectEquipmentChange.entrySet()) {
@@ -316,8 +313,7 @@ public class EventManager {
         ItemStack itemStack=event.getItemStack();
         Player player=event.getEntity();
         if (player!=null){
-            if (itemStack.getItem() instanceof CustomArmorItem){
-                CustomArmorItem armorItem= (CustomArmorItem) itemStack.getItem();
+            if (itemStack.getItem() instanceof CustomArmorItem armorItem){
                 CustomArmorMaterial material= (CustomArmorMaterial) armorItem.getMaterial();
                 if(armorMaterials.containsKey(material)){
                     int cnt=countPieces(player,material);
@@ -348,14 +344,12 @@ public class EventManager {
         Entity entity=event.getEntity();
         if (!event.getLevel().isClientSide){
             ServerLevel serverLevel= (ServerLevel) event.getLevel();
-            if (entity instanceof FishingHook){
-                FishingHook hook= (FishingHook) entity;
+            if (entity instanceof FishingHook hook){
                 if (hook.getPlayerOwner()!=null){
                     int cnt=0;
                     Player player=hook.getPlayerOwner();
                     for (ItemStack armorStack : player.getInventory().armor) {
-                        if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
-                            ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                        if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
                             if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
                                 cnt++;
                             }
@@ -625,9 +619,12 @@ public class EventManager {
 
     @SubscribeEvent
     public static void onPlayerChangeDim(PlayerEvent.PlayerChangedDimensionEvent event){
+        /*
         if (event.getTo() == null){
 
         }
+
+         */
     }
 
 
@@ -648,7 +645,7 @@ public class EventManager {
                 Object[] honorDuelData=cap.getAbilityData(KnightmareSuit.honorDuel);
                 UUID id1= (UUID) honorDuelData[0];
 
-                @NotNull LazyOptional<LivingEntityCapability> otherCapOptional=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.capability);
+                LazyOptional<LivingEntityCapability> otherCapOptional=level.getEntity(id1).getCapability(LivingEntityCapabilityProvider.capability);
                 otherCapOptional.ifPresent(otherCap->{
                     if (otherCap.hasAbility(KnightmareSuit.honorDuel) && otherCap.getAbilityData(KnightmareSuit.honorDuel)[0]==entity.getUUID()){
                         otherCap.removeFromAbilityMap(KnightmareSuit.honorDuel);
@@ -660,6 +657,7 @@ public class EventManager {
     }
 
 
+    @SubscribeEvent
     public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){
         LevelAccessor levelAccessor=event.getLevel();
         if (levelAccessor instanceof Level level){
@@ -676,11 +674,6 @@ public class EventManager {
         }
     }
 
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event){
-        if (event.phase== TickEvent.Phase.START){
-        }
-    }
 
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
@@ -691,10 +684,7 @@ public class EventManager {
                 ServerLevel serverLevel = (ServerLevel) event.level;
                 @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
                 int time= (int) (serverLevel.getDayTime()%24000L);
-                DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);//this is called twice
-                if (time==0){
-
-                }
+                DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
                         if (time % 100==0){
@@ -726,6 +716,7 @@ public class EventManager {
                     }
 
                 });
+                lunarEvents.detectIfLookingAtMoon(serverLevel,time>12000);
                 if (time>12000){
                     int phase=serverLevel.getMoonPhase();
                     lunarEvents.createMoonstone(serverLevel);
@@ -738,7 +729,7 @@ public class EventManager {
                             break;
                         }
                     }
-                    lunarEvents.detectIfLookingAtMoon(serverLevel);
+
                     if (time%100==0){
                         lunarEvents.moonSanity(serverLevel);
                     }
@@ -799,7 +790,9 @@ public class EventManager {
             ServerLevel level= (ServerLevel) player.level();
             playerOptional.ifPresent(cap->{
                 if (player.tickCount%200==0){
+
                     cap.changeInsanityVal((short) -4);
+                    System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
                 }
 
             });
@@ -836,8 +829,7 @@ public class EventManager {
         if (player!=null){
 
             for (ItemStack armorStack : player.getInventory().armor) {
-                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
-                    ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
                     if (armorItem.getMaterial()==material){
                         cnt++;
                     }

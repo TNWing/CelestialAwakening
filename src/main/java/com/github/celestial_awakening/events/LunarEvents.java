@@ -250,21 +250,17 @@ public class LunarEvents {
             if (val>moonSanMin){
                 LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
                 optional.ifPresent(cap->{
-                    //max of 1.8k, use exponential func
-                    /*
-                    1 + 1800/1000
-                     */
                     int insChange= (int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400));
                     cap.changeInsanityVal(insChange);
                 });
             }
         });
     }
-    public void detectIfLookingAtMoon(Level level){
+    public void detectIfLookingAtMoon(Level level, boolean isNight){
         for (Player player:level.players()){
             UUID uuid=player.getUUID();
             short val=1;
-            if (LevelFuncs.detectIfLookingAtCelestialBody(level,player,-1)){
+            if (isNight && LevelFuncs.detectIfLookingAtCelestialBody(level,player,-1)){
                 if (timeSpentLookingAtMoon.containsKey(uuid)){
                     val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)+1);
                 }
@@ -273,7 +269,7 @@ public class LunarEvents {
             }
             else{
                 if (timeSpentLookingAtMoon.containsKey(uuid)){
-                    val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)-1);
+                    val= (short) Math.min(0,timeSpentLookingAtMoon.get(uuid)-1);
                     timeSpentLookingAtMoon.put(uuid,val);
                 }
             }

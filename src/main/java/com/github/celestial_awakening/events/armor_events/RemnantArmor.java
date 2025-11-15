@@ -33,7 +33,7 @@ public class RemnantArmor extends ArmorEffect {
 
     int[] devouringLightFoodLevels={1,1,1,2};
     float[] devouringLightSaturationLevels={0.5f,0.75f,1f,1f};
-
+    public static final String LORE="tooltip.celestial_awakening.remnant_armor.lore";
     public static final String DL_NAME = "tooltip.celestial_awakening.remnant_armor.dl_name";
     public static final String DL_DESC = "tooltip.celestial_awakening.remnant_armor.dl_desc";
     public static final String FL_NAME = "tooltip.celestial_awakening.remnant_armor.fl_name";
@@ -74,6 +74,7 @@ public class RemnantArmor extends ArmorEffect {
         }
         event.getToolTip().clear();
         event.getToolTip().add(name);
+        event.getToolTip().add(Component.translatable(LORE));
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,FL_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,COLLAPSE_NAME,boldColor);

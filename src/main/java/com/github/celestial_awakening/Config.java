@@ -48,6 +48,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST;
     private static final ForgeConfigSpec.ConfigValue<Boolean> PK_DAY_DESPAWN;
 
+    private static final ForgeConfigSpec.ConfigValue<Boolean> INSANITY_SOUNDS;
 
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_INTERVAL;
 
@@ -118,6 +119,7 @@ maybe use json files instead since it'll look neater?
             PK_SPAWN_CAP=builder.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,100);
             PK_RMG_RES_DIST=builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
             PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault: true").define("pk_day_despawn",true);
+            INSANITY_SOUNDS=builder.comment("If true, causes certain sounds to have a chance to play when insane.\nDefault: true").define("ins_sound",true);
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
@@ -214,6 +216,7 @@ maybe use json files instead since it'll look neater?
     public static boolean pkDayDespawn;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
     public static int moonstoneDimLim=15;
+    public static boolean insSound=true;
 
     public static int excitedParticlesTickInterval=50;
 
@@ -297,6 +300,8 @@ maybe use json files instead since it'll look neater?
         pkDmgResDist=PK_RMG_RES_DIST.get();
 
         pkDayDespawn=PK_DAY_DESPAWN.get();
+
+        insSound=INSANITY_SOUNDS.get();
 
         excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();
 

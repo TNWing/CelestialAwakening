@@ -146,7 +146,7 @@ public class LightRay extends CA_Projectile {
 
  */
             //this.doPostHurtEffects(livingentity);
-            if (entity1 != null && entity != entity1 && entity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
+            if (entity != entity1 && entity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
                 ((ServerPlayer)entity1).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
             //this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
@@ -182,10 +182,10 @@ public class LightRay extends CA_Projectile {
         for (LivingEntity entity: livingEntityList) {
                 AABB aabb=entity.getBoundingBox();
                 Vec3[] rayOffsets = new Vec3[] {
-                        new Vec3(-0 / 2, 0, 0),
-                        new Vec3(0/ 2, 0, 0),
-                        new Vec3(0, -0 / 2, 0),
-                        new Vec3(0, 0 / 2, 0)
+                        new Vec3(-0 / 2f, 0, 0),
+                        new Vec3(0/ 2f, 0, 0),
+                        new Vec3(0, -0 / 2f, 0),
+                        new Vec3(0, 0 / 2f, 0)
                 };
                 for (int i=0;i<4;i++){
 
@@ -229,18 +229,13 @@ public class LightRay extends CA_Projectile {
         ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
         BlockHitResult result= this.level().clip(clipContext);
 
-        if (result!=null){
-            //block in the way, so cut the ray short
-            BlockPos hitPos=result.getBlockPos();
-            if (!this.level().getBlockState(hitPos).isAir()){
-                end=result.getLocation();
-                hasHitSomething=true;
-            }
-
+        //block in the way, so cut the ray short
+        BlockPos hitPos=result.getBlockPos();
+        if (!this.level().getBlockState(hitPos).isAir()){
+            end=result.getLocation();
+            hasHitSomething=true;
         }
-        else{
 
-        }
         AABB rayBox=new AABB(this.position(),end);
         return rayBox;
     }

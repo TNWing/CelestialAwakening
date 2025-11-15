@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class CA_Predicates {
     //Gets all players and allied mobs
     public static Predicate getPlayersAndAlliedMobsPredicate(LivingEntity attacker){
-        Predicate<Entity> predicate= o -> {
+        return (Predicate<Entity>) o -> {
             if (attacker.isAlliedTo(o) || o.equals(attacker)){
                 return true;
             }
@@ -27,17 +27,15 @@ public class CA_Predicates {
             }
             return false;
         };
-        return predicate;
     }
 
     //Simply gets all players
     public static Predicate getPlayersPredicate(){
-        Predicate predicate= o -> o instanceof Player;
-        return predicate;
+        return o -> o instanceof Player;
     }
     //Uses vanilla teams to determine allies, and will also select all vanilla allied mobs
     public static Predicate sameTeamAndAlliesPredicate(LivingEntity attacker){
-        Predicate<LivingEntity> predicate= o -> {
+        return (Predicate<LivingEntity>) o -> {
             if (attacker.isAlliedTo(o) || o.equals(attacker) || (o instanceof SnowGolem && ((SnowGolem) o).getTarget()!=attacker)){
                 return true;
             }
@@ -46,7 +44,6 @@ public class CA_Predicates {
             }
             return o.isAlliedTo(attacker);
         };
-        return predicate;
     }
     //Uses vanilla teams to determine allies
     public static Predicate sameTeam(LivingEntity attacker){

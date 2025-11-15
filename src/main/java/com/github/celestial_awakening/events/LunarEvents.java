@@ -155,7 +155,6 @@ public class LunarEvents {
 
      */
     public void prowlerRaid(ServerLevel level){
-        List<ServerPlayer> serverPlayers=level.players();
         List<ServerPlayer> validTargets=level.getPlayers(serverPlayer -> {
             int pY = serverPlayer.getBlockY();
             int lY = level.getHeight(Heightmap.Types.WORLD_SURFACE, serverPlayer.getBlockX(), serverPlayer.getBlockZ());
@@ -241,16 +240,19 @@ public class LunarEvents {
     /*
     add players to this when they are added to level?
      */
+    /*
+    append this to cap instead of internal storage as that allows preservation outside of separate game instances
+     */
     static ConcurrentHashMap<UUID, Short> timeSpentLookingAtMoon=new ConcurrentHashMap<>();
 
     int moonSanMin=400;
     public void moonSanity(Level level){
         level.players().forEach(player->{
             Short val=timeSpentLookingAtMoon.get(player.getUUID());
-            if (val>moonSanMin){
+            if (val !=null && val>moonSanMin){
                 LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
                 optional.ifPresent(cap->{
-                    int insChange= (int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400));
+                    int insChange= (int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400f));
                     cap.changeInsanityVal(insChange);
                 });
             }
@@ -311,7 +313,7 @@ public class LunarEvents {
             night is 12000-24000
             spawn at 15000,18000,21000
              */
-                if ((time%12000)%3000==0 && time!=24000){//valid time
+                if ((time%12000)%3000==0){//valid time
                     //for each player, attempt to create a moonstone in a nearby chunk
                     List<? extends Player> pList=level.players();
                     for (Player p:pList) {
@@ -341,10 +343,9 @@ public class LunarEvents {
                                 }
                             }
                         }
-                        //pick a random applicable block
                         if (applicableBlocks.size()>0){
                             BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
-                            System.out.println("PLACING MOONSTONE at " + chosenSpot);
+                            //System.out.println("PLACING MOONSTONE at " + chosenSpot);
                             cap.currentMoonstonePos.put(chosenSpot, (short) 1800);
                         }
 

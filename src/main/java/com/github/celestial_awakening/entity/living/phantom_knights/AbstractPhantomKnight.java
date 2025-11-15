@@ -113,8 +113,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
         if (this.getActionId()<=0){
             amt*=0.4f;
         }
-        boolean returnVal=super.hurt(source,amt);
-        return returnVal;
+        return super.hurt(source,amt);
     }
 
     public void startUpBossBar(){

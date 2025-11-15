@@ -33,6 +33,7 @@ public class UmbraArmor extends ArmorEffect {
     int[] dreadCD={600,500,400,300};
     int[] dreadCDReduction={20,40,60,80};
 
+    public static final String LORE="tooltip.celestial_awakening.umbra_armor.lore";
     public static final String DREAD_NAME = "tooltip.celestial_awakening.umbra_armor.dread_name";
     public static final String DREAD_DESC = "tooltip.celestial_awakening.umbra_armor.dread_desc";
     public static final String PURSUIT_NAME = "tooltip.celestial_awakening.umbra_armor.pursuit_name";
@@ -77,6 +78,7 @@ Reduces CD by 1/2/3/4 sec on kill
         }
         event.getToolTip().clear();
         event.getToolTip().add(name);
+        event.getToolTip().add(Component.translatable(LORE));
         ToolTipBuilder.addShiftInfo(event);
         ToolTipBuilder.addFullSetName(event,PURSUIT_NAME,boldColor);
         ToolTipBuilder.addFullSetName(event,CL_NAME,boldColor);

@@ -90,7 +90,8 @@
   "effect.celestial_awakening.lunar_renewal.description":"Instantly repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.photosynthesis": "Photosynthesis",
   "effect.celestial_awakening.photosynthesis.description": "Periodically grants small amounts of hunger.",
-
+  "effect.celestial_awakening.moon_curse": "Curse of the Moon",
+  "effect.celestial_awakening.moon_curse.description": "Healing too fast causes the afflicted to take damage.",
 
   "entity.celestial_awakening.transcendent_asteron": "Asteron",
   "entity.celestial_awakening.transcendent_astralite": "Astralite",
@@ -104,6 +105,10 @@
   "advancement.celestial_awakening.root.title":"Celestial Awakening",
   "advancement.celestial_awakening.root.description":"",
 
+  "advancement.celestial_awakening.obtain_life_frag.title":"GIft of Light",
+  "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal transmute into raw life energy.",
+  "advancement.celestial_awakening.obtain_lunar_scale.title":"Lunar Tide",
+  "advancement.celestial_awakening.obtain_lunar_scale.description":"Retrieve an aquatic material infused with moonlight",
   "advancement.celestial_awakening.obtain_moonstone.title":"Magic of the Moon",
   "advancement.celestial_awakening.obtain_moonstone.description":"Follow the guidance of the moon and uncover a precious material",
   "advancement.celestial_awakening.obtain_sunstone.title":"Brilliant Light",
@@ -122,8 +127,8 @@
   "advancement.celestial_awakening.kill_transcendent_elite.title":"Awaking Threat",
   "advancement.celestial_awakening.kill_transcendent_elite.description":"Slay an elite transcendent.",
 
-  "advancement.celestial_awakening.kill_ph.title":"Test of Skill",
-  "advancement.celestial_awakening.kill_ph.description":"Duel a phantom knight.",
+  "advancement.celestial_awakening.kill_pk.title":"Test of Skill",
+  "advancement.celestial_awakening.kill_pk.description":"Duel a phantom knight.",
 
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
@@ -162,6 +167,7 @@
   "tooltip.celestial_awakening.armor.piece_effect": "Piece Effect: ",
   "tooltip.celestial_awakening.armor.shift_tip": "Hold Shift for Details",
 
+  "tooltip.celestial_awakening.everlight_armor.lore": "The armor shudders as it struggles to contain the blinding light within.",
   "tooltip.celestial_awakening.everlight_armor.unyielding_name": "Unyielding Flame",
   "tooltip.celestial_awakening.everlight_armor.unyielding_desc": "Upon killing an enemy, ignite nearby enemies and gain absorption.",
   "tooltip.celestial_awakening.everlight_armor.star_gazer_name": "Star Gazer",
@@ -196,6 +202,7 @@
   "tooltip.celestial_awakening.radiant_armor.wave_name": "Rejuvinating Wave",
   "tooltip.celestial_awakening.radiant_armor.wave_desc":"Every 7 seconds, recover 2.5 HP.",
 
+  "tooltip.celestial_awakening.remnant_armor.lore": "The armor emits a dull light. Perhaps you can fuel it with certain materials.",
   "tooltip.celestial_awakening.remnant_armor.dl_name": "Devouring Light",
   "tooltip.celestial_awakening.remnant_armor.dl_desc": "Kills restore %s hunger and %s saturation",
   "tooltip.celestial_awakening.remnant_armor.fl_name": "Final Light",
@@ -210,6 +217,7 @@
   "tooltip.celestial_awakening.shade_robes.strike_name": "Shadow Strike",
   "tooltip.celestial_awakening.shade_robes.strike_desc":"Increases damage dealt based on distance from the target.",
 
+  "tooltip.celestial_awakening.umbra_armor.lore": "The armor emits an aura of unnatural hunger. You feel as though you should satiate it.",
   "tooltip.celestial_awakening.umbra_armor.dread_name": "Dread",
   "tooltip.celestial_awakening.umbra_armor.dread_desc": "Hitting a target at full HP will deal an additional %s damage.\nCooldown of %s seconds, reduces cooldown by %s seconds on kill.",
   "tooltip.celestial_awakening.umbra_armor.pursuit_name": "Pursuit",

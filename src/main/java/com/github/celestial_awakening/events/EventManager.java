@@ -8,6 +8,7 @@ import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
+import com.github.celestial_awakening.events.raids.CARaids;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
@@ -20,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,6 +42,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -135,7 +140,6 @@ public class EventManager {
 
     private static final ParticleManager particleManager=ParticleManager.createParticleManager();
 
-    private static int currentDay;
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event){
         new DivinerDataCommand(event.getDispatcher(),2);
@@ -275,8 +279,7 @@ public class EventManager {
         if (!player.level().isClientSide){
             int cnt=0;
             for (ItemStack armorStack : player.getInventory().armor) {
-                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem)) {
-                    ArmorItem armorItem= (ArmorItem) armorStack.getItem();
+                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
                     if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
                         cnt++;
                     }
@@ -489,6 +492,7 @@ public class EventManager {
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
+                assert arrow != null;
                 if (arrow.getTags().contains(fBowBoost) && arrow.getOwner() instanceof LivingEntity){
                     Vec3 offset=new Vec3(3,0.5f,3);
                     AABB aabb=new AABB(target.position().subtract(offset),target.position().add(offset));
@@ -511,16 +515,14 @@ public class EventManager {
             @NotNull LazyOptional<LivingEntityCapability> targetCapOptional= target.getCapability(LivingEntityCapabilityProvider.capability);
             @NotNull LazyOptional<LivingEntityCapability> attackerCapOptional= causingEntity.getCapability(LivingEntityCapabilityProvider.capability);
             LazyOptional<PlayerCapability> playerCapOptional=target.getCapability(PlayerCapabilityProvider.capability);
-            if (target instanceof Player){
-                Player player=(Player) target;
+            if (target instanceof Player player){
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageSelf.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
                     if (cnt>0) {
                         entry.getValue().onLivingDamageSelf(event, player, cnt);
                     }
                 }
-                if (causingEntity instanceof Mob){
-                    Mob mob= (Mob) causingEntity;
+                if (causingEntity instanceof Mob mob){
                     if (mob.hasEffect(MobEffectInit.MARK_OF_HAUNTING.get())){
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
@@ -542,8 +544,7 @@ public class EventManager {
 
             }
 
-            if(causingEntity instanceof Player){
-                Player player=(Player) causingEntity;
+            if(causingEntity instanceof Player player){
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDamageOthers.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
                     if (cnt>0) {
@@ -591,8 +592,7 @@ public class EventManager {
                     }
                 }
             });
-            if(event.getSource().getEntity() instanceof Player){
-                Player player=(Player) event.getSource().getEntity();
+            if(event.getSource().getEntity() instanceof Player player){
                 for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectLivingDeath.entrySet()) {
                     int cnt=countPieces(player,entry.getKey());
                     if (cnt>0){
@@ -631,14 +631,13 @@ public class EventManager {
 
     @SubscribeEvent
     public static void onEntityLeaveLevel(EntityLeaveLevelEvent event){
-        if (!(event.getEntity() instanceof LivingEntity)) {
+        if (!(event.getEntity() instanceof LivingEntity entity)) {
             return;
         }
         if (event.getLevel().isClientSide){
             return;
         }
         ServerLevel level= (ServerLevel) event.getLevel();
-        LivingEntity entity = (LivingEntity) event.getEntity();
         @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             if (cap.hasAbility(KnightmareSuit.honorDuel)){//Needs to remove honor duel
@@ -678,7 +677,6 @@ public class EventManager {
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase== TickEvent.Phase.START){
-            //server side stuff only
             if (event.side.isServer()){
 
                 ServerLevel serverLevel = (ServerLevel) event.level;
@@ -686,10 +684,14 @@ public class EventManager {
                 int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
+                    cap.raids.tick();
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
+                        /*
                         if (time % 100==0){
                             System.out.println("cap dim is " + serverLevel.dimensionTypeId());
                         }
+
+                         */
                         solarEvents.detectTargets(serverLevel,cap);
 
                     }
@@ -790,11 +792,32 @@ public class EventManager {
             ServerLevel level= (ServerLevel) player.level();
             playerOptional.ifPresent(cap->{
                 if (player.tickCount%200==0){
+                    if (Config.insSound && cap.getInsanityPts()>1000 &&  player.tickCount%1800==0){
+                        if (level.random.nextInt(5)==0){
+                            switch(level.random.nextInt(3)){
+                                case 0:{
+                                    player.playSound(SoundEvents.ENDERMAN_STARE);
+                                    break;
+                                }
+                                case 1:{
+                                    player.playSound(SoundEvents.PARROT_IMITATE_CREEPER);
+                                    break;
+                                }
+                                case 2:{
+                                    BlockState blockState=level.getBlockState(player.blockPosition());
+                                    //Block block=blockState.getBlock();
+                                    SoundType soundtype = blockState.getSoundType(level, player.blockPosition(), player);
+                                    player.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.15F, soundtype.getPitch());
+                                    break;
+                                }
+                            }
 
+                        }
+                    }
                     cap.changeInsanityVal((short) -4);
                     System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
-                }
 
+                }
             });
             capOptional.ifPresent(cap->{
                 cap.tickAbilityMap();

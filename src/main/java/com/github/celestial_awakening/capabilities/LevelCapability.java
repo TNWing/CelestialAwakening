@@ -26,6 +26,7 @@ import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
 public class LevelCapability{
     public LevelCapability(Level level){
         initVals(level);
+        raids=new CARaids();
     }
 
     private CompoundTag storedNBT;

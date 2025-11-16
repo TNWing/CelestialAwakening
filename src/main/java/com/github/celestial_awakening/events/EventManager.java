@@ -557,6 +557,9 @@ public class EventManager {
                         if (!id1.equals(target.getUUID())){
                             event.setAmount(event.getAmount()*0.3f);
                         }
+                        else{
+                            event.setAmount(event.getAmount()*1.15f);
+                        }
                     }
                 });
 

@@ -106,7 +106,7 @@
   "advancement.celestial_awakening.root.description":"",
 
   "advancement.celestial_awakening.obtain_life_frag.title":"GIft of Light",
-  "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal transmute into raw life energy.",
+  "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal degrade into raw life energy.",
   "advancement.celestial_awakening.obtain_lunar_scale.title":"Lunar Tide",
   "advancement.celestial_awakening.obtain_lunar_scale.description":"Retrieve an aquatic material infused with moonlight",
   "advancement.celestial_awakening.obtain_moonstone.title":"Magic of the Moon",
@@ -124,11 +124,14 @@
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
 
-  "advancement.celestial_awakening.kill_transcendent_elite.title":"Awaking Threat",
+  "advancement.celestial_awakening.kill_transcendent_elite.title":"Steadfast Defender",
   "advancement.celestial_awakening.kill_transcendent_elite.description":"Slay an elite transcendent.",
 
+  "advancement.celestial_awakening.kill_transcendent_mboss.title":"Awaking Threat",
+  "advancement.celestial_awakening.kill_transcendent_mboss.description":"Slay a supreme transcendent.",
+
   "advancement.celestial_awakening.kill_pk.title":"Test of Skill",
-  "advancement.celestial_awakening.kill_pk.description":"Duel a phantom knight.",
+  "advancement.celestial_awakening.kill_pk.description":"Emerge victorious from a duel with a phantom knight.",
 
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
@@ -178,7 +181,7 @@
   "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
   "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had for 15 seconds.",
   "tooltip.celestial_awakening.knightmare_suit.honor_duel_name": "Honor Duel",
-  "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc": "Hitting an enemy applies Honor Duel to the user.\nDecreases damage taken from other enemies.\nDecreases damage dealt to other enemies.\nHonor Duel is removed if the user or the target is killed.\nAn entity can only be linked with one Honor Duel at a time.",
+  "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc": "Hitting an enemy applies Honor Duel to the user and the enemy.\nIncreases the damage dealt to the afflicted enemy.\nDecreases damage dealt and taken from other enemies.\nHonor Duel is removed if the user or the target is killed.\nAn entity can only be linked with one Honor Duel at a time.",
   "tooltip.celestial_awakening.knightmare_suit.ss_name": "Sword & Shield",
   "tooltip.celestial_awakening.knightmare_suit.ss_desc": "TBD",
 

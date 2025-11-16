@@ -289,8 +289,6 @@ public class EventManager {
                 ServerLevel serverLevel= (ServerLevel) player.level();
                 ((LunarArmor)lunarArmor.getValue()).onTrade(serverLevel, event,player);
             }
-
-
         }
 
     }
@@ -718,8 +716,8 @@ public class EventManager {
                     }
 
                 });
-                lunarEvents.detectIfLookingAtMoon(serverLevel,time>12000);
-                if (time>12000){
+                lunarEvents.detectIfLookingAtMoon(serverLevel,time>13000);
+                if (time>13000){
                     int phase=serverLevel.getMoonPhase();
                     lunarEvents.createMoonstone(serverLevel);
                     switch(phase){

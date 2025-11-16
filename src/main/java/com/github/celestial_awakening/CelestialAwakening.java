@@ -68,8 +68,8 @@ public class CelestialAwakening
         PotionInit.POTIONS.register(modEventBus);
         EnchantmentInit.ENCHANTMENTS.register(modEventBus);
         LootInit.LOOT_SERIALIZER.register(modEventBus);
+        LootModInit.LOOT_MOD_SERIALIZER.register(modEventBus);
         EntityInit.ENTITY_TYPES.register(modEventBus);
-        LootInit.registerLootConditions();
         RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
 
         MobEffectInit.MOB_EFFECTS.register(modEventBus);

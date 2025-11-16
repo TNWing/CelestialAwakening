@@ -310,7 +310,7 @@ public class LunarEvents {
                 int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
                 //time% % 24000L will give the actual daytime
             /*
-            night is 12000-24000
+            night is 13000-24999
             spawn at 15000,18000,21000
              */
                 if ((time%12000)%3000==0){//valid time

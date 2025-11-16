@@ -19,7 +19,8 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 public class LunarScaleFromFishLootModifier extends LootModifier {
-    public static final RegistryObject<Codec<LunarScaleFromFishLootModifier>> CODEC = LootInit.LOOT_SERIALIZER.register("scale_from_fish",()-> RecordCodecBuilder.create
+    public static final RegistryObject<Codec<LunarScaleFromFishLootModifier>> CODEC =
+            LootInit.LOOT_SERIALIZER.register("scale_from_fish",()-> RecordCodecBuilder.create
             (inst->codecStart(inst)
                     .apply(inst,LunarScaleFromFishLootModifier::new)));
     protected LunarScaleFromFishLootModifier(LootItemCondition[] conditionsIn) {

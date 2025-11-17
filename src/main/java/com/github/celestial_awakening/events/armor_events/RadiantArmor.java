@@ -166,7 +166,7 @@ public class RadiantArmor extends ArmorEffect {
                     animal.ageUp(1);//adds 1 sec (20 ticks) of age
                 }
                 else if (animal.getAge()>0){
-                    animal.setAge(animal.getAge()-20);
+                    animal.setAge(Math.max(0,animal.getAge()-20));
                 }
                 //goes from -X to 0, 0 is adult, negative num is child
                 //positive age means animal is on breeding cooldown, cooldown starts at 6k ticks

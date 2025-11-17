@@ -17,17 +17,17 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     SUNSTONE("radiant", 20, new int[]{ 2, 2, 2, 1}, 14,
             SoundEvents.ARMOR_EQUIP_LEATHER, 1, 0f, () -> Ingredient.of(ItemInit.SUNSTONE.get())),
 
-    ONYX_FUR("umbra",18,new int[]{2,5,4,1},15,SoundEvents.ARMOR_EQUIP_LEATHER,
+    ONYX_FUR("umbra",18,new int[]{2,5,4,1},12,SoundEvents.ARMOR_EQUIP_LEATHER,
             0,0f,()->Ingredient.of(ItemInit.ONYX_FUR.get())),
 
-    DYING_LIGHT_ESSENCE("remnant",18,new int[]{2,5,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
+    DYING_LIGHT_ESSENCE("remnant",18,new int[]{2,5,5,2},12,SoundEvents.ARMOR_EQUIP_CHAIN,
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
-    CONCENTRATED_LIGHT_ESSENCE("everlight",18,new int[]{2,6,5,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
-            0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
+    CONCENTRATED_LIGHT_ESSENCE("everlight",25,new int[]{3,6,6,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
+            3.5f,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
-    MIDNIGHT_IRON("knightmare",22,new int[]{2,5,5,2},14,SoundEvents.ARMOR_EQUIP_IRON,
-            1,0.1f,()->Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),
+    MIDNIGHT_IRON("knightmare",22,new int[]{3,6,5,2},14,SoundEvents.ARMOR_EQUIP_IRON,
+            2,0.1f,()->Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),
 
     COSMIC_HIDE("cosmic_hide",19,new int[]{0,1,1,0},16,SoundEvents.ARMOR_EQUIP_ELYTRA,
             0,0f,()->Ingredient.of(ItemInit.COSMIC_HIDE.get())),

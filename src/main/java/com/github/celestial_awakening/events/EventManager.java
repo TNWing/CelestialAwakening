@@ -735,11 +735,15 @@ public class EventManager {
 
                     if (time%100==0){
                         lunarEvents.moonSanity(serverLevel);
+                        if (time==18000){
+                            lunarEvents.midnightIronTransformation(serverLevel);
+                            lunarEvents.attemptPKSpawn(serverLevel);
+                        }
+                        else if (time==15500){
+                            lunarEvents.attemptProwlerRaid(serverLevel);
+                        }
                     }
-                    if (time==18000){
-                        lunarEvents.midnightIronTransformation(serverLevel);
-                        lunarEvents.attemptPKSpawn(serverLevel);
-                    }
+
 
                 }
                 particleManager.generateParticles(serverLevel);

@@ -1,13 +1,18 @@
 package com.github.celestial_awakening.entity.combat.night_prowlers;
 
+import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
+import com.github.celestial_awakening.entity.projectile.IceShard;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -15,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -32,7 +38,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
     ParticleOptions particleType = ParticleTypes.SMOKE;
     Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob);
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
-
+    DamageSourceIgnoreIFrames flameLeap=new DamageSourceIgnoreIFrames(mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE),this.mob);
     public NightProwlerShadowLeap(AbstractNightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
@@ -68,6 +74,12 @@ public class NightProwlerShadowLeap extends GenericAbility {
                         Vec3 dm=new Vec3(dir.x,0,dir.z).scale(0.4*dist).add(0,yM,0);
                         this.mob.setDeltaMovement(dm);
                         leapDir=this.mob.getDeltaMovement();
+                        if (((AbstractNightProwler)this.mob).getInfuse()==-1){
+                            for (int i=-1;i<=1;i+=2){
+                                IceShard iceShard=IceShard.create(this.mob.level(),160,3,50*i+MathFuncs.getAngFrom2DVec(leapDir),40,1.5f);
+                            }
+                        }
+
                         AABB aabb=new AABB(this.mob.position(),this.mob.position());
                         aabb=aabb.inflate(aabbInflate);
                         LivingEntity entity=this.mob.level().getNearestEntity(LivingEntity.class,conds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
@@ -159,7 +171,17 @@ public class NightProwlerShadowLeap extends GenericAbility {
 
                                 }
                                 else if (infuse==1){
+                                    aabb=new AABB(this.mob.position(),this.mob.position());
+                                    aabb=aabb.inflate(3.5f);
+                                    TargetingConditions conds=null;
+                                    conds.selector(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class)));
+                                    List<LivingEntity> entityList=this.mob.level().getNearbyEntities(LivingEntity.class,conds,this.mob,aabb);
+                                    entityList.forEach(e->{
 
+                                        if (e.hurt(flameLeap,2.5f)){
+                                            e.setSecondsOnFire(4);
+                                        }
+                                    });
                                 }
                                 this.mob.setOpacity(1f);
 

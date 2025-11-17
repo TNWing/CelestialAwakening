@@ -246,6 +246,13 @@ maybe use json files instead since it'll look neater?
 
     public static boolean useVanillaTeams;
 
+    public enum ProwlerDestruction{
+        ALL,
+        RAID,
+        NONE
+    }
+    public static ProwlerDestruction prowlerDestruction=ProwlerDestruction.RAID;
+
     public static List<Integer> whelpWave1Vals;
 
 

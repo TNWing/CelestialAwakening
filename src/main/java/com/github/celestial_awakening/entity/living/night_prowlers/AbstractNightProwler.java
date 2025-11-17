@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.living.night_prowlers;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
@@ -97,6 +98,25 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     @Override
     public boolean hurt(DamageSource source, float amt){
         return super.hurt(source,amt);
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        Level level = this.level();
+        if (level instanceof ServerLevel) {
+            if (getInfuse()!=0){
+                if (Config.prowlerDestruction== Config.ProwlerDestruction.ALL || (Config.prowlerDestruction== Config.ProwlerDestruction.RAID && this.raid!=null)){
+                    if (getInfuse()==1){//fire
+
+                    }
+                    else{//ice
+
+                    }
+                }
+            }
+        }
+
     }
 
     public int getInfuse(){

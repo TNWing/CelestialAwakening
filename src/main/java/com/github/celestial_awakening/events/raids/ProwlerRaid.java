@@ -9,6 +9,8 @@ import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -62,13 +64,13 @@ public class ProwlerRaid extends AbstractCARaid{
 
     private List<AbstractNightProwler> prowlers=new ArrayList<>();
 
-    private int delayTicks=60;
+    private int delayTicks=360;
 
-    private int currentWave=1;
+    private int currentWave=0;
 
     private int maxWave;
 
-    private int nextWaveInterval;
+    private int nextWaveInterval=10;
 
 
     /*
@@ -288,29 +290,41 @@ Config should have these settings
     }
 
     public void tick() {
-        if (isActive())
-        if (this.getServerLevel().getGameTime()>=warningTriggerTime+delayTicks){
+        if (isActive()){
+            if (this.getServerLevel().getGameTime()>=warningTriggerTime+delayTicks){//not ready
+                if ((this.getServerLevel().getGameTime()-(warningTriggerTime+delayTicks)%120)==0){
+                /*
+                the floats represent vol & pitch (i think)
+                the bool represents idk, but most instances seem to be false anyway
+                 */
+                    this.getServerLevel().playLocalSound(getCenterPos(), SoundEvents.WOLF_GROWL, SoundSource.HOSTILE,0.4f,1f,false);
+                }
 
-        }
-        nextWaveInterval--;
-        if (prowlers.isEmpty() && nextWaveInterval>80){
-            nextWaveInterval=80;
+            }
+            else{
+                nextWaveInterval--;
+                if (prowlers.isEmpty() && nextWaveInterval>80){
+                    nextWaveInterval=80;
             /*
             expedite the spawning if all prowlers are dead
              */
-        }
-        if (nextWaveInterval<=0){
-            nextWaveInterval=700;
-            currentWave++;
-/*
-            if (currentWave>=maxWave){
-                this.getServerLevel().getCapability(LevelCapabilityProvider.LevelCap).ifPresent(cap->{
-                    cap.raids.removeProwlerRaid(this.getRaidID());
-                });
+                }
+                if (nextWaveInterval<=0){
+                    nextWaveInterval=700;
+                    /*
+                    spawn stuff
+                     */
+                    currentWave++;
+
+                    if (currentWave>=maxWave){
+                        this.getServerLevel().getCapability(LevelCapabilityProvider.LevelCap).ifPresent(cap->{
+                            cap.raids.removeProwlerRaid(this.getRaidID());
+                        });
+                    }
+
+
+                }
             }
-
- */
         }
-
     }
 }

@@ -83,6 +83,7 @@ public class LunarArmor extends ArmorEffect {
     }
 
     public void onFishEvent(ItemFishedEvent event,int cnt){//TODO: move this to loot modifier instead
+        /*
         if (random.nextInt(0,100)<cnt*12){
             Player player=event.getEntity();
             int roll=random.nextInt(0,10);
@@ -95,13 +96,16 @@ public class LunarArmor extends ArmorEffect {
             }
             player.level().addFreshEntity(itemEntity);
         }
+
+         */
     }
 
     public void onFishHookCreationEvent(ServerLevel serverLevel, FishingHook hook){
         if (serverLevel.getDayTime()>=nightStart && serverLevel.getMoonPhase()==4){
             int luck= ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37096_");
-            //TODO: also impact fishing spd bc fishing is kinda meh in base game
+            int spd=ObfuscationReflectionHelper.getPrivateValue(FishingHook.class,hook,"f_37097_");
             ObfuscationReflectionHelper.setPrivateValue(FishingHook.class,hook,luck+2,"f_37096_");
+            ObfuscationReflectionHelper.setPrivateValue(FishingHook.class, hook,spd+1,"f_37097_");
         }
 
     }

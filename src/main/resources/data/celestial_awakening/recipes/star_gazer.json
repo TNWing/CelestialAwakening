@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "base": {
+    "item": "celestial_awakening:fluorescent_bow"
+  },
+  "result": {
+    "item": "celestial_awakening:star_gazer"
+  },
+  "template": {
+    "item": "celestial_awakening:shimmer_cube"
+  }
+}

@@ -1,7 +1,9 @@
 package com.github.celestial_awakening.events;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -48,6 +50,23 @@ public class CA_SpawnPlacements {
             }
 
 
+            return false;
+        }
+    };
+//SpawnPlacements.Type.IN_LAVA
+    static SpawnPlacements.SpawnPredicate lava_daySurface =new SpawnPlacements.SpawnPredicate() {
+        //copied from strider
+        @Override
+        public boolean test(EntityType entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+            if (serverLevelAccessor.getLevel().isDay()){
+                BlockPos.MutableBlockPos blockpos$mutableblockpos = blockPos.mutable();
+
+                do {
+                    blockpos$mutableblockpos.move(Direction.UP);
+                } while(serverLevelAccessor.getFluidState(blockpos$mutableblockpos).is(FluidTags.LAVA));
+
+                return serverLevelAccessor.getBlockState(blockpos$mutableblockpos).isAir() && serverLevelAccessor.canSeeSky(blockpos$mutableblockpos);
+            }
             return false;
         }
     };

@@ -54,7 +54,7 @@ public class NebureScorchingRays extends GenericAbility {
             angStartOffset=target.level().random.nextInt(360);
             for (int i=0;i<v;i++){
                 double ang=Math.toRadians(angStartOffset+angDiff*i);
-                rays[i]=LightRay.create(this.mob.level(),90, (float) (this.mob.getAttribute(Attributes.ATTACK_DAMAGE).getValue()*1.75f));
+                rays[i]=LightRay.create(this.mob.level(),90, (float) (this.mob.getAttribute(Attributes.ATTACK_DAMAGE).getValue()*1.75f),true,false);
                 rays[i].setPred(o -> !(o instanceof AbstractTranscendent));
                 rays[i].setOwner(this.mob);
                 rays[i].setCollision(false);

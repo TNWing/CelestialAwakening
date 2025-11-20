@@ -10,7 +10,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LunarScaleFromFishLootModifier extends LootModifier {
     public static final RegistryObject<Codec<LunarScaleFromFishLootModifier>> CODEC =
-            LootInit.LOOT_SERIALIZER.register("scale_from_fish",()-> RecordCodecBuilder.create
+            LootInit.LOOT_MOD_SERIALIZER.register("scale_from_fish",()-> RecordCodecBuilder.create
             (inst->codecStart(inst)
                     .apply(inst,LunarScaleFromFishLootModifier::new)));
     protected LunarScaleFromFishLootModifier(LootItemCondition[] conditionsIn) {

@@ -23,7 +23,16 @@ public class MathFuncs {
         double angle=v1.dot(v2);
         angle/=v1.length();
         angle/=v2.length();
+        angle=Math.max(-1.0,Math.min(1.0,angle));
         angle=Math.toDegrees(Math.acos(angle));
+        return angle;
+    }
+    public static double radBtwnVec(Vec3 v1, Vec3 v2){
+        double angle=v1.dot(v2);
+        angle/=v1.length();
+        angle/=v2.length();
+        angle=Math.max(-1.0,Math.min(1.0,angle));
+        angle=Math.acos(angle);
         return angle;
     }
     public static double clampAngle(double deg){
@@ -112,5 +121,9 @@ public class MathFuncs {
         int j = Mth.floor(vec.y);
         int k = Mth.floor(vec.z);
         return new BlockPos(i,j,k);
+    }
+
+    public static Vec3 getDirVecFromHVAngs(float h, float v){
+        return Vec3.ZERO;
     }
 }

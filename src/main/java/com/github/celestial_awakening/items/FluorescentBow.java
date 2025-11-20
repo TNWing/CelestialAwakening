@@ -42,6 +42,9 @@ public class FluorescentBow extends BowItem {
         components.add(Component.translatable("tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc"));
         super.appendHoverText(itemStack, level, components, tooltipFlag);
     }
+    public void superAppendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, level, components, tooltipFlag);
+    }
 
     @Override
     public int getUseDuration(ItemStack p_40680_) {
@@ -49,9 +52,14 @@ public class FluorescentBow extends BowItem {
     }
 
     @Override
+    public int getEnchantmentValue() {
+        return 2;
+    }
+    @Override
     public void releaseUsing(ItemStack bowStack, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         if (p_40669_ instanceof Player player) {
-            boolean upgradedBowFlag=bowStack.getItem() instanceof Stargazer;
+            boolean upgradedBowFlag=bowStack.getItem() instanceof Stargazer gazer;
+
             boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bowStack) > 0;
             ItemStack arrowStack = player.getProjectile(bowStack);
 
@@ -74,7 +82,7 @@ public class FluorescentBow extends BowItem {
                         abstractarrow.setBaseDamage(abstractarrow.getBaseDamage()*dmgMult);
                         abstractarrow.addTag(NBTStrings.fBowBoost);
                         if (upgradedBowFlag){
-
+                            abstractarrow.addTag(NBTStrings.sgBowBoost);
                         }
                         abstractarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {

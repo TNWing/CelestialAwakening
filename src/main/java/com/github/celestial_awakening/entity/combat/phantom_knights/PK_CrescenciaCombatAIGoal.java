@@ -16,6 +16,7 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     //PK_CrescenciaNightSlash nightSlash=new PK_CrescenciaNightSlash(this.mob,20,120,120,30);
     PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36,9);
     PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,160,0,10,8);
+    PK_CrescenciaPhantomStrike phantomStrike=new PK_CrescenciaPhantomStrike(this.mob,0,25,0,0);
     List<GenericAbility> abilities=List.of(basicAttack,crescentWhirlwind,moonCutter,strikethrough);
     public PK_CrescenciaCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
@@ -23,7 +24,14 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     public void tick(){//this tick occurs ever 2 standard ticks
         LivingEntity target=this.mob.getTarget();
         if (this.mob.getBossBarWindup()>=100){
-            abilities.forEach(a->{a.decreaseCD(1);});
+            abilities.forEach(a-> a.decreaseCD(1));
+            if (this.mob.level().getDifficulty().getId()>1 &&  this.mob.getHealth()/this.mob.getMaxHealth()<=0.4f){
+                phantomStrike.decreaseCD(1);
+                if (phantomStrike.getCurrentCD()==0){
+                    phantomStrike.executeAbility(this.mob.getTarget());
+                    phantomStrike.setCD(25);
+                }
+            }
             if (this.mob.isActing){
                 currentAbility.executeAbility(this.mob.getTarget());
             }

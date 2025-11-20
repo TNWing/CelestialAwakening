@@ -28,6 +28,7 @@ public class LightRay extends CA_Projectile {
     float widthProgress;
     float heightProgress;
 
+    //rate of change per tick
     float widthRateOfChange;
     float heightRateOfChange;
 
@@ -75,7 +76,14 @@ public class LightRay extends CA_Projectile {
         entity.setDmg(dmg);
         return entity;
     }
-
+    public static LightRay create(Level level, int tickLiveTime,float dmg,boolean hitMultiple,boolean destroyIfHitLiving) {
+        LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
+        entity.setLifetime(tickLiveTime);
+        entity.setDmg(dmg);
+        entity.hitMultiple=hitMultiple;
+        entity.destroyIfHitLiving=destroyIfHitLiving;
+        return entity;
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

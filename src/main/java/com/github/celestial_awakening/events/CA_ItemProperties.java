@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 public class CA_ItemProperties extends ItemProperties {
     public static void addProperties() {
         bowProperties(ItemInit.FLUORESCENT_BOW.get());
+        bowProperties(ItemInit.STAR_GAZER.get());
     }
 
     private static void bowProperties(Item item) {

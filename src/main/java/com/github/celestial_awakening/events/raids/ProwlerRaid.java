@@ -60,7 +60,7 @@ public class ProwlerRaid extends AbstractCARaid{
 
     private boolean active;
 
-    private int warningTriggerTime;
+    private long warningTriggerTime;
 
     private List<AbstractNightProwler> prowlers=new ArrayList<>();
 
@@ -169,6 +169,7 @@ make this a separate class and init the values based on config vals later down t
         //this.raidEvent.setProgress(0.0F);
         this.setCenterPos(p_37694_);
         this.maxWave=maxWaves;
+        this.warningTriggerTime=p_37693_.getGameTime();
         //this.numGroups = this.getNumGroups(p_37693_.getDifficulty());
         //this.status = Raid.RaidStatus.ONGOING;
     }

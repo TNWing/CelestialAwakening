@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.events;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import com.github.celestial_awakening.entity.projectile.MoonlightOrb;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.*;
@@ -25,6 +26,7 @@ public class ClientModEventBusManager {
         EntityRenderers.register(EntityInit.SHINING_ORB.get(), ShiningOrbRenderer::new);
         EntityRenderers.register(EntityInit.LUNAR_CRESCENT.get(), LunarCrescentRenderer::new);
         EntityRenderers.register(EntityInit.ORBITER.get(), OrbiterRenderer::new);
+        EntityRenderers.register(EntityInit.MOONLIGHT_ORB.get(), MoonlightOrbRenderer::new);
         EntityRenderers.register(EntityInit.NIGHT_PROWLER_WHELP.get(), NightProwlerRenderer::new);
         EntityRenderers.register(EntityInit.CUSTOM_ARROW.get(), CArrowRenderer::new);
 

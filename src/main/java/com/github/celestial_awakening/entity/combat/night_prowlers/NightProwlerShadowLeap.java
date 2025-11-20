@@ -1,9 +1,15 @@
 package com.github.celestial_awakening.entity.combat.night_prowlers;
 
+import com.github.celestial_awakening.capabilities.MovementModifier;
+import com.github.celestial_awakening.capabilities.ProjCapability;
+import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.entity.projectile.IceShard;
+import com.github.celestial_awakening.networking.ModNetwork;
+import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
@@ -19,6 +25,8 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -75,8 +83,21 @@ public class NightProwlerShadowLeap extends GenericAbility {
                         this.mob.setDeltaMovement(dm);
                         leapDir=this.mob.getDeltaMovement();
                         if (((AbstractNightProwler)this.mob).getInfuse()==-1){
+                            ServerLevel serverLevel= (ServerLevel) this.mob.level();
                             for (int i=-1;i<=1;i+=2){
-                                IceShard iceShard=IceShard.create(this.mob.level(),160,3,50*i+MathFuncs.getAngFrom2DVec(leapDir),40,1.5f);
+                                IceShard iceShard=IceShard.create(this.mob.level(),200,5.4f,51*i+MathFuncs.getAngFrom2DVec(leapDir),42,1.5f,this.mob);
+                                @NotNull LazyOptional<ProjCapability> capOptional=iceShard.getCapability(ProjCapabilityProvider.ProjCap);
+
+                                iceShard.setPos(this.mob.position());
+                                int finalI = i;
+                                capOptional.ifPresent(cap->{
+                                    MovementModifier reorient=new MovementModifier(MovementModifier.modFunction.NUM,MovementModifier.modOperation.MULT,
+                                            MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,1,-17* finalI,-28,30,60);
+                                    cap.putInBackOfList(reorient);
+                                    ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(iceShard.getId(), cap),serverLevel.dimension());
+                                });
+                                serverLevel.addFreshEntity(iceShard);
+                                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(iceShard.getId()),serverLevel.dimension());
                             }
                         }
 

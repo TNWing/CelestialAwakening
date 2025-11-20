@@ -3,7 +3,7 @@
   "item.celestial_awakening.lunar_scale": "Lunar Scale",
   "item.celestial_awakening.lunar_arrow": "Lunar Arrow",
   "item.celestial_awakening.moon_scythe": "Moon Scythe",
-  "item.celestial_awakening.moonlight_reaper": "Moonlight Reaper",
+  "item.celestial_awakening.moonlight_reaper": "Midnight Reaper",
   "item.celestial_awakening.moonstone_helmet": "Lunar Helmet",
   "item.celestial_awakening.moonstone_chestplate": "Lunar Chestplate",
   "item.celestial_awakening.moonstone_leggings": "Lunar Leggings",
@@ -52,8 +52,6 @@
   "item.celestial_awakening.midnight_iron_shovel": "Midnight Iron Shovel",
   "item.celestial_awakening.midnight_iron_hoe": "Midnight Iron Hoe",
 
-  "item.celestial_awakening.honor_c": "Emblem of Honor - C",
-
   "item.celestial_awakening.knightmare_helmet": "Knightmare Helmet",
   "item.celestial_awakening.knightmare_chestplate": "Knightmare Chestplate",
   "item.celestial_awakening.knightmare_leggings": "Knightmare Leggings",
@@ -84,6 +82,7 @@
   "effect.celestial_awakening.purging_light": "Purging Light",
   "effect.celestial_awakening.purging_light.description": "Upon expiring, removes a random buff and damages the afflicted depending on the number of debuffs on them.",
   "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
+  "effect.celestial_awakening.celestial_beacon.description": "Draws the attention of the transcendents.",
   "effect.celestial_awakening.lunar_restoration": "Lunar Restoration",
   "effect.celestial_awakening.lunar_restoration.description":"Periodically repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.lunar_renewal": "Lunar Renewal",
@@ -98,6 +97,7 @@
   "entity.celestial_awakening.transcendent_nebure": "Nebure",
   "entity.celestial_awakening.night_prowler_whelp": "Whelp",
   "entity.celestial_awakening.pk_crescencia": "Crescencia",
+  "entity.celestial_awakening.solmander_newt": "Sol Newt",
 
   "container.astralter":"Astralter",
   "astralter.transmute": "Transmute Stones",
@@ -105,12 +105,12 @@
   "advancement.celestial_awakening.root.title":"Celestial Awakening",
   "advancement.celestial_awakening.root.description":"",
 
-  "advancement.celestial_awakening.obtain_life_frag.title":"GIft of Light",
-  "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal degrade into raw life energy.",
+  "advancement.celestial_awakening.obtain_life_frag.title":"Gift of Light",
+  "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal degrade into raw life energy",
   "advancement.celestial_awakening.obtain_lunar_scale.title":"Lunar Tide",
   "advancement.celestial_awakening.obtain_lunar_scale.description":"Retrieve an aquatic material infused with moonlight",
   "advancement.celestial_awakening.obtain_moonstone.title":"Magic of the Moon",
-  "advancement.celestial_awakening.obtain_moonstone.description":"Follow the guidance of the moon and uncover a precious material",
+  "advancement.celestial_awakening.obtain_moonstone.description":"Follow the guidance of the moon and uncover a precious stone",
   "advancement.celestial_awakening.obtain_sunstone.title":"Brilliant Light",
   "advancement.celestial_awakening.obtain_sunstone.description":"Find a fragment of solar energy concealed in vegetation",
   "advancement.celestial_awakening.obtain_onyx_fur.title":"Cursed Wildlife",
@@ -121,17 +121,20 @@
   "advancement.celestial_awakening.obtain_midnight_iron.description": "Observe the transformation of a common metal",
 
 
+  "advancement.celestial_awakening.prowler_raid.title":"Constant Threat",
+  "advancement.celestial_awakening.prowler_raid.description":"The hounds are getting restless",
+
   "advancement.celestial_awakening.spotted_by_diviner.title":"Dark Forest",
   "advancement.celestial_awakening.spotted_by_diviner.description":"Catch the attention of an otherworldly entity",
 
   "advancement.celestial_awakening.kill_transcendent_elite.title":"Steadfast Defender",
-  "advancement.celestial_awakening.kill_transcendent_elite.description":"Slay an elite transcendent.",
+  "advancement.celestial_awakening.kill_transcendent_elite.description":"Slay an elite transcendent",
 
   "advancement.celestial_awakening.kill_transcendent_mboss.title":"Awaking Threat",
-  "advancement.celestial_awakening.kill_transcendent_mboss.description":"Slay a supreme transcendent.",
+  "advancement.celestial_awakening.kill_transcendent_mboss.description":"Slay a supreme transcendent",
 
   "advancement.celestial_awakening.kill_pk.title":"Test of Skill",
-  "advancement.celestial_awakening.kill_pk.description":"Emerge victorious from a duel with a phantom knight.",
+  "advancement.celestial_awakening.kill_pk.description":"Emerge victorious from a duel with a phantom knight",
 
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
@@ -161,6 +164,10 @@
   "tooltip.celestial_awakening.fluorescent_bow.dangersense_desc": "Upon nocking an arrow, reveal all nearby enemies that aren't invisible.",
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_name": "Revealing Shot",
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target.",
+  "tooltip.celestial_awakening.star_gazer.burning_light_name": "Burning Light",
+  "tooltip.celestial_awakening.star_gazer.burning_light_desc": "When the arrow hits a target, deal bonus damage if the target is glowing and heal slightly if the target is on fire.\nThis effect is applied before Revealing Shot.",
+
+
 
   "tooltip.celestial_awakening.lunar_arrow.desc": "Upon hitting an entity, damages and slows all entities behind the target.",
   "tooltip.celestial_awakening.solar_arrow.desc": "Ignites nearby enemies while airborne.",

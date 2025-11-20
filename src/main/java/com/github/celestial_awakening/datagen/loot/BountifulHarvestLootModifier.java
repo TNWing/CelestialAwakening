@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 public class BountifulHarvestLootModifier extends LootModifier {
-    public static final RegistryObject<Codec<BountifulHarvestLootModifier>> CODEC = LootInit.LOOT_SERIALIZER.register("moonstone_crop_boost",()-> RecordCodecBuilder.create
+    public static final RegistryObject<Codec<BountifulHarvestLootModifier>> CODEC = LootInit.LOOT_MOD_SERIALIZER.register("moonstone_crop_boost",()-> RecordCodecBuilder.create
             (inst->codecStart(inst)
                     .apply(inst,BountifulHarvestLootModifier::new)));
     public BountifulHarvestLootModifier(LootItemCondition[] conditionsIn) {

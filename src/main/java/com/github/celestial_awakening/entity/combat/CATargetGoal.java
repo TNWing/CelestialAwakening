@@ -11,6 +11,14 @@ functions like TargetGoal with the following differences
 -reads mob data to determine if the mob can detect targets through walls
  */
 public abstract class CATargetGoal extends TargetGoal {
+    public int getUnseenCATicks() {
+        return unseenCATicks;
+    }
+
+    public void setUnseenCATicks(int unseenCATicks) {
+        this.unseenCATicks = unseenCATicks;
+    }
+
     private int unseenCATicks;
 
     public CATargetGoal(Mob p_26140_, boolean p_26141_) {

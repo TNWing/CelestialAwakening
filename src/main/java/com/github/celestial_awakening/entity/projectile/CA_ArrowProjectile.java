@@ -4,7 +4,6 @@ import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.CA_Entity;
-import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.CA_Predicates;

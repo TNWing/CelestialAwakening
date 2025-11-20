@@ -8,12 +8,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -21,20 +22,18 @@ import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
-public class LunarFishingLootModifier extends LootModifier {
-    //LootTableIdCondition
-    //LootItemBlockStatePropertyCondition
+public class RadiantButcherLootModifier extends LootModifier {
     ArmorMaterial material;
     float chancePerPiece;
-    public static final RegistryObject<Codec<LunarFishingLootModifier>> CODEC = LootInit.LOOT_MOD_SERIALIZER.register("lunar_fishing",()-> RecordCodecBuilder.create
+    public static final RegistryObject<Codec<RadiantButcherLootModifier>> CODEC = LootInit.LOOT_MOD_SERIALIZER.register("radiant_butcher",()-> RecordCodecBuilder.create
             (inst->codecStart(inst)
-                    .apply(inst,LunarFishingLootModifier::new)));
+                    .apply(inst,RadiantButcherLootModifier::new)));
     /**
      * Constructs a LootModifier.
      *
      * @param conditionsIn the ILootConditions that need to be matched before the loot is modified.
      */
-    protected LunarFishingLootModifier(LootItemCondition[] conditionsIn) {
+    protected RadiantButcherLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
         for (LootItemCondition cond:conditionsIn) {
             if (cond instanceof ArmorLootCondition){
@@ -45,13 +44,20 @@ public class LunarFishingLootModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        Entity entity=context.getParamOrNull(LootContextParams.THIS_ENTITY);
+        if (entity!=null && entity instanceof LivingEntity){
+            LivingEntity livingEntity= (LivingEntity) entity;
+            if (!(livingEntity instanceof Animal)){
+                return generatedLoot;
+            }
+        }
         for (LootItemCondition cond:this.conditions) {
             if (!cond.test(context)){
                 return generatedLoot;
             }
         }
-        Entity entity=context.getParamOrNull(LootContextParams.KILLER_ENTITY);
-        if (entity!=null && entity instanceof LivingEntity livingEntity){
+        Entity killer=context.getParamOrNull(LootContextParams.KILLER_ENTITY);
+        if (killer!=null && killer instanceof LivingEntity livingEntity){
             Iterable<ItemStack> armorSlots=livingEntity.getArmorSlots();
             int cnt=0;
 
@@ -64,19 +70,17 @@ public class LunarFishingLootModifier extends LootModifier {
             }
             RandomSource randomSource= context.getLevel().getRandom();
             if (cnt>0 && randomSource.nextFloat()*100<cnt*chancePerPiece){
-
-                //randomSource.next
-                if (randomSource.nextInt(10)>5){
-                    generatedLoot.add(new ItemStack(ItemInit.MOONSTONE.get()));
+                if (randomSource.nextInt(10)>4){
+                    generatedLoot.add(new ItemStack(Items.BONE));
                 }
                 else{
-                    generatedLoot.add(new ItemStack(ItemInit.LUNAR_SCALE.get()));
+                    generatedLoot.add(new ItemStack(ItemInit.LIFE_FRAG.get()));
                 }
             }
-
         }
-        return generatedLoot;
 
+
+        return generatedLoot;
     }
 
     @Override

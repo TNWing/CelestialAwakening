@@ -1,6 +1,8 @@
 {
   "replace": false,
   "entries": [
-    "celestial_awakening:lunar_scale_from_fish_modifier"
+    "celestial_awakening:lunar_scale_from_fish_modifier",
+    "celestial_awakening:lunar_armor_fishing_modifier",
+    "celestial_awakening:radiant_armor_butcher_modifier"
   ]
 }

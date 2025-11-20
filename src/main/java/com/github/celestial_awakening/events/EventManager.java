@@ -5,10 +5,10 @@ import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
+import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
-import com.github.celestial_awakening.events.raids.CARaids;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
@@ -42,7 +42,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -53,7 +52,6 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
-import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -66,7 +64,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,20 +77,20 @@ public class EventManager {
     public static LunarEvents lunarEvents=new LunarEvents();
     public static SolarEvents solarEvents=new SolarEvents();
 
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> lunarArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.MOONSTONE,new LunarArmor());
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> radiantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.SUNSTONE,new RadiantArmor());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> lunarArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.LUNAR,new LunarArmor());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> radiantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.RADIANT,new RadiantArmor());
 
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> remnantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.DYING_LIGHT_ESSENCE,new RemnantArmor());
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> umbraArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.ONYX_FUR,new UmbraArmor());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> remnantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.REMNANT,new RemnantArmor());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> umbraArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.UMBRA,new UmbraArmor());
 
 
 
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> shadeArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.PULSATING_DARKNESS,new ShadeRobes());
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> stellarRobes=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.COSMIC_HIDE,new StellarRobes());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> shadeArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.SHADE,new ShadeRobes());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> stellarRobes=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.STELLAR,new StellarRobes());
 
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> everlightArmor =new AbstractMap.SimpleEntry<>(CustomArmorMaterial.CONCENTRATED_LIGHT_ESSENCE,new EverlightArmor());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> everlightArmor =new AbstractMap.SimpleEntry<>(CustomArmorMaterial.EVERLIGHT,new EverlightArmor());
 
-    private static final Map.Entry<ArmorMaterial,ArmorEffect> knightmareSuit=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.MIDNIGHT_IRON,new KnightmareSuit());
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> knightmareSuit=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.KNIGHTMARE,new KnightmareSuit());
 
 
     private static final Map<ArmorMaterial,ArmorEffect> armorMaterials =  (new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
@@ -262,7 +259,7 @@ public class EventManager {
 
             for (ItemStack armorStack : player.getInventory().armor) {
                 if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
-                    if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                    if (armorItem.getMaterial()==CustomArmorMaterial.LUNAR){
                         cnt++;
                     }
                 }
@@ -280,7 +277,7 @@ public class EventManager {
             int cnt=0;
             for (ItemStack armorStack : player.getInventory().armor) {
                 if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
-                    if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                    if (armorItem.getMaterial()==CustomArmorMaterial.LUNAR){
                         cnt++;
                     }
                 }
@@ -351,7 +348,7 @@ public class EventManager {
                     Player player=hook.getPlayerOwner();
                     for (ItemStack armorStack : player.getInventory().armor) {
                         if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
-                            if (armorItem.getMaterial()==CustomArmorMaterial.MOONSTONE){
+                            if (armorItem.getMaterial()==CustomArmorMaterial.LUNAR){
                                 cnt++;
                             }
                         }
@@ -490,8 +487,25 @@ public class EventManager {
             }
             if (directEntity instanceof AbstractArrow){
                 AbstractArrow arrow= (AbstractArrow) event.getSource().getDirectEntity();
+                Entity owner=arrow.getOwner();
                 assert arrow != null;
-                if (arrow.getTags().contains(fBowBoost) && arrow.getOwner() instanceof LivingEntity){
+                Set<String> tags=arrow.getTags();
+                if (tags.contains(sgBowBoost)){
+                    if (target.hasEffect(MobEffects.GLOWING)){
+                        event.setAmount(event.getAmount()+1.5f);
+
+                    }
+                    if (target.isOnFire()){
+                        if (owner instanceof LivingEntity livingEntity){
+                            livingEntity.heal(0.5f);
+                        }
+                    }
+                }
+                if (tags.contains(sgBowRay)){
+                    LightRay ray=LightRay.create(event.getEntity().level(), 10,4,true,false);
+                    ray.setOwner(owner);
+                }
+                if (tags.contains(fBowBoost) && owner instanceof LivingEntity){
                     Vec3 offset=new Vec3(3,0.5f,3);
                     AABB aabb=new AABB(target.position().subtract(offset),target.position().add(offset));
                     List<LivingEntity> livingEntityList= level.getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeamsPredicate((LivingEntity)arrow.getOwner()));
@@ -500,6 +514,7 @@ public class EventManager {
                         livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 10, 0));
                     }
                 }
+
             }
         }
     }

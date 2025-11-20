@@ -14,6 +14,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class CANearestAttackableTargetGoal <T extends LivingEntity> extends CATargetGoal {
+
     protected final Class<T> targetType;
     protected final int randomInterval;
     @Nullable

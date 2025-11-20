@@ -3,6 +3,7 @@ package com.github.celestial_awakening.init;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Nebure;
@@ -28,6 +29,8 @@ public class EntityInit {
     public static final RegistryObject<EntityType<ProwlerWhelp>> NIGHT_PROWLER_WHELP =ENTITY_TYPES.register("night_prowler_whelp",
             ()->EntityType.Builder.of(ProwlerWhelp::new,MobCategory.MONSTER).build("night_prowler_whelp"));
 
+    public static final RegistryObject<EntityType<SolmanderNewt>> SOLMANDER_NEWT=ENTITY_TYPES.register("solmander_newt",
+            ()->EntityType.Builder.of(SolmanderNewt::new,MobCategory.MONSTER).sized(1.6f,1f).build("solmander_newt"));
 
 
 
@@ -63,5 +66,9 @@ public class EntityInit {
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(4)
                     .updateInterval(20).build("ca_arrow"));
+
+
+    public static final RegistryObject<EntityType<MoonlightOrb>> MOONLIGHT_ORB=ENTITY_TYPES.register("moonlight_orb",
+            ()->EntityType.Builder.<MoonlightOrb>of(MoonlightOrb::new,MobCategory.MISC).sized(0.5f,0.5f).build("moonlight_orb"));
 
 }

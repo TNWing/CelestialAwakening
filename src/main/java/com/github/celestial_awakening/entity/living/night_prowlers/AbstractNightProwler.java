@@ -5,23 +5,35 @@ import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.events.raids.ProwlerRaid;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BedBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class AbstractNightProwler extends AbstractCAMonster {
     private static final EntityDataAccessor<Integer> INFUSE = SynchedEntityData.defineId(AbstractNightProwler.class, EntityDataSerializers.INT);
@@ -36,7 +48,7 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(INFUSE,0);
+        this.entityData.define(INFUSE,1);//for now, default to 1 to test fire
     }
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
@@ -107,11 +119,62 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
         if (level instanceof ServerLevel) {
             if (getInfuse()!=0){
                 if (Config.prowlerDestruction== Config.ProwlerDestruction.ALL || (Config.prowlerDestruction== Config.ProwlerDestruction.RAID && this.raid!=null)){
+                    BlockPos centerPos=this.blockPosition();
                     if (getInfuse()==1){//fire
+                        for (int x=-3;x<=3;x++){
+                            for (int z=-3;z<=3;z++){
+                                for (int y=-1;y<=1;y++){
+                                    BlockPos pos=centerPos.offset(x,y,z);
+                                    BlockState blockState=this.level().getBlockState(pos);
+                                    for(Direction direction : Direction.values()) {
+                                        if (BaseFireBlock.canBePlacedAt(level, pos,direction)){
+                                            BlockState blockstate1 = BaseFireBlock.getState(level, pos);
+                                            level.setBlock(pos, blockstate1, 11);
+                                        }
+                                        if (blockState.isFlammable(this.level(), pos.relative(direction), direction.getOpposite())){
+                                        }
+                                    }
 
+                                }
+                            }
+                        }
+                        AABB aabb=null;
+                        List<LivingEntity> list=this.level().getNearbyEntities(LivingEntity.class,null,this,aabb);
+                        list.forEach(entity->{
+                            entity.setSecondsOnFire(3);
+                        });
                     }
                     else{//ice
+                        for (int x=-3;x<=3;x++) {
+                            for (int z = -3; z <= 3; z++) {
+                                for (int y = -1; y <= 1; y++) {
+                                    /*
+                                    the issue is there is no generic tag for stuff that have cobbled variants, stuff that are made of brick ingots, etc
+                                    destroys cobblestone, converts stone to cobblestone, converts sandstone to sand, destroys bricks/nether bricks and drops 2 brick ingots
+                                     */
+                                    BlockPos pos=centerPos.offset(x,y,z);
+                                    BlockState blockState=this.level().getBlockState(pos);
+                                    if (blockState.is(Tags.Blocks.STONE) ){
+                                        //this.level().setBlockAndUpdate(pos,);
+                                    }
+                                    else if (blockState.is(Tags.Blocks.SANDSTONE)){
+                                        this.level().setBlockAndUpdate(pos,Blocks.SAND.defaultBlockState());
+                                    }
+                                    else if (blockState.is(Tags.Blocks.COBBLESTONE)){
+                                        this.level().destroyBlock(pos,true,this);
+                                    }
+                                    /*
+                                    else if (blockState.getBlock() == Blocks.BRICKS){
 
+                                    }
+                                    else if (blockState.getBlock() == Blocks.NETHER_BRICKS || blockState.getBlock() == Blocks.RED_NETHER_BRICKS){
+
+                                    }
+
+                                     */
+                                }
+                            }
+                        }
                     }
                 }
             }

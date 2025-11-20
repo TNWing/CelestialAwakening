@@ -1,0 +1,10 @@
+{
+  "type": "celestial_awakening:radiant_butchering",
+  "conditions": [
+    {
+      "condition": "celestial_awakening:armor_condition",
+      "armor": "RADIANT",
+      "chance_per_piece": 8
+    }
+  ]
+}

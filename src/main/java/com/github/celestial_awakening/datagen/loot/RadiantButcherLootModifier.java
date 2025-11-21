@@ -25,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
 public class RadiantButcherLootModifier extends LootModifier {
     ArmorMaterial material;
     float chancePerPiece;
-    public static final RegistryObject<Codec<RadiantButcherLootModifier>> CODEC = LootInit.LOOT_MOD_SERIALIZER.register("radiant_butcher",()-> RecordCodecBuilder.create
+    public static final Codec<RadiantButcherLootModifier> CODEC = RecordCodecBuilder.create
             (inst->codecStart(inst)
-                    .apply(inst,RadiantButcherLootModifier::new)));
+                    .apply(inst,RadiantButcherLootModifier::new));
     /**
      * Constructs a LootModifier.
      *
@@ -36,8 +36,11 @@ public class RadiantButcherLootModifier extends LootModifier {
     protected RadiantButcherLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
         for (LootItemCondition cond:conditionsIn) {
-            if (cond instanceof ArmorLootCondition){
-                material=((ArmorLootCondition) cond).material;
+            if (cond instanceof ArmorLootCondition armorLootCondition){
+                material=armorLootCondition.material;
+
+                chancePerPiece=armorLootCondition.chancePerPiece;
+                System.out.println(armorLootCondition.chancePerPiece + " is the chance   and mat  " + armorLootCondition.material);
             }
         }
     }
@@ -45,6 +48,7 @@ public class RadiantButcherLootModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         Entity entity=context.getParamOrNull(LootContextParams.THIS_ENTITY);
+
         if (entity!=null && entity instanceof LivingEntity){
             LivingEntity livingEntity= (LivingEntity) entity;
             if (!(livingEntity instanceof Animal)){
@@ -85,6 +89,6 @@ public class RadiantButcherLootModifier extends LootModifier {
 
     @Override
     public Codec<? extends IGlobalLootModifier> codec() {
-        return CODEC.get();
+        return CODEC;
     }
 }

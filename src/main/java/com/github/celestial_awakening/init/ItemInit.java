@@ -88,13 +88,13 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.KNIGHTMARE, ArmorItem.Type.BOOTS, new Item.Properties()));
 
     public static final RegistryObject<Item> EVERLIGHT_HELMET=ITEMS.register("everlight_helmet",
-            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.HELMET,new Item.Properties(),3));
+            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.HELMET,new Item.Properties(),1.5f));
     public static final RegistryObject<Item> EVERLIGHT_CHESTPLATE=ITEMS.register("everlight_chestplate",
-            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.CHESTPLATE,new Item.Properties(),2));
+            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.CHESTPLATE,new Item.Properties(),0));
     public static final RegistryObject<Item> EVERLIGHT_LEGGINGS=ITEMS.register("everlight_leggings",
-            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.LEGGINGS,new Item.Properties(),2));
+            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.LEGGINGS,new Item.Properties(),0));
     public static final RegistryObject<Item> EVERLIGHT_BOOTS=ITEMS.register("everlight_boots",
-            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.BOOTS,new Item.Properties(),3));
+            ()->new CustomArmorItem(CustomArmorMaterial.EVERLIGHT,ArmorItem.Type.BOOTS,new Item.Properties(),1.5f));
 
     public static final RegistryObject<Item> COSMIC_HIDE =
             ITEMS.register("cosmic_hide", () ->new Item(new Item.Properties()));

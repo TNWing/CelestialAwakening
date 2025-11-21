@@ -48,10 +48,6 @@ public class RadiantArmor extends ArmorEffect {
     }
 
     @Override
-    public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
-        pieceEffect_Death(event,cnt);
-    }
-    @Override
     public void onPlayerTick(TickEvent.PlayerTickEvent event,Player player,int cnt){
         if (cnt==4){
             excitedParticles(event);
@@ -116,28 +112,6 @@ public class RadiantArmor extends ArmorEffect {
                 level.addFreshEntity(itemEntity);
             }
 
-        }
-    }
-    public void pieceEffect_Death(LivingDeathEvent deathEvent, int cnt){
-        if (deathEvent.getSource().getEntity() !=  null & deathEvent.getSource().getEntity()  instanceof Player && deathEvent.getEntity() instanceof Animal){
-            Animal animal= (Animal) deathEvent.getEntity();
-            if (random.nextInt(100)<cnt*4.5f){
-                Level level=animal.level();
-                BlockPos blockPos=animal.blockPosition();
-                ItemEntity itemEntity;
-                int rollNum=random.nextInt(0,11);
-                if (rollNum<3){
-                    int amt=random.nextInt(1,4);
-                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(Items.BONE,amt));
-                }
-                else if (rollNum<8){
-                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.SUNSTONE.get()));
-                }
-                else{
-                    itemEntity=new ItemEntity(level,blockPos.getX(),blockPos.getY(),blockPos.getZ(),new ItemStack(ItemInit.LIFE_FRAG.get()));
-                }
-                level.addFreshEntity(itemEntity);
-            }
         }
     }
 

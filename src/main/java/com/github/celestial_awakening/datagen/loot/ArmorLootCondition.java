@@ -33,6 +33,7 @@ public class ArmorLootCondition implements LootItemCondition {
         catch (Exception e){
         }
         finally {
+            System.out.println("OUR FINAL VALS ARE "  + m +  "    " + r);
             material=m;
             this.chancePerPiece=r;
         }
@@ -81,14 +82,14 @@ public class ArmorLootCondition implements LootItemCondition {
         @Override
         public void serialize(JsonObject jsonObject, ArmorLootCondition cond, JsonSerializationContext context) {
             jsonObject.addProperty("armor",cond.material.toString());
-            jsonObject.addProperty("chancePerPiece",cond.chancePerPiece);
+            jsonObject.addProperty("chance_per_piece",cond.chancePerPiece);
 
         }
 
         @Override
         public ArmorLootCondition deserialize(JsonObject jsonObject, JsonDeserializationContext context) {
             String mat=jsonObject.has("armor")? GsonHelper.getAsString(jsonObject,"armor"):null;
-            float chance=jsonObject.has("chancePerPiece")? GsonHelper.getAsFloat(jsonObject,"chancePerPiece"):0;
+            float chance=jsonObject.has("chance_per_piece")? GsonHelper.getAsFloat(jsonObject,"chance_per_piece"):0;
             return new ArmorLootCondition(mat,chance);
         }
     }

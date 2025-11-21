@@ -24,7 +24,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
     EVERLIGHT("everlight",25,new int[]{3,6,6,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
-            3.5f,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
+            2f,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
     KNIGHTMARE("knightmare",22,new int[]{3,6,5,2},14,SoundEvents.ARMOR_EQUIP_IRON,
             2,0.1f,()->Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),

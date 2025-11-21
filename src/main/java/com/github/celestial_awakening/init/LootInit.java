@@ -19,9 +19,16 @@ public class LootInit {
     //public static final RegistryObject<LootItemConditionType> NEW_MOON_COND=LOOT_COND.register("new_moon_cond",()->new NewMoonCondition());
     //public static final RegistryObject<LootItem>
 
-    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> FISH_SCALE=LOOT_MOD_SERIALIZER.register("scale_from_fish", LunarScaleFromFishLootModifier.CODEC);
+
+    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> FISH_SCALE=LOOT_MOD_SERIALIZER.register(
+            "scale_from_fish",()-> LunarScaleFromFishLootModifier.CODEC);
     public static final RegistryObject<Codec<? extends IGlobalLootModifier>> LUNAR_FISHING=
-            LOOT_MOD_SERIALIZER.register("lunar_fishing", LunarFishingLootModifier.CODEC);
+            LOOT_MOD_SERIALIZER.register("lunar_fishing", ()->LunarFishingLootModifier.CODEC);
+
+    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> RADIANT_BUTCHERING=
+            LOOT_MOD_SERIALIZER.register("radiant_butchering", ()->RadiantButcherLootModifier.CODEC);
+
+
 
     public static final DeferredRegister<LootItemConditionType> LOOT_COND_SERIALIZER = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, CelestialAwakening.MODID);
     public static final RegistryObject<LootItemConditionType> ARMOR_COND=LOOT_COND_SERIALIZER.register("armor_cond",()-> new LootItemConditionType(new ArmorLootCondition.Serializer()));

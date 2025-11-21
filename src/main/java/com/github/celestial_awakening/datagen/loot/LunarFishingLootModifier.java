@@ -26,9 +26,9 @@ public class LunarFishingLootModifier extends LootModifier {
     //LootItemBlockStatePropertyCondition
     ArmorMaterial material;
     float chancePerPiece;
-    public static final RegistryObject<Codec<LunarFishingLootModifier>> CODEC = LootInit.LOOT_MOD_SERIALIZER.register("lunar_fishing",()-> RecordCodecBuilder.create
+    public static final Codec<LunarFishingLootModifier> CODEC = RecordCodecBuilder.create
             (inst->codecStart(inst)
-                    .apply(inst,LunarFishingLootModifier::new)));
+                    .apply(inst,LunarFishingLootModifier::new));
     /**
      * Constructs a LootModifier.
      *
@@ -39,12 +39,15 @@ public class LunarFishingLootModifier extends LootModifier {
         for (LootItemCondition cond:conditionsIn) {
             if (cond instanceof ArmorLootCondition){
                 material=((ArmorLootCondition) cond).material;
+                chancePerPiece=((ArmorLootCondition) cond).chancePerPiece;
+                System.out.println(((ArmorLootCondition) cond).chancePerPiece + " is the chance");
             }
         }
     }
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        System.out.println("DO APPLY");
         for (LootItemCondition cond:this.conditions) {
             if (!cond.test(context)){
                 return generatedLoot;
@@ -62,9 +65,10 @@ public class LunarFishingLootModifier extends LootModifier {
                     }
                 }
             }
+            System.out.println("DO APPLY 2 " + cnt +  "   " + chancePerPiece);//still 0.0 for some reason
             RandomSource randomSource= context.getLevel().getRandom();
             if (cnt>0 && randomSource.nextFloat()*100<cnt*chancePerPiece){
-
+                System.out.println("DO APPLY 3");
                 //randomSource.next
                 if (randomSource.nextInt(10)>5){
                     generatedLoot.add(new ItemStack(ItemInit.MOONSTONE.get()));
@@ -81,6 +85,6 @@ public class LunarFishingLootModifier extends LootModifier {
 
     @Override
     public Codec<? extends IGlobalLootModifier> codec() {
-        return CODEC.get();
+        return CODEC;
     }
 }

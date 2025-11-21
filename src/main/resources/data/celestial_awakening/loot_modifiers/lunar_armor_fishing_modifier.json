@@ -6,7 +6,7 @@
       "loot_table_id": "minecraft:gameplay/fishing"
     },
     {
-      "condition": "celestial_awakening:armor_condition",
+      "condition": "celestial_awakening:armor_cond",
       "armor": "LUNAR",
       "chance_per_piece": 12
     }

@@ -132,7 +132,7 @@ public class EventManager {
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDeath=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(radiantArmor).put(remnantArmor).put(umbraArmor).put(knightmareSuit).put(everlightArmor)
+            .put(remnantArmor).put(umbraArmor).put(knightmareSuit).put(everlightArmor)
             .build();
 
     private static final ParticleManager particleManager=ParticleManager.createParticleManager();
@@ -154,7 +154,10 @@ public class EventManager {
         ItemEntity itemEntity= event.getEntity();
         FoodProperties foodProperties=itemEntity.getItem().getFoodProperties(null);
         if (foodProperties!=null && foodProperties.isMeat()){
-            itemEntity.setItem(new ItemStack(ItemInit.LIFE_FRAG.get()));
+            ItemStack newStack=new ItemStack(ItemInit.LIFE_FRAG.get());
+            newStack.setCount(itemEntity.getItem().getCount());
+            itemEntity.setItem(newStack);
+
             event.setExtraLife(1200);
             event.setCanceled(true);
 

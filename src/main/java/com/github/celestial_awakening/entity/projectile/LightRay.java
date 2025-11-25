@@ -6,24 +6,28 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import static com.github.celestial_awakening.nbt_strings.ProjDataNBTNames.ray_ContactStop;
 //need to make a capability for this to store persistent nbt data like dmg and stuff
 public class LightRay extends CA_Projectile {
-
+    //used to determine if the light ray should have the actual endpoint stop upon colliding w/ something
+    //this can be used to prevent block clipping or piercing thr targets
+    private static final EntityDataAccessor<Boolean> STOP_ON_CONTACT= SynchedEntityData.defineId(LightRay.class, EntityDataSerializers.BOOLEAN);
     //BeaconBlockEntity.BeaconBeamSection
     float widthProgress;
     float heightProgress;
@@ -61,6 +65,15 @@ public class LightRay extends CA_Projectile {
     Vec3 rotDir;//represents the direction of movement and expansion
 
     Vec3 end;
+
+    public boolean doesStop(){
+        return this.entityData.get(STOP_ON_CONTACT);
+    }
+
+    public void setStopOnContact(boolean b){
+        this.entityData.set(STOP_ON_CONTACT,b);
+    }
+
     public LightRay(EntityType<LightRay> entityType, Level level) {
         super(entityType,level,20);
         this.setDmg(2f);
@@ -87,6 +100,7 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(STOP_ON_CONTACT,false);
     }
 
     @Override
@@ -107,11 +121,13 @@ public class LightRay extends CA_Projectile {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.entityData.set(STOP_ON_CONTACT,tag.getBoolean(ray_ContactStop));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putBoolean(ray_ContactStop,this.entityData.get(STOP_ON_CONTACT));
     }
 
     public void setSize(float w,float h){
@@ -221,6 +237,7 @@ public class LightRay extends CA_Projectile {
                 this.hitLivingEntity(entity);
             }
         }
+        hasHitSomething=false;
         if (!entitiesToHit.isEmpty() && destroyIfHitLiving){
             this.discard();
         }
@@ -234,7 +251,9 @@ public class LightRay extends CA_Projectile {
         Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
         end=this.position();
         end=end.add(dir.scale(this.getHeight()));
+
         ClipContext clipContext=new ClipContext(this.position(),end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,this);
+
         BlockHitResult result= this.level().clip(clipContext);
 
         //block in the way, so cut the ray short
@@ -243,6 +262,16 @@ public class LightRay extends CA_Projectile {
             end=result.getLocation();
             hasHitSomething=true;
         }
+        if (this.entityData.get(STOP_ON_CONTACT)){
+            EntityHitResult entityHitResult= ProjectileUtil.getEntityHitResult(this,this.position(),this.end,this.getBoundingBox(),pred,0);
+            if (entityHitResult.getType()!= HitResult.Type.MISS){
+                end=entityHitResult.getLocation();
+            }
+            //figure out how to stop at the first collision
+
+        }
+
+
 
         AABB rayBox=new AABB(this.position(),end);
         return rayBox;

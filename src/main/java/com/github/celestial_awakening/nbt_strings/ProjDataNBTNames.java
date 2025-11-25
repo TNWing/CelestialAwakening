@@ -28,4 +28,6 @@ public class ProjDataNBTNames {
 
     public static String pd_HolderName="ProjData";
 
+    public static String ray_ContactStop="ray_contact";
+
 }

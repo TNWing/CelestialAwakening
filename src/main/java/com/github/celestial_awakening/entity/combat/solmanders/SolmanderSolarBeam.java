@@ -1,14 +1,18 @@
 package com.github.celestial_awakening.entity.combat.solmanders;
 
+import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.transcendents.AbstractTranscendent;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import org.apache.commons.numbers.quaternion.Quaternion;
@@ -77,6 +81,26 @@ public class SolmanderSolarBeam extends GenericAbility {
                     ray.setHAng(yaw);
                     ray.setPred(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob, List.of(AbstractTranscendent.class)));
                     ray.setVAng(-MathFuncs.getVertAngFromVec(dir));
+                    ray.setStopOnContact(true);
+                    ray.setAlertInterface(new AlertInterface() {
+                        @Override
+                        public void onAlert() {
+                            Vec3 pos=ray.getEndPt();
+                            for (int x=-1;x<=1;x++){
+                                for (int z=-1;z<=1;z++){
+                                    BlockPos offsetPos=BlockPos.containing(pos.add(x,0,z));
+                                    if (BaseFireBlock.canBePlacedAt(serverLevel, offsetPos, Direction.UP)){
+                                        serverLevel.setBlockAndUpdate(offsetPos, BaseFireBlock.getState(serverLevel,offsetPos));
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void alertOthers() {
+
+                        }
+                    });
                     serverLevel.addFreshEntity(ray);
                     break;
                 }

@@ -50,6 +50,10 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
 
     private static final EntityDataAccessor<Boolean> HAS_COLLISION=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
+
+
+
+    //move the data below to a non-entitydataaccessor? same w/ stuff like real and dmg, those are only calced once
     private static final EntityDataAccessor<Boolean> DISABLE_SHIELDS=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DISABLE_TICKS = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     DamageSource damagesource;

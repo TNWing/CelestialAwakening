@@ -42,6 +42,7 @@ public class CelestialBeaconMobEffectInstance extends MobEffectInstance {
 
 
     }
+    //TODO: change it so stage is persistent
     @Override
     public void applyEffect(LivingEntity livingEntity) {
         if (this.startDuration!=this.getDuration() && this.hasRemainingDuration()) {

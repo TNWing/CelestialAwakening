@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -634,6 +635,10 @@ public class EventManager {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingHeal(LivingHealEvent event){
         LivingEntity entity=event.getEntity();
+        if (entity.hasEffect(MobEffectInit.CAUTERIZE.get())){
+            int amp=entity.getEffect(MobEffectInit.CAUTERIZE.get()).getAmplifier();
+            event.setAmount(event.getAmount()*Math.max(0,(0.9f-0.09f*(1+amp))));
+        }
         if (entity.hasEffect(MobEffectInit.MOON_CURSE.get())){
             LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.capability);
             optional.ifPresent(cap->{

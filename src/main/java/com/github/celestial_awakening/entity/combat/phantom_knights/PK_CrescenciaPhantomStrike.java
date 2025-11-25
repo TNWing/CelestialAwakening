@@ -17,6 +17,7 @@ import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,8 +30,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class PK_CrescenciaPhantomStrike extends GenericAbility {
+
     public PK_CrescenciaPhantomStrike(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
+
     }
     ArrayList<MoonlightOrb> orbs;
     DamageSourceIgnoreIFrames strikeSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
@@ -43,9 +46,12 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
 
          */
         //does not need to use states as this is a passively used ability
-
-        float randAng=this.mob.level().getRandom().nextInt(360);
-        MoonlightOrb orb=MoonlightOrb.create(this.mob.level(),0,300,7,randAng,0,0);
+        RandomSource randomSource=this.mob.level().getRandom();
+        float randAng=randomSource.nextInt(40,300);
+        if (randomSource.nextBoolean()){
+            randAng=-randAng;
+        }
+        MoonlightOrb orb=MoonlightOrb.create(this.mob.level(),0,300,7,(float)MathFuncs.angBtwnVec(this.mob.position(),target.position())+ randAng,0,0);
         int id=orb.getId();
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
         orb.setOwner(this.mob);

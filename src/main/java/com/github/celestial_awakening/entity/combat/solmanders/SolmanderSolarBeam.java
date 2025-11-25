@@ -16,8 +16,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 public class SolmanderSolarBeam extends GenericAbility {
     Vec3 targetPos=Vec3.ZERO;
     LightRay ray;
-    public SolmanderSolarBeam(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+    public SolmanderSolarBeam(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
+        super(mob, castTime, CD, executeTime, recoveryTime,p);
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {

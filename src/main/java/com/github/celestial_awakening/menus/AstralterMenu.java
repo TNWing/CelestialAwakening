@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.menus;
 
-import com.github.celestial_awakening.blocks.entity.AstralterBlockEntity;
+import com.github.celestial_awakening.capabilities.blocks.entity.AstralterBlockEntity;
 import com.github.celestial_awakening.init.BlockInit;
 import com.github.celestial_awakening.init.MenuInit;
 import net.minecraft.network.FriendlyByteBuf;

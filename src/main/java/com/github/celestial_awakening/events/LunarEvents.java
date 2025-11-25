@@ -256,7 +256,7 @@ public class LunarEvents {
             if (val !=null && val>moonSanMin){
                 LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
                 optional.ifPresent(cap->{
-                    int insChange= (int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400f));
+                    int insChange= -(int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400f));
                     cap.changeInsanityVal(insChange);
                 });
             }

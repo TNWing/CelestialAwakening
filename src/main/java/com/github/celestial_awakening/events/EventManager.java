@@ -4,6 +4,7 @@ import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.commands.DivinerDataCommand;
+import com.github.celestial_awakening.commands.ProwlerRaidCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
@@ -16,9 +17,12 @@ import com.github.celestial_awakening.items.CustomArmorMaterial;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
+import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -42,11 +46,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -140,6 +147,7 @@ public class EventManager {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event){
         new DivinerDataCommand(event.getDispatcher(),2);
+        new ProwlerRaidCommand(event.getDispatcher(),2);
         ConfigCommand.register(event.getDispatcher());
     }
 
@@ -198,7 +206,6 @@ public class EventManager {
                 int orbs=cap.getLunarOrbs();
                 int cd=event.getCD();
                 cd-=orbs*5;
-                //create(Level level, float damage, int lifeVal,float spd,float hAng,float vAng,float zR,float width,float height,float rs)
                 LunarCrescent crescent=null;
                 if (isCrit){
                     if (cap.getStrikeCD()<=0){//performs a powerful short ranged strike
@@ -543,7 +550,7 @@ public class EventManager {
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
                             playerCapOptional.ifPresent(cap->{
-                                cap.changeInsanityVal((short) 100);
+                                cap.changeInsanityVal((short) -100);
                             });
                         }
                     }
@@ -654,8 +661,10 @@ public class EventManager {
             return;
         }
         if (event.getLevel().isClientSide){
+            InsManager.INSTANCE.removeFromEntityMap(entity);
             return;
         }
+
         ServerLevel level= (ServerLevel) event.getLevel();
         @NotNull LazyOptional<LivingEntityCapability> capOptional=entity.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
@@ -799,6 +808,22 @@ public class EventManager {
 
     }
 
+    public static void onRenderLiving(RenderLivingEvent.Pre event){
+        Entity camera=Minecraft.getInstance().cameraEntity;
+        LivingEntity livingEntity=event.getEntity();
+        Player player=Minecraft.getInstance().player;
+        LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
+        optional.ifPresent(cap->{
+            if (cap.getInsanityPts()<12000){
+                //event.getRenderer().getModel()
+                //event.setCanceled(true);
+                //event.getRenderer().getModel()
+
+            }
+        });
+        //event.getRenderer().
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         Player player=event.player;
@@ -815,29 +840,45 @@ public class EventManager {
             ServerLevel level= (ServerLevel) player.level();
             playerOptional.ifPresent(cap->{
                 if (player.tickCount%200==0){
-                    if (Config.insSound && cap.getInsanityPts()>1000 &&  player.tickCount%1800==0){
+                    //maybe cap contains the ins sound cd so sound cd is dependent on the kind of sound played
+                    /*
+                    could also group sounds into the following and have separate CDs for each
+                    -biome-specific
+                    -generic mob sounds
+                    -block sounds
+                     */
+                    if (Config.insSound && cap.getInsanityPts()<16000 &&  player.tickCount%2800==0){
+                        BlockPos pos=player.blockPosition();
+                        Holder<Biome> biomeHolder=level.getBiome(pos);
+
                         if (level.random.nextInt(5)==0){
-                            switch(level.random.nextInt(3)){
-                                case 0:{
-                                    player.playSound(SoundEvents.ENDERMAN_STARE);
-                                    break;
-                                }
-                                case 1:{
-                                    player.playSound(SoundEvents.PARROT_IMITATE_CREEPER);
-                                    break;
-                                }
-                                case 2:{
-                                    BlockState blockState=level.getBlockState(player.blockPosition());
-                                    //Block block=blockState.getBlock();
-                                    SoundType soundtype = blockState.getSoundType(level, player.blockPosition(), player);
-                                    player.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.15F, soundtype.getPitch());
-                                    break;
+                            if (biomeHolder== Biomes.DEEP_DARK && level.random.nextInt(6)<4){
+                                player.playSound(SoundEvents.SCULK_SHRIEKER_SHRIEK);
+                            }
+                            else{
+                                switch(level.random.nextInt(3)){
+                                    case 0:{
+                                        player.playSound(SoundEvents.ENDERMAN_STARE);
+                                        break;
+                                    }
+                                    case 1:{
+                                        player.playSound(SoundEvents.PARROT_IMITATE_CREEPER);
+                                        break;
+                                    }
+                                    case 2:{
+                                        BlockState blockState=level.getBlockState(pos);
+                                        //Block block=blockState.getBlock();
+                                        SoundType soundtype = blockState.getSoundType(level, player.blockPosition(), player);
+                                        player.playSound(soundtype.getStepSound(), soundtype.getVolume() * 0.15F, soundtype.getPitch());
+                                        break;
+                                    }
                                 }
                             }
 
+
                         }
                     }
-                    cap.changeInsanityVal((short) -4);
+                    cap.changeInsanityVal((short) 4);
                     System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
 
                 }

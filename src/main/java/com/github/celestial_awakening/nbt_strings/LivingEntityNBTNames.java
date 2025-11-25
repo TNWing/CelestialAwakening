@@ -10,5 +10,8 @@ public class LivingEntityNBTNames {
     public static String leCap_abilityData="Data";
 
     public static String pCap_prowlerCnt="CA_PR_Cnt";
+    public static String pCap_soundBiome="CA_SBIOME";
+    public static String pCap_soundMob="CA_SMOB";
+    public static String pCap_soundBlock="CA_SBLOCK";
 
 }

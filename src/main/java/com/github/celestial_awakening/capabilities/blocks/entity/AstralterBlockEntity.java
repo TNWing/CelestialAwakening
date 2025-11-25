@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.blocks.entity;
+package com.github.celestial_awakening.capabilities.blocks.entity;
 
 import com.github.celestial_awakening.init.BlockInit;
 import com.github.celestial_awakening.menus.AstralterMenu;

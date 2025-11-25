@@ -1,8 +1,8 @@
 package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.blocks.Astralter;
-import com.github.celestial_awakening.blocks.entity.AstralterBlockEntity;
+import com.github.celestial_awakening.capabilities.blocks.Astralter;
+import com.github.celestial_awakening.capabilities.blocks.entity.AstralterBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;

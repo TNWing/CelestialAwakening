@@ -61,6 +61,7 @@ public class AttachCapabilities {
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);
         });
     }
+
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinLevelEvent event) {
         Entity entity =  event.getEntity();
@@ -70,6 +71,7 @@ public class AttachCapabilities {
             cap.setUUID(uuID);
         });
     }
+
     @SubscribeEvent
     public void onAttachEntityCap(AttachCapabilitiesEvent<Entity> event){
         Entity entity=event.getObject();

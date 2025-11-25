@@ -40,7 +40,6 @@ public class RadiantButcherLootModifier extends LootModifier {
                 material=armorLootCondition.material;
 
                 chancePerPiece=armorLootCondition.chancePerPiece;
-                System.out.println(armorLootCondition.chancePerPiece + " is the chance   and mat  " + armorLootCondition.material);
             }
         }
     }

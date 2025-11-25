@@ -1,12 +1,17 @@
 package com.github.celestial_awakening.events;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.entity.projectile.MoonlightOrb;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.*;
 import com.github.celestial_awakening.rendering.client.renderers.*;
+import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.VillagerRenderer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,6 +37,11 @@ public class ClientModEventBusManager {
 
         EntityRenderers.register(EntityInit.PK_CRESCENCIA.get(), PKCrescenciaRenderer::new);
 
+
+
+
+
+
         CA_ItemProperties.addProperties();
     }
     @SubscribeEvent
@@ -45,6 +55,15 @@ public class ClientModEventBusManager {
         event.registerLayerDefinition(ModelLayerInit.NIGHT_PROWLER_LAYER,NightProwlerModel::createBodyLayer);
         event.registerLayerDefinition(ModelLayerInit.PK_CRESCENCIA_LAYER, PKCrescenciaModel::createBodyLayer);
 
+    }
+
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event){
+        EntityRenderer vRenderer= event.getRenderer(EntityType.VILLAGER);
+        if (vRenderer instanceof VillagerRenderer villagerRenderer){
+            EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+            dispatcher.renderers.put(EntityType.VILLAGER,new InsVillagerRenderer<>(event.getContext(),villagerRenderer));
+        }
     }
 
 

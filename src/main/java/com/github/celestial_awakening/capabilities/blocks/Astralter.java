@@ -1,6 +1,6 @@
-package com.github.celestial_awakening.blocks;
+package com.github.celestial_awakening.capabilities.blocks;
 
-import com.github.celestial_awakening.blocks.entity.AstralterBlockEntity;
+import com.github.celestial_awakening.capabilities.blocks.entity.AstralterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;

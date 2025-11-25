@@ -40,14 +40,12 @@ public class LunarFishingLootModifier extends LootModifier {
             if (cond instanceof ArmorLootCondition){
                 material=((ArmorLootCondition) cond).material;
                 chancePerPiece=((ArmorLootCondition) cond).chancePerPiece;
-                System.out.println(((ArmorLootCondition) cond).chancePerPiece + " is the chance");
             }
         }
     }
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        System.out.println("DO APPLY");
         for (LootItemCondition cond:this.conditions) {
             if (!cond.test(context)){
                 return generatedLoot;
@@ -65,10 +63,8 @@ public class LunarFishingLootModifier extends LootModifier {
                     }
                 }
             }
-            System.out.println("DO APPLY 2 " + cnt +  "   " + chancePerPiece);//still 0.0 for some reason
             RandomSource randomSource= context.getLevel().getRandom();
             if (cnt>0 && randomSource.nextFloat()*100<cnt*chancePerPiece){
-                System.out.println("DO APPLY 3");
                 //randomSource.next
                 if (randomSource.nextInt(10)>5){
                     generatedLoot.add(new ItemStack(ItemInit.MOONSTONE.get()));

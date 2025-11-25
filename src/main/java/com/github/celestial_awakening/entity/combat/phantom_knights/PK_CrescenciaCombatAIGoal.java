@@ -11,9 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,10,20,15,0,99);
     //PhantomKnightChargeAttack chargeAttack=new PhantomKnightChargeAttack(this.mob,50,200,50,30);
-    //PK_CrescenciaDualCrescentSlash dualCrescentSlash=new PK_CrescenciaDualCrescentSlash(this.mob,20,160,14,30);
     PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,20,200,125,30,15);
-    //PK_CrescenciaNightSlash nightSlash=new PK_CrescenciaNightSlash(this.mob,20,120,120,30);
     PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36,9);
     PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,160,0,10,8);
     PK_CrescenciaPhantomStrike phantomStrike=new PK_CrescenciaPhantomStrike(this.mob,0,25,0,0);

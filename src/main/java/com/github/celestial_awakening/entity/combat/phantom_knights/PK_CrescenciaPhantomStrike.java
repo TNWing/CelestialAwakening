@@ -39,12 +39,6 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
     DamageSourceIgnoreIFrames strikeSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
     @Override
     public void executeAbility(LivingEntity target) {
-        /*
-        if (true){//for now so the code below doesn't execute
-            return;
-        }
-
-         */
         //does not need to use states as this is a passively used ability
         RandomSource randomSource=this.mob.level().getRandom();
         float randAng=randomSource.nextInt(40,300);

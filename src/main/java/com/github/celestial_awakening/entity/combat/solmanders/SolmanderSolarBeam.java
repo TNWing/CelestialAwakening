@@ -37,15 +37,18 @@ public class SolmanderSolarBeam extends GenericAbility {
     @Override
     public void executeAbility(LivingEntity target) {
         if (state==0 && currentStateTimer==abilityCastTime/4){
-            targetPos=target.position();
+            targetPos=target.getEyePosition();
         }
         else if (state==1){
             //have ray slowly move
-            if (this.mob.distanceToSqr(target.position())>Math.pow(30,2)){
+            if (this.mob.distanceToSqr(target.getEyePosition())>Math.pow(30,2)){
+
+                System.out.println("DISCARD RAY");
                 ray.discard();
                 currentStateTimer=1;
             }
             else{
+                /*
                 Vec3 currentNorm=ray.calculateMoveVec().normalize();
                 Vec3 desiredVec=target.position().subtract(this.mob.position()).normalize();
                 double ang=MathFuncs.radBtwnVec(desiredVec,currentNorm);
@@ -62,6 +65,8 @@ public class SolmanderSolarBeam extends GenericAbility {
                 System.out.printf("New angs %s %s",newYaw,newV);
                 ray.setHAng(newYaw);
                 ray.setVAng(newV);
+
+                 */
             }
 
         }
@@ -71,16 +76,19 @@ public class SolmanderSolarBeam extends GenericAbility {
                 case 0:{
                     state++;
                     currentStateTimer=abilityExecuteTime;
-                    Vec3 dir=targetPos.subtract(this.mob.position()).normalize();
+                    Vec3 dir=targetPos.subtract(this.mob.getEyePosition()).normalize();
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
                     ray=LightRay.create(serverLevel,abilityExecuteTime*2,1.5f,true,false);
-                    float yaw= (float) -(Math.toDegrees (Math.atan2(dir.z,dir.x)) +90f);
+                    float yaw= MathFuncs.getAngFrom2DVec(dir)+180;
+                    float v=MathFuncs.getVertAngFromVec(dir);
+                    System.out.println("  va  " + v);
                     ray.setPred(o -> !(o instanceof AbstractTranscendent));
                     ray.setOwner(this.mob);
+                    ray.setPos(this.mob.getEyePosition());
                     ray.initDims(0.25f,0,0.25f,0,0.4f,30f,0,1f);
                     ray.setHAng(yaw);
                     ray.setPred(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob, List.of(AbstractTranscendent.class)));
-                    ray.setVAng(-MathFuncs.getVertAngFromVec(dir));
+                    ray.setVAng(-90);
                     ray.setStopOnContact(true);
                     ray.setAlertInterface(new AlertInterface() {
                         @Override
@@ -90,7 +98,7 @@ public class SolmanderSolarBeam extends GenericAbility {
                                 for (int z=-1;z<=1;z++){
                                     BlockPos offsetPos=BlockPos.containing(pos.add(x,0,z));
                                     if (BaseFireBlock.canBePlacedAt(serverLevel, offsetPos, Direction.UP)){
-                                        serverLevel.setBlockAndUpdate(offsetPos, BaseFireBlock.getState(serverLevel,offsetPos));
+                                        //serverLevel.setBlockAndUpdate(offsetPos, BaseFireBlock.getState(serverLevel,offsetPos));
                                     }
                                 }
                             }
@@ -107,6 +115,9 @@ public class SolmanderSolarBeam extends GenericAbility {
                 case 1:{
                     state++;
                     currentStateTimer=abilityRecoveryTime;
+                    if (!ray.isRemoved()){
+                        ray.discard();
+                    }
                     break;
                 }
                 case 2:{
@@ -121,6 +132,6 @@ public class SolmanderSolarBeam extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 0;
+        return 29;
     }
 }

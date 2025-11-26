@@ -49,6 +49,8 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Boolean> PK_DAY_DESPAWN;
 
     private static final ForgeConfigSpec.ConfigValue<Boolean> INSANITY_SOUNDS;
+    private static final ForgeConfigSpec.ConfigValue<String> INSANITY_VISUALS;
+
 
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_INTERVAL;
 
@@ -73,6 +75,9 @@ public class Config
 
     private static final ForgeConfigSpec.DoubleValue LUNAR_ARROW_BASE_DMG;
     private static final ForgeConfigSpec.DoubleValue SOLAR_ARROW_BASE_DMG;
+
+
+
 
 /*
 maybe use json files instead since it'll look neater?
@@ -120,6 +125,11 @@ maybe use json files instead since it'll look neater?
             PK_RMG_RES_DIST=builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
             PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault: true").define("pk_day_despawn",true);
             INSANITY_SOUNDS=builder.comment("If true, causes certain sounds to have a chance to play when insane.\nDefault: true").define("ins_sound",true);
+            INSANITY_VISUALS=builder.comment("Impacts the rendering of certain mobs for insane players." +
+                    "\nNONE:Visual modifications are disabled" +
+                    "\nSIMPLE:Model of entities are replaced, but do not have any animations" +
+                    "\nCOMPLEX(Not implemented yet):Model and animation of entities are replaced. Likely adds some performance overhead"+
+                    "\nDefault:SIMPLE.").define("ins_visual","SIMPLE");
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
@@ -217,7 +227,12 @@ maybe use json files instead since it'll look neater?
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
     public static int moonstoneDimLim=15;
     public static boolean insSound=true;
-
+    public enum INS_VISUALS{
+        NONE,
+        SIMPLE,
+        COMPLEX
+    }
+    public static INS_VISUALS insVisuals=INS_VISUALS.SIMPLE;
     public static int excitedParticlesTickInterval=50;
 
 
@@ -309,6 +324,13 @@ maybe use json files instead since it'll look neater?
         pkDayDespawn=PK_DAY_DESPAWN.get();
 
         insSound=INSANITY_SOUNDS.get();
+        try{
+            insVisuals=INS_VISUALS.valueOf(INSANITY_VISUALS.get().toUpperCase());
+        }
+        catch(Exception e){
+            insVisuals=INS_VISUALS.SIMPLE;
+        }
+
 
         excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();
 

@@ -134,18 +134,21 @@ public class PKCrescenciaModel<T extends Entity>extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.model.getAllParts().forEach(ModelPart::resetPose);
-		if (((AbstractCAMonster)entity).getActionId()==0){
-			this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
+		if (entity instanceof PhantomKnight_Crescencia){
+			if (((AbstractCAMonster)entity).getActionId()==0){
+				this.animateWalk(PK_CrescenciaAnimations.walk,limbSwing,limbSwingAmount,1f,2f);
+			}
+			this.animate(((PhantomKnight_Crescencia)entity).asleepAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).moonCutterAnimationState, PK_CrescenciaAnimations.mooncutter,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).whirlwindStartAnimationState, PK_CrescenciaAnimations.whirlwindStart,ageInTicks,1f);
+			this.animate(((PhantomKnight_Crescencia)entity).whirlwindAnimationState,PK_CrescenciaAnimations.whirlwind,ageInTicks,1f);
+			setupAttackAnimation((T) entity,limbSwing);
 		}
-		this.animate(((PhantomKnight_Crescencia)entity).asleepAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).idleAnimationState,PK_CrescenciaAnimations.idle,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).wakeUpAnimationState,PK_CrescenciaAnimations.wakeUp,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStartAnimationState, PK_CrescenciaAnimations.strikeThroughStart,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).strikethroughStrikeAnimationState, PK_CrescenciaAnimations.strikeThroughStrike,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).moonCutterAnimationState, PK_CrescenciaAnimations.mooncutter,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).whirlwindStartAnimationState, PK_CrescenciaAnimations.whirlwindStart,ageInTicks,1f);
-		this.animate(((PhantomKnight_Crescencia)entity).whirlwindAnimationState,PK_CrescenciaAnimations.whirlwind,ageInTicks,1f);
-		setupAttackAnimation((T) entity,limbSwing);
+
 	}
 	protected void setupAttackAnimation(T p_102858_, float p_102859_) {
 		if (!(this.attackTime <= 0.0F)) {

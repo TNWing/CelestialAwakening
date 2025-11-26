@@ -54,8 +54,9 @@ public class InsVillagerRenderer<T extends LivingEntity, M extends EntityModel<T
                         else{
                             if (name.isBlank()){
                                 //attempt to make a new texture change every 30 secs if it doesnt have a texture change
-                                if (villager.tickCount% 600 ==0 &&  villager.getRandom().nextInt(100)<20){
-                                    data.delay=villager.getRandom().nextInt(7)*120+600;
+                                if (villager.tickCount% 600 ==0 &&  villager.getRandom().nextInt(100)<100){
+                                    data.delay=villager.getRandom().nextInt(7)*120+1200;
+                                    System.out.println("NOW PILLAGER");
                                     data.modelName="pillager";
                                 }
                             }
@@ -66,7 +67,7 @@ public class InsVillagerRenderer<T extends LivingEntity, M extends EntityModel<T
                         }
                     }
                     else{
-                        data=new InsManager.AppearanceData("",villager.getRandom().nextInt(6)*12 + 400);
+                        data=new InsManager.AppearanceData("",villager.getRandom().nextInt(6)*12 + 100);
                         InsManager.INSTANCE.insertIntoEntityMap(villager,data);
                     }
                     if (newModel!=null){
@@ -135,7 +136,7 @@ public class InsVillagerRenderer<T extends LivingEntity, M extends EntityModel<T
                         }
 
                         newModel.prepareMobModel(villager, f5, f8, p_115310_);
-                        newModel.setupAnim(villager, f5, f8, f7, f2, f6);
+                        //newModel.setupAnim(villager, f5, f8, f7, f2, f6);
                         Minecraft minecraft = Minecraft.getInstance();
                         boolean flag = this.isBodyVisible(villager);
                         boolean flag1 = !flag && !villager.isInvisibleTo(minecraft.player);
@@ -148,9 +149,12 @@ public class InsVillagerRenderer<T extends LivingEntity, M extends EntityModel<T
                         }
 
                         if (!villager.isSpectator()) {
+                            /*
                             for(RenderLayer<Villager, VillagerModel<Villager>> renderlayer : this.layers) {
                                 renderlayer.render(poseStack, buffer, p_115313_, villager, f5, f8, p_115310_, f7, f2, f6);
                             }
+
+                             */
                         }
 
                         poseStack.popPose();
@@ -185,4 +189,12 @@ public class InsVillagerRenderer<T extends LivingEntity, M extends EntityModel<T
             return p_115325_ ? RenderType.outline(resourcelocation) : null;
         }
     }
+    /*
+    class net.minecraft.world.entity.npc.Villager cannot be cast to class net.minecraft.world.entity.monster.AbstractIllager (net.minecraft.world.entity.npc.Villager and net.minecraft.world.entity.monster.AbstractIllager are in module minecraft@1.20.1 of loader 'TRANSFORMER' @6bcc3f27)
+	at net.minecraft.client.model.IllagerModel.setupAnim(IllagerModel.java:17) ~[forge-1.20.1-47.3.33_mapped_official_1.20.1-recomp.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer.lambda$render$0(InsVillagerRenderer.java:138) ~[main/:?] {re:classloading}
+	at net.minecraftforge.common.util.LazyOptional.ifPresent(LazyOptional.java:137) ~[forge-1.20.1-47.3.33_mapped_official_1.20.1-recomp.jar:?] {re:mixin,re:computing_frames,re:classloading}
+	at com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer.render(InsVillagerRenderer.java:34) ~[main/:?] {re:classloading}
+	at com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer.render(InsVillagerRenderer.java:24) ~[main/:?] {re:classloading}
+     */
 }

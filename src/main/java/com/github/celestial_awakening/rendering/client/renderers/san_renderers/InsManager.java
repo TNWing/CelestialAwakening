@@ -64,10 +64,12 @@ public class InsManager {
         INSTANCE.entityAppearanceMap.put(ent,data);
     }
 
-    public void init(EntityRendererProvider.Context context){
+    public static void init(EntityRendererProvider.Context context){
         if (INSTANCE==null){
             INSTANCE=new InsManager();
         }
+        INSTANCE.entityAppearanceMap=new HashMap<>();
+        INSTANCE.rendererHolderHashMap=new HashMap<>();
         INSTANCE.insertIntoModelMap("pillager",new IllagerModel<>(context.bakeLayer(ModelLayers.PILLAGER)), new ResourceLocation("textures/entity/illager/pillager.png"),0.5f);
         INSTANCE.insertIntoModelMap("vindicator",new IllagerModel<>(context.bakeLayer(ModelLayers.VINDICATOR)), new ResourceLocation("textures/entity/illager/vindicator.png"),0.5f);
         //INSTANCE.insertIntoMap();

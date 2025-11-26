@@ -9,25 +9,24 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-public class SolmanderConflagarate extends GenericAbility {
+public class SolmanderConflagration extends GenericAbility {
     int hBound;
     int vBound;
     boolean diagonal=false;
-    public SolmanderConflagarate(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
+    public SolmanderConflagration(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
     }
 
     @Override
     public void executeAbility(LivingEntity target) {
         if(state==1){
-            conflagarate();
+            conflagration();
         }
         this.currentStateTimer--;
         if (currentStateTimer<=0){
@@ -52,7 +51,7 @@ public class SolmanderConflagarate extends GenericAbility {
         }
     }
 
-    void conflagarate(){
+    void conflagration(){
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
         for (int x=-hBound;x<=hBound;x++){
             for (int z=-hBound;z<=hBound;z++){

@@ -21,7 +21,7 @@ public class MobEffectInit {
     ->new CelestialBeacon(MobEffectCategory.NEUTRAL,16750848));
 
     public static final RegistryObject<MobEffect> REMNANT_FL=MOB_EFFECTS.register("remnant_fl",()
-            ->new CustomEffect(MobEffectCategory.NEUTRAL,1675084,false)
+            ->new CustomEffect(MobEffectCategory.BENEFICIAL,1675084,false)
             .addAttributeModifier(Attributes.ATTACK_DAMAGE, String.valueOf(CA_UUIDs.remnantFinalLightID),0.2f,AttributeModifier.Operation.MULTIPLY_TOTAL)
             .addAttributeModifier(Attributes.ATTACK_SPEED, String.valueOf(CA_UUIDs.remnantFinalLightID),0.2f,AttributeModifier.Operation.MULTIPLY_TOTAL)
     );

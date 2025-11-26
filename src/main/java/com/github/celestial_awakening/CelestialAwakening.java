@@ -7,6 +7,7 @@ import com.github.celestial_awakening.events.triggers.CA_Triggers;
 import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomTiers;
 import com.github.celestial_awakening.networking.ModNetwork;
+import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -62,7 +64,8 @@ public class CelestialAwakening
         modEventBus.addListener(this::commonSetup);
 
         CREATIVE_MODE_TABS.register(modEventBus);
-
+        BlockInit.BLOCKS.register(modEventBus);
+        BlockInit.BLOCK_ENTITY_TYPES.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
         PotionInit.POTIONS.register(modEventBus);
         EnchantmentInit.ENCHANTMENTS.register(modEventBus);
@@ -104,8 +107,10 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         RecipeInit.registerBrewingRecipes();
         event.enqueueWork(() -> {
             CriteriaTriggers.register(CA_Triggers.PROWLER_RAID_TRIGGER);
+
         });
     }
+
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {

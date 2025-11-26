@@ -13,9 +13,9 @@ public class SolmanderCombatAIGoal extends GenericCombatAIGoal {
         super(mob);
     }
     SolmanderNewtBasicAttack basicAttack=new SolmanderNewtBasicAttack(this.mob,5,15,5,10,99);
-    SolmanderConflagarate conflagarate=new SolmanderConflagarate(this.mob,25,80,1,0,20);
+    SolmanderConflagration conflagration =new SolmanderConflagration(this.mob,25,80,1,0,20);
     SolmanderSolarBeam solarBeam = new SolmanderSolarBeam(this.mob,15,100,40,10,10);
-    List<GenericAbility> abilities=List.of(basicAttack,solarBeam,conflagarate);
+    List<GenericAbility> abilities=List.of(basicAttack,solarBeam, conflagration);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         abilities.forEach(ability->{

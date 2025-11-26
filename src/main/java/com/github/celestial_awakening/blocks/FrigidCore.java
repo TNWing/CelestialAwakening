@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.capabilities.blocks;
+package com.github.celestial_awakening.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BaseEntityBlock;

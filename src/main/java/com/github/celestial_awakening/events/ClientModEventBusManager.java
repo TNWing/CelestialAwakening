@@ -1,10 +1,12 @@
 package com.github.celestial_awakening.events;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.init.EntityInit;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.*;
 import com.github.celestial_awakening.rendering.client.renderers.*;
+import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
 import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -61,9 +63,14 @@ public class ClientModEventBusManager {
     }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        event.registerEntityRenderer(EntityType.VILLAGER,ctx->{
-            return new InsVillagerRenderer(ctx, (VillagerRenderer) ctx.getEntityRenderDispatcher().renderers.get(EntityType.VILLAGER));
-        });
+        System.out.println(Config.arrowSolarDmg + "  SOLAR ARROW DMG");
+        if (Config.insVisuals!= Config.INS_VISUALS.NONE){
+            event.registerEntityRenderer(EntityType.VILLAGER,ctx->{
+                InsManager.init(ctx);
+                return new InsVillagerRenderer(ctx, (VillagerRenderer) ctx.getEntityRenderDispatcher().renderers.get(EntityType.VILLAGER));
+            });
+        }
+
         event.registerEntityRenderer(EntityInit.SOLMANDER_NEWT.get(), SolmanderNewtRenderer::new);
         event.registerEntityRenderer(EntityInit.ASTERON.get(), TranscendentAsteronRenderer::new);
         event.registerEntityRenderer(EntityInit.ASTRALITE.get(), TranscendentAstraliteRenderer::new);

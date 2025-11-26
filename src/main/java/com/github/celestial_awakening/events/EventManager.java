@@ -551,7 +551,7 @@ public class EventManager {
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
                             playerCapOptional.ifPresent(cap->{
-                                cap.changeInsanityVal((short) -100);
+                                cap.changeInsanityVal((short) -500);
                             });
                         }
                     }
@@ -857,6 +857,21 @@ public class EventManager {
                         Holder<Biome> biomeHolder=level.getBiome(pos);
 
                         if (level.random.nextInt(5)==0){
+                            /*
+                            Another method would be to group things like so
+                            -mob sounds
+                            -block sounds
+
+                            in each category, a sound can be generic, biome-boosted, or biome-specific
+                            Ex:
+                            generic: footsteps, creeper
+                            biome-boosted:endermen (in the end)
+                            biome-specific: sculk shrieker
+
+                            use a weight system
+                            biome-specific have high weights if in their biome, otherwise they have 0 weight
+                            biome-boosted have slightly below generic weights but are boosted if inside their biome/dim
+                             */
                             if (biomeHolder== Biomes.DEEP_DARK && level.random.nextInt(6)<4){
                                 player.playSound(SoundEvents.SCULK_SHRIEKER_SHRIEK);
                             }
@@ -883,7 +898,7 @@ public class EventManager {
 
                         }
                     }
-                    cap.changeInsanityVal((short) 4);
+                    cap.changeInsanityVal((short) 40);
                     System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
 
                 }

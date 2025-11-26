@@ -196,8 +196,38 @@ public class LightRay extends CA_Projectile {
         this.updateRotation();
     }
 
+    public LivingEntity nearestEntityFromRay(AABB rayBox){
+        List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox,pred);
+        LivingEntity livingEntity = null;
+        double currentDist=Double.MAX_VALUE;
+        //my idea for better collision is to use 4 raycasts
+        for (LivingEntity entity: livingEntityList) {
+            AABB aabb = entity.getBoundingBox();
+            Vec3[] rayOffsets = new Vec3[]{
+                    new Vec3(-0 / 2f, 0, 0),
+                    new Vec3(0 / 2f, 0, 0),
+                    new Vec3(0, -0 / 2f, 0),
+                    new Vec3(0, 0 / 2f, 0)
+            };
+            for (int i = 0; i < 4; i++) {
+
+                Vec3 rayOffset = rayOffsets[i];
+                Optional<Vec3> edgeRay = aabb.clip(this.position().add(rayOffset), end.add(rayOffset));//does the entity intersect with the ray;
+                if (edgeRay.isPresent()) {
+                    double d=entity.distanceToSqr(this.position());
+                    if (d<currentDist){
+                        currentDist=d;
+                        livingEntity=entity;
+                    }
+                }
+            }
+        }
+        return livingEntity;
+    }
+
 
     public void raycast(){
+        System.out.println("BEFFORE ALL " + end);
         AABB rayBox=getRayBox();
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox,pred);
 
@@ -245,8 +275,6 @@ public class LightRay extends CA_Projectile {
     public AABB getRayBox(){
         double xz=Math.toRadians((-1*this.getHAng())+90);//yaw, TEST +90
         double y=Math.toRadians(this.getVAng());
-        if (this.getVAng()>=180){
-        }
 
         Vec3 dir=new Vec3(Math.cos(xz)*Math.sin(y),Math.cos(y),Math.sin(xz)*Math.sin(y)).normalize();
         end=this.position();
@@ -262,18 +290,19 @@ public class LightRay extends CA_Projectile {
             end=result.getLocation();
             hasHitSomething=true;
         }
+        AABB rayBox=new AABB(this.position(),end);
         if (this.entityData.get(STOP_ON_CONTACT)){
-            EntityHitResult entityHitResult= ProjectileUtil.getEntityHitResult(this,this.position(),this.end,this.getBoundingBox(),pred,0);
-            if (entityHitResult.getType()!= HitResult.Type.MISS){
-                end=entityHitResult.getLocation();
+            LivingEntity livingEntity=nearestEntityFromRay(rayBox);
+            if (livingEntity!=null){
+                end=livingEntity.position();
             }
             //figure out how to stop at the first collision
-
         }
 
 
 
-        AABB rayBox=new AABB(this.position(),end);
+        rayBox=new AABB(this.position(),end);
+        System.out.println("final END IS " + end);
         return rayBox;
     }
 
@@ -298,7 +327,7 @@ public class LightRay extends CA_Projectile {
 
         }
         else {
-            if(this.isAlive() && this.hasCollision()) {
+            if(this.isAlive() && this.hasCollision() && !this.level().isClientSide) {
                 raycast();
             }
         }

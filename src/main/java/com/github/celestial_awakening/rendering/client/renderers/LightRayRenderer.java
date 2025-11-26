@@ -42,9 +42,10 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
 
 
     public void render(LightRay entity, float entityYaw, float partialTicks,PoseStack poseStack, MultiBufferSource bufferSource, int packedLight){
+        //figure out why at certain camera angles it disappears
         poseStack.pushPose();
         RenderSystem.disableCull();
-        RenderSystem.disableDepthTest();
+        //RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -54,15 +55,15 @@ public class LightRayRenderer<T extends Entity> extends EntityRenderer<LightRay>
         //beaconBeam(END_FACE_TEXTURE,false)
 
         VertexConsumer vertexconsumerEnd = bufferSource.getBuffer(CA_RenderTypes.translucentFullBright(END_FACE_TEXTURE));
+        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getHAng()));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
+        poseStack.mulPose(Axis.XP.rotationDegrees(entity.getVAng()));
         PoseStack.Pose posestack$pose = poseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
         float width=entity.getWidth()/2;
         float height=entity.getHeight();
-        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getHAng()));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getZRot()));
-        poseStack.mulPose(Axis.XP.rotationDegrees(entity.getVAng()));//can probs replace with vang
-        //TODO: modify collision detection
+
         //bottom face
         drawFace(poseStack,matrix4f,matrix3f,vertexconsumerEnd,width,0,width,alpha);
         //top face

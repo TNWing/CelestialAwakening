@@ -30,7 +30,7 @@ public class EntityInit {
             ()->EntityType.Builder.of(ProwlerWhelp::new,MobCategory.MONSTER).build("night_prowler_whelp"));
 
     public static final RegistryObject<EntityType<SolmanderNewt>> SOLMANDER_NEWT=ENTITY_TYPES.register("solmander_newt",
-            ()->EntityType.Builder.of(SolmanderNewt::new,MobCategory.MONSTER).sized(1.6f,1f).build("solmander_newt"));
+            ()->EntityType.Builder.of(SolmanderNewt::new,MobCategory.MONSTER).fireImmune().sized(1.6f,1f).build("solmander_newt"));
 
 
 

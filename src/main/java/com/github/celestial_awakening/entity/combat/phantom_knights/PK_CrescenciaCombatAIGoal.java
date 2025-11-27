@@ -23,6 +23,7 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
         LivingEntity target=this.mob.getTarget();
         if (this.mob.getBossBarWindup()>=100){
             abilities.forEach(a-> a.decreaseCD(1));
+            /*
             if (this.mob.level().getDifficulty().getId()>1 &&  this.mob.getHealth()/this.mob.getMaxHealth()<=0.4f){
                 phantomStrike.decreaseCD(1);
                 if (phantomStrike.getCurrentCD()==0){
@@ -30,6 +31,8 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
                     phantomStrike.setCD(25);
                 }
             }
+
+             */
             if (this.mob.isActing){
                 currentAbility.executeAbility(this.mob.getTarget());
             }

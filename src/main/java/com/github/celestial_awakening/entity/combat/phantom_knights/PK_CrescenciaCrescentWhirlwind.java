@@ -160,7 +160,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
         int p= this.getBasePriority();
         List<LivingEntity> list=mob.level().getNearbyEntities(LivingEntity.class,null,mob,new AABB(0,0,0,0,0,0));
         if (list.size()<3){
-            System.out.println("Too few targets, whirlwind less likely");
+            //System.out.println("Too few targets, whirlwind less likely");
             p+=20;
         }
         return p;

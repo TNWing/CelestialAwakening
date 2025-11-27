@@ -35,7 +35,7 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
         super(mob, castTime, CD, executeTime, recoveryTime);
 
     }
-    ArrayList<MoonlightOrb> orbs;
+    ArrayList<MoonlightOrb> orbs=new ArrayList<>();
     DamageSourceIgnoreIFrames strikeSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);
     @Override
     public void executeAbility(LivingEntity target) {
@@ -54,7 +54,7 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
         orbs.add(orb);
         optional.ifPresent(cap->{
             MovementModifier modifier=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
-                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,-7f/4f,0,0,0,10);
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,-7f/4f,0,0,0,15);
             MovementModifier mod2=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.SET,
                     MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,0,0,0,0,1);//just to ensure it stays 0
             cap.putInBackOfList(modifier);

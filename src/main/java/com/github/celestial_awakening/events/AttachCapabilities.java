@@ -84,6 +84,7 @@ public class AttachCapabilities {
             }
             if (!event.getCapabilities().containsValue(ProjCapabilityProvider.ProjCap)){//TODO
                 event.addCapability(CelestialAwakening.createResourceLocation("projectile_data"),new ProjCapabilityProvider((CA_Projectile) event.getObject()));
+                //System.out.println("PROJ IS " + event.getObject().getName());
             }
         }
 

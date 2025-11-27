@@ -169,7 +169,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
         }
         int p=this.getBasePriority();
         if (mob.getPerceivedTargetDistanceSquareForMeleeAttack(mob.getTarget())<10){
-            System.out.println("player too close, strikethrough less likely");
+            //System.out.println("player too close, strikethrough less likely");
             p+=10;
         }
         return p;

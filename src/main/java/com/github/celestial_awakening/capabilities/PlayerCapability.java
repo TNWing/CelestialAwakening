@@ -5,8 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import static com.github.celestial_awakening.nbt_strings.LivingEntityNBTNames.*;
 
 public class PlayerCapability {
-    short prowlerRaidCounter;//incremented periodically, when reach certain value starts raid, resets upon starting
-    short insanityPts;
+    short prowlerRaidCounter=0;//incremented periodically, when reach certain value starts raid, resets upon starting
+    short insanityPts=32000;
 
     int insBiomeSoundCD;//stuff like nether ghast or deep dark shrieker
     int insMobSoundCD;//generic mob sounds like enderman & creeper

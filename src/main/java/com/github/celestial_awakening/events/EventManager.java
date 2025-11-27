@@ -772,7 +772,7 @@ public class EventManager {
                             lunarEvents.attemptPKSpawn(serverLevel);
                         }
                         else if (time==15500){
-                            lunarEvents.attemptProwlerRaid(serverLevel);
+                            //lunarEvents.attemptProwlerRaid(serverLevel);
                         }
                     }
 
@@ -899,7 +899,7 @@ public class EventManager {
                         }
                     }
                     cap.changeInsanityVal((short) 40);
-                    System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
+                    //System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
 
                 }
             });

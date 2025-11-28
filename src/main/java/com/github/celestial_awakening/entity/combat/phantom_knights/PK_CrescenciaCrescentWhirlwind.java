@@ -63,6 +63,7 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
 
     @Override
     public void executeAbility(LivingEntity target) {
+
         if (state==1){
             int diffMod=this.mob.level().getDifficulty().getId();
             if (diffMod>0){
@@ -90,6 +91,9 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
             }
         }
         this.currentStateTimer--;
+        if (this.currentStateTimer==1 && state==0){
+            //
+        }
         if (currentStateTimer<=0) {
             switch (state) {
                 case 0:{

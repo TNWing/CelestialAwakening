@@ -21,7 +21,6 @@ import java.util.function.Predicate;
 import static com.github.celestial_awakening.nbt_strings.ProjDataNBTNames.pd_HolderName;
 
 public class ShiningOrb extends CA_Projectile {
-    private int life;
 
     double explosionRadius =2.25D;
     private static final EntityDataAccessor<Boolean> SHOULD_EXPLODE= SynchedEntityData.defineId(ShiningOrb.class, EntityDataSerializers.BOOLEAN);
@@ -81,7 +80,7 @@ public class ShiningOrb extends CA_Projectile {
         Entity entity = this.getOwner();
 
         if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
-            super.tick();
+            this.calcAndMove();
             List<LivingEntity> entities;
             if (this.getOwner() instanceof LivingEntity){
                 entities=this.entitiesToHurt(pred);
@@ -93,9 +92,10 @@ public class ShiningOrb extends CA_Projectile {
                 explode();
             }
             this.checkInsideBlocks();
-            this.life++;
-            if (this.life>=this.getLifeTime()){
-                explode();
+            super.tick();
+            this.setCurrentLifetime(this.getCurrentLifeTime()+1);
+            if (this.getCurrentLifeTime()>=this.getLifeTime()){
+                this.discard();
             }
         } else {
             this.discard();

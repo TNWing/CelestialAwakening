@@ -52,49 +52,49 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
         orb.setPos(this.mob.position());
         LazyOptional<ProjCapability> optional=orb.getProjCap();
         orbs.add(orb);
-        optional.ifPresent(cap->{
-            MovementModifier modifier=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
-                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,-7f/4f,0,0,0,15);
-            MovementModifier mod2=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.SET,
-                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,0,0,0,0,1);//just to ensure it stays 0
-            cap.putInBackOfList(modifier);
-            cap.putInBackOfList(mod2);
-            ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(id, cap),serverLevel.dimension());
-        });
         orb.setAlertInterface(new AlertInterface() {
             @Override
             public void onAlert() {
-                /*
-                onds,this.mob,this.mob.position().x,this.mob.position().y,this.mob.position().z,aabb);
-
-                 */
                 ServerLevel level= (ServerLevel) orb.level();
                 TargetingConditions conds=TargetingConditions.DEFAULT;
                 conds.selector(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate((LivingEntity) orb.getOwner(), List.of(AbstractPhantomKnight.class)));
-                //getNearestEntity(Class<? extends T> p_45964_, TargetingConditions p_45965_, @Nullable LivingEntity p_45966_, double p_45967_, double p_45968_, double p_45969_, AABB p_45970_) {
-                //
-                LivingEntity nearestEntity=level.getNearestEntity(LivingEntity.class,conds,(LivingEntity) orb.getOwner(), orb.getX(),orb.getY(),orb.getZ(),orb.getBoundingBox());
-                nearestEntity.hurt(strikeSource,2f);
-                if (orb.level().getDifficulty().getId()>2){
-                    for (MoonlightOrb o:orbs) {
-                        if (!o.isRemoved() && !o.equals(orb)){
-                            //todo: check to see if this would access the orbs present at the time of creation of the orbs stored currently
-                            Vec3 targetPos=nearestEntity.position();
-                            Vec3 dir=targetPos.subtract(o.position()).normalize();
-                            LunarCrescent crescent=LunarCrescent.create(o.level(),1.5f,80,9, MathFuncs.getAngFrom2DVec(dir),MathFuncs.getVertAngFromVec(dir),0);
-                            crescent.setOwner(o.getOwner());
-                            crescent.setPos(o.position());
-                            serverLevel.addFreshEntity(crescent);
-                            ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),serverLevel.dimension());
+                LivingEntity nearestEntity=level.getNearestEntity(LivingEntity.class,conds,(LivingEntity) orb.getOwner(), orb.getX(),orb.getY(),orb.getZ(),orb.getBoundingBox().inflate(0.5f));
+                if (nearestEntity!=null){
+                    nearestEntity.hurt(strikeSource,2f);
+                    if (orb.level().getDifficulty().getId()>2){
+                        for (MoonlightOrb o:orbs) {
+                            if (!o.isRemoved() && !o.equals(orb)){
+                                //todo: check to see if this would access the orbs present at the time of creation of the orbs stored currently
+                                Vec3 targetPos=nearestEntity.position();
+                                Vec3 dir=targetPos.subtract(o.position()).normalize();
+                                LunarCrescent crescent=LunarCrescent.create(o.level(),1.5f,80,9, MathFuncs.getAngFrom2DVec(dir),MathFuncs.getVertAngFromVec(dir),0);
+                                crescent.setOwner(o.getOwner());
+                                crescent.setPos(o.position());
+                                serverLevel.addFreshEntity(crescent);
+                                ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(crescent.getId()),serverLevel.dimension());
+                            }
                         }
                     }
+                    orb.discard();
                 }
+
+
             }
 
             @Override
             public void alertOthers() {
             }
         });
+        optional.ifPresent(cap->{
+            MovementModifier modifier=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,-7f,0,0,0,20);
+            MovementModifier mod2=new MovementModifier(MovementModifier.modFunction.NUM, MovementModifier.modOperation.SET,
+                    MovementModifier.modFunction.NUM, MovementModifier.modOperation.ADD,0,0,0,0,2);//just to ensure it stays 0
+            cap.putInBackOfList(modifier);
+            cap.putInBackOfList(mod2);
+            ModNetwork.sendToClientsInDim(new ProjCapS2CPacket(id, cap),serverLevel.dimension());
+        });
+
         serverLevel.addFreshEntity(orb);
         ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(id),serverLevel.dimension());
     }

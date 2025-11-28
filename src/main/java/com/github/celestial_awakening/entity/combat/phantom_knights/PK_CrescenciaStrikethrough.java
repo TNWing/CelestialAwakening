@@ -115,7 +115,7 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
                     break;
                 }
                 case 14:{
-                    Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
+                    Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position()).multiply(1,0,1);
                     this.mob.setPos(target.position().subtract(dir.scale(0.4)));
                     List<LivingEntity> entityList=this.mob.findCollidedEntities(CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob),1.4f);
                     DamageSourceIgnoreIFrames dashSource=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK),this.mob);

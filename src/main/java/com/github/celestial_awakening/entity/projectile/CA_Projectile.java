@@ -18,12 +18,15 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -33,6 +36,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     int rmdTicks;
     MovementModifier currentMovementModifier;
     AlertInterface alertInterface;
+    int life;
     private static final EntityDataAccessor<Boolean> DELETE_ON_OWNER_DEATH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> REAL = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> RENDERER_XSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
@@ -306,21 +310,8 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         rotMoveDir=rotDir;
     }
     double zeroThreshold=1e-7;
-    public void tick(){
-        if (prevY!=null){
-            //this.setPos(this.position().x,prevY,this.position().z);
-        }
-        //something outside this code is changing the position, before and after match values
-        /*
-        It does have something to do withh zrot, not sure what but if its not 0 it changes
-        NOTE:
-        zrot value impacts the pos for some odd reason
-        eg: when zrot=440, its at a diff y pos than if it was kept at zrot=0
-         */
 
-
-        super.tick();
-
+    public void calcAndMove(){
         @NotNull LazyOptional<ProjCapability> capOptional=getProjCap();
         capOptional.ifPresent(cap->{
             if (currentMovementModifier==null){
@@ -342,6 +333,25 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         double d2 = this.getZ() + dm.z;
 
         this.setPos(d0, d1, d2);
+    }
+
+    public void tick(){
+        if (prevY!=null){
+            //this.setPos(this.position().x,prevY,this.position().z);
+        }
+        //something outside this code is changing the position, before and after match values
+        /*
+        It does have something to do withh zrot, not sure what but if its not 0 it changes
+        NOTE:
+        zrot value impacts the pos for some odd reason
+        eg: when zrot=440, its at a diff y pos than if it was kept at zrot=0
+         */
+
+
+        super.tick();
+
+
+
     }
     public Vec3 calculateMoveVec(){
         double hAngle = MathFuncs.clampAngle(this.getHAng());
@@ -396,9 +406,9 @@ public class CA_Projectile extends Projectile implements CA_Entity {
                 float hAng=currentMovementModifier.getHAng();
                 float vAng=currentMovementModifier.getVAng();
                 float zRot=currentMovementModifier.getZRot();
+                MovementModifier.modOperation spdOp=currentMovementModifier.getSpdOperation();
+                if (spdVal!=0 || (spdOp== MovementModifier.modOperation.SET)){//TODO: change/remove since setting spdVal to 0 can be used for some stuff
 
-                if (spdVal!=0){//TODO: change/remove since setting spdVal to 0 can be used for some stuff
-                    MovementModifier.modOperation spdOp=currentMovementModifier.getSpdOperation();
                     MovementModifier.modFunction spdFunc=currentMovementModifier.getSpdFunction();
                     float spdMod=0;
                     switch(spdFunc){
@@ -540,5 +550,9 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     @Override
     public void setAlertInterface(AlertInterface alertInterface) {
         this.alertInterface=alertInterface;
+    }
+    @Nullable
+    protected EntityHitResult findHitEntity(Vec3 p_36758_, Vec3 p_36759_) {
+        return ProjectileUtil.getEntityHitResult(this.level(), this, p_36758_, p_36759_, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1.0D), this::canHitEntity);
     }
 }

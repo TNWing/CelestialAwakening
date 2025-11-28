@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class LunarCrescent extends CA_Projectile {
-    private int life;
     public ItemStack itemStackSource;
     /*
     NOTE:
@@ -87,11 +86,11 @@ public class LunarCrescent extends CA_Projectile {
     public void tick() {
         Entity owner = this.getOwner();
         if (this.level().isClientSide || (owner == null || !owner.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
-            super.tick();
+            this.calcAndMove();
+
             if (this.isReal()){
                 Predicate<Entity> alreadyHitPred= o -> o != null && !entityIDs.contains(o.getStringUUID());
-                Predicate p;
-                p=alreadyHitPred.and(pred);
+                Predicate p=alreadyHitPred.and(pred);
                 List<LivingEntity> entities=this.entitiesToHurt(p);
                 for (LivingEntity e:entities) {
                     this.entityIDs.add(e.getStringUUID());
@@ -111,8 +110,9 @@ public class LunarCrescent extends CA_Projectile {
                 }
                 this.checkInsideBlocks();
             }
-            this.life++;
-            if (this.life>=this.getLifeTime()){
+            super.tick();
+            this.setCurrentLifetime(this.getCurrentLifeTime()+1);
+            if (this.getCurrentLifeTime()>=this.getLifeTime()){
                 this.discard();
             }
         } else {

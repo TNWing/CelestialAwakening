@@ -146,5 +146,8 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
                 }
             }
         }
+        else if(!currentState.isStarted()){
+            currentState.start(this.tickCount);
+        }
     }
 }

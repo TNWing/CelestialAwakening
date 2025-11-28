@@ -58,6 +58,7 @@ public class IceShard extends CA_Projectile{
         Entity entity = this.getOwner();
 
         if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
+            this.calcAndMove();
             super.tick();
 
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, (this::canHitEntity));

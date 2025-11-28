@@ -87,7 +87,8 @@ public class OrbiterProjectile extends CA_Projectile {
     public void tick() {
         Entity entity = this.getOwner();
         if (this.level().isClientSide || (entity != null && !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
-            super.tick();
+            calcAndMove();
+
             if (this.entityData.get(RELEASETIMER)>0 && this.getOwner()!=null){
                 orbit();
                 this.entityData.set(RELEASETIMER,this.entityData.get(RELEASETIMER)-1);
@@ -105,6 +106,7 @@ public class OrbiterProjectile extends CA_Projectile {
                     this.discard();
                 }
             }
+            super.tick();
         }
         else {
             this.discard();

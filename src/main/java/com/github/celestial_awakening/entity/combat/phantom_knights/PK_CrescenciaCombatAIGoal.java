@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,10,20,15,0,99);
     //PhantomKnightChargeAttack chargeAttack=new PhantomKnightChargeAttack(this.mob,50,200,50,30);
-    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,20,200,125,30,15);
+    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,15,200,125,30,15);
     PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36,9);
     PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,160,0,10,8);
     PK_CrescenciaPhantomStrike phantomStrike=new PK_CrescenciaPhantomStrike(this.mob,0,25,0,0);
@@ -23,7 +23,7 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
         LivingEntity target=this.mob.getTarget();
         if (this.mob.getBossBarWindup()>=100){
             abilities.forEach(a-> a.decreaseCD(1));
-            /*
+
             if (this.mob.level().getDifficulty().getId()>1 &&  this.mob.getHealth()/this.mob.getMaxHealth()<=0.4f){
                 phantomStrike.decreaseCD(1);
                 if (phantomStrike.getCurrentCD()==0){
@@ -32,7 +32,7 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
                 }
             }
 
-             */
+
             if (this.mob.isActing){
                 currentAbility.executeAbility(this.mob.getTarget());
             }

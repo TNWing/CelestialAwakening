@@ -12,6 +12,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -192,5 +194,21 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
 
     public void setRaidValue(int w){
         this.raidValue =w;
+    }
+
+
+    protected SoundEvent getAmbientSound() {
+        if (this.random.nextInt(3)==0){
+            return SoundEvents.WOLF_GROWL;
+        }
+        return null;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource p_30424_) {
+        return SoundEvents.WOLF_HURT;
+    }
+
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.WOLF_DEATH;
     }
 }

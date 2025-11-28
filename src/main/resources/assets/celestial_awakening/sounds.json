@@ -1,0 +1,8 @@
+{
+  "trans_div_open":{
+    "subtitles": "sounds.celestial_awakening.trans_div_open",
+    "sounds" : [
+      "celestial_awakening:trans_div_open"
+    ]
+  }
+}

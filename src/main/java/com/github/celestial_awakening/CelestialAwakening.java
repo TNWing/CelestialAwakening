@@ -56,9 +56,6 @@ public class CelestialAwakening
     }
     public CelestialAwakening(FMLJavaModLoadingContext context)
     {
-        if (false) {
-            return;
-        }
         IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -76,6 +73,7 @@ public class CelestialAwakening
         RecipeInit.RECIPE_SERIALIZER_DEFERRED_REGISTER.register(modEventBus);
 
         MobEffectInit.MOB_EFFECTS.register(modEventBus);
+        SoundInit.SOUND_EVENTS.register(modEventBus);
         registerTiers();
 /*
 optimize eventmanager later, theres probably  some stuff eating up performance

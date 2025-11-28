@@ -9,9 +9,11 @@ import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
+import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
+import com.github.celestial_awakening.init.SoundInit;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -26,6 +28,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -944,5 +947,18 @@ public class EventManager {
             }
         }
         return cnt;
+    }
+
+    @SubscribeEvent
+    public static void divinerSoundEvent(DivinerEyeSoundEvent event){
+        if (event.getLevel().dimension() == Minecraft.getInstance().level.dimension()){
+            if (event.isOpen()){
+                System.out.println("HELLO DIV");
+                Player player=Minecraft.getInstance().player;
+                Minecraft.getInstance().level.playLocalSound(player.getX()  ,player.getY(),player.getZ(), SoundInit.TRANSCENDENT_DIV_OPEN.get(), SoundSource.HOSTILE,1.8f,1,false);
+            }
+
+        }
+
     }
 }

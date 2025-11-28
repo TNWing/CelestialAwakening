@@ -156,21 +156,23 @@ public class MoonScythe extends Item implements IForgeItem {
             p_43414_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
         });
         if (attacker instanceof Player){
+
             Player player=(Player) attacker;
             boolean isFullyCharged = player.getAttackStrengthScale(0.5F) > 0.9F;
-            boolean isCrit=player.fallDistance > 0.0F && !player.onGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && target instanceof LivingEntity && !player.isSprinting();
-            Vec3 targetPos=target.position().add(0,1,0);
-            Vec3 dir=targetPos.subtract(player.position()).normalize();
-
-            dir.multiply(1,0,1);//TODO: replace later (maybe)
-            float hAng= MathFuncs.getAngFrom2DVec(dir);
-            double dmg=Config.moonScytheWaveDmg;
-            if (isCrit){
-                dmg=Config.moonScytheStrikeDmg;
-            }
             if (isFullyCharged){
+                boolean isCrit=player.fallDistance > 0.0F && !player.onGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && target instanceof LivingEntity && !player.isSprinting();
+                Vec3 targetPos=target.position().add(0,1,0);
+                Vec3 dir=targetPos.subtract(player.position()).normalize();
+
+                dir.multiply(1,0,1);//TODO: replace later (maybe)
+                float hAng= MathFuncs.getAngFrom2DVec(dir);
+                double dmg=Config.moonScytheWaveDmg;
+                if (isCrit){
+                    dmg=Config.moonScytheStrikeDmg;
+                }
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
             }
+
         }
         return true;
     }

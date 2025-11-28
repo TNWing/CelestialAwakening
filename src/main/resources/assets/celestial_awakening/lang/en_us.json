@@ -233,7 +233,7 @@
   "tooltip.celestial_awakening.umbra_armor.pursuit_name": "Pursuit",
   "tooltip.celestial_awakening.umbra_armor.pursuit_desc":"Hitting an enemy below 50% max HP will grant a speed boost to the wearer.\nCooldown of 15 seconds, resets on kill.",
   "tooltip.celestial_awakening.umbra_armor.cl_name": "Cursed Light",
-  "tooltip.celestial_awakening.umbra_armor.cl_desc":"Getting hit will apply Weakness 2 to the attacker for 3 seconds.\nFurthermore, all nearby entities will take damage and be inflicted with Weakness 1 for 2 seconds.\nCooldown of 8 seconds"
+  "tooltip.celestial_awakening.umbra_armor.cl_desc":"Getting hit will apply Weakness 2 to the attacker for 3 seconds.\nFurthermore, all nearby entities will take damage and be inflicted with Weakness 1 for 2 seconds.\nCooldown of 8 seconds",
 
-
+  "sounds.celestial_awakening.trans_div_open": "Diviner appears"
 }

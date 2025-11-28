@@ -7,8 +7,10 @@ import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
 import com.github.celestial_awakening.effects.CelestialBeaconMobEffectInstance;
 import com.github.celestial_awakening.events.command_patterns.UpdateDivinerEyeCommandPattern;
+import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
+import com.github.celestial_awakening.init.SoundInit;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
 import com.github.celestial_awakening.util.ResourceCheckerFuncs;
@@ -18,6 +20,7 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +32,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
@@ -69,6 +73,21 @@ public class SolarEvents {
                             if (randF<cap.divinerEyeChance){
                                 createDivinerEye(cap,level.dimension());
                                 cap.divinerEyeChance=0;
+                                //MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
+                                MinecraftForge.EVENT_BUS.post(new DivinerEyeSoundEvent(true,level));
+                                /*
+                                level.playSeededSound(
+                                        null,
+                                        0, 0, 0, // position irrelevant for global sounds
+                                        SoundInit.TRANSCENDENT_DIV_OPEN.get(),
+                                        SoundSource.HOSTILE,
+                                        1f,
+                                        1f,
+                                        level.random.nextLong()
+                                );
+
+                                 */
+
                                 //success, perform roll
                             }
                             else{//increase chance for next attempt
@@ -114,7 +133,7 @@ public class SolarEvents {
         cap.divinerEyeToState=-1;
         cap.divinerEyeCurrentChangeDelay =120;
         cap.divinerEyeFrameProgress=0;
-        cap.divinerEyeTimer=rand.nextInt(401)+460;
+        cap.divinerEyeTimer=rand.nextInt(201)+360;//401 + 460
         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),dimID);
         Object[] params=new Object[]{cap,dimID};
         DelayedFunctionManager.delayedFunctionManager.insertIntoLevelMap(ServerLifecycleHooks.getCurrentServer().getLevel(dimID), new UpdateDivinerEyeCommandPattern(params,0),120,true);//6 seconds before it opens

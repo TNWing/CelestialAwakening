@@ -149,6 +149,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
         int id=crescent.getId();
         crescent.setPos(startPos);
         crescent.setOwner(this.mob);
+
         crescent.setDisableShields(true);
         crescent.setDisableTicks(60);
         lvl.addFreshEntity(crescent);

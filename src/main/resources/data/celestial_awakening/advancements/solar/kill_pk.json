@@ -28,7 +28,7 @@
     }
   },
   "requirements": [
-    ["celestial_awakening:transcendent_nebure"]
+    ["celestial_awakening:pk_crescencia"]
   ],
   "sends_telemetry_event": true
 }

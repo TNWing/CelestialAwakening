@@ -41,7 +41,7 @@ public class Config
 
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_LIMIT;
-
+    private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_INTERVAL;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP;
@@ -119,6 +119,7 @@ maybe use json files instead since it'll look neater?
         builder.push("Lunar_Config");
             LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 15").defineInRange("moonstone_lim",15,-1,Integer.MAX_VALUE);
+            MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);
             PK_DIMENSIONS=builder.comment("Dimensions that Phantom Knights are allowed to spawn in. Default: [minecraft:overworld]").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
             PK_CRESCENCIA_MIN_DAY=builder.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
             PK_SPAWN_CAP=builder.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,100);
@@ -226,6 +227,7 @@ maybe use json files instead since it'll look neater?
     public static boolean pkDayDespawn;
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
     public static int moonstoneDimLim=15;
+    public static int moonstoneInterval;
     public static boolean insSound=true;
     public enum INS_VISUALS{
         NONE,
@@ -292,6 +294,8 @@ maybe use json files instead since it'll look neater?
         lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
 
         moonstoneDimLim=MOONSTONE_LIMIT.get();
+
+        moonstoneInterval=MOONSTONE_INTERVAL.get();
 
         divinerShared= TRANSCENDENTS_MULTIPLE_DIVINER.get();
 

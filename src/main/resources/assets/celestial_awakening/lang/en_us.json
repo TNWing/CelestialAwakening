@@ -78,7 +78,7 @@
   "item.minecraft.tipped_arrow.effect.lunar_restoration": "Arrow of Lunar Restoration",
 
   "effect.celestial_awakening.exposing_light": "Exposing Light",
-  "effect.celestial_awakening.exposing_light.description": "Exposing Light",
+  "effect.celestial_awakening.exposing_light.description": "Not implemented, stop looking.",
   "effect.celestial_awakening.purging_light": "Purging Light",
   "effect.celestial_awakening.purging_light.description": "Upon expiring, removes a random buff and damages the afflicted depending on the number of debuffs on them.",
   "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
@@ -86,11 +86,18 @@
   "effect.celestial_awakening.lunar_restoration": "Lunar Restoration",
   "effect.celestial_awakening.lunar_restoration.description":"Periodically repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.lunar_renewal": "Lunar Renewal",
-  "effect.celestial_awakening.lunar_renewal.description":"Instantly repairs worn armor and items held in either hand.",
+  "effect.celestial_awakening.lunar_renewal.description":"(NOT IMPLEMENTED YET)Instantly repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.photosynthesis": "Photosynthesis",
   "effect.celestial_awakening.photosynthesis.description": "Periodically grants small amounts of hunger.",
   "effect.celestial_awakening.moon_curse": "Curse of the Moon",
   "effect.celestial_awakening.moon_curse.description": "Healing too fast causes the afflicted to take damage.",
+  "effect.celestial_awakening.cauterize": "Cauterize",
+  "effect.celestial_awakening.cauterize.description": "Reduces incoming healing.",
+  "effect.celestial_awakening.mark_of_haunting": "Mark of Haunting",
+  "effect.celestial_awakening.mark_of_haunting.description": "Non-player entities with this effect impart certain effects on players they attack.",
+  "effect.celestial_awakening.remnant_fl": "Final Light",
+  "effect.celestial_awakening.mark_of_haunting.description": "A buff bestowed by the Remnant armor set.",
+
 
   "entity.celestial_awakening.transcendent_asteron": "Asteron",
   "entity.celestial_awakening.transcendent_astralite": "Astralite",
@@ -139,10 +146,9 @@
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
-
+  "tooltip.celestial_awakening.luna_tome": "A book with significantly increased enchantability.",
   "tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_name": "Burn the Midnight Oil",
   "tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_effect": "At night, this item will not lose durability.\nFurthermore, it gains increased attack speed, damage, and mining speed.",
-
 
   "tooltip.celestial_awakening.moon_scythe.ability_name": "Crescent Strike/Crescent Wave",
   "tooltip.celestial_awakening.moon_scythe.ability_desc": "Executing a fully charged attack will launch a projectile based on the hit type: a vertical strike if the attack is a critical hit, or a horizontal wave otherwise.\nStrike and Wave each have independent cooldowns of %s seconds.",

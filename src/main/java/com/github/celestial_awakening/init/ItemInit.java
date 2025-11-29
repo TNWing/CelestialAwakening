@@ -68,7 +68,7 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.REMNANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
-    public static final RegistryObject<Item> LUNA_TOME=ITEMS.register("luna_tome",()->new LunaTomeItem(new Item.Properties()));
+    public static final RegistryObject<Item> LUNA_TOME=ITEMS.register("luna_tome",()->new LunaTomeItem(new Item.Properties(),"tooltip.celestial_awakening.luna_tome",0xFFFFFF));
 
     //maybe make them slightly worse than iron but have the buffs to offset the weaker stats?
     public static final RegistryObject<Item> MIDNIGHT_IRON_INGOT = ITEMS.register("midnight_iron_ingot", () ->new Item(new Item.Properties()));

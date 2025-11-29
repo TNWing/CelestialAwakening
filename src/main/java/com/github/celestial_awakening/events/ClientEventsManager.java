@@ -75,10 +75,19 @@ public class ClientEventsManager {
 
     }
     public void renderTransAoDOverlay(PoseStack poseStack,ClientLevel level,LevelCapability cap,RenderLevelStageEvent event){
+        // Save old GL state
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableCull();
+
+        // If you disabled depth somewhere:
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
         float f12 = 15.0F;//f12=30 for a 32 by 32
         FogRenderer.levelFogColor();
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        poseStack=poseStackModificationForSun(level,poseStack,event.getPartialTick());
+        poseStack.pushPose();
+        poseStackModificationForSun(level,poseStack,event.getPartialTick());
 
         Matrix4f matrix4f1=poseStack.last().pose();//posestack
         RenderSystem.enableBlend();
@@ -94,17 +103,29 @@ public class ClientEventsManager {
         BufferUploader.drawWithShader(bufferbuilder.end());
         RenderSystem.disableBlend();
         poseStack.popPose();
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.disableBlend();
+        RenderSystem.enableCull();
     }
 
 //also, whenever a transition to state starts, theres a brief moment of glitched texture
     public void renderDivinerEye(PoseStack poseStack,ClientLevel level, LevelCapability cap,RenderLevelStageEvent event){
         //System.out.println("rendering on time " + level.getDayTime());
-        Minecraft minecraft = Minecraft.getInstance();
+        // Save old GL state
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableCull();
 
+        // If you disabled depth somewhere:
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
         float f12 = 30.0F;
-        FogRenderer.levelFogColor();
+        //FogRenderer.levelFogColor();
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        poseStack=poseStackModificationForSun(level,poseStack,event.getPartialTick());
+        poseStack.pushPose();
+        poseStackModificationForSun(level,poseStack,event.getPartialTick());
 
         Matrix4f matrix4f1=poseStack.last().pose();//posestack
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -169,6 +190,11 @@ public class ClientEventsManager {
         bufferbuilder.vertex(matrix4f1, -f12, 100.0F, f12).uv(0.0F, 1.0F).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
         poseStack.popPose();
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.disableBlend();
+        RenderSystem.enableCull();
     }
 
     public int eyeLidRender(float progress, boolean opening){
@@ -184,12 +210,11 @@ public class ClientEventsManager {
 
 
     //performs the calculations on the posestack by copying vanilla code
-    public PoseStack poseStackModificationForSun(ClientLevel level,PoseStack poseStack,float partialTicks){
-        poseStack.pushPose();
+    public void poseStackModificationForSun(ClientLevel level,PoseStack poseStack,float partialTicks){
+
         float f11 = 1.0F - level.getRainLevel(partialTicks);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, f11);
         poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
         poseStack.mulPose(Axis.XP.rotationDegrees(level.getTimeOfDay(partialTicks) * 360.0F));
-        return poseStack;
     }
 }

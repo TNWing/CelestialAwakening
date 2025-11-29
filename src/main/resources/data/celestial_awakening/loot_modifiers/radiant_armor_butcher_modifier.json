@@ -4,7 +4,7 @@
     {
       "condition": "celestial_awakening:armor_cond",
       "armor": "RADIANT",
-      "chance_per_piece": 8
+      "chance_per_piece": 11
     }
   ]
 }

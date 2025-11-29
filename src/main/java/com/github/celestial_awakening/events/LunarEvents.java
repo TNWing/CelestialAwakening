@@ -317,7 +317,7 @@ public class LunarEvents {
             night is 13000-24999
             spawn at 15000,18000,21000
              */
-                if ((time%12000)%3000==0){//valid time
+                if ((time%12000)%600==0){//valid time
                     //for each player, attempt to create a moonstone in a nearby chunk
                     List<? extends Player> pList=level.players();
                     for (Player p:pList) {

@@ -75,20 +75,6 @@ public class SolarEvents {
                                 cap.divinerEyeChance=0;
                                 //MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
                                 MinecraftForge.EVENT_BUS.post(new DivinerEyeSoundEvent(true,level));
-                                /*
-                                level.playSeededSound(
-                                        null,
-                                        0, 0, 0, // position irrelevant for global sounds
-                                        SoundInit.TRANSCENDENT_DIV_OPEN.get(),
-                                        SoundSource.HOSTILE,
-                                        1f,
-                                        1f,
-                                        level.random.nextLong()
-                                );
-
-                                 */
-
-                                //success, perform roll
                             }
                             else{//increase chance for next attempt
                                 cap.divinerEyeChance+=rand.nextInt(1,6)/100f;
@@ -110,10 +96,10 @@ public class SolarEvents {
             float chance=0;
             Random rand = new Random();
             if (block instanceof LeavesBlock){
-                chance=5+5f*Math.abs(6000f-time)/6000f;
+                chance=8.5f+5f*Math.abs(6000f-time)/6000f;
             }
             else if(block instanceof BushBlock){
-                chance=1.5f+2f*Math.abs(6000f-time)/6000f;
+                chance=3f+2f*Math.abs(6000f-time)/6000f;
             }
             float randNum=rand.nextFloat(100f);
             if (randNum<=chance){

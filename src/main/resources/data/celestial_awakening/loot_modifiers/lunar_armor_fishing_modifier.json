@@ -8,7 +8,7 @@
     {
       "condition": "celestial_awakening:armor_cond",
       "armor": "LUNAR",
-      "chance_per_piece": 12
+      "chance_per_piece": 14
     }
 
   ]

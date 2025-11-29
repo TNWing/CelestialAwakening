@@ -953,7 +953,6 @@ public class EventManager {
     public static void divinerSoundEvent(DivinerEyeSoundEvent event){
         if (event.getLevel().dimension() == Minecraft.getInstance().level.dimension()){
             if (event.isOpen()){
-                System.out.println("HELLO DIV");
                 Player player=Minecraft.getInstance().player;
                 Minecraft.getInstance().level.playLocalSound(player.getX()  ,player.getY(),player.getZ(), SoundInit.TRANSCENDENT_DIV_OPEN.get(), SoundSource.HOSTILE,1.8f,1,false);
             }

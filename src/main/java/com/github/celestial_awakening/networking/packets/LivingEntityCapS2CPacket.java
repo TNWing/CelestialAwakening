@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.networking.packets;
 
-import com.github.celestial_awakening.capabilities.PlayerCapability;
-import com.github.celestial_awakening.networking.packets.client.ClientPlayerData;
+import com.github.celestial_awakening.capabilities.LivingEntityCapability;
+import com.github.celestial_awakening.networking.packets.client.ClientLEPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -10,19 +10,19 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PlayerCapS2CPacket {
-    private final PlayerCapability cap;
+public class LivingEntityCapS2CPacket {
+    private final LivingEntityCapability cap;
 
-    public PlayerCapS2CPacket(PlayerCapability cap) {
+    public LivingEntityCapS2CPacket(LivingEntityCapability cap) {
         this.cap = cap;
     }
-    public PlayerCapS2CPacket(FriendlyByteBuf buf){
-        this.cap=new PlayerCapability();
+    public LivingEntityCapS2CPacket(FriendlyByteBuf buf){
+        this.cap=new LivingEntityCapability();
         CompoundTag tag=buf.readNbt();
-        cap.loadNBTData(tag);
+        cap.loadNBTData(tag,false);
     }
     public void toBytes(FriendlyByteBuf buf){//claims cap is null
-        CompoundTag nbt=cap.initNBTData();
+        CompoundTag nbt=cap.initNBTData(new CompoundTag());
         buf.writeNbt(nbt);
     }
 
@@ -32,7 +32,7 @@ public class PlayerCapS2CPacket {
             //client-side
 
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->
-                    ClientPlayerData.setData(cap)
+                    ClientLEPlayerData.setData( cap)
             );
         });
         return true;

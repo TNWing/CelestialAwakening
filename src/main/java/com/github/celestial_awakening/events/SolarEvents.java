@@ -93,13 +93,13 @@ public class SolarEvents {
         Block block=event.getState().getBlock();
         long time=level.dayTime();
         if (time>0 && time<12000){
-            float chance=0;
+            double chance=0;
             Random rand = new Random();
             if (block instanceof LeavesBlock){
-                chance=8.5f+5f*Math.abs(6000f-time)/6000f;
+                chance=Config.sunstoneLeavesRate+5f*(1f-Math.abs(6000f-time)/6000f);
             }
             else if(block instanceof BushBlock){
-                chance=3f+2f*Math.abs(6000f-time)/6000f;
+                chance=  Config.sunstoneGrassRate+2f*(1f-Math.abs(6000f-time)/6000f);
             }
             float randNum=rand.nextFloat(100f);
             if (randNum<=chance){

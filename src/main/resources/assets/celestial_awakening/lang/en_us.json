@@ -10,8 +10,10 @@
   "item.celestial_awakening.moonstone_boots": "Lunar Boots",
   "item.celestial_awakening.lunar_dial": "Lunar Dial",
   "item.celestial_awakening.luna_tome": "Luna Tome",
+  "item.celestial_awakening.lunula_rock": "Lunula Rock",
 
   "item.celestial_awakening.fluorescent_bow": "Fluorescent Bow",
+  "item.celestial_awakening.star_gazer": "Star Gazer",
   "item.celestial_awakening.sun_staff": "Sun Staff",
   "item.celestial_awakening.shimmer_cube": "Shimmer Cube",
   "item.celestial_awakening.sunstone": "Sunstone",
@@ -82,7 +84,7 @@
   "effect.celestial_awakening.purging_light": "Purging Light",
   "effect.celestial_awakening.purging_light.description": "Upon expiring, removes a random buff and damages the afflicted depending on the number of debuffs on them.",
   "effect.celestial_awakening.celestial_beacon": "Celestial Beacon",
-  "effect.celestial_awakening.celestial_beacon.description": "Draws the attention of the transcendents.",
+  "effect.celestial_awakening.celestial_beacon.description": "Unwanted Attention.",
   "effect.celestial_awakening.lunar_restoration": "Lunar Restoration",
   "effect.celestial_awakening.lunar_restoration.description":"Periodically repairs worn armor and items held in either hand.",
   "effect.celestial_awakening.lunar_renewal": "Lunar Renewal",
@@ -94,7 +96,7 @@
   "effect.celestial_awakening.cauterize": "Cauterize",
   "effect.celestial_awakening.cauterize.description": "Reduces incoming healing.",
   "effect.celestial_awakening.mark_of_haunting": "Mark of Haunting",
-  "effect.celestial_awakening.mark_of_haunting.description": "Non-player entities with this effect impart certain effects on players they attack.",
+  "effect.celestial_awakening.mark_of_haunting.description": "Not good for your mental health.",
   "effect.celestial_awakening.remnant_fl": "Final Light",
   "effect.celestial_awakening.mark_of_haunting.description": "A buff bestowed by the Remnant armor set.",
 
@@ -192,9 +194,9 @@
   "tooltip.celestial_awakening.everlight_armor.photon_cycle_desc": "While in combat, channel the power of light.\n  If you are above half health, ignite nearby enemies and deal a burst of additional fire damage.\n  If below half health, reduce the duration of burning and glowing effects on nearby entities. You are healed based on the total time removed across all targets.\nCooldown of 12 seconds.",
 
   "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
-  "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had for 15 seconds.",
+  "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had. This effect lasts for 15 seconds.",
   "tooltip.celestial_awakening.knightmare_suit.honor_duel_name": "Honor Duel",
-  "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc": "Hitting an enemy applies Honor Duel to the user and the enemy.\nIncreases the damage dealt to the afflicted enemy.\nDecreases damage dealt and taken from other enemies.\nHonor Duel is removed if the user or the target is killed.\nAn entity can only be linked with one Honor Duel at a time.",
+  "tooltip.celestial_awakening.knightmare_suit.honor_duel_desc": "Hitting an enemy applies Honor Duel to the user and the enemy.\nIncreases the damage dealt to the afflicted enemy.\nDecreases damage dealt and taken from other enemies.\nHonor Duel is removed if the user or the target is killed, or if the linked entities are too far from each other.\nAn entity can only be linked with one Honor Duel at a time.",
   "tooltip.celestial_awakening.knightmare_suit.ss_name": "Sword & Shield",
   "tooltip.celestial_awakening.knightmare_suit.ss_desc": "TBD",
 
@@ -237,7 +239,7 @@
   "tooltip.celestial_awakening.umbra_armor.dread_name": "Dread",
   "tooltip.celestial_awakening.umbra_armor.dread_desc": "Hitting a target at full HP will deal an additional %s damage.\nCooldown of %s seconds, reduces cooldown by %s seconds on kill.",
   "tooltip.celestial_awakening.umbra_armor.pursuit_name": "Pursuit",
-  "tooltip.celestial_awakening.umbra_armor.pursuit_desc":"Hitting an enemy below 50% max HP will grant a speed boost to the wearer.\nCooldown of 15 seconds, resets on kill.",
+  "tooltip.celestial_awakening.umbra_armor.pursuit_desc":"Bringing an enemy below 50% max HP will grant a speed boost to the wearer.\nCooldown of 15 seconds, resets on kill.",
   "tooltip.celestial_awakening.umbra_armor.cl_name": "Cursed Light",
   "tooltip.celestial_awakening.umbra_armor.cl_desc":"Getting hit will apply Weakness 2 to the attacker for 3 seconds.\nFurthermore, all nearby entities will take damage and be inflicted with Weakness 1 for 2 seconds.\nCooldown of 8 seconds",
 

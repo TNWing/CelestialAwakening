@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -72,6 +73,7 @@ public class InsManager {
         INSTANCE.rendererHolderHashMap=new HashMap<>();
         INSTANCE.insertIntoModelMap("pillager",new IllagerModel<>(context.bakeLayer(ModelLayers.PILLAGER)), new ResourceLocation("textures/entity/illager/pillager.png"),0.5f);
         INSTANCE.insertIntoModelMap("vindicator",new IllagerModel<>(context.bakeLayer(ModelLayers.VINDICATOR)), new ResourceLocation("textures/entity/illager/vindicator.png"),0.5f);
+        INSTANCE.insertIntoModelMap("creeper",new CreeperModel(context.bakeLayer(ModelLayers.CREEPER)),new ResourceLocation("textures/entity/creeper/creeper.png"),0.5f);
         //INSTANCE.insertIntoMap();
     }
 

@@ -1,7 +1,10 @@
 package com.github.celestial_awakening.capabilities;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
+import static com.github.celestial_awakening.nbt_strings.LevelCapNBTNames.*;
 import static com.github.celestial_awakening.nbt_strings.LivingEntityNBTNames.*;
 
 public class PlayerCapability {
@@ -64,6 +67,15 @@ public class PlayerCapability {
         this.prowlerRaidCounter = prowlerRaidCounter;
     }
 
+    public CompoundTag initNBTData(){
+        CompoundTag nbt=new CompoundTag();
+        nbt.putShort(leCap_insanity,insanityPts);
+        nbt.putShort(pCap_prowlerCnt,prowlerRaidCounter);
+        nbt.putInt(pCap_soundBiome,insBiomeSoundCD);
+        nbt.putInt(pCap_soundMob,insMobSoundCD);
+        nbt.putInt(pCap_soundBlock,insBlockSoundCD);
+        return nbt;
+    }
 
 
     void saveNBTData(CompoundTag nbt){
@@ -82,4 +94,10 @@ public class PlayerCapability {
         insBlockSoundCD=nbt.getInt(pCap_soundBlock);
 
     }
+
+    public void updateData(PlayerCapability data){
+        this.insanityPts=data.getInsanityPts();
+        this.prowlerRaidCounter=data.getProwlerRaidCounter();
+    }
+
 }

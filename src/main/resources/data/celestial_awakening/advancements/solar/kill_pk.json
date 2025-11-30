@@ -20,8 +20,10 @@
     "description": {
       "translate": "advancement.celestial_awakening.kill_pk.description"
     },
+    "frame": "challenge",
+    "hidden": true,
     "icon": {
-      "item": "minecraft:bucket"
+      "item": "celestial_awakening:midnight_iron_sword"
     },
     "title": {
       "translate": "advancement.celestial_awakening.kill_pk.title"

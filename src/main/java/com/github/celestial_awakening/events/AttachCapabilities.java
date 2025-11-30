@@ -7,6 +7,7 @@ import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.items.MoonScythe;
 import com.github.celestial_awakening.items.SunStaff;
 import com.github.celestial_awakening.networking.ModNetwork;
+import com.github.celestial_awakening.networking.packets.LivingEntityCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -58,6 +59,11 @@ public class AttachCapabilities {
         @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             cap.setUUID(playerID);
+            ModNetwork.sendToClient(new LivingEntityCapS2CPacket(cap),player);
+
+        });
+        LazyOptional<PlayerCapability> playerOptional=player.getCapability(PlayerCapabilityProvider.capability);
+        playerOptional.ifPresent(cap->{
             ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),player);
         });
     }

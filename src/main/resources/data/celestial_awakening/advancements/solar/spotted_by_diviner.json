@@ -14,7 +14,6 @@
     "description": {
       "translate": "advancement.celestial_awakening.spotted_by_diviner.description"
     },
-    "frame": "challenge",
     "hidden": true,
     "icon": {
       "item": "minecraft:bucket"

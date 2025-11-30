@@ -247,37 +247,14 @@ public class LunarEvents {
     /*
     append this to cap instead of internal storage as that allows preservation outside of separate game instances
      */
-    static ConcurrentHashMap<UUID, Short> timeSpentLookingAtMoon=new ConcurrentHashMap<>();
-
-    int moonSanMin=400;
-    public void moonSanity(Level level){
-        level.players().forEach(player->{
-            Short val=timeSpentLookingAtMoon.get(player.getUUID());
-            if (val !=null && val>moonSanMin){
-                LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
-                optional.ifPresent(cap->{
-                    int insChange= -(int) Math.floor(Math.pow(5,1+(val-moonSanMin)/1400f));
-                    cap.changeInsanityVal(insChange);
-                });
-            }
-        });
-    }
+    //maybe instead just have moon sanity decrease when looking at moon per tick
     public void detectIfLookingAtMoon(Level level, boolean isNight){
         for (Player player:level.players()){
-            UUID uuid=player.getUUID();
-            short val=1;
             if (isNight && LevelFuncs.detectIfLookingAtCelestialBody(level,player,-1)){
-                if (timeSpentLookingAtMoon.containsKey(uuid)){
-                    val= (short) Math.max(3000,timeSpentLookingAtMoon.get(uuid)+1);
-                }
-                timeSpentLookingAtMoon.put(uuid,val);
-                //looking at moon
-            }
-            else{
-                if (timeSpentLookingAtMoon.containsKey(uuid)){
-                    val= (short) Math.min(0,timeSpentLookingAtMoon.get(uuid)-1);
-                    timeSpentLookingAtMoon.put(uuid,val);
-                }
+                LazyOptional<PlayerCapability> optional = player.getCapability(PlayerCapabilityProvider.capability);
+                optional.ifPresent(cap->{
+                    cap.changeInsanityVal(Config.moonInsVal);
+                });
             }
         }
     }

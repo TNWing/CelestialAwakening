@@ -7,14 +7,12 @@ import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.*;
 import com.github.celestial_awakening.rendering.client.renderers.*;
 import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
+import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsPigRenderer;
 import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsVillagerRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.VillagerModel;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.VillagerRenderer;
+import net.minecraft.client.renderer.entity.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
@@ -68,6 +66,10 @@ public class ClientModEventBusManager {
             event.registerEntityRenderer(EntityType.VILLAGER,ctx->{
                 InsManager.init(ctx);
                 return new InsVillagerRenderer(ctx, (VillagerRenderer) ctx.getEntityRenderDispatcher().renderers.get(EntityType.VILLAGER));
+            });
+            event.registerEntityRenderer(EntityType.PIG,ctx->{
+                InsManager.init(ctx);
+                return new InsPigRenderer<>(ctx,(PigRenderer) ctx.getEntityRenderDispatcher().renderers.get(EntityType.PIG));
             });
         }
 

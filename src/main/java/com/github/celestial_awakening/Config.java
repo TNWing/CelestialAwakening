@@ -25,6 +25,9 @@ public class Config
 
     static final ForgeConfigSpec.BooleanValue OUTOFCOMBAT_HEAL;
 
+
+    private static final ForgeConfigSpec.ConfigValue<Double> SUNSTONE_LEAVES_RATE;
+    private static final ForgeConfigSpec.ConfigValue<Double> SUNSTONE_GRASS_RATE;
     static final ForgeConfigSpec.ConfigValue<List<? extends String>> TRANSCENDENTS_DIMENSIONS;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_MULTIPLE_DIVINER;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DELAY;
@@ -50,7 +53,7 @@ public class Config
 
     private static final ForgeConfigSpec.ConfigValue<Boolean> INSANITY_SOUNDS;
     private static final ForgeConfigSpec.ConfigValue<String> INSANITY_VISUALS;
-
+    private static final ForgeConfigSpec.ConfigValue<Integer> MOON_INSANITY;
 
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_INTERVAL;
 
@@ -103,6 +106,8 @@ maybe use json files instead since it'll look neater?
 
 
         builder.push("Transcendents_Config");
+            SUNSTONE_LEAVES_RATE=builder.comment("Base drop rate of sunstones from tree leaf blocks.\nDefault: 6.5f").defineInRange("sunstone_leaves",6.5f,0,100f);
+            SUNSTONE_GRASS_RATE=builder.comment("Base drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3f").defineInRange("sunstone_leaves",3f,0,100f);
             TRANSCENDENTS_DIMENSIONS =builder.comment("Dimensions that the Transcendents are allowed to be active in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             TRANSCENDENTS_MULTIPLE_DIVINER=builder.comment("If the Transcendents's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault: false").define("transcendents_diviner_shared_dim",false);
             TRANSCENDENTS_DELAY=builder.comment("Upon creating a world, block the Transcendents from doing anything until a set amount of time has passed.\nDefault: 240000 ticks(10 in game days)").defineInRange("transcendents_init_delay",240000,0,Integer.MAX_VALUE);
@@ -131,6 +136,7 @@ maybe use json files instead since it'll look neater?
                     "\nSIMPLE:Model of entities are replaced, but do not have any animations" +
                     "\nCOMPLEX(Not implemented yet):Model and animation of entities are replaced. Likely adds some performance overhead"+
                     "\nDefault:SIMPLE.").define("ins_visual","SIMPLE");
+            MOON_INSANITY=builder.comment("The rate of change for sanity per tick if the player is staring at the moon\nDefault:-20").defineInRange("moon_ins",20,1,Integer.MAX_VALUE);
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
@@ -225,10 +231,19 @@ maybe use json files instead since it'll look neater?
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static boolean pkDayDespawn;
+
+
+    public static double sunstoneLeavesRate;
+    public static double sunstoneGrassRate;
+
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
     public static int moonstoneDimLim=15;
     public static int moonstoneInterval;
+
+
+
     public static boolean insSound=true;
+    public static int moonInsVal;
     public enum INS_VISUALS{
         NONE,
         SIMPLE,
@@ -297,6 +312,9 @@ maybe use json files instead since it'll look neater?
 
         moonstoneInterval=MOONSTONE_INTERVAL.get();
 
+        sunstoneGrassRate=SUNSTONE_GRASS_RATE.get();
+        sunstoneLeavesRate=SUNSTONE_LEAVES_RATE.get();
+
         divinerShared= TRANSCENDENTS_MULTIPLE_DIVINER.get();
 
         transcendentsInitDelay = TRANSCENDENTS_DELAY.get();
@@ -334,6 +352,8 @@ maybe use json files instead since it'll look neater?
         catch(Exception e){
             insVisuals=INS_VISUALS.SIMPLE;
         }
+
+        moonInsVal=MOON_INSANITY.get();
 
 
         excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();

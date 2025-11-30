@@ -30,10 +30,10 @@ public class ModNetwork {
                 .encoder(LevelCapS2CPacket::toBytes)
                 .consumerMainThread(LevelCapS2CPacket::handle)
                 .add();
-        channel.messageBuilder(PlayerCapS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerCapS2CPacket::new)
-                .encoder(PlayerCapS2CPacket::toBytes)
-                .consumerMainThread(PlayerCapS2CPacket::handle)
+        channel.messageBuilder(LivingEntityCapS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(LivingEntityCapS2CPacket::new)
+                .encoder(LivingEntityCapS2CPacket::toBytes)
+                .consumerMainThread(LivingEntityCapS2CPacket::handle)
                 .add();
         channel.messageBuilder(RefreshEntityDimsS2CPacket.class,id(),NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(RefreshEntityDimsS2CPacket::new)
@@ -49,6 +49,11 @@ public class ModNetwork {
                 .decoder(AstralterTransmuteC2SPacket::new)
                 .encoder(AstralterTransmuteC2SPacket::toBytes)
                 .consumerMainThread(AstralterTransmuteC2SPacket::handle)
+                .add();
+        channel.messageBuilder(PlayerCapS2CPacket.class,id(),NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerCapS2CPacket::new)
+                .encoder(PlayerCapS2CPacket::toBytes)
+                .consumerMainThread(PlayerCapS2CPacket::handle)
                 .add();
     }
 

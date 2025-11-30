@@ -18,6 +18,7 @@ import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
+import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
 import com.github.celestial_awakening.util.CA_Predicates;
@@ -769,7 +770,7 @@ public class EventManager {
                     }
 
                     if (time%100==0){
-                        lunarEvents.moonSanity(serverLevel);
+                        //lunarEvents.moonSanity(serverLevel);
                         if (time==18000){
                             lunarEvents.midnightIronTransformation(serverLevel);
                             lunarEvents.attemptPKSpawn(serverLevel);
@@ -835,7 +836,7 @@ public class EventManager {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         Player player=event.player;
-        if (event.phase== TickEvent.Phase.START && event.side.isServer()){
+        if (event.phase== TickEvent.Phase.START && event.side.isServer() && player instanceof ServerPlayer serverPlayer){
             DelayedFunctionManager.delayedFunctionManager.tickPlayerMap(player);
             for (Map.Entry<ArmorMaterial,ArmorEffect> entry:armorEffectTick.entrySet()) {
                 int cnt=countPieces(player,entry.getKey());
@@ -855,6 +856,7 @@ public class EventManager {
                     -generic mob sounds
                     -block sounds
                      */
+
                     if (Config.insSound && cap.getInsanityPts()<16000 &&  player.tickCount%2800==0){
                         BlockPos pos=player.blockPosition();
                         Holder<Biome> biomeHolder=level.getBiome(pos);
@@ -903,6 +905,9 @@ public class EventManager {
                     }
                     cap.changeInsanityVal((short) 40);
                     //System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
+                    if (player.tickCount%400==0){
+                        ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),serverPlayer);
+                    }
 
                 }
             });
@@ -954,7 +959,7 @@ public class EventManager {
         if (event.getLevel().dimension() == Minecraft.getInstance().level.dimension()){
             if (event.isOpen()){
                 Player player=Minecraft.getInstance().player;
-                Minecraft.getInstance().level.playLocalSound(player.getX()  ,player.getY(),player.getZ(), SoundInit.TRANSCENDENT_DIV_OPEN.get(), SoundSource.HOSTILE,3.3f,1,false);
+                Minecraft.getInstance().level.playLocalSound(player.getX()  ,player.getY(),player.getZ(), SoundInit.TRANSCENDENT_DIV_OPEN.get(), SoundSource.HOSTILE,0.8f,1,false);
             }
 
         }

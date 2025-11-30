@@ -5,6 +5,7 @@ import com.github.celestial_awakening.entity.living.transcendents.AbstractTransc
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.github.celestial_awakening.entity.living.transcendents.Nebure;
+import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffect;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -122,6 +124,11 @@ public class CelestialBeacon extends MobEffect {
                     for (int i=0;i< mobGroup.length;i++){
                         mobGroup[i].setPos(spt);
                         level.addFreshEntity(mobGroup[i]);
+                        if (!level.isClientSide){
+                            TranscendentSpawnEvent event=new TranscendentSpawnEvent(spt,level);
+                            MinecraftForge.EVENT_BUS.post(event);
+                        }
+
                     }
                 }
             }

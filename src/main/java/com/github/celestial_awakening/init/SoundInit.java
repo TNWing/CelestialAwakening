@@ -11,6 +11,8 @@ public class SoundInit {
 
     public static final RegistryObject<SoundEvent> TRANSCENDENT_DIV_OPEN=registerSoundEvent("trans_div_open");
 
+    public static final RegistryObject<SoundEvent> TRANSCENDENT_SPAWN_1=registerSoundEvent("trans_div_open");
+
     private static RegistryObject<SoundEvent> registerSoundEvent(String name){
         return SOUND_EVENTS.register(name,()->SoundEvent.createVariableRangeEvent(CelestialAwakening.createResourceLocation(name)));
     }

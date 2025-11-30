@@ -54,7 +54,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Boolean> INSANITY_SOUNDS;
     private static final ForgeConfigSpec.ConfigValue<String> INSANITY_VISUALS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOON_INSANITY;
-
+    private static final ForgeConfigSpec.ConfigValue<Integer> INSANITY_PASSIVE_REC;
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_INTERVAL;
 
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST;
@@ -137,6 +137,7 @@ maybe use json files instead since it'll look neater?
                     "\nCOMPLEX(Not implemented yet):Model and animation of entities are replaced. Likely adds some performance overhead"+
                     "\nDefault:SIMPLE.").define("ins_visual","SIMPLE");
             MOON_INSANITY=builder.comment("The rate of change for sanity per tick if the player is staring at the moon\nDefault:-20").defineInRange("moon_ins",20,1,Integer.MAX_VALUE);
+            INSANITY_PASSIVE_REC=builder.comment("Passive recovery of sanity (occurs every 5 seconds.\nDefault:40").defineInRange("ins_rec",40,1,Integer.MAX_VALUE);
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
@@ -250,6 +251,8 @@ maybe use json files instead since it'll look neater?
         COMPLEX
     }
     public static INS_VISUALS insVisuals=INS_VISUALS.SIMPLE;
+    public static int insRec;
+
     public static int excitedParticlesTickInterval=50;
 
 
@@ -354,6 +357,8 @@ maybe use json files instead since it'll look neater?
         }
 
         moonInsVal=MOON_INSANITY.get();
+
+        insRec=INSANITY_PASSIVE_REC.get();
 
 
         excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();

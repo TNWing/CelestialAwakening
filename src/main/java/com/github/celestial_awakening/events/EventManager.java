@@ -11,6 +11,7 @@ import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
+import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.init.SoundInit;
@@ -844,7 +845,7 @@ public class EventManager {
                     entry.getValue().onPlayerTick(event, player, cnt);
                 }
             }
-            @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+            @NotNull LazyOptional<LivingEntityCapability> livingEntityOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
             LazyOptional<PlayerCapability> playerOptional=player.getCapability(PlayerCapabilityProvider.capability);
             ServerLevel level= (ServerLevel) player.level();
             playerOptional.ifPresent(cap->{
@@ -903,7 +904,7 @@ public class EventManager {
 
                         }
                     }
-                    cap.changeInsanityVal((short) 40);
+                    cap.changeInsanityVal((short) Config.insRec);
                     //System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
                     if (player.tickCount%400==0){
                         ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),serverPlayer);
@@ -911,7 +912,7 @@ public class EventManager {
 
                 }
             });
-            capOptional.ifPresent(cap->{
+            livingEntityOptional.ifPresent(cap->{
                 cap.tickAbilityMap();
                 //forced updates every 15 sec in case of emergencies
                 if (player.tickCount%300==0){
@@ -964,5 +965,13 @@ public class EventManager {
 
         }
 
+    }
+
+    @SubscribeEvent
+    public static void transcendentSpawnEvent(TranscendentSpawnEvent event){
+        if (event.getLevel().dimension() == Minecraft.getInstance().level.dimension()){
+                Vec3 pos=event.getPos();
+                Minecraft.getInstance().level.playLocalSound(BlockPos.containing(pos), SoundInit.TRANSCENDENT_SPAWN_1.get(), SoundSource.HOSTILE,0.8f,1,false);
+        }
     }
 }

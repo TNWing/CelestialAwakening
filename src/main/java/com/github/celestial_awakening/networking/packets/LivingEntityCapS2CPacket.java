@@ -29,7 +29,6 @@ public class LivingEntityCapS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier){
         NetworkEvent.Context context=supplier.get();
         context.enqueueWork(()->{
-            //client-side
 
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->
                     ClientLEPlayerData.setData( cap)

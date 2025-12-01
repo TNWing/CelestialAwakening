@@ -556,7 +556,7 @@ public class EventManager {
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
                             playerCapOptional.ifPresent(cap->{
-                                cap.changeInsanityVal((short) -500);
+                                cap.changeInsanityVal((short) Config.insMoH);
                             });
                         }
                     }

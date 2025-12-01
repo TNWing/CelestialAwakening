@@ -51,6 +51,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST;
     private static final ForgeConfigSpec.ConfigValue<Boolean> PK_DAY_DESPAWN;
 
+    private static final ForgeConfigSpec.ConfigValue<Integer> INS_MOH;
     private static final ForgeConfigSpec.ConfigValue<Boolean> INSANITY_SOUNDS;
     private static final ForgeConfigSpec.ConfigValue<String> INSANITY_VISUALS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOON_INSANITY;
@@ -100,14 +101,33 @@ maybe use json files instead since it'll look neater?
 
         builder.comment("Celestial Awakening Config");
 
+
+        builder.push("Material_Config");
+            SUNSTONE_LEAVES_RATE=builder.comment("Base drop rate of sunstones from tree leaf blocks.\nDefault: 6.5f").defineInRange("sunstone_leaves",6.5f,0,100f);
+            SUNSTONE_GRASS_RATE=builder.comment("Base drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3f").defineInRange("sunstone_leaves",3f,0,100f);
+            LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
+            MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 19").defineInRange("moonstone_lim",19,-1,Integer.MAX_VALUE);
+            MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);
+        builder.pop();
+
+        builder.push("Sanity_Config");
+            INS_MOH=builder.comment("Change in sanity when hit by a mob that has the mark of haunting effect.\nDefault:-500").defineInRange("ins_moh",-500,Short.MIN_VALUE,Short.MAX_VALUE);
+            INSANITY_SOUNDS=builder.comment("If true, causes certain sounds to have a chance to play when insane.\nDefault: true").define("ins_sound",true);
+            INSANITY_VISUALS=builder.comment("Impacts the rendering of certain mobs for insane players." +
+                    "\nNONE:Visual modifications are disabled" +
+                    "\nSIMPLE:Model of entities are replaced, but do not have any animations" +
+                    "\nCOMPLEX(Not implemented yet):Model and animation of entities are replaced. Likely adds some performance overhead"+
+                    "\nDefault:SIMPLE.").define("ins_visual","SIMPLE");
+            MOON_INSANITY=builder.comment("The rate of change for sanity per tick if the player is staring at the moon\nDefault:-20").defineInRange("moon_ins",20,1,Short.MAX_VALUE);
+            INSANITY_PASSIVE_REC=builder.comment("Passive recovery of sanity (occurs every 5 seconds.\nDefault:40").defineInRange("ins_rec",40,1,Short.MAX_VALUE);
+        builder.pop();
+
         builder.push("Global_Enemy_Config");
             OUTOFCOMBAT_HEAL=builder.comment("Allows some enemies to heal when not in combat.\nDefault: true").define("enemy_combat_regen",true);
         builder.pop();
 
-
         builder.push("Transcendents_Config");
-            SUNSTONE_LEAVES_RATE=builder.comment("Base drop rate of sunstones from tree leaf blocks.\nDefault: 6.5f").defineInRange("sunstone_leaves",6.5f,0,100f);
-            SUNSTONE_GRASS_RATE=builder.comment("Base drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3f").defineInRange("sunstone_leaves",3f,0,100f);
+
             TRANSCENDENTS_DIMENSIONS =builder.comment("Dimensions that the Transcendents are allowed to be active in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("transcendents_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             TRANSCENDENTS_MULTIPLE_DIVINER=builder.comment("If the Transcendents's diviner can be active in multiple dimensions, sets whether or not the diviner being active in multiple dimensions simultaneously.\nDefault: false").define("transcendents_diviner_shared_dim",false);
             TRANSCENDENTS_DELAY=builder.comment("Upon creating a world, block the Transcendents from doing anything until a set amount of time has passed.\nDefault: 240000 ticks(10 in game days)").defineInRange("transcendents_init_delay",240000,0,Integer.MAX_VALUE);
@@ -121,23 +141,14 @@ maybe use json files instead since it'll look neater?
             TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
         builder.pop();
 
-        builder.push("Lunar_Config");
-            LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
-            MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 15").defineInRange("moonstone_lim",15,-1,Integer.MAX_VALUE);
-            MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);
+        builder.push("Phantom_Knight_Config");
+
             PK_DIMENSIONS=builder.comment("Dimensions that Phantom Knights are allowed to spawn in. Default: [minecraft:overworld]").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
             PK_CRESCENCIA_MIN_DAY=builder.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
             PK_SPAWN_CAP=builder.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,100);
             PK_RMG_RES_DIST=builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
             PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault: true").define("pk_day_despawn",true);
-            INSANITY_SOUNDS=builder.comment("If true, causes certain sounds to have a chance to play when insane.\nDefault: true").define("ins_sound",true);
-            INSANITY_VISUALS=builder.comment("Impacts the rendering of certain mobs for insane players." +
-                    "\nNONE:Visual modifications are disabled" +
-                    "\nSIMPLE:Model of entities are replaced, but do not have any animations" +
-                    "\nCOMPLEX(Not implemented yet):Model and animation of entities are replaced. Likely adds some performance overhead"+
-                    "\nDefault:SIMPLE.").define("ins_visual","SIMPLE");
-            MOON_INSANITY=builder.comment("The rate of change for sanity per tick if the player is staring at the moon\nDefault:-20").defineInRange("moon_ins",20,1,Integer.MAX_VALUE);
-            INSANITY_PASSIVE_REC=builder.comment("Passive recovery of sanity (occurs every 5 seconds.\nDefault:40").defineInRange("ins_rec",40,1,Integer.MAX_VALUE);
+
         builder.pop();
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
@@ -158,9 +169,9 @@ maybe use json files instead since it'll look neater?
 
         builder.push("Weapons_&_Tools_Config");
             builder.push("Midnight_Iron_Tools");
-                MIDNIGHT_IRON_DMG_MULT=builder.comment("The damage multiplier midnight iron tools receive at night.\nDefault: 1.15").defineInRange("midnight_iron_dmg_mult",1.15d,1,100);
-                MIDNIGHT_IRON_ATK_SPD_MULT=builder.comment("The attack speed multiplier midnight iron tools receive at night. Lower values means faster attack speed.\nDefault: 0.95").defineInRange("midnight_iron_atk_spd_mult",0.95d,0.1,1);
-                MIDNIGHT_IRON_MINING_SPD_MULT=builder.comment("The mining speed multiplier midnight iron tools receive at night.\nDefault: 1.2").defineInRange("midnight_iron_mining_spd_mult",1.2d,1,100);
+                MIDNIGHT_IRON_DMG_MULT=builder.comment("The damage multiplier midnight iron tools receive at night.\nDefault: 1.2").defineInRange("midnight_iron_dmg_mult",1.2d,1,100);
+                MIDNIGHT_IRON_ATK_SPD_MULT=builder.comment("The attack speed multiplier midnight iron tools receive at night. Lower values means faster attack speed.\nDefault: 0.9").defineInRange("midnight_iron_atk_spd_mult",0.9d,0.1,1);
+                MIDNIGHT_IRON_MINING_SPD_MULT=builder.comment("The mining speed multiplier midnight iron tools receive at night.\nDefault: 1.3").defineInRange("midnight_iron_mining_spd_mult",1.3d,1,100);
             builder.pop();
             builder.push("Moon_Scythe&Midnight_Reaper");
                 MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5f").defineInRange("moon_scythe_base_damage",6.5f,0,Double.MAX_VALUE);
@@ -168,7 +179,7 @@ maybe use json files instead since it'll look neater?
                 MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5f").defineInRange("moon_scythe_wave_damage",2.5f,0,Double.MAX_VALUE);
                 MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5f").defineInRange("moon_scythe_strike_damage",4.5f,0,Double.MAX_VALUE);
 
-                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.5f").defineInRange("midnight_reaper_base_damage",7.5f,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8f").defineInRange("midnight_reaper_base_damage",7.8f,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nLower values equals faster attack speed.\nDefault: -2.7f").defineInRange("midnight_reaper_base_spd",-2.7f,-Double.MAX_VALUE,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5f").defineInRange("moon_scythe_wave_damage",3.5f,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5f").defineInRange("moon_scythe_strike_damage",5.5f,0,Double.MAX_VALUE);
@@ -252,6 +263,7 @@ maybe use json files instead since it'll look neater?
     }
     public static INS_VISUALS insVisuals=INS_VISUALS.SIMPLE;
     public static int insRec;
+    public static int insMoH;
 
     public static int excitedParticlesTickInterval=50;
 
@@ -271,7 +283,7 @@ maybe use json files instead since it'll look neater?
     public static double moonScytheWaveDmg;
     public static double moonScytheStrikeDmg;
 
-    public static double midnightReaperBaseDmg=7.5f;
+    public static double midnightReaperBaseDmg=7.8f;
     public static double midnightReaperBaseSpd=-2.7f;;
     public static double midnightReaperWaveDmg;
     public static double midnightReaperStrikeDmg;
@@ -360,6 +372,7 @@ maybe use json files instead since it'll look neater?
 
         insRec=INSANITY_PASSIVE_REC.get();
 
+        insMoH=INS_MOH.get();
 
         excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();
 

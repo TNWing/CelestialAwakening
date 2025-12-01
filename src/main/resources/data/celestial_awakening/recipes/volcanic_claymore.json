@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "celestial_awakening:scorched_stone"
+  },
+  "base": {
+    "item": "minecraft:iron_sword"
+  },
+  "result": {
+    "item": "celestial_awakening:volcanic_claymore"
+  }
+}

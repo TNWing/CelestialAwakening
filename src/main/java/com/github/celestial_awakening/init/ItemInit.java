@@ -53,6 +53,10 @@ public class ItemInit {
     public static final RegistryObject<Item> RADIANT_BOOTS = ITEMS.register("radiant_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.RADIANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
+
+    public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register("scorched_stone",()->new Item(new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),8,-3));
+
     public static final RegistryObject<Item> SHIMMER_CUBE = ITEMS.register("shimmer_cube", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));
 

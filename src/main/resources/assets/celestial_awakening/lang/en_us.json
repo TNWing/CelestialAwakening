@@ -1,4 +1,5 @@
 {
+  "block.celestial_awakening.scorched_stone": "Scorched Stone",
   "item.celestial_awakening.moonstone": "Moonstone",
   "item.celestial_awakening.lunar_scale": "Lunar Scale",
   "item.celestial_awakening.lunar_arrow": "Lunar Arrow",
@@ -12,7 +13,7 @@
   "item.celestial_awakening.luna_tome": "Luna Tome",
   "item.celestial_awakening.lunula_rock": "Lunula Rock",
 
-  "item.celestial_awakening.fluorescent_bow": "Fluorescent Bow",
+  "item.celestial_awakening.fluorescent_bow": "Fluorescent Shortbow",
   "item.celestial_awakening.star_gazer": "Star Gazer",
   "item.celestial_awakening.sun_staff": "Sun Staff",
   "item.celestial_awakening.shimmer_cube": "Shimmer Cube",
@@ -23,6 +24,14 @@
   "item.celestial_awakening.radiant_chestplate": "Radiant Chestplate",
   "item.celestial_awakening.radiant_leggings": "Radiant Leggings",
   "item.celestial_awakening.radiant_boots": "Radiant Boots",
+
+  "item.celestial_awakening.scorched_stone": "Scorched Stone",
+  "item.celestial_awakening.volcanic_claymore": "Volcanic Claymore",
+  "item.celestial_awakening.flamberge": "Flamberge",
+  "item.celestial_awakening.scorched_helmet": "Scorched Helmet",
+  "item.celestial_awakening.scorched_chestplate": "Scorched Chestplate",
+  "item.celestial_awakening.scorched_leggings": "Scorched Leggings",
+  "item.celestial_awakening.scorched_boots": "Scorched Boots",
 
   "item.celestial_awakening.onyx_fur": "Onyx Fur",
   "item.celestial_awakening.umbra_helmet": "Umbra Cap",
@@ -243,5 +252,6 @@
   "tooltip.celestial_awakening.umbra_armor.cl_name": "Cursed Light",
   "tooltip.celestial_awakening.umbra_armor.cl_desc":"Getting hit will apply Weakness 2 to the attacker for 3 seconds.\nFurthermore, all nearby entities will take damage and be inflicted with Weakness 1 for 2 seconds.\nCooldown of 8 seconds",
 
-  "sounds.celestial_awakening.trans_div_open": "Diviner appears"
+  "sounds.celestial_awakening.trans_div_open": "Diviner appears",
+  "sounds.celestial_awakening.trans_spawn_1": "Transcendents spawn in"
 }

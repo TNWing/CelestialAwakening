@@ -8,5 +8,6 @@
   },
   "result": {
     "item": "celestial_awakening:volcanic_claymore"
-  }
+  },
+  "template": {"item":"celestial_awakening:scorched_stone"}
 }

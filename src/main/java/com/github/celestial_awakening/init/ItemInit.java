@@ -39,6 +39,7 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.UMBRA, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
+
     public static final RegistryObject<Item> SUNSTONE = ITEMS.register("sunstone", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> LIFE_FRAG = ITEMS.register("life_fragment", ()->new CustomItem(new Item.Properties(),"tooltip.celestial_awakening.life_frag"));
     public static final RegistryObject<Item> FLUORESCENT_BOW=ITEMS.register("fluorescent_bow",()->new FluorescentBow(new Item.Properties().stacksTo(1).durability(448)));
@@ -54,8 +55,16 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.RADIANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
-    public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register("scorched_stone",()->new Item(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),8,-3));
+    public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register ("scorched_stone",()->new BlockItem(BlockInit.SCORCHED_STONE.get(),new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),10.5f,-3.2f));
+    public static final RegistryObject<Item> SCORCHED_HELMET = ITEMS.register("scorched_helmet",
+            () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> SCORCHED_CHESTPLATE = ITEMS.register("scorched_chestplate",
+            () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> SCORCHED_LEGGINGS = ITEMS.register("scorched_leggings",
+            () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> SCORCHED_BOOTS = ITEMS.register("scorched_boots",
+            () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.BOOTS, new Item.Properties()));
 
     public static final RegistryObject<Item> SHIMMER_CUBE = ITEMS.register("shimmer_cube", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));

@@ -35,7 +35,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     SHADE("shade",19,new int[]{0,1,1,0},15,SoundEvents.ARMOR_EQUIP_ELYTRA,
             0,0f,()->Ingredient.of(ItemInit.PULSATING_DARKNESS.get()),0.025f),
 
-    SCORCHED("scorched",19,new int[]{2,4,3,2},11,SoundEvents.STONE_BREAK,0,0f,()->Ingredient.of(ItemInit.SCORCHED_STONE.get()));
+    SCORCHED("scorched",19,new int[]{2,4,3,2},11,SoundEvents.STONE_BREAK,0.5f,0f,()->Ingredient.of(ItemInit.SCORCHED_STONE.get()));
 
     private final String name;
     private final int durabilityMultiplier;
@@ -74,6 +74,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     @Override
     public int getDurabilityForType(ArmorItem.Type pType) {
         return BASE_DURABILITY[pType.ordinal()] * this.durabilityMultiplier;
+
     }
 
     @Override

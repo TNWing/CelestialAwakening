@@ -103,8 +103,8 @@ maybe use json files instead since it'll look neater?
 
 
         builder.push("Material_Config");
-            SUNSTONE_LEAVES_RATE=builder.comment("Base drop rate of sunstones from tree leaf blocks.\nDefault: 6.5f").defineInRange("sunstone_leaves",6.5f,0,100f);
-            SUNSTONE_GRASS_RATE=builder.comment("Base drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3f").defineInRange("sunstone_leaves",3f,0,100f);
+            SUNSTONE_LEAVES_RATE=builder.comment("Base % drop rate of sunstones from tree leaf blocks.\nDefault: 6.5").defineInRange("sunstone_leaves",6.5d,0,100d);
+            SUNSTONE_GRASS_RATE=builder.comment("Base % drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3").defineInRange("sunstone_leaves",3d,0,100d);
             LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 19").defineInRange("moonstone_lim",19,-1,Integer.MAX_VALUE);
             MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);
@@ -174,15 +174,15 @@ maybe use json files instead since it'll look neater?
                 MIDNIGHT_IRON_MINING_SPD_MULT=builder.comment("The mining speed multiplier midnight iron tools receive at night.\nDefault: 1.3").defineInRange("midnight_iron_mining_spd_mult",1.3d,1,100);
             builder.pop();
             builder.push("Moon_Scythe&Midnight_Reaper");
-                MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5f").defineInRange("moon_scythe_base_damage",6.5f,0,Double.MAX_VALUE);
-                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nLower values equals faster attack speed.\nDefault: -2.8f").defineInRange("moon_scythe_base_spd",-2.8F,-Double.MAX_VALUE,Double.MAX_VALUE);
-                MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5f").defineInRange("moon_scythe_wave_damage",2.5f,0,Double.MAX_VALUE);
-                MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5f").defineInRange("moon_scythe_strike_damage",4.5f,0,Double.MAX_VALUE);
+                MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5").defineInRange("moon_scythe_base_damage",6.5d,0,Double.MAX_VALUE);
+                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nLower values equals faster attack speed.\nDefault: -2.8").defineInRange("moon_scythe_base_spd",-2.8d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5").defineInRange("moon_scythe_wave_damage",2.5d,0,Double.MAX_VALUE);
+                MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5").defineInRange("moon_scythe_strike_damage",4.5d,0,Double.MAX_VALUE);
 
-                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8f").defineInRange("midnight_reaper_base_damage",7.8f,0,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nLower values equals faster attack speed.\nDefault: -2.7f").defineInRange("midnight_reaper_base_spd",-2.7f,-Double.MAX_VALUE,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5f").defineInRange("moon_scythe_wave_damage",3.5f,0,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5f").defineInRange("moon_scythe_strike_damage",5.5f,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8").defineInRange("midnight_reaper_base_damage",7.8d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nLower values equals faster attack speed.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("moon_scythe_wave_damage",3.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("moon_scythe_strike_damage",5.5d,0,Double.MAX_VALUE);
 
 
             builder.pop();

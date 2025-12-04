@@ -45,9 +45,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
@@ -60,6 +58,7 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -832,6 +831,44 @@ public class EventManager {
             }
         });
         //event.getRenderer().
+    }
+
+/*
+    public static List<Tier> getTiersLowerThan(Tier tier)
+    {
+        if (!isTierSorted(tier)) return List.of();
+        return sortedTiers.stream().takeWhile(t -> t != tier).toList();
+    }
+ */
+    //Gain bonus mining speed when mining blocks whose required breaking level is lower than your tool
+    @SubscribeEvent
+    public static void playerBreakSpeed(PlayerEvent.BreakSpeed event){
+        Player player=event.getEntity();
+
+        int scorchCnt=countPieces(player,CustomArmorMaterial.SCORCHED);
+        if (scorchCnt>0){
+            System.out.printf("og break spd is %s",event.getNewSpeed());
+            Item playerItem=player.getMainHandItem().getItem();
+            if (playerItem instanceof TieredItem tieredItem){
+                Tier tier=tieredItem.getTier();
+                if (TierSortingRegistry.isCorrectTierForDrops(tier,event.getState())){
+                    Tier lowerTier=TierSortingRegistry.getTiersLowerThan(tier).get(0);
+                    if (TierSortingRegistry.isCorrectTierForDrops(lowerTier,event.getState())){
+                        float newSpd=event.getNewSpeed()*1.1f;
+                        System.out.printf("Melt break boost is %s",newSpd);
+                        event.setNewSpeed(newSpd);
+                    }
+                }
+            }
+            if (scorchCnt==4 && 0>player.getY()){
+                double y=player.getY();
+                double diff=0f-y;
+                float boost= (float)( (diff)*1.2f/(diff+20d));
+                System.out.printf("core reson break boost is %s",boost);
+                event.setNewSpeed(event.getNewSpeed()+boost);
+            }
+        }
+
     }
 
     @SubscribeEvent

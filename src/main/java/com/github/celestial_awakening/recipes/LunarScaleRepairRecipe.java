@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.recipes;
 
 import com.github.celestial_awakening.init.ItemInit;
+import com.github.celestial_awakening.init.RecipeInit;
 import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
 import com.google.common.collect.Lists;
 import net.minecraft.core.RegistryAccess;
@@ -95,6 +96,6 @@ public class LunarScaleRepairRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return LunarScaleRepairSerializer.INSTANCE;
+        return RecipeInit.LUNAR_SCALE_REPAIR_SERIALIZER.get();
     }
 }

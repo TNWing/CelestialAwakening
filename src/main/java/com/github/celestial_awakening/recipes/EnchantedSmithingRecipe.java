@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.recipes;
 
+import com.github.celestial_awakening.init.RecipeInit;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -13,9 +14,40 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantedSmithingRecipe extends SmithingTransformRecipe {
+    public HashMap<Enchantment, Integer> getEnchantMap() {
+        return enchantMap;
+    }
+
     HashMap<Enchantment,Integer> enchantMap;
+    final Ingredient template;
+
+    public Ingredient getTemplate() {
+        return template;
+    }
+
+    public Ingredient getBase() {
+        return base;
+    }
+
+    public Ingredient getAddition() {
+        return addition;
+    }
+
+    public ItemStack getResult() {
+        return result;
+    }
+
+    final Ingredient base;
+    final Ingredient addition;
+    final ItemStack result;
+
+
     public EnchantedSmithingRecipe(ResourceLocation loc, Ingredient template, Ingredient base, Ingredient addition, ItemStack result, HashMap<Enchantment,Integer> enchants){
         super(loc, template, base,addition,  result);
+        this.template=template;
+        this.base=base;
+        this.addition=addition;
+        this.result=result;
         enchantMap=enchants;
     }
     /*
@@ -39,6 +71,6 @@ public class EnchantedSmithingRecipe extends SmithingTransformRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return RecipeInit.ENCHANT_SMITHING_SERIALIZER.get();
     }
 }

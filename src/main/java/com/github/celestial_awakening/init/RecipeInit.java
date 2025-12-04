@@ -2,6 +2,7 @@ package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.recipes.CABrewingRecipe;
+import com.github.celestial_awakening.recipes.serializers.EnchantedSmithingSerializer;
 import com.github.celestial_awakening.recipes.serializers.LifeFragFoodSerializer;
 import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
 import net.minecraft.world.item.Item;
@@ -24,6 +25,8 @@ public class RecipeInit {
     public static final RegistryObject<RecipeSerializer> LUNAR_SCALE_REPAIR_SERIALIZER = RECIPE_SERIALIZER_DEFERRED_REGISTER.register("lunar_scale_repair", ()->new LunarScaleRepairSerializer());
 
     public static final RegistryObject<RecipeSerializer> LIFE_FRAG_FOOD_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("life_frag_food", ()->new LifeFragFoodSerializer());
+
+    public static final RegistryObject<RecipeSerializer> ENCHANT_SMITHING_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("enchant_smithing",()->new EnchantedSmithingSerializer());
 
     public static void registerBrewingRecipes(){
         createBrewingRecipeVariants(Potions.THICK,ItemInit.MOONSTONE.get(),PotionInit.LUNAR_GLEAM.get());

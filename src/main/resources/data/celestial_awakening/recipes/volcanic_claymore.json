@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "celestial_awakening:enchant_smithing",
   "addition": {
     "item": "celestial_awakening:scorched_stone"
   },
@@ -9,5 +9,11 @@
   "result": {
     "item": "celestial_awakening:volcanic_claymore"
   },
-  "template": {"item":"celestial_awakening:scorched_stone"}
+  "template": {"item":"celestial_awakening:scorched_stone"},
+  "enchantments": [
+    {
+      "enchantment": "minecraft:fire_aspect",
+      "level": 2
+    }
+  ]
 }

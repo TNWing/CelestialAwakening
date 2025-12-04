@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.recipes;
 
 import com.github.celestial_awakening.init.ItemInit;
+import com.github.celestial_awakening.init.RecipeInit;
 import com.github.celestial_awakening.nbt_strings.NBTStrings;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -87,6 +88,6 @@ public class LifeFragFoodRecipe extends ShapedRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return RecipeInit.LIFE_FRAG_FOOD_SERIALIZER.get();
     }
 }

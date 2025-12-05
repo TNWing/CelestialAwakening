@@ -65,6 +65,10 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> SCORCHED_BOOTS = ITEMS.register("scorched_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.SCORCHED, ArmorItem.Type.BOOTS, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> SEARED_STONE_PICKAXE=ITEMS.register("seared_stone_pickaxe",()->new SearedStonePickaxe(CustomTiers.SEARED_STONE,1, -2.8F,new Item.Properties()));
+    public static final RegistryObject<Item> SEARED_STONE_AXE=ITEMS.register("seared_stone_axe",()->new SearedStoneAxe(CustomTiers.SEARED_STONE,6.0F, -3.1F,new Item.Properties()));
+
+
 
     public static final RegistryObject<Item> SHIMMER_CUBE = ITEMS.register("shimmer_cube", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));

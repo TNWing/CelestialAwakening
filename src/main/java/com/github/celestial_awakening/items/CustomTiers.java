@@ -9,8 +9,9 @@ import java.util.function.Supplier;
 
 public enum CustomTiers implements Tier {
     MIDNIGHT_IRON(2,333,5.8f,1.8f,16,
-            ()-> Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get()));
-
+            ()-> Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),
+    SEARED_STONE(1,300,4.1f,1f,15,
+            ()-> Ingredient.of(ItemInit.SCORCHED_STONE.get()));
     //use tiersorterregistry
     private final int level;
     private final int uses;

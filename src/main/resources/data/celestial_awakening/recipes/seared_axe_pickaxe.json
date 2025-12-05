@@ -1,0 +1,23 @@
+{
+  "type": "celestial_awakening:enchant_smithing",
+  "addition": {
+    "item": "celestial_awakening:scorched_stone"
+  },
+  "base": {
+    "item": "minecraft:stone_axe"
+  },
+  "result": {
+    "item": "celestial_awakening:seared_stone_axe"
+  },
+  "template": {"item":"celestial_awakening:scorched_stone"},
+  "enchantments": [
+    {
+      "enchantment": "minecraft:unbreaking",
+      "level": 2
+    },
+    {
+      "enchantment": "minecraft:efficiency",
+      "level": 2
+    }
+  ]
+}

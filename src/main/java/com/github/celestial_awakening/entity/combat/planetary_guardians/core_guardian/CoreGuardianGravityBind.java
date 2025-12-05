@@ -3,20 +3,14 @@ package com.github.celestial_awakening.entity.combat.planetary_guardians.core_gu
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
 
-public class CoreGuardianTremor extends GenericAbility {
-    /*
-    how this should work
-
-     */
-    public CoreGuardianTremor(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
+public class CoreGuardianGravityBind extends GenericAbility {
+    public CoreGuardianGravityBind(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
 
     @Override
     public void executeAbility(LivingEntity target) {
-        AABB aabb=new AABB(this.mob.blockPosition()).inflate(3.5f,0.7f,3.5f);
 
     }
 

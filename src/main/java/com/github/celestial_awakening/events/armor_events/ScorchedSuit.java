@@ -98,7 +98,7 @@ Gain bonus mining speed when mining blocks whose required breaking level is lowe
                 double diff=0-y;
                 AttributeModifier armorMod=new AttributeModifier(coreResonance,"Core Resonance",diff/25d,AttributeModifier.Operation.ADDITION);
                 AttributeModifier toughMod=new AttributeModifier(coreResonance,"Core Resonance",diff/50d,AttributeModifier.Operation.ADDITION);
-                System.out.printf("OUR MODS ARE %s   %s",armorMod,toughMod);
+                //System.out.printf("OUR MODS ARE %s   %s",armorMod,toughMod);
                 player.getAttribute(Attributes.ARMOR).addTransientModifier(armorMod);
                 player.getAttribute(Attributes.ARMOR_TOUGHNESS).addTransientModifier(toughMod);
 

@@ -104,6 +104,8 @@ public class EventManager {
 
     private static final Map.Entry<ArmorMaterial,ArmorEffect> knightmareSuit=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.KNIGHTMARE,new KnightmareSuit());
 
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> scorchedSuit=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.SCORCHED,new ScorchedSuit());
+
 
     private static final Map<ArmorMaterial,ArmorEffect> armorMaterials =  (new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
             .put(lunarArmor)
@@ -114,15 +116,16 @@ public class EventManager {
             .put(umbraArmor)
             .put(everlightArmor)
             .put(knightmareSuit)
+            .put(scorchedSuit)
             .build();
 
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectTick=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(lunarArmor).put(everlightArmor).put(radiantArmor)
+            .put(lunarArmor).put(everlightArmor).put(radiantArmor).put(scorchedSuit)
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectEquipmentChange=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(lunarArmor).put(shadeArmor)
+            .put(lunarArmor).put(shadeArmor).put(scorchedSuit)
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectBlockBreak=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
@@ -136,7 +139,7 @@ public class EventManager {
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurtSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
             .put(umbraArmor).build();
 
-    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
+    private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>()).put(scorchedSuit)
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
@@ -847,15 +850,13 @@ public class EventManager {
 
         int scorchCnt=countPieces(player,CustomArmorMaterial.SCORCHED);
         if (scorchCnt>0){
-            System.out.printf("og break spd is %s",event.getNewSpeed());
             Item playerItem=player.getMainHandItem().getItem();
             if (playerItem instanceof TieredItem tieredItem){
                 Tier tier=tieredItem.getTier();
                 if (TierSortingRegistry.isCorrectTierForDrops(tier,event.getState())){
-                    Tier lowerTier=TierSortingRegistry.getTiersLowerThan(tier).get(0);
-                    if (TierSortingRegistry.isCorrectTierForDrops(lowerTier,event.getState())){
-                        float newSpd=event.getNewSpeed()*1.1f;
-                        System.out.printf("Melt break boost is %s",newSpd);
+                    Tier lowerTier=TierSortingRegistry.getTiersLowerThan(tier).isEmpty() ? null : TierSortingRegistry.getTiersLowerThan(tier).get(0);
+                    if (lowerTier!=null && TierSortingRegistry.isCorrectTierForDrops(lowerTier,event.getState())){
+                        float newSpd=event.getNewSpeed()*1.4f;
                         event.setNewSpeed(newSpd);
                     }
                 }
@@ -863,11 +864,11 @@ public class EventManager {
             if (scorchCnt==4 && 0>player.getY()){
                 double y=player.getY();
                 double diff=0f-y;
-                float boost= (float)( (diff)*1.2f/(diff+20d));
-                System.out.printf("core reson break boost is %s",boost);
+                float boost= (float)( (diff)*1.7f/(diff+20d));
                 event.setNewSpeed(event.getNewSpeed()+boost);
             }
         }
+
 
     }
 

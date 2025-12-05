@@ -3,21 +3,26 @@ package com.github.celestial_awakening.entity.combat.planetary_guardians.core_gu
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
 
-public class CoreGuardianTremor extends GenericAbility {
+public class CoreGuardianShockwave extends GenericAbility {
     /*
     how this should work
-
+    sends a shockwave that activates 3 times
+    first 2 just slow
+    third instance slows and damages
      */
-    public CoreGuardianTremor(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
+    public CoreGuardianShockwave(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
 
     @Override
     public void executeAbility(LivingEntity target) {
-        AABB aabb=new AABB(this.mob.blockPosition()).inflate(3.5f,0.7f,3.5f);
-
+        if (state==1){
+            if (this.currentStateTimer%10==0){
+                
+            }
+        }
+        this.currentStateTimer--;
     }
 
     @Override

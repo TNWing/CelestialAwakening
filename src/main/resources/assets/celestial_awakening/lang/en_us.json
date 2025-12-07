@@ -26,6 +26,8 @@
   "item.celestial_awakening.radiant_boots": "Radiant Boots",
 
   "item.celestial_awakening.scorched_stone": "Scorched Stone",
+  "item.celestial_awakening.seared_stone_pickaxe": "Seared Pickaxe",
+  "item.celestial_awakening.seared_stone_axe": "Seared Axe",
   "item.celestial_awakening.volcanic_claymore": "Volcanic Claymore",
   "item.celestial_awakening.flamberge": "Flamberge",
   "item.celestial_awakening.scorched_helmet": "Scorched Helmet",
@@ -184,6 +186,12 @@
   "tooltip.celestial_awakening.star_gazer.burning_light_name": "Burning Light",
   "tooltip.celestial_awakening.star_gazer.burning_light_desc": "When the arrow hits a target, deal bonus damage if the target is glowing and heal slightly if the target is on fire.\nThis effect is applied before Revealing Shot.",
 
+  "tooltip.celestial_awakening.seared_stone_tools.tier": "Tier:%s",
+  "tooltip.celestial_awakening.seared_stone_tools.earthlink_name": "Earthlink",
+  "tooltip.celestial_awakening.seared_stone_pickaxe.earthlink_desc": "Breaks non-ores much faster.",
+  "tooltip.celestial_awakening.seared_stone_axe.earthlink_desc": "Breaks logs much faster.",
+  "tooltip.celestial_awakening.seared_stone_tools.sturdy_name": "Sturdy",
+  "tooltip.celestial_awakening.seared_stone_tools.sturdy_desc": "Does not lose durability if below 10% durability, but loses bonus mining speed from Earthlink.",
 
 
   "tooltip.celestial_awakening.lunar_arrow.desc": "Upon hitting an entity, damages and slows all entities behind the target.",

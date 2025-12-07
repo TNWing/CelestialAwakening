@@ -2,9 +2,10 @@ package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.recipes.CABrewingRecipe;
-import com.github.celestial_awakening.recipes.serializers.EnchantedSmithingSerializer;
+import com.github.celestial_awakening.recipes.serializers.BasicEnchantedSmithingSerializer;
 import com.github.celestial_awakening.recipes.serializers.LifeFragFoodSerializer;
 import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
+import com.github.celestial_awakening.recipes.serializers.SearedStoneToolsSmithingSerializer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.common.brewing.BrewingRecipe;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -26,7 +26,9 @@ public class RecipeInit {
 
     public static final RegistryObject<RecipeSerializer> LIFE_FRAG_FOOD_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("life_frag_food", ()->new LifeFragFoodSerializer());
 
-    public static final RegistryObject<RecipeSerializer> ENCHANT_SMITHING_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("enchant_smithing",()->new EnchantedSmithingSerializer());
+    public static final RegistryObject<RecipeSerializer> ENCHANT_SMITHING_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("enchant_smithing",()->new BasicEnchantedSmithingSerializer());
+
+    public static final RegistryObject<RecipeSerializer> SEARED_STONE_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("seared_stone_smithing",()->new SearedStoneToolsSmithingSerializer());
 
     public static void registerBrewingRecipes(){
         createBrewingRecipeVariants(Potions.THICK,ItemInit.MOONSTONE.get(),PotionInit.LUNAR_GLEAM.get());

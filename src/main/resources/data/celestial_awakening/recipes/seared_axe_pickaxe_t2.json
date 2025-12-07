@@ -1,0 +1,28 @@
+{
+  "type": "celestial_awakening:seared_stone_smithing",
+  "addition": {
+    "item": "celestial_awakening:lunar_scale"
+  },
+  "base": {
+    "item": "celestial_awakening:seared_stone_pickaxe"
+  },
+  "result": {
+    "item": "celestial_awakening:seared_stone_pickaxe"
+  },
+  "template": {"item":"celestial_awakening:lunar_scale"},
+  "requirements": [
+    {
+      "capability": "SearedStone",
+      "method": "getUpgradeTier",
+      "type":"equals",
+      "val": 1
+    }
+  ],
+  "capability_mod": [
+    {
+      "SearedStone" :{
+        "setUpgradeTier": 2
+      }
+    }
+  ]
+}

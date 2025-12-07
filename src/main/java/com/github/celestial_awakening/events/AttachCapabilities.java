@@ -5,6 +5,7 @@ import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.entity.projectile.CA_Projectile;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.items.MoonScythe;
+import com.github.celestial_awakening.items.SearedStoneTool;
 import com.github.celestial_awakening.items.SunStaff;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LivingEntityCapS2CPacket;
@@ -48,6 +49,11 @@ public class AttachCapabilities {
         else if (itemStack.getItem() instanceof SunStaff){
             if (!event.getCapabilities().containsValue(SunStaffCapabilityProvider.cap)){
                 event.addCapability(CelestialAwakening.createResourceLocation("sun_staff_data"),new SunStaffCapabilityProvider());
+            }
+        }
+        else if (itemStack.getItem() instanceof SearedStoneTool){
+            if (!event.getCapabilities().containsValue(SearedStoneToolCapabilityProvider.capability)){
+                event.addCapability(CelestialAwakening.createResourceLocation("ss_tool_data"),new SearedStoneToolCapabilityProvider());
             }
         }
     }

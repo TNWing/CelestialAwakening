@@ -3,6 +3,7 @@ package com.github.celestial_awakening.items;
 import com.github.celestial_awakening.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,8 +43,7 @@ public class SearedStonePickaxe extends PickaxeItem implements SearedStoneTool {
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd=super.getDestroySpeed(itemStack, blockState);
-        System.out.printf("pre SPD " + spd);
-        if (getUpgradeTier(itemStack)>0 && !blockState.is(Tags.Blocks.ORES)){
+        if (getUpgradeTier(itemStack)>0 && !blockState.is(Tags.Blocks.ORES) && blockState.is(BlockTags.MINEABLE_WITH_PICKAXE)){
             if (getUpgradeTier(itemStack)>1 && (itemStack.getDamageValue()/(float)itemStack.getMaxDamage())>0.1f){
                 spd*= 3;
             }
@@ -52,7 +52,6 @@ public class SearedStonePickaxe extends PickaxeItem implements SearedStoneTool {
             }
 
         }
-        System.out.printf("SPD " + spd);
         return spd;
     }
 

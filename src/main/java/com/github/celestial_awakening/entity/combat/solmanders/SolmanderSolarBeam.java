@@ -78,10 +78,9 @@ public class SolmanderSolarBeam extends GenericAbility {
                     currentStateTimer=abilityExecuteTime;
                     Vec3 dir=targetPos.subtract(this.mob.getEyePosition()).normalize();
                     ServerLevel serverLevel= (ServerLevel) this.mob.level();
-                    ray=LightRay.create(serverLevel,abilityExecuteTime*2,1.5f,true,false);
+                    ray=LightRay.create(serverLevel,abilityExecuteTime*2,1.5f,true,false,false);
                     float yaw= MathFuncs.getAngFrom2DVec(dir)+180;
                     float v=MathFuncs.getVertAngFromVec(dir);
-                    System.out.println("  va  " + v);
                     ray.setPred(o -> !(o instanceof AbstractTranscendent));
                     ray.setOwner(this.mob);
                     ray.setPos(this.mob.getEyePosition());
@@ -98,7 +97,7 @@ public class SolmanderSolarBeam extends GenericAbility {
                                 for (int z=-1;z<=1;z++){
                                     BlockPos offsetPos=BlockPos.containing(pos.add(x,0,z));
                                     if (BaseFireBlock.canBePlacedAt(serverLevel, offsetPos, Direction.UP)){
-                                        //serverLevel.setBlockAndUpdate(offsetPos, BaseFireBlock.getState(serverLevel,offsetPos));
+                                        serverLevel.setBlockAndUpdate(offsetPos, BaseFireBlock.getState(serverLevel,offsetPos));
                                     }
                                 }
                             }

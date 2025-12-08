@@ -66,6 +66,8 @@ public class LightRay extends CA_Projectile {
 
     Vec3 end;
 
+    boolean ignoreDefaultHitIfAlert=true;
+
     public boolean doesStop(){
         return this.entityData.get(STOP_ON_CONTACT);
     }
@@ -95,6 +97,15 @@ public class LightRay extends CA_Projectile {
         entity.setDmg(dmg);
         entity.hitMultiple=hitMultiple;
         entity.destroyIfHitLiving=destroyIfHitLiving;
+        return entity;
+    }
+    public static LightRay create(Level level, int tickLiveTime,float dmg,boolean hitMultiple,boolean destroyIfHitLiving,boolean ignoreDefaultHitIfAlert) {
+        LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
+        entity.setLifetime(tickLiveTime);
+        entity.setDmg(dmg);
+        entity.hitMultiple=hitMultiple;
+        entity.destroyIfHitLiving=destroyIfHitLiving;
+        entity.ignoreDefaultHitIfAlert=ignoreDefaultHitIfAlert;
         return entity;
     }
     @Override
@@ -246,6 +257,7 @@ public class LightRay extends CA_Projectile {
                     Vec3 rayOffset=rayOffsets[i];
                     Optional<Vec3> edgeRay= aabb.clip(this.position().add(rayOffset), end.add(rayOffset));//does the entity intersect with the ray;
                     if (edgeRay.isPresent()){
+                        System.out.printf("ADDING ENT %s\n",entity);
                         entitiesToHit.add(entity);
                         if (!hitMultiple){
                             break;
@@ -261,6 +273,11 @@ public class LightRay extends CA_Projectile {
         }
         if (hasHitSomething &&  alertInterface!=null){
             this.alertInterface.onAlert();
+            if (!ignoreDefaultHitIfAlert){
+                for (LivingEntity entity:entitiesToHit) {
+                    this.hitLivingEntity(entity);
+                }
+            }
         }
         else{//use default hit behavior if no alert interface
             for (LivingEntity entity:entitiesToHit) {
@@ -302,7 +319,6 @@ public class LightRay extends CA_Projectile {
 
 
         rayBox=new AABB(this.position(),end);
-        System.out.println("final END IS " + end);
         return rayBox;
     }
 

@@ -94,7 +94,6 @@ import java.util.function.Supplier;
 import static com.github.celestial_awakening.nbt_strings.NBTStrings.*;
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
 public class EventManager {
-    public static ArrayList<Entity> entityList=new ArrayList<>();
     public static Supplier<Block>[] gaiaPlateBlocks = new Supplier[]{
             () -> Blocks.DEEPSLATE,
             BlockInit.SCORCHED_STONE,
@@ -377,15 +376,6 @@ public class EventManager {
         Entity entity=event.getEntity();
         if (!event.getLevel().isClientSide){
             ServerLevel serverLevel= (ServerLevel) event.getLevel();
-            if (entity instanceof FallingBlockEntity fallingBlockEntity){
-                if (fallingBlockEntity.getBlockState().is((BlockTags.ANVIL))){
-                    System.out.println("ADDING ENTITY");
-                    entityList.add(fallingBlockEntity);
-                }
-                else{
-                    System.out.println("WHAT");
-                }
-            }
             if (entity instanceof FishingHook hook){
                 if (hook.getPlayerOwner()!=null){
                     int cnt=0;
@@ -813,35 +803,6 @@ public class EventManager {
                 }
                 particleManager.generateParticles(serverLevel);
                 lunarEvents.moonstoneMark(serverLevel);
-                Iterator<Entity> entityIterator=entityList.iterator();
-                while (entityIterator.hasNext()){
-                    Entity entity=entityIterator.next();
-                    if (entity instanceof FallingBlockEntity fallingBlockEntity){
-                        if (fallingBlockEntity.isRemoved()){
-                            BlockPos pos = fallingBlockEntity.blockPosition();
-                            System.out.println("REMOVED AT " + pos);
-                            boolean valid=true;
-                            for (int i=1;i<=5;i++){
-                                BlockPos blockPos=pos.offset(0,-i,0);
-                                if (!serverLevel.getBlockState(blockPos).is(gaiaPlateBlocks[i-1].get())){
-                                    System.out.println("BLOCK STATE AT " + blockPos + "   Is " + serverLevel.getBlockState(blockPos));
-                                    valid=false;
-                                }
-                            }
-
-                            if (valid){
-                                for(int i=1;i<=5;i++){
-                                    BlockPos blockPos=pos.offset(0,-i,0);
-                                    serverLevel.destroyBlock(blockPos,true);
-                                }
-                                ItemEntity itemEntity=new ItemEntity(serverLevel,pos.getX(),pos.getY(),pos.getZ(),new ItemStack(ItemInit.GAIA_PLATE.get()));
-                                serverLevel.addFreshEntity(itemEntity);
-                            }
-                            entityIterator.remove();
-                            continue;
-                        }
-                    }
-                }
             }
             //both sides
             LazyOptional<LevelCapability> capOptional=event.level.getCapability(LevelCapabilityProvider.LevelCap);

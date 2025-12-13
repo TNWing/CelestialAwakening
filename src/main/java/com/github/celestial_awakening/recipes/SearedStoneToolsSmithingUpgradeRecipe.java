@@ -53,12 +53,17 @@ public class SearedStoneToolsSmithingUpgradeRecipe extends BasicEnchantedSmithin
         atomicBoolean.set(super.matches(container,level));
 
         if (atomicBoolean.get()){
+            System.out.println("REQUIREMENT CNTR " + requirements.size());
             for (Requirement requirement:requirements){
-                if (requirement.capabilityName=="SearedStone"){
+                System.out.println("NAME " + requirement.capabilityName);
+                if (requirement.capabilityName.equalsIgnoreCase("SearedStone")){
+                    System.out.println("SEARED");
                     LazyOptional<SearedStoneToolCapability> optional=containerBase.getCapability(SearedStoneToolCapabilityProvider.capability);
                     optional.ifPresent(cap->{
                         switch (requirement.getMethodName()){
                             case "getUpgradeTier":{
+                                System.out.println("UPGRADE TIER REQUIREd " + Byte.parseByte(requirement.getResult()));
+                                System.out.println("CURRENT TIER " + cap.getUpgradeTier());
                                 atomicBoolean.set(cap.getUpgradeTier()==Byte.parseByte( requirement.getResult()));
                             }
                         }
@@ -78,7 +83,7 @@ public class SearedStoneToolsSmithingUpgradeRecipe extends BasicEnchantedSmithin
         applyEnchants(stack,enchantMap);
         for (CapabilityResult result:results){
 
-            if (result.getCapabilityName()=="SearedStone"){
+            if (result.capabilityName.equalsIgnoreCase("SearedStone")){
                 LazyOptional<SearedStoneToolCapability> optional=stack.getCapability(SearedStoneToolCapabilityProvider.capability);
                 optional.ifPresent(cap->{
                     switch(result.methodName){

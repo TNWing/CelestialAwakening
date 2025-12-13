@@ -14,9 +14,9 @@ public class CoreGuardian extends AbstractGuardian{
     int hardenStacks=0;
     int hardenShieldBrokenCnt=0;
 
-    static double baseHP=60.0D;
-    static double baseDmg=4.0D;
-    static double baseArmor=6D;
+    static double baseHP=110.0D;
+    static double baseDmg=5.0D;
+    static double baseArmor=8D;
     static double baseTough=6.5D;
 
     public CoreGuardian(EntityType<? extends Monster> p_33002_, Level p_33003_) {
@@ -64,7 +64,12 @@ public class CoreGuardian extends AbstractGuardian{
 
     @Override
     public boolean hurt(DamageSource source, float amt){
-        amt=amt*(1-hardenStacks/(hardenStacks+2)) * (1+0.1f*hardenShieldBrokenCnt);
+        if (!(this.level().isClientSide)) {
+            float mult=(1f-hardenStacks/(hardenStacks+2f) + 0.1f*hardenShieldBrokenCnt);
+            System.out.println("CORE guard mult " + mult);
+            amt=amt*mult;
+        }
+
         return super.hurt(source,amt);
     }
 }

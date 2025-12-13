@@ -54,6 +54,7 @@ public class ItemInit {
     public static final RegistryObject<Item> RADIANT_BOOTS = ITEMS.register("radiant_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.RADIANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
+    public static final RegistryObject<Item> COSMIC_PEARL=ITEMS.register("cosmic_pearl",()->new CosmicPearl(new Item.Properties().stacksTo(16),"tooltip_celestial_awakening_cosmic_pearl"));
 
     public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register ("scorched_stone",()->new BlockItem(BlockInit.SCORCHED_STONE.get(),new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),10.5f,-3.2f));
@@ -84,6 +85,7 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.REMNANT, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> REMNANT_BOOTS = ITEMS.register("remnant_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.REMNANT, ArmorItem.Type.BOOTS, new Item.Properties()));
+
 
 
     public static final RegistryObject<Item> LUNA_TOME=ITEMS.register("luna_tome",()->new LunaTomeItem(new Item.Properties(),"tooltip.celestial_awakening.luna_tome",0xFFFFFF));
@@ -117,7 +119,6 @@ public class ItemInit {
 
     public static final RegistryObject<Item> COSMIC_HIDE =
             ITEMS.register("cosmic_hide", () ->new Item(new Item.Properties()));
-
     public static final RegistryObject<Item> PULSATING_DARKNESS =
             ITEMS.register("pulsating_darkness", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SHADE_CAP=

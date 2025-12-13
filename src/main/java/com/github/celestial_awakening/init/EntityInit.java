@@ -78,4 +78,6 @@ public class EntityInit {
     public static final RegistryObject<EntityType<MoonlightOrb>> MOONLIGHT_ORB=ENTITY_TYPES.register("moonlight_orb",
             ()->EntityType.Builder.<MoonlightOrb>of(MoonlightOrb::new,MobCategory.MISC).sized(0.5f,0.5f).build("moonlight_orb"));
 
+    public static final RegistryObject<EntityType<CosmicPearlProjectile>> COSMIC_PEARL=ENTITY_TYPES.register("cosmic_pearl",()->EntityType.Builder.<CosmicPearlProjectile>of(CosmicPearlProjectile::new,MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build("cosmic_pearl"));
+
 }

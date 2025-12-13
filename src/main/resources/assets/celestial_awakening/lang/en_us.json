@@ -25,6 +25,8 @@
   "item.celestial_awakening.radiant_leggings": "Radiant Leggings",
   "item.celestial_awakening.radiant_boots": "Radiant Boots",
 
+  "item.celestial_awakening.cosmic_pearl": "Cosmic Pearl",
+
   "item.celestial_awakening.scorched_stone": "Scorched Stone",
   "item.celestial_awakening.seared_stone_pickaxe": "Seared Pickaxe",
   "item.celestial_awakening.seared_stone_axe": "Seared Axe",
@@ -46,6 +48,8 @@
   "item.celestial_awakening.remnant_chestplate": "Remnant Chestplate",
   "item.celestial_awakening.remnant_leggings": "Remnant Leggings",
   "item.celestial_awakening.remnant_boots": "Remnant Boots",
+
+  "item.celestial_awakening.gaia_plate": "Gaia Plate",
 
   "item.celestial_awakening.everlight_helmet": "Everlight Helmet",
   "item.celestial_awakening.everlight_chestplate": "Everlight Chestplate",
@@ -161,6 +165,9 @@
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
   "tooltip.celestial_awakening.luna_tome": "A book with significantly increased enchantability.",
+  "tooltip_celestial_awakening_cosmic_pearl":"(DO NOT USE, NOT FULLY WORKING)Like an enderpearl, but consumes 10 hunger points and all of your saturation instead of health.",
+
+
   "tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_name": "Burn the Midnight Oil",
   "tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_effect": "At night, this item will not lose durability.\nFurthermore, it gains increased attack speed, damage, and mining speed.",
 

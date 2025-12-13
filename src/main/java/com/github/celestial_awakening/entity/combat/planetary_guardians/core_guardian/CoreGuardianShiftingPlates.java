@@ -37,30 +37,30 @@ public class CoreGuardianShiftingPlates extends GenericAbility {
     @Override
     public void executeAbility(LivingEntity target) {
         if (state==1){
-            if (blockPosList.size()>10){
-                return;
-            }
-            ArrayList<BlockPos> potentialPos = new ArrayList<>();
-            for (int x=-7;x<=7;x++){
-                for (int z=-7;z<=7;z++){
-                    for (int y=-1;y<=1;y++){
-                        BlockPos pos=this.mob.blockPosition().offset(x,y,z);
-                        if (this.mob.level().getBlockState(pos.above()).isAir()){
-                            potentialPos.add(pos);
-                            break;
+            if (blockPosList.size()<10){
+                ArrayList<BlockPos> potentialPos = new ArrayList<>();
+                for (int x=-7;x<=7;x++){
+                    for (int z=-7;z<=7;z++){
+                        for (int y=-1;y<=1;y++){
+                            BlockPos pos=this.mob.blockPosition().offset(x,y,z);
+                            if (this.mob.level().getBlockState(pos.above()).isAir()){
+                                potentialPos.add(pos);
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            if (potentialPos.size()>0){
-                for (int i=0;i<5;i++){
-                    if (blockPosList.size()>10){
-                        break;
+                if (potentialPos.size()>0){
+                    for (int i=0;i<5;i++){
+                        if (blockPosList.size()>10){
+                            break;
+                        }
+                        BlockPos pos=potentialPos.get(this.mob.getRandom().nextInt(potentialPos.size()));
+                        blockPosList.add(pos);
                     }
-                    BlockPos pos=potentialPos.get(this.mob.getRandom().nextInt(potentialPos.size()));
-                    blockPosList.add(pos);
                 }
             }
+
         }
         this.currentStateTimer--;
         if (this.currentStateTimer<=0){

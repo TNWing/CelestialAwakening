@@ -6,11 +6,6 @@
       "conditions": [
         {
           "condition": "minecraft:killed_by_player"
-        },
-        {
-          "chance": 0.025,
-          "condition": "minecraft:random_chance_with_looting",
-          "looting_multiplier": 0.01
         }
       ],
       "entries": [

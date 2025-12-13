@@ -12,6 +12,7 @@ import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
+import com.github.celestial_awakening.init.BlockInit;
 import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.init.MobEffectInit;
 import com.github.celestial_awakening.init.SoundInit;
@@ -31,6 +32,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -40,6 +42,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -52,12 +55,16 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.AnvilBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -76,14 +83,25 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+
 import static com.github.celestial_awakening.nbt_strings.NBTStrings.*;
 @Mod.EventBusSubscriber(modid= CelestialAwakening.MODID)
 public class EventManager {
+    public static ArrayList<Entity> entityList=new ArrayList<>();
+    public static Supplier<Block>[] gaiaPlateBlocks = new Supplier[]{
+            () -> Blocks.DEEPSLATE,
+            BlockInit.SCORCHED_STONE,
+            () -> Blocks.IRON_BLOCK,
+            BlockInit.SCORCHED_STONE,
+            () -> Blocks.DEEPSLATE
+    };
     protected static final RandomSource randomSource=RandomSource.create();
 
     public static LunarEvents lunarEvents=new LunarEvents();
@@ -158,7 +176,6 @@ public class EventManager {
         new ProwlerRaidCommand(event.getDispatcher(),2);
         ConfigCommand.register(event.getDispatcher());
     }
-
 
     //TODO: spawn multiple prowlers in here, base it off the cel beacon spawning
     @SubscribeEvent
@@ -360,6 +377,15 @@ public class EventManager {
         Entity entity=event.getEntity();
         if (!event.getLevel().isClientSide){
             ServerLevel serverLevel= (ServerLevel) event.getLevel();
+            if (entity instanceof FallingBlockEntity fallingBlockEntity){
+                if (fallingBlockEntity.getBlockState().is((BlockTags.ANVIL))){
+                    System.out.println("ADDING ENTITY");
+                    entityList.add(fallingBlockEntity);
+                }
+                else{
+                    System.out.println("WHAT");
+                }
+            }
             if (entity instanceof FishingHook hook){
                 if (hook.getPlayerOwner()!=null){
                     int cnt=0;
@@ -787,6 +813,35 @@ public class EventManager {
                 }
                 particleManager.generateParticles(serverLevel);
                 lunarEvents.moonstoneMark(serverLevel);
+                Iterator<Entity> entityIterator=entityList.iterator();
+                while (entityIterator.hasNext()){
+                    Entity entity=entityIterator.next();
+                    if (entity instanceof FallingBlockEntity fallingBlockEntity){
+                        if (fallingBlockEntity.isRemoved()){
+                            BlockPos pos = fallingBlockEntity.blockPosition();
+                            System.out.println("REMOVED AT " + pos);
+                            boolean valid=true;
+                            for (int i=1;i<=5;i++){
+                                BlockPos blockPos=pos.offset(0,-i,0);
+                                if (!serverLevel.getBlockState(blockPos).is(gaiaPlateBlocks[i-1].get())){
+                                    System.out.println("BLOCK STATE AT " + blockPos + "   Is " + serverLevel.getBlockState(blockPos));
+                                    valid=false;
+                                }
+                            }
+
+                            if (valid){
+                                for(int i=1;i<=5;i++){
+                                    BlockPos blockPos=pos.offset(0,-i,0);
+                                    serverLevel.destroyBlock(blockPos,true);
+                                }
+                                ItemEntity itemEntity=new ItemEntity(serverLevel,pos.getX(),pos.getY(),pos.getZ(),new ItemStack(ItemInit.GAIA_PLATE.get()));
+                                serverLevel.addFreshEntity(itemEntity);
+                            }
+                            entityIterator.remove();
+                            continue;
+                        }
+                    }
+                }
             }
             //both sides
             LazyOptional<LevelCapability> capOptional=event.level.getCapability(LevelCapabilityProvider.LevelCap);

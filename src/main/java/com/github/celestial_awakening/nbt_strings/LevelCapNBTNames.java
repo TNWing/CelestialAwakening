@@ -15,5 +15,6 @@ public class LevelCapNBTNames {
     public static String lvlCap_transcendentDivTimer="t";
     public static String lvlCap_moonstoneData="msData";
     public static String lvlCap_moonstoneTimer="t";
+    public static String lvlCap_deepCnt="dCnt";
 
 }

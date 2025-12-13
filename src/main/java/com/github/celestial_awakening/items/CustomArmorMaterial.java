@@ -23,19 +23,21 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     REMNANT("remnant",18,new int[]{2,5,5,2},12,SoundEvents.ARMOR_EQUIP_CHAIN,
             0,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
 
-    EVERLIGHT("everlight",25,new int[]{3,6,6,2},15,SoundEvents.ARMOR_EQUIP_CHAIN,
-            2f,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get())),
+    EVERLIGHT("everlight",25,new int[]{3,6,6,3},15,SoundEvents.ARMOR_EQUIP_CHAIN,
+            2f,0.1f,()->Ingredient.of(ItemInit.DYING_LIGHT_ESSENCE.get()),0,1.5f),
 
-    KNIGHTMARE("knightmare",22,new int[]{3,6,5,2},14,SoundEvents.ARMOR_EQUIP_IRON,
+    KNIGHTMARE("knightmare",22,new int[]{3,6,5,3},14,SoundEvents.ARMOR_EQUIP_IRON,
             2,0.1f,()->Ingredient.of(ItemInit.MIDNIGHT_IRON_INGOT.get())),
 
     STELLAR("stellar",19,new int[]{0,1,1,0},16,SoundEvents.ARMOR_EQUIP_ELYTRA,
             0,0f,()->Ingredient.of(ItemInit.COSMIC_HIDE.get())),
 
     SHADE("shade",19,new int[]{0,1,1,0},15,SoundEvents.ARMOR_EQUIP_ELYTRA,
-            0,0f,()->Ingredient.of(ItemInit.PULSATING_DARKNESS.get()),0.025f),
+            0,0f,()->Ingredient.of(ItemInit.PULSATING_DARKNESS.get()),0.025f,0),
 
-    SCORCHED("scorched",19,new int[]{2,4,4,2},11,SoundEvents.STONE_BREAK,0.5f,0f,()->Ingredient.of(ItemInit.SCORCHED_STONE.get()));
+    SCORCHED("scorched",19,new int[]{2,4,4,2},11,SoundEvents.STONE_BREAK,0.5f,0f,()->Ingredient.of(ItemInit.SCORCHED_STONE.get())),
+
+    PLATE("plate",22,new int[]{2,7,6,2},13,SoundEvents.ARMOR_EQUIP_IRON,1,0.05f,()->Ingredient.of((ItemInit.GAIA_PLATE.get())));
 
     private final String name;
     private final int durabilityMultiplier;
@@ -47,6 +49,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
     private final Supplier<Ingredient> repairIngredient;
     private static final int[] BASE_DURABILITY = { 11, 16, 16, 13 };
     private final float spdBoost;
+    private final float hpBoost;
     CustomArmorMaterial(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantmentValue, SoundEvent equipSound,
                         float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
         this.name = name;
@@ -58,9 +61,10 @@ public enum CustomArmorMaterial implements ArmorMaterial {
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = repairIngredient;
         this.spdBoost=0;
+        this.hpBoost=0;
     }
     CustomArmorMaterial(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantmentValue, SoundEvent equipSound,
-                        float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient,float spd) {
+                        float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient,float spd,float hp) {
         this.name = name;
         this.durabilityMultiplier = durabilityMultiplier;
         this.protectionAmounts = protectionAmounts;
@@ -70,6 +74,7 @@ public enum CustomArmorMaterial implements ArmorMaterial {
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = repairIngredient;
         this.spdBoost=spd;
+        this.hpBoost=hp;
     }
     @Override
     public int getDurabilityForType(ArmorItem.Type pType) {
@@ -113,5 +118,8 @@ public enum CustomArmorMaterial implements ArmorMaterial {
 
     public float getSpdBoost(){
         return this.spdBoost;
+    }
+    public float getHpBoost(){
+        return this.hpBoost;
     }
 }

@@ -1,5 +1,7 @@
 package com.github.celestial_awakening.events;
 
+import com.github.celestial_awakening.capabilities.LevelCapability;
+import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -13,6 +15,9 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.util.LazyOptional;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CA_SpawnPlacements {
     static SpawnPlacements.SpawnPredicate dark_NightSurface=new SpawnPlacements.SpawnPredicate() {
@@ -24,7 +29,7 @@ public class CA_SpawnPlacements {
             BlockState blockState=serverLevelAccessor.getBlockState(blockPos);
             DimensionType dimensiontype =serverLevelAccessor.dimensionType();
             int i = dimensiontype.monsterSpawnBlockLightLimit();
-            boolean darkEnough=true;
+            boolean darkEnough;
             if (i < 15 && serverLevelAccessor.getBrightness(LightLayer.BLOCK, blockPos) > i) {
                 return false;
             } else {
@@ -68,6 +73,23 @@ public class CA_SpawnPlacements {
                 return serverLevelAccessor.getBlockState(blockpos$mutableblockpos).isAir() && serverLevelAccessor.canSeeSky(blockpos$mutableblockpos);
             }
             return false;
+        }
+    };
+    static SpawnPlacements.SpawnPredicate deepLayerSpawn =new SpawnPlacements.SpawnPredicate() {
+        //copied from strider
+        @Override
+        public boolean test(EntityType entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+            LazyOptional<LevelCapability> optional= serverLevelAccessor.getLevel().getCapability(LevelCapabilityProvider.LevelCap);
+            AtomicBoolean atomicBoolean=new AtomicBoolean(false);
+
+            if (blockPos.getY()<=serverLevelAccessor.getLevel().getMinBuildHeight()+20){
+                optional.ifPresent(cap->{
+                    if (cap.deepLayerCounter>=10){
+                        atomicBoolean.set(true);
+                    }
+                });
+            }
+            return atomicBoolean.get();
         }
     };
 }

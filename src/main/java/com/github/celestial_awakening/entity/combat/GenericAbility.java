@@ -114,6 +114,9 @@ public abstract class GenericAbility {
         return this.basePriority;
     }
     public int calcPriority(){
+        if (this.getCurrentCD()>0){
+            return -1;
+        }
         return this.basePriority;
     }
 }

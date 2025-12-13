@@ -48,6 +48,12 @@ public class LevelCapability{
 
     public int pkRemainingSpawnAttempts;
     public int prowlerSpawnCD;
+
+    public void increaseDeepLayerCounter(int amt) {
+        this.deepLayerCounter = Math.max(10,deepLayerCounter+amt);
+    }
+
+    public int deepLayerCounter;//used to enable core guardian spawns
     /*
     -2: not active
     -1: eye closed
@@ -74,6 +80,7 @@ public class LevelCapability{
         this.levelResourceKey=data.levelResourceKey;
         this.prowlerSpawnCD=data.prowlerSpawnCD;
         this.divinerEyePower=data.divinerEyePower;
+        this.deepLayerCounter=data.deepLayerCounter;
     }
 
     void saveNBTData(CompoundTag nbt){
@@ -125,6 +132,7 @@ public class LevelCapability{
         divEyeTag.putInt(lvlCap_transcendentDivTimer,this.divinerEyeTimer);
 
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
+        nbt.putInt(lvlCap_deepCnt,deepLayerCounter);
     }
 
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -168,6 +176,7 @@ public class LevelCapability{
                 }
             }
         }
+        deepLayerCounter=nbt.getInt(lvlCap_deepCnt);
 
     }
     public void loadNBTAfterLevelLoad(){
@@ -212,6 +221,7 @@ public class LevelCapability{
                     }
                 }
             }
+            deepLayerCounter=storedNBT.getInt(lvlCap_deepCnt);
 
         }
     }
@@ -238,6 +248,7 @@ public class LevelCapability{
         divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
+        nbt.putInt(lvlCap_deepCnt,deepLayerCounter);
         return nbt;
     }
 
@@ -253,6 +264,7 @@ public class LevelCapability{
         this.divinerEyeChance=0;
         this.divinerSunControlVal =0;
         this.divinerEyePower=0;
+        this.deepLayerCounter=0;
         if (level!=null){
             this.levelResourceKey=level.dimension();
         }

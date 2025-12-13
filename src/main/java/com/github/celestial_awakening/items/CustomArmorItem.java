@@ -47,6 +47,9 @@ public class CustomArmorItem extends ArmorItem implements IForgeItem {
         if (this.getSpdBoost()>0){
             builder.put(Attributes.MOVEMENT_SPEED,new AttributeModifier(uuid,"Armor Speed",this.getSpdBoost(), AttributeModifier.Operation.ADDITION));
         }
+        if (this.getHpBoost()>0){
+            builder.put(Attributes.MAX_HEALTH,new AttributeModifier(uuid,"Armor HP",this.getHpBoost(), AttributeModifier.Operation.ADDITION));
+        }
         //	defaultModifiers f_40383_
         ObfuscationReflectionHelper.setPrivateValue(ArmorItem.class,this,builder.build(),"f_40383_");
         DispenserBlock.registerBehavior(this, DISPENSE_ITEM_BEHAVIOR);
@@ -63,7 +66,9 @@ public class CustomArmorItem extends ArmorItem implements IForgeItem {
     public float getSpdBoost() {
         return ((CustomArmorMaterial)this.material).getSpdBoost();
     }
-
+    public float getHpBoost() {
+        return ((CustomArmorMaterial)this.material).getHpBoost();
+    }
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);

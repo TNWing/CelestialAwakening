@@ -4,8 +4,11 @@ import com.github.celestial_awakening.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -48,10 +51,13 @@ public class SearedStoneAxe extends AxeItem implements SearedStoneTool{
                 spd*= 3;
             }
             else{
-                spd*= 3;
+                spd*= 1.5f;
             }
         }
         return spd;
     }
 
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        return onRightClick(level, player, interactionHand);
+    }
 }

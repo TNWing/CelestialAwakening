@@ -61,7 +61,6 @@ public class ClientModEventBusManager {
     }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        System.out.println(Config.arrowSolarDmg + "  SOLAR ARROW DMG");
         if (Config.insVisuals!= Config.INS_VISUALS.NONE){
             event.registerEntityRenderer(EntityType.VILLAGER,ctx->{
                 InsManager.init(ctx);
@@ -74,6 +73,7 @@ public class ClientModEventBusManager {
         }
 
         event.registerEntityRenderer(EntityInit.SOLMANDER_NEWT.get(), SolmanderNewtRenderer::new);
+        event.registerEntityRenderer(EntityInit.CORE_GUARDIAN.get(), CoreGuardianRenderer::new);
         event.registerEntityRenderer(EntityInit.ASTERON.get(), TranscendentAsteronRenderer::new);
         event.registerEntityRenderer(EntityInit.ASTRALITE.get(), TranscendentAstraliteRenderer::new);
         event.registerEntityRenderer(EntityInit.NEBURE.get(), TranscendentNebureRenderer::new);

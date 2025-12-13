@@ -118,6 +118,7 @@
   "entity.celestial_awakening.night_prowler_whelp": "Whelp",
   "entity.celestial_awakening.pk_crescencia": "Crescencia",
   "entity.celestial_awakening.solmander_newt": "Sol Newt",
+  "entity.celestial_awakening.core_guardian": "Core Guardian",
 
   "container.astralter":"Astralter",
   "astralter.transmute": "Transmute Stones",
@@ -187,11 +188,14 @@
   "tooltip.celestial_awakening.star_gazer.burning_light_desc": "When the arrow hits a target, deal bonus damage if the target is glowing and heal slightly if the target is on fire.\nThis effect is applied before Revealing Shot.",
 
   "tooltip.celestial_awakening.seared_stone_tools.tier": "Tier:%s",
+  "tooltip.celestial_awakening.seared_stone_tools.unlock_text": "Upgrade this tool in a smithing table to unlock more abilities",
   "tooltip.celestial_awakening.seared_stone_tools.earthlink_name": "Earthlink",
+  "tooltip.celestial_awakening.seared_stone_tools.earthlink_hint": "Stones of opposite polarity.",
   "tooltip.celestial_awakening.seared_stone_pickaxe.earthlink_desc": "Breaks non-ores much faster.",
   "tooltip.celestial_awakening.seared_stone_axe.earthlink_desc": "Breaks logs much faster.",
   "tooltip.celestial_awakening.seared_stone_tools.sturdy_name": "Sturdy",
-  "tooltip.celestial_awakening.seared_stone_tools.sturdy_desc": "Does not lose durability if below 10% durability, but loses bonus mining speed from Earthlink.",
+  "tooltip.celestial_awakening.seared_stone_tools.sturdy_hint": "Restorative material.",
+  "tooltip.celestial_awakening.seared_stone_tools.sturdy_desc": "Does not lose durability if below 10% durability, but reduced bonus mining speed from Earthlink.",
 
 
   "tooltip.celestial_awakening.lunar_arrow.desc": "Upon hitting an entity, damages and slows all entities behind the target.",

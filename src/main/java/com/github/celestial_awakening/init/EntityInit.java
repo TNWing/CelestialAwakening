@@ -3,6 +3,7 @@ package com.github.celestial_awakening.init;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
@@ -37,6 +38,12 @@ public class EntityInit {
     public static final RegistryObject<EntityType<PhantomKnight_Crescencia>> PK_CRESCENCIA=ENTITY_TYPES.register("pk_crescencia",
             ()->EntityType.Builder.of(PhantomKnight_Crescencia::new,MobCategory.MONSTER).sized(1f,2f).build("pk_crescencia"));
 
+
+
+
+
+    public static final RegistryObject<EntityType<CoreGuardian>> CORE_GUARDIAN=ENTITY_TYPES.register("core_guardian",
+            ()->EntityType.Builder.of(CoreGuardian::new,MobCategory.MONSTER).sized(1.4f,2.6f).build("core_guardian"));
 
 
 

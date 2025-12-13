@@ -3,6 +3,7 @@ package com.github.celestial_awakening.entity.combat.planetary_guardians.core_gu
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
+import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -26,9 +27,10 @@ public class CoreGuardianShockwave extends GenericAbility {
     Vec3 endPos;
     Predicate pred= o -> true;
     int triggers;
+    int triggerDmgCnt=2;
     AABB rayBox;
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),this.mob);
-
+    double angle;
     public CoreGuardianShockwave(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
     }
@@ -41,12 +43,23 @@ public class CoreGuardianShockwave extends GenericAbility {
 
                 List<LivingEntity> livingEntityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,rayBox,pred);
 
-
+                //not sure if these vals even work?
+                /*
+                need to use the angle of the ray to calculate this
+                 */
+                float xOffset= (float) Math.sin(Math.toRadians(angle));
+                float zOffset=(float) Math.cos(Math.toRadians(angle));
+                System.out.println("X OFF " + xOffset + "   zoff "  + zOffset);
+                float yOffset=0.5f;
                 Vec3[] rayOffsets = new Vec3[] {
-                        new Vec3(-0 / 2f, 0, 0),
-                        new Vec3(0/ 2f, 0, 0),
-                        new Vec3(0, -0 / 2f, 0),
-                        new Vec3(0, 0 / 2f, 0)
+                        new Vec3(-xOffset, -yOffset, 0),
+                        new Vec3(-xOffset, yOffset, 0),
+                        new Vec3(xOffset, -yOffset, 0),
+                        new Vec3(xOffset, yOffset, 0),
+                        new Vec3(0, -yOffset, -zOffset),
+                        new Vec3(0, -yOffset, zOffset),
+                        new Vec3(0, yOffset, -zOffset),
+                        new Vec3(0, yOffset, zOffset)
                 };
                 Set<LivingEntity> entitiesToHit=new HashSet<>();
                 for (LivingEntity entity: livingEntityList) {
@@ -65,7 +78,7 @@ public class CoreGuardianShockwave extends GenericAbility {
                 for (LivingEntity entity:entitiesToHit) {
                     entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,70,1));
                 }
-                if (triggers>2){
+                if (triggers>triggerDmgCnt){
                     //deal damage
                     for (LivingEntity entity:entitiesToHit) {
                         entity.hurt(source,3.5f);
@@ -80,8 +93,13 @@ public class CoreGuardianShockwave extends GenericAbility {
             switch (state){
                 case 0:{
                     state++;
+                    this.mob.canMove=false;
                     currentStateTimer=abilityExecuteTime;
                     triggers=0;
+                    Vec3 dirVec= MathFuncs.getDirVec(this.mob.position(),target.position());
+                    startPos=this.mob.position();
+                    endPos=dirVec.normalize().scale(7);
+                    angle=MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(startPos,endPos));
                     rayBox=new AABB(startPos,endPos);
                     break;
                 }
@@ -102,6 +120,6 @@ public class CoreGuardianShockwave extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return 0;
+        return 7;
     }
 }

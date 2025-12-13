@@ -76,7 +76,7 @@ public class ParticleManager {
                     double x = pos.x;
                     double y = pos.y + 0.75D;
                     double z = pos.z;
-                    int count = 15; // Number of particles
+                    int count = 25; // Number of particles
                     double speed = 0.12; // Speed of particles
                     serverLevel.sendParticles(particleType, x, y, z, count, 0, 0, 0, speed);
                 }

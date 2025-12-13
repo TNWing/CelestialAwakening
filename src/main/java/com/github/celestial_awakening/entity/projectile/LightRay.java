@@ -238,7 +238,6 @@ public class LightRay extends CA_Projectile {
 
 
     public void raycast(){
-        System.out.println("BEFFORE ALL " + end);
         AABB rayBox=getRayBox();
         List<LivingEntity> livingEntityList=this.level().getEntitiesOfClass(LivingEntity.class,rayBox,pred);
 
@@ -319,6 +318,8 @@ public class LightRay extends CA_Projectile {
 
 
         rayBox=new AABB(this.position(),end);
+        double dist=end.distanceTo(this.position());
+        this.setHeight(MathFuncs.clamp((float) dist,minHeight,maxHeight));
         return rayBox;
     }
 

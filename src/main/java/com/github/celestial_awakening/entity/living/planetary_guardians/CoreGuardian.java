@@ -46,9 +46,13 @@ public class CoreGuardian extends AbstractGuardian{
         if (hardenStacks<=0){
             return;
         }
+        System.out.println("DEC stacks from " + this.hardenStacks);
         this.hardenStacks--;
+        System.out.println("HARD STACKS " + this.hardenStacks);
         if (hardenStacks==0){
+
             hardenShieldBrokenCnt++;
+            System.out.println("HARD SHIELD BROKE AT " + hardenShieldBrokenCnt);
         }
     }
 
@@ -60,7 +64,7 @@ public class CoreGuardian extends AbstractGuardian{
 
     @Override
     public boolean hurt(DamageSource source, float amt){
-        amt=amt*hardenStacks/(hardenStacks+2) * (1+0.1f*hardenShieldBrokenCnt);
+        amt=amt*(1-hardenStacks/(hardenStacks+2)) * (1+0.1f*hardenShieldBrokenCnt);
         return super.hurt(source,amt);
     }
 }

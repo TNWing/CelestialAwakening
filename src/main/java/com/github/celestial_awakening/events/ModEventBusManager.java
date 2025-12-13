@@ -3,6 +3,7 @@ package com.github.celestial_awakening.events;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import com.github.celestial_awakening.entity.living.transcendents.Astralite;
@@ -30,6 +31,8 @@ public class ModEventBusManager {
 
         event.put(EntityInit.NIGHT_PROWLER_WHELP.get(), ProwlerWhelp.createAttributes().build());
         event.put(EntityInit.SOLMANDER_NEWT.get(), SolmanderNewt.createAttributes().build());
+
+        event.put(EntityInit.CORE_GUARDIAN.get(), CoreGuardian.createAttributes().build());
         event.put(EntityInit.PK_CRESCENCIA.get(), PhantomKnight_Crescencia.createAttributes().build());
     }
     /*

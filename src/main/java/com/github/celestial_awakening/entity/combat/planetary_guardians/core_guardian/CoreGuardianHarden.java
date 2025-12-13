@@ -13,6 +13,27 @@ public class CoreGuardianHarden extends GenericAbility {
     @Override
     public void executeAbility(LivingEntity target) {
         ((CoreGuardian)this.mob).setHardenStacks(5);
+        this.currentStateTimer--;
+        if (this.currentStateTimer<=0){
+            switch (state){
+                case 0:{
+                    state++;
+                    currentStateTimer=abilityExecuteTime;
+                    break;
+                }
+                case 1:{
+                    state++;
+                    currentStateTimer=abilityRecoveryTime;
+
+                    break;
+                }
+                case 2:{
+                    state=0;
+                    liftRestrictions();
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -23,10 +44,17 @@ public class CoreGuardianHarden extends GenericAbility {
 
     @Override
     public int calcPriority(){
+        System.out.println("HARDEN PRIO");
+        System.out.println(this.mob.getHealth()/this.mob.getMaxHealth());
         if (this.getCurrentCD()>0 || ((CoreGuardian) this.mob).getHardenStacks()>0 || this.mob.getHealth()/this.mob.getMaxHealth()>0.85f){
             return -1;
         }
         int p= this.getBasePriority();
         return p;
+    }
+
+    @Override
+    public String getAbilityName(){
+        return "Harden";
     }
 }

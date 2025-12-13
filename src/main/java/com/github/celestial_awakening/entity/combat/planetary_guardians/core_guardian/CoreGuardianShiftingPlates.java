@@ -4,14 +4,16 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
-import com.github.celestial_awakening.util.MathFuncs;
+import com.github.celestial_awakening.util.CA_Predicates;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,7 +23,10 @@ import java.util.List;
 
 public class CoreGuardianShiftingPlates extends GenericAbility {
     int updatePlateDelay=5;
-    ParticleOptions particleType = (ParticleOptions) ParticleTypes.FALLING_DUST;
+    ParticleOptions particleOption =
+            new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.DEEPSLATE.defaultBlockState());
+    ParticleOptions particleOption2 =
+            new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.BLACKSTONE.defaultBlockState());
     ArrayList<BlockPos> blockPosList=new ArrayList<>();
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),this.mob);
     public CoreGuardianShiftingPlates(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int basePriority) {
@@ -54,7 +59,6 @@ public class CoreGuardianShiftingPlates extends GenericAbility {
                     }
                     BlockPos pos=potentialPos.get(this.mob.getRandom().nextInt(potentialPos.size()));
                     blockPosList.add(pos);
-                    blockPosList.remove(pos);
                 }
             }
         }
@@ -82,41 +86,54 @@ public class CoreGuardianShiftingPlates extends GenericAbility {
     }
 
     public void updatePlates(){
-        Iterator<BlockPos> iter=blockPosList.iterator();
-        while (iter.hasNext()){
-            BlockPos blockPos=iter.next();
-            if (this.mob.level().getBlockState(blockPos).isAir()){
-                List<LivingEntity> entityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,new AABB(blockPos).inflate(1.25f,0.3f,1.25f));
-                for (LivingEntity entity:entityList) {
-                    if (entity instanceof CoreGuardian coreGuardian){
-                        coreGuardian.decrementHardenStacks();
+        if (!blockPosList.isEmpty()){
+            Iterator<BlockPos> iter=blockPosList.iterator();
+            while (iter.hasNext()){
+                BlockPos blockPos=iter.next();
+                Vec3 pos=blockPos.getCenter();
+                if (this.mob.level().getBlockState(blockPos).isAir()){
+                    List<LivingEntity> entityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,new AABB(blockPos).inflate(1.75f,0.3f,1.75f));
+                    ServerLevel serverLevel= (ServerLevel) this.mob.level();
+                    serverLevel.sendParticles(particleOption2, pos.x(),pos.y()+1.2f,pos.z, 8, 0.3f, 0.1f, 0.3f,0.1f);
+                    for (LivingEntity entity:entityList) {
+
+                        if (entity instanceof CoreGuardian coreGuardian){
+                            coreGuardian.decrementHardenStacks();
+                        }
+                        entity.hurt(source,3.25f);
+
+                        break;
                     }
-                    entity.hurt(source,1.5f);
                     iter.remove();
-                    break;
+                }
+                else if (updatePlateDelay==0){
+
+
+                    ServerLevel serverLevel= (ServerLevel) this.mob.level();
+                    serverLevel.sendParticles(particleOption, pos.x(),pos.y()+1.2f,pos.z, 8, 0.3f, 0.1f, 0.3f,0.1f);
+                    List<LivingEntity> entityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,new AABB(blockPos).inflate(0.5f,0.1f,0.5f),CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
+                    for (LivingEntity entity:entityList) {
+                        entity.hurt(source,1.25f);
+                    }
                 }
             }
-            else if (updatePlateDelay==0){
-                Vec3 pos=blockPos.getCenter();
-
-                ServerLevel serverLevel= (ServerLevel) this.mob.level();
-                serverLevel.sendParticles(particleType, pos.x(),pos.y()+0.4f,pos.z, 20, 0, 0, 0,0.1f);
-                List<LivingEntity> entityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,new AABB(blockPos).inflate(0.5f,0.1f,0.5f));
-                for (LivingEntity entity:entityList) {
-                    entity.hurt(source,0.75f);
-                   }
+            if (updatePlateDelay>0){
+                updatePlateDelay--;
+            }
+            else{
+                updatePlateDelay=5;
             }
         }
-        if (updatePlateDelay>0){
-            updatePlateDelay--;
-        }
-        else{
-            updatePlateDelay=5;
-        }
+
     }
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
         return 0;
+    }
+
+    @Override
+    public String getAbilityName(){
+        return "Shifting Plates";
     }
 }

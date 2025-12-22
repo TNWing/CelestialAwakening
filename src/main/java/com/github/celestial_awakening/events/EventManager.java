@@ -512,11 +512,14 @@ public class EventManager {
                     if (!player.getCooldowns().isOnCooldown(stack.getItem())){
                         int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
                         if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
-                            amt*=1f-0.1f*lvl;
+                            amt*=1f-0.05f*lvl;
                         }
                     }
                     else{//REMNANTS
-
+                        int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_REMNANTS.get());
+                        if (lvl>0){
+                            amt*=1-0.03f*lvl;
+                        }
                     }
                 }
                 else if( player.getItemInHand(InteractionHand.OFF_HAND).is(Tags.Items.TOOLS_SHIELDS)){
@@ -524,11 +527,14 @@ public class EventManager {
                     if (!player.getCooldowns().isOnCooldown(stack.getItem())){
                         int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
                         if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
-                            amt*=1f-0.1f*lvl;
+                            amt*=1f-0.05f*lvl;
                         }
                     }
                     else{
-
+                        int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_REMNANTS.get());
+                        if (lvl>0){
+                            amt*=1-0.03f*lvl;
+                        }
                     }
                 }
             }

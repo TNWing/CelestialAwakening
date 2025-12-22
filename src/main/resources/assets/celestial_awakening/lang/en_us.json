@@ -164,6 +164,8 @@
   "enchantment.celestial_awakening.gaia_link" : "Gaia Link",
   "enchantment.celestial_awakening.gaia_link.desc" : "While holding a shield which is not being used nor is on cooldown, reduce incoming damage by 5% per level.",
 
+  "enchantment.celestial_awakening.gaia_remnants" : "Gaia Remnants",
+  "enchantment.celestial_awakening.gaia_remnants.desc" : "While holding a shield that is on cooldown, reduce incoming damage by 3% per level.",
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",

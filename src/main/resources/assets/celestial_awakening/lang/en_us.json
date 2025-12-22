@@ -161,6 +161,9 @@
   "advancement.celestial_awakening.kill_pk.title":"Test of Skill",
   "advancement.celestial_awakening.kill_pk.description":"Emerge victorious from a duel with a phantom knight",
 
+  "enchantment.celestial_awakening.gaia_link" : "Gaia Link",
+  "enchantment.celestial_awakening.gaia_link.desc" : "While holding a shield which is not being used nor is on cooldown, reduce incoming damage by 5% per level.",
+
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
@@ -195,6 +198,7 @@
   "tooltip.celestial_awakening.star_gazer.burning_light_desc": "When the arrow hits a target, deal bonus damage if the target is glowing and heal slightly if the target is on fire.\nThis effect is applied before Revealing Shot.",
 
   "tooltip.celestial_awakening.seared_stone_tools.tier": "Tier:%s",
+  "tooltip.celestial_awakening.seared_stone_tools.hint_pre": "Hint: ",
   "tooltip.celestial_awakening.seared_stone_tools.unlock_text": "Upgrade this tool in a smithing table to unlock more abilities",
   "tooltip.celestial_awakening.seared_stone_tools.earthlink_name": "Earthlink",
   "tooltip.celestial_awakening.seared_stone_tools.earthlink_hint": "Stones of opposite polarity.",

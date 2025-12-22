@@ -1,10 +1,7 @@
 package com.github.celestial_awakening.events.raids;
 
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
-import com.github.celestial_awakening.capabilities.PlayerCapability;
-import com.github.celestial_awakening.capabilities.PlayerCapabilityProvider;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
-import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,23 +9,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raid;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.IExtensibleEnum;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProwlerRaid extends AbstractCARaid{
     /*
@@ -60,15 +50,55 @@ public class ProwlerRaid extends AbstractCARaid{
 
     private boolean active;
 
+    public long getWarningTriggerTime() {
+        return warningTriggerTime;
+    }
+
+    public void setWarningTriggerTime(long warningTriggerTime) {
+        this.warningTriggerTime = warningTriggerTime;
+    }
+
     private long warningTriggerTime;
 
     private List<AbstractNightProwler> prowlers=new ArrayList<>();
 
+    public int getDelayTicks() {
+        return delayTicks;
+    }
+
+    public void setDelayTicks(int delayTicks) {
+        this.delayTicks = delayTicks;
+    }
+
+    public byte getCurrentWave() {
+        return currentWave;
+    }
+
+    public void setCurrentWave(byte currentWave) {
+        this.currentWave = currentWave;
+    }
+
+    public byte getMaxWave() {
+        return maxWave;
+    }
+
+    public void setMaxWave(byte maxWave) {
+        this.maxWave = maxWave;
+    }
+
+    public int getNextWaveInterval() {
+        return nextWaveInterval;
+    }
+
+    public void setNextWaveInterval(int nextWaveInterval) {
+        this.nextWaveInterval = nextWaveInterval;
+    }
+
     private int delayTicks=360;
 
-    private int currentWave=0;
+    private byte currentWave=0;
 
-    private int maxWave;
+    private byte maxWave;
 
     private int nextWaveInterval=10;
 
@@ -160,17 +190,17 @@ make this a separate class and init the values based on config vals later down t
     }
 
 
-    public ProwlerRaid(int p_37692_, ServerLevel p_37693_, BlockPos p_37694_, int maxWaves,int str) {
-        this.setRaidID(p_37692_);
-        this.setServerLevel(p_37693_);
+    public ProwlerRaid(int id, ServerLevel serverLevel, BlockPos blockPos, byte maxWaves, int str) {
+        this.setRaidID(id);
+        this.setServerLevel(serverLevel);
         this.active = true;
         this.setRaidStrength(str);
         //this.raidCooldownTicks = 300;
         //this.raidEvent.setProgress(0.0F);
-        this.setCenterPos(p_37694_);
+        this.setCenterPos(blockPos);
         this.maxWave=maxWaves;
-        this.warningTriggerTime=p_37693_.getGameTime();
-        //this.numGroups = this.getNumGroups(p_37693_.getDifficulty());
+        this.warningTriggerTime=serverLevel.getGameTime();
+        //this.numGroups = this.getNumGroups(serverLevel.getDifficulty());
         //this.status = Raid.RaidStatus.ONGOING;
     }
     /*
@@ -233,27 +263,6 @@ Config should have these settings
          */
         return tag;
     }
-
-    public boolean attemptToStart(Player target){
-        Level level=target.level();
-        DifficultyInstance difficultyInstance= level.getCurrentDifficultyAt(target.blockPosition());
-        float effectiveDifficulty=difficultyInstance.getEffectiveDifficulty();
-        System.out.println("Effective diff is " + difficultyInstance);
-        LazyOptional<PlayerCapability> pCapOptional=target.getCapability(PlayerCapabilityProvider.capability);
-        AtomicBoolean result= new AtomicBoolean(false);
-        pCapOptional.ifPresent(cap->{
-            if (effectiveDifficulty>1.5f && cap.getProwlerRaidCounter()>5){
-                int lY = level.getHeight(Heightmap.Types.WORLD_SURFACE, target.getBlockX(), target.getBlockZ());
-                if (this.getCenterPos()!=null){//will not attempt spawn if too far underground
-                    // && this.getCenterPos().getY()>=lY-20
-                    result.set(true);
-                }
-            }
-        });
-
-        return result.get();
-    }
-
     public List<AbstractNightProwler> prowlersToSpawn(){
         int strength=this.getRaidStrength();
         List<AbstractNightProwler> prowlers=new ArrayList<>();
@@ -291,6 +300,7 @@ Config should have these settings
     }
 
     public void tick() {
+        System.out.println("IS ACTIVE   " + isActive());
         if (isActive()){
             if (this.getServerLevel().getGameTime()>=warningTriggerTime+delayTicks){//not ready
                 if ((this.getServerLevel().getGameTime()-(warningTriggerTime+delayTicks)%120)==0){
@@ -298,19 +308,23 @@ Config should have these settings
                 the floats represent vol & pitch (i think)
                 the bool represents idk, but most instances seem to be false anyway
                  */
+                    System.out.println("PLAY warning SOUND");
                     this.getServerLevel().playLocalSound(getCenterPos(), SoundEvents.WOLF_GROWL, SoundSource.HOSTILE,0.4f,1f,false);
                 }
 
             }
             else{
+                System.out.println("DEC WAVE INTERVAL");
                 nextWaveInterval--;
                 if (prowlers.isEmpty() && nextWaveInterval>80){
+                    System.out.println("accelerate new wave");
                     nextWaveInterval=80;
             /*
             expedite the spawning if all prowlers are dead
              */
                 }
                 if (nextWaveInterval<=0){
+                    System.out.println("SHOULD SPAWN STUFF");
                     nextWaveInterval=700;
                     /*
                     spawn stuff

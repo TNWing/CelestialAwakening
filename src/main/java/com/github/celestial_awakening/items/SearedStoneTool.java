@@ -44,12 +44,12 @@ public interface SearedStoneTool {
                 components.add(sturdyEffect);
             }
             else{
-                hint=Component.translatable("tooltip.celestial_awakening.seared_stone_tools.sturdy_hint");
+                hint=Component.translatable("tooltip.celestial_awakening.seared_stone_tools.hint_pre").append(Component.translatable("tooltip.celestial_awakening.seared_stone_tools.sturdy_hint"));
             }
 
         }
         else{
-            hint=Component.translatable("tooltip.celestial_awakening.seared_stone_tools.earthlink_hint");
+            hint=Component.translatable("tooltip.celestial_awakening.seared_stone_tools.hint_pre").append(Component.translatable("tooltip.celestial_awakening.seared_stone_tools.earthlink_hint"));
 
         }
         if (hint!=null){

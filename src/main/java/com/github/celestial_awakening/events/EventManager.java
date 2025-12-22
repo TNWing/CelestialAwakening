@@ -12,10 +12,7 @@ import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
-import com.github.celestial_awakening.init.BlockInit;
-import com.github.celestial_awakening.init.ItemInit;
-import com.github.celestial_awakening.init.MobEffectInit;
-import com.github.celestial_awakening.init.SoundInit;
+import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -35,6 +32,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -509,6 +507,34 @@ public class EventManager {
                     }
 
                 }
+                if (player.getItemInHand(InteractionHand.MAIN_HAND).is(Tags.Items.TOOLS_SHIELDS)){
+                    ItemStack stack=player.getMainHandItem();
+                    if (!player.getCooldowns().isOnCooldown(stack.getItem())){
+                        int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
+                        if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
+                            System.out.println("PRE gaia link " + amt);
+                            amt*=1f-0.1f*lvl;
+                            System.out.println("Post gaia link " + amt);
+                        }
+                    }
+                    else{//REMNANTS
+
+                    }
+                }
+                else if( player.getItemInHand(InteractionHand.OFF_HAND).is(Tags.Items.TOOLS_SHIELDS)){
+                    ItemStack stack=player.getOffhandItem();
+                    if (!player.getCooldowns().isOnCooldown(stack.getItem())){
+                        int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
+                        if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
+                            System.out.println("PRE gaia link " + amt);
+                            amt*=1f-0.1f*lvl;
+                            System.out.println("Post gaia link " + amt);
+                        }
+                    }
+                    else{
+
+                    }
+                }
             }
             if(causingEntity instanceof Player){
                 Player player=(Player) event.getSource().getEntity();
@@ -550,6 +576,7 @@ public class EventManager {
                 }
 
             }
+            event.setAmount(amt);
         }
     }
 
@@ -795,7 +822,7 @@ public class EventManager {
                             lunarEvents.attemptPKSpawn(serverLevel);
                         }
                         else if (time==15500){
-                            //lunarEvents.attemptProwlerRaid(serverLevel);
+                            lunarEvents.attemptProwlerRaid(serverLevel);
                         }
                     }
 

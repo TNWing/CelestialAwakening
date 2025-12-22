@@ -17,7 +17,6 @@ import com.github.celestial_awakening.util.MathFuncs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -44,7 +43,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.celestial_awakening.util.ResourceCheckerFuncs.validDim;
 
@@ -70,11 +68,12 @@ public class LunarEvents {
                 ServerPlayer player=iter.next();
                 DifficultyInstance difficultyInstance= level.getCurrentDifficultyAt(player.blockPosition());
                 float effectiveDifficulty= difficultyInstance.getEffectiveDifficulty();
-                System.out.println("Effective diff is " + difficultyInstance);
+                System.out.println("Effective diff is " + effectiveDifficulty);
                 LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
-                if (false && effectiveDifficulty>1.5f && level.getHeight(Heightmap.Types.WORLD_SURFACE, player.getBlockX(), player.getBlockZ())-20<player.getBlockY()){
+                if (effectiveDifficulty>1.5f && level.getHeight(Heightmap.Types.WORLD_SURFACE, player.getBlockX(), player.getBlockZ())-20<player.getBlockY()){
                     optional.ifPresent(cap->{
                         short counter=cap.incrementAndGetProwlerRaidCounter();
+                        System.out.println("COUNTER IS " + counter);
                         BlockPos pos=player.blockPosition();
                         boolean create=counter>=10;
                         ProwlerRaid raid=levelCap.raids.getNearbyProwlerRaid(level,levelCap,pos);
@@ -87,7 +86,7 @@ public class LunarEvents {
                         }
                         else if (create){
                             cap.setProwlerRaidCounter((short) 0);
-                            int maxWaves=1;
+                            byte maxWaves=1;
                             int strength=100;
                             raid=levelCap.raids.createProwlerRaid(level,pos,maxWaves,strength);
                             levelCap.raids.addRaidToMap(raid);

@@ -28,7 +28,7 @@ public class SanityCommand {
         LazyOptional<LevelCapability> levelOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
         levelOptional.ifPresent(cap->{
             for(ServerPlayer serverPlayer : entities) {
-                cap.raids.createProwlerRaid(serverLevel,serverPlayer.blockPosition(),1,1);
+                //cap.raids.createProwlerRaid(serverLevel,serverPlayer.blockPosition(), (byte) 1,1);
             }
         });
 

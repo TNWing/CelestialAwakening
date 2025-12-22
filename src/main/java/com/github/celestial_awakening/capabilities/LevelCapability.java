@@ -133,6 +133,8 @@ public class LevelCapability{
 
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
         nbt.putInt(lvlCap_deepCnt,deepLayerCounter);
+
+        nbt.put("Raids",raids.saveRaids());
     }
 
     public void loadNBTData(CompoundTag nbt,boolean insert){
@@ -177,6 +179,8 @@ public class LevelCapability{
             }
         }
         deepLayerCounter=nbt.getInt(lvlCap_deepCnt);
+
+        raids.loadRaids(nbt.getCompound("Raids"),server.getLevel(this.levelResourceKey));
 
     }
     public void loadNBTAfterLevelLoad(){
@@ -223,6 +227,7 @@ public class LevelCapability{
             }
             deepLayerCounter=storedNBT.getInt(lvlCap_deepCnt);
 
+            raids.loadRaids(storedNBT.getCompound("Raids"),server.getLevel(this.levelResourceKey));
         }
     }
     public CompoundTag initNBTData(CompoundTag nbt){
@@ -249,6 +254,7 @@ public class LevelCapability{
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
         nbt.putInt(lvlCap_deepCnt,deepLayerCounter);
+        nbt.put("Raids",raids.saveRaids());
         return nbt;
     }
 
@@ -265,6 +271,7 @@ public class LevelCapability{
         this.divinerSunControlVal =0;
         this.divinerEyePower=0;
         this.deepLayerCounter=0;
+        this.raids=new CARaids();
         if (level!=null){
             this.levelResourceKey=level.dimension();
         }

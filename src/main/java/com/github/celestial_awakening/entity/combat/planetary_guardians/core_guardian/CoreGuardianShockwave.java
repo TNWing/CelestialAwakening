@@ -4,13 +4,18 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.entity.living.planetary_guardians.AbstractGuardian;
+import com.github.celestial_awakening.init.SoundInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -66,7 +71,7 @@ public class CoreGuardianShockwave extends GenericAbility {
 
                 }
                 if (this.currentStateTimer%10==1){
-
+                    this.mob.level().playLocalSound(BlockPos.containing(this.mob.position()), SoundEvents.STONE_FALL, SoundSource.HOSTILE,0.8f,1,false);
                     triggers++;
                     List<LivingEntity> livingEntityList=this.mob.level().getEntitiesOfClass(LivingEntity.class,rayBox, CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob));
                     float xOffset= (float) Math.cos(rad);

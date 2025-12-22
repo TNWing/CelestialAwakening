@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raids;
 
 import javax.annotation.Nullable;
@@ -34,11 +33,11 @@ public class CARaids {
         return prowlerRaids.get(id);
     }
 
-    public ProwlerRaid getOrCreateProwlerRaid(ServerLevel level,LevelCapability cap, BlockPos pos, int mW, int str){
+    public ProwlerRaid getOrCreateProwlerRaid(ServerLevel level, LevelCapability cap, BlockPos pos, byte mW, int str){
         ProwlerRaid raid= cap.raids.getNearbyProwlerRaid(pos,6400);
         return raid==null? raid:new ProwlerRaid(++nextID,level,pos,mW,str);//int p_37692_, ServerLevel p_37693_, BlockPos p_37694_, int maxWaves,int str
     }
-    public ProwlerRaid createProwlerRaid(ServerLevel level, BlockPos pos, int mW, int str){
+    public ProwlerRaid createProwlerRaid(ServerLevel level, BlockPos pos, byte mW, int str){
         return new ProwlerRaid(++nextID,level,pos,mW,str);//int p_37692_, ServerLevel p_37693_, BlockPos p_37694_, int maxWaves,int str
     }
     public ProwlerRaid getNearbyProwlerRaid(ServerLevel level,LevelCapability cap, BlockPos pos){
@@ -48,6 +47,7 @@ public class CARaids {
 
     public void addRaidToMap(ProwlerRaid raid){
         prowlerRaids.put(raid.getRaidID(),raid);
+        System.out.println("RAID AT " + raid.getCenterPos());
     }
     public static ProwlerRaid loadProwlerRaids(ServerLevel p_150236_, CompoundTag p_150237_) {
         Raids raids = new Raids(p_150236_);
@@ -86,5 +86,56 @@ public class CARaids {
     public void removeProwlerRaid(int id){
         prowlerRaids.remove(id);
     }
+/*
 
+    private boolean active;
+
+ */
+    public CompoundTag saveRaids(){
+        CompoundTag parentTag=new CompoundTag();
+        ListTag pRaids=new ListTag();
+        for (ProwlerRaid prowlerRaid:prowlerRaids.values()) {
+            CompoundTag compoundTag=new CompoundTag();
+            compoundTag.putInt("id",prowlerRaid.getRaidID());
+            compoundTag.putInt("str",prowlerRaid.getRaidStrength());
+            compoundTag.putByte("currentWave",prowlerRaid.getCurrentWave());
+            compoundTag.putByte("maxWave",prowlerRaid.getMaxWave());
+            compoundTag.putInt("status",prowlerRaid.getStatus().ordinal());
+            compoundTag.putInt("delayTicks",prowlerRaid.getDelayTicks());
+            compoundTag.putInt("waveInterval",prowlerRaid.getNextWaveInterval());
+            CompoundTag pos=new CompoundTag();
+            BlockPos center=prowlerRaid.getCenterPos();
+            pos.putInt("x",center.getX());
+            pos.putInt("y",center.getY());
+            pos.putInt("z",center.getZ());
+            compoundTag.put("center",pos);
+            compoundTag.putLong("wtt",prowlerRaid.getWarningTriggerTime());
+            pRaids.add(compoundTag);
+        }
+        //prowlerRaids.add()
+        parentTag.put("prowler",pRaids);
+        return parentTag;
+    }
+
+    public void loadRaids(CompoundTag tag,ServerLevel serverLevel){
+        if (serverLevel!=null){
+            ListTag prowlerRaids=(ListTag)tag.get("prowler");
+            if (prowlerRaids!=null){
+                for (int i=0;i<prowlerRaids.size();i++){
+                    CompoundTag pTag=prowlerRaids.getCompound(i);
+                    CompoundTag pos=pTag.getCompound("center");
+                    ProwlerRaid prowlerRaid=new ProwlerRaid(pTag.getInt("id"),serverLevel,
+                            new BlockPos(pos.getInt("x"),pos.getInt("y"),pos.getInt("z")),
+                            pTag.getByte("maxWave"),pTag.getInt(("str")));
+                    prowlerRaid.setStatus(AbstractCARaid.RaidStatus.values()[pTag.getInt(("status"))]);
+                    prowlerRaid.setWarningTriggerTime(pTag.getLong("wtt"));
+                    prowlerRaid.setNextWaveInterval(pTag.getInt("waveInterval"));
+                    prowlerRaid.setCurrentWave(pTag.getByte("currentWave"));
+                    prowlerRaid.setDelayTicks(pTag.getInt("delayTicks"));
+                    addRaidToMap(prowlerRaid);
+                }
+            }
+        }
+
+    }
 }

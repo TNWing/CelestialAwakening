@@ -34,7 +34,7 @@ public class SearedStoneAxe extends AxeItem implements SearedStoneTool{
     public boolean mineBlock(ItemStack stack, Level p_43283_, BlockState p_43284_, BlockPos p_43285_, LivingEntity p_43286_) {
         if (p_43284_.getDestroySpeed(p_43283_, p_43285_) != 0.0F) {
             int breakAmt=1;
-            if (getUpgradeTier(stack)>1 && (stack.getDamageValue()/(float)stack.getMaxDamage())<=0.1f) {
+            if (getUpgradeTier(stack)>1 && (stack.getDamageValue()/(float)stack.getMaxDamage())>=0.9f) {
                 breakAmt = 0;
             }
             stack.hurtAndBreak(breakAmt, p_43286_, (p_43276_) -> {
@@ -47,11 +47,16 @@ public class SearedStoneAxe extends AxeItem implements SearedStoneTool{
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd=super.getDestroySpeed(itemStack, blockState);
         if (getUpgradeTier(itemStack)>0 && blockState.is(BlockTags.LOGS)){
-            if (getUpgradeTier(itemStack)>1 && (itemStack.getDamageValue()/(float)itemStack.getMaxDamage())>0.1f){
-                spd*= 3;
+            if (getUpgradeTier(itemStack)>1){
+                if (((float)itemStack.getDamageValue()/(float)itemStack.getMaxDamage())<0.9f){
+                    spd*= 3;
+                }
+                else{
+                    spd*= 1.5f;
+                }
             }
             else{
-                spd*= 1.5f;
+                spd*=3;
             }
         }
         return spd;

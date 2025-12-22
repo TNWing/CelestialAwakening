@@ -512,9 +512,7 @@ public class EventManager {
                     if (!player.getCooldowns().isOnCooldown(stack.getItem())){
                         int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
                         if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
-                            System.out.println("PRE gaia link " + amt);
                             amt*=1f-0.1f*lvl;
-                            System.out.println("Post gaia link " + amt);
                         }
                     }
                     else{//REMNANTS
@@ -526,9 +524,7 @@ public class EventManager {
                     if (!player.getCooldowns().isOnCooldown(stack.getItem())){
                         int lvl=stack.getEnchantmentLevel(EnchantmentInit.GAIA_LINK.get());
                         if( player.getUseItem()!=stack && lvl>0){//GAIA LINK
-                            System.out.println("PRE gaia link " + amt);
                             amt*=1f-0.1f*lvl;
-                            System.out.println("Post gaia link " + amt);
                         }
                     }
                     else{

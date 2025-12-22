@@ -1,0 +1,27 @@
+{
+  "type": "celestial_awakening:enchanted_book",
+  "category": "misc",
+  "pattern": [
+    "ISI",
+    "SBS",
+    "ISI"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "celestial_awakening:scorched_stone"
+    }
+  },
+  "result": {
+    "item": "minecraft:enchanted_book",
+    "enchantment": "celestial_awakening:gaia_link",
+    "level": 1,
+    "count": 1
+
+  }
+}

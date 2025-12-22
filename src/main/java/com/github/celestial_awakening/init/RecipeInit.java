@@ -2,10 +2,7 @@ package com.github.celestial_awakening.init;
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.recipes.CABrewingRecipe;
-import com.github.celestial_awakening.recipes.serializers.BasicEnchantedSmithingSerializer;
-import com.github.celestial_awakening.recipes.serializers.LifeFragFoodSerializer;
-import com.github.celestial_awakening.recipes.serializers.LunarScaleRepairSerializer;
-import com.github.celestial_awakening.recipes.serializers.SearedStoneToolsSmithingSerializer;
+import com.github.celestial_awakening.recipes.serializers.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,6 +26,8 @@ public class RecipeInit {
     public static final RegistryObject<RecipeSerializer> ENCHANT_SMITHING_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("enchant_smithing",()->new BasicEnchantedSmithingSerializer());
 
     public static final RegistryObject<RecipeSerializer> SEARED_STONE_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("seared_stone_smithing",()->new SearedStoneToolsSmithingSerializer());
+
+    public static final RegistryObject<RecipeSerializer> ENCHANTED_BOOK_SERIALIZER=RECIPE_SERIALIZER_DEFERRED_REGISTER.register("enchanted_book",()->new EnchantedBookSerializer());
 
     public static void registerBrewingRecipes(){
         createBrewingRecipeVariants(Potions.THICK,ItemInit.MOONSTONE.get(),PotionInit.LUNAR_GLEAM.get());

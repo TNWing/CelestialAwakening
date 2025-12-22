@@ -2,9 +2,9 @@
   "type": "celestial_awakening:enchanted_book",
   "category": "misc",
   "pattern": [
-    "ISI",
-    "SBS",
-    "ISI"
+    "IGI",
+    "GBG",
+    "IGI"
   ],
   "key": {
     "B": {
@@ -13,8 +13,8 @@
     "I": {
       "item": "minecraft:iron_ingot"
     },
-    "S": {
-      "item": "celestial_awakening:scorched_stone"
+    "G": {
+      "item": "celestial_awakening:gaia_plate"
     }
   },
   "result": {

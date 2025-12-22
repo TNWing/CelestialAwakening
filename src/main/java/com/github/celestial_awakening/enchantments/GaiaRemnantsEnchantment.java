@@ -5,7 +5,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.MendingEnchantment;
 import net.minecraftforge.common.extensions.IForgeEnchantment;
 
 public class GaiaRemnantsEnchantment extends Enchantment implements IForgeEnchantment {

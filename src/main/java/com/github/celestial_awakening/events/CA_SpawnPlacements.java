@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import net.minecraft.core.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.LightLayer;
@@ -58,6 +60,19 @@ public class CA_SpawnPlacements {
             return false;
         }
     };
+
+    static  <T extends Mob> SpawnPlacements.SpawnPredicate wip_enabled(SpawnPlacements.SpawnPredicate<T> pred){
+        return new SpawnPlacements.SpawnPredicate() {
+            @Override
+            public boolean test(EntityType p_217081_, ServerLevelAccessor p_217082_, MobSpawnType p_217083_, BlockPos p_217084_, RandomSource p_217085_) {
+                if (Config.wipEnabled){
+                    return pred.test(p_217081_, p_217082_, p_217083_, p_217084_, p_217085_);
+                }
+                return Config.wipEnabled;
+            }
+        };
+    }
+
 //SpawnPlacements.Type.IN_LAVA
     static SpawnPlacements.SpawnPredicate lava_daySurface =new SpawnPlacements.SpawnPredicate() {
         //copied from strider
@@ -84,7 +99,7 @@ public class CA_SpawnPlacements {
 
             if (blockPos.getY()<=serverLevelAccessor.getLevel().getMinBuildHeight()+20){
                 optional.ifPresent(cap->{
-                    if (cap.deepLayerCounter>=10){
+                    if (cap.deepLayerCounter>=50){
                         atomicBoolean.set(true);
                     }
                 });

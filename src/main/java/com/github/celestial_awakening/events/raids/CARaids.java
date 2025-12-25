@@ -6,7 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.raid.Raids;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;

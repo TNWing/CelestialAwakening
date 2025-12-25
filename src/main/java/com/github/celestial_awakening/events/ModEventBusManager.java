@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.events;
 
 import com.github.celestial_awakening.CelestialAwakening;
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
@@ -21,7 +22,9 @@ public class ModEventBusManager {
     @SubscribeEvent
     public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
         event.register(EntityInit.NIGHT_PROWLER_WHELP.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
-        //event.register(EntityInit.SOLMANDER_NEWT.get(), SpawnPlacements.Type.IN_LAVA,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.lava_daySurface,SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(EntityInit.SOLMANDER_NEWT.get(), SpawnPlacements.Type.IN_LAVA,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.wip_enabled(CA_SpawnPlacements.lava_daySurface),SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(EntityInit.CORE_GUARDIAN.get(), SpawnPlacements.Type.ON_GROUND,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.wip_enabled(CA_SpawnPlacements.deepLayerSpawn),SpawnPlacementRegisterEvent.Operation.REPLACE);
+
     }
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){//called before config load

@@ -87,6 +87,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.github.celestial_awakening.nbt_strings.NBTStrings.*;
@@ -487,6 +488,7 @@ public class EventManager {
             }
         }
     }
+
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event){
         LivingEntity target=event.getEntity();
@@ -769,7 +771,19 @@ public class EventManager {
                 int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
-                    cap.raids.tick();
+                    if (Config.wipEnabled){
+                        cap.raids.tick();
+                        if (event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%2000==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
+                            cap.increaseDeepLayerCounter(5*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
+                                @Override
+                                public boolean test(ServerPlayer serverPlayer) {
+                                    return serverPlayer.getY()<=0;
+                                }
+                            }).size());
+                        }
+                    }
+
+
                     if (cap.divinerEyeFromState>-1 && cap.divinerEyeToState>-1){
                         /*
                         if (time % 100==0){

@@ -54,7 +54,7 @@ public class ItemInit {
     public static final RegistryObject<Item> RADIANT_BOOTS = ITEMS.register("radiant_boots",
             () -> new CustomArmorItem(CustomArmorMaterial.RADIANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
-    public static final RegistryObject<Item> COSMIC_PEARL=ITEMS.register("cosmic_pearl",()->new CosmicPearl(new Item.Properties().stacksTo(16),"tooltip_celestial_awakening_cosmic_pearl"));
+    //public static final RegistryObject<Item> COSMIC_PEARL=ITEMS.register("cosmic_pearl",()->new CosmicPearl(new Item.Properties().stacksTo(16),"tooltip_celestial_awakening_cosmic_pearl"));
 
     public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register ("scorched_stone",()->new BlockItem(BlockInit.SCORCHED_STONE.get(),new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),10.5f,-3.2f));
@@ -71,6 +71,8 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> GAIA_PLATE=ITEMS.register("gaia_plate",() ->new Item(new Item.Properties()));
+    public static final RegistryObject<Item> TERRA_GLAIVE=ITEMS.register("terra_glaive",()->new TerraGlaive(new Item.Properties().stacksTo(1).durability(800),8.5f,-2.9f));
+
 
     public static final RegistryObject<Item> SHIMMER_CUBE = ITEMS.register("shimmer_cube", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));

@@ -143,8 +143,8 @@ make this a separate class and init the values based on config vals later down t
             this.type=t;
             waveMap=new HashMap<>();
         }
-        public void setWaveVals(Integer num,ProwlerVals vals){
-            waveMap.put(num,vals);
+        public void setWaveVals(Integer waveNum,ProwlerVals vals){
+            waveMap.put(waveNum,vals);
         }
 
     }
@@ -154,26 +154,35 @@ make this a separate class and init the values based on config vals later down t
 
     public static class ProwlerVals{
         int reps;
-        int baseVal;
-        int infusementBonus;
-        int rollChance;
-        int maxAmt;
+        int minUnitVal;
+        int minUnitCnt;
+        int bonusUnitCnt;
+        int bonusUnitVal;
+        int infusementCost;
+        int bonusRollChance;
         public ProwlerVals(){
             reps=0;
         }
         public ProwlerVals(int r,int bV, int i, int rC, int max){
             reps=r;
-            baseVal=bV;
-            infusementBonus=i;
-            rollChance=rC;
-            maxAmt=max;
+            minUnitVal =bV;
+            infusementCost =i;
+            bonusRollChance=rC;
+        }
+        public ProwlerVals(int reps,int minVal,int minCnt,int bonusVal,int bonusCnt, int bonusRC, int iCost){
+            this.reps=reps;
+            this.minUnitVal=minVal;
+            this.minUnitCnt=minCnt;
+            this.bonusUnitVal=bonusVal;
+            this.bonusUnitCnt=bonusCnt;
+            this.bonusRollChance=bonusRC;
+            this.infusementCost=iCost;
         }
         public ProwlerVals(Integer[] vals){
             reps=vals[0];
-            baseVal=vals[1];
-            infusementBonus=vals[2];
-            rollChance=vals[3];
-            maxAmt=vals[4];
+            minUnitVal =vals[1];
+            infusementCost =vals[2];
+            bonusRollChance=vals[3];
         }
     }
 
@@ -183,10 +192,12 @@ make this a separate class and init the values based on config vals later down t
     /*
     maps wave to prowlerType
      */
-    private HashMap<Integer,List<ProwlerType>> prowlerMap=new HashMap<>();
+    private static HashMap<Integer,List<ProwlerType>> prowlerMap=new HashMap<>();
 
     public static void initProwlerRaidData(){
-        ProwlerRaid.ProwlerType.WHELP.setWaveVals(0,new ProwlerVals());
+        ProwlerRaid.ProwlerType.WHELP.setWaveVals(0,new ProwlerVals(1,5,4,100,5));
+
+        prowlerMap.put(0,List.of(ProwlerType.WHELP));
     }
 
 
@@ -200,6 +211,7 @@ make this a separate class and init the values based on config vals later down t
         this.setCenterPos(blockPos);
         this.maxWave=maxWaves;
         this.warningTriggerTime=serverLevel.getGameTime();
+        this.setStatus(RaidStatus.WAITING);
         //this.numGroups = this.getNumGroups(serverLevel.getDifficulty());
         //this.status = Raid.RaidStatus.ONGOING;
     }
@@ -300,32 +312,57 @@ Config should have these settings
     }
 
     public void tick() {
-        System.out.println("IS ACTIVE   " + isActive());
         if (isActive()){
-            if (this.getServerLevel().getGameTime()>=warningTriggerTime+delayTicks){//not ready
-                if ((this.getServerLevel().getGameTime()-(warningTriggerTime+delayTicks)%120)==0){
-                /*
-                the floats represent vol & pitch (i think)
-                the bool represents idk, but most instances seem to be false anyway
-                 */
-                    System.out.println("PLAY warning SOUND");
-                    this.getServerLevel().playLocalSound(getCenterPos(), SoundEvents.WOLF_GROWL, SoundSource.HOSTILE,0.4f,1f,false);
+            if (this.getServerLevel().getGameTime()<warningTriggerTime+delayTicks){//not ready
+                if (((warningTriggerTime+delayTicks-this.getServerLevel().getGameTime())%120)==0){
+                    this.getServerLevel().playSound(null,getCenterPos(), SoundEvents.WOLF_GROWL, SoundSource.HOSTILE,0.4f,1f);
                 }
 
             }
             else{
-                System.out.println("DEC WAVE INTERVAL");
                 nextWaveInterval--;
                 if (prowlers.isEmpty() && nextWaveInterval>80){
-                    System.out.println("accelerate new wave");
                     nextWaveInterval=80;
             /*
             expedite the spawning if all prowlers are dead
              */
                 }
                 if (nextWaveInterval<=0){
-                    System.out.println("SHOULD SPAWN STUFF");
+                    /*
+                    So given a wave # and strength, do the following
+Loop over the prowlertypes until no more strength
+For each prowler type
+Generate a min amount of prowlers (when possible. Otherwise
+If any strength left over, rolls infusement on each
+After that, roll additional prowlers for the rep, and roll infusement individually
+After a rep of prowlers is generated, if there is any leftover strength, perform rolls on infusement
+There should be a cap on the max # of infusements per rep
+So example:
+Start off with 24 strength, min of 3 prowlers for this rep (3 per prowler), infusement requires 2 strength per unit, max of 2 infusements, up to 2 additional prowlers (rng), 2 strength per additional unit
+Check to see if can create full rep. We can, so create 3 prowlers
+Create 3 prowlers, now have 15 strength
+Roll infusements on prowlers, 1 successful infusement, now have 13 strength
+Create prowler, successful infusement, now has 9 strength
+Create prowler, cannot infuse again, now has 7 strength
+Check to see if we can create full rep. We cant, but can create 2 prowlers. So we create them, with 1 strength leftover (can’t be used for anything so we done)
+
+                     */
                     nextWaveInterval=700;
+                    List<ProwlerType> prowlerTypes=prowlerMap.get(currentWave);
+                    if (prowlerTypes!=null){
+                        int strength=getRaidStrength();
+                        while (strength>0){
+                            for(ProwlerType type:prowlerTypes){
+                                ProwlerVals vals=type.waveMap.get(currentWave);
+                                for (int r=0;r<vals.reps;r++){
+
+                                }
+                            }
+                            strength--;//just to prevent it from endlessly looping for now
+                        }
+                    }
+
+
                     /*
                     spawn stuff
                      */

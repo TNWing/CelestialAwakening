@@ -25,6 +25,8 @@ public class Config
 
     static final ForgeConfigSpec.BooleanValue OUTOFCOMBAT_HEAL;
 
+    static final ForgeConfigSpec.BooleanValue ENABLE_WIP_CONTENT;
+
 
     private static final ForgeConfigSpec.ConfigValue<Double> SUNSTONE_LEAVES_RATE;
     private static final ForgeConfigSpec.ConfigValue<Double> SUNSTONE_GRASS_RATE;
@@ -100,7 +102,7 @@ maybe use json files instead since it'll look neater?
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
         builder.comment("Celestial Awakening Config");
-
+        ENABLE_WIP_CONTENT= builder.comment("If true, enables functional content that is incomplete (such as items with missing textures, or enemies with only partially finished AI.\nDefault: false").define("enable_wip",false);
 
         builder.push("Material_Config");
             SUNSTONE_LEAVES_RATE=builder.comment("Base % drop rate of sunstones from tree leaf blocks.\nDefault: 6.5").defineInRange("sunstone_leaves",6.5d,0,100d);
@@ -211,6 +213,7 @@ maybe use json files instead since it'll look neater?
     static final ForgeConfigSpec SPEC =  BUILDER.build();
 
     public static boolean mobCombatRegen=true;
+    public static boolean wipEnabled=false;
 
 
     public static double mobHPScale=1;
@@ -317,6 +320,8 @@ maybe use json files instead since it'll look neater?
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        //event.getConfig().get
+        wipEnabled=ENABLE_WIP_CONTENT.get();
         mobCombatRegen= OUTOFCOMBAT_HEAL.get();
 
         transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());

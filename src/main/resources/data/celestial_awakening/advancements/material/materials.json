@@ -1,0 +1,30 @@
+{
+  "parent": "celestial_awakening:root",
+  "criteria": {
+    "base": {
+      "conditions": {
+      },
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/end.png",
+    "description": {
+      "translate": "advancement.celestial_awakening.materials.description"
+    },
+    "icon": {
+      "item": "minecraft:end_stone"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.celestial_awakening.materials.title"
+    }
+  },
+  "requirements": [
+    [
+      "base"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

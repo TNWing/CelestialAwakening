@@ -129,7 +129,8 @@
 
   "advancement.celestial_awakening.root.title":"Celestial Awakening",
   "advancement.celestial_awakening.root.description":"",
-
+  "advancement.celestial_awakening.materials.title":"Special Materials",
+  "advancement.celestial_awakening.materials.description":"",
   "advancement.celestial_awakening.obtain_life_frag.title":"Gift of Light",
   "advancement.celestial_awakening.obtain_life_frag.description":"Let the remains of an animal degrade into raw life energy",
   "advancement.celestial_awakening.obtain_lunar_scale.title":"Lunar Tide",
@@ -144,6 +145,10 @@
   "advancement.celestial_awakening.obtain_dying_light_essence.description":"Rescue the remnants of a star from its captor",
   "advancement.celestial_awakening.obtain_midnight_iron.title": "When the Clock Strikes Twelve",
   "advancement.celestial_awakening.obtain_midnight_iron.description": "Observe the transformation of a common metal",
+  "advancement.celestial_awakening.obtain_scorched_stone.title": "Magmatic Transmutation",
+  "advancement.celestial_awakening.obtain_scorched_stone.description": "What doesn't destroy you makes you stronger.",
+  "advancement.celestial_awakening.obtain_gaia_plate.title": "Pressure Sandwich",
+  "advancement.celestial_awakening.obtain_gaia_plate.description": "Steps to make an iron-rich plate\n1. Take your filling and put it between two hot rocks.\n2. Add a dark rock to the opposite side of the flaming rocks.\n3. Squish it to ensure it sticks together.",
 
 
   "advancement.celestial_awakening.prowler_raid.title":"Constant Threat",

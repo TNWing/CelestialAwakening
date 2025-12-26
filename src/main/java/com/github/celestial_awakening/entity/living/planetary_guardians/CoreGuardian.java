@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.entity.living.planetary_guardians;
 
+import com.github.celestial_awakening.entity.combat.CoreGuardianDeepYTargetGoal;
 import com.github.celestial_awakening.entity.combat.planetary_guardians.core_guardian.CoreGuardianCombatAIGoal;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class CoreGuardian extends AbstractGuardian{
@@ -59,6 +61,7 @@ public class CoreGuardian extends AbstractGuardian{
 
     protected void registerGoals() {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(1, new CoreGuardianDeepYTargetGoal(this, Player.class, true));
         this.goalSelector.addGoal(5,new CoreGuardianCombatAIGoal(this));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D, 60));
     }
@@ -67,7 +70,6 @@ public class CoreGuardian extends AbstractGuardian{
     public boolean hurt(DamageSource source, float amt){
         if (!(this.level().isClientSide)) {
             float mult=(1f-hardenStacks/(hardenStacks+2f) + 0.1f*hardenShieldBrokenCnt);
-            System.out.println("CORE guard mult " + mult);
             amt=amt*mult;
         }
 

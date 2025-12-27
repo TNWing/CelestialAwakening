@@ -87,7 +87,7 @@ public class LunarEvents {
                         else if (create){
                             cap.setProwlerRaidCounter((short) 0);
                             byte maxWaves=1;
-                            int strength=100;
+                            int strength=24;
                             raid=levelCap.raids.createProwlerRaid(level,pos,maxWaves,strength);
                             levelCap.raids.addRaidToMap(raid);
                             CA_Triggers.PROWLER_RAID_TRIGGER.trigger(player);

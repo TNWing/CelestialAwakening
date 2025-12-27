@@ -12,6 +12,7 @@ import com.github.celestial_awakening.events.armor_events.*;
 import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
+import com.github.celestial_awakening.events.raids.ProwlerRaid;
 import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
@@ -77,6 +78,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -167,6 +169,11 @@ public class EventManager {
             .build();
 
     private static final ParticleManager particleManager=ParticleManager.createParticleManager();
+
+    @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event) {
+        ProwlerRaid.initProwlerRaidData();
+    }
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event){

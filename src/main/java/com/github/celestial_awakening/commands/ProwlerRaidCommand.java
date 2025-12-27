@@ -50,7 +50,7 @@ public class ProwlerRaidCommand {
         LazyOptional<LevelCapability> levelOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
         levelOptional.ifPresent(cap->{
             for(ServerPlayer serverPlayer : entities) {
-                cap.raids.getOrCreateProwlerRaid(serverLevel,cap,serverPlayer.blockPosition(), (byte) 1,1);
+                cap.raids.getOrCreateProwlerRaid(serverLevel,cap,serverPlayer.blockPosition(), (byte) 1,21);
             }
         });
 

@@ -2,6 +2,7 @@ package com.github.celestial_awakening.events.raids;
 
 import com.github.celestial_awakening.capabilities.LevelCapabilityProvider;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
+import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import com.github.celestial_awakening.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,16 +10,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProwlerRaid extends AbstractCARaid{
     /*
@@ -125,7 +127,12 @@ when it loops, adds an additional roll to determine if the unit is added to grou
 make this a separate class and init the values based on config vals later down the line
  */
     public enum ProwlerType{
-        WHELP(EntityInit.NIGHT_PROWLER_WHELP.get());
+        WHELP(EntityInit.NIGHT_PROWLER_WHELP.get()){
+            @Override
+            public AbstractNightProwler createProwler(ServerLevel serverLevel) {
+                return new ProwlerWhelp(EntityInit.NIGHT_PROWLER_WHELP.get(),serverLevel);
+            }
+        };
         /*
         should include
         -entity type
@@ -138,12 +145,14 @@ make this a separate class and init the values based on config vals later down t
          */
         ;
         EntityType type;
-        HashMap<Integer,ProwlerVals> waveMap;
+        HashMap<Byte,ProwlerVals> waveMap;
         ProwlerType(EntityType t){
             this.type=t;
             waveMap=new HashMap<>();
         }
-        public void setWaveVals(Integer waveNum,ProwlerVals vals){
+
+        public abstract AbstractNightProwler createProwler(ServerLevel serverLevel);
+        public void setWaveVals(Byte waveNum,ProwlerVals vals){
             waveMap.put(waveNum,vals);
         }
 
@@ -159,17 +168,13 @@ make this a separate class and init the values based on config vals later down t
         int bonusUnitCnt;
         int bonusUnitVal;
         int infusementCost;
+        int infusementRollChance;
+        int infuseLim;
         int bonusRollChance;
         public ProwlerVals(){
             reps=0;
         }
-        public ProwlerVals(int r,int bV, int i, int rC, int max){
-            reps=r;
-            minUnitVal =bV;
-            infusementCost =i;
-            bonusRollChance=rC;
-        }
-        public ProwlerVals(int reps,int minVal,int minCnt,int bonusVal,int bonusCnt, int bonusRC, int iCost){
+        public ProwlerVals(int reps,int minVal,int minCnt,int bonusVal,int bonusCnt, int bonusRC, int iCost, int iLim, int iRC){
             this.reps=reps;
             this.minUnitVal=minVal;
             this.minUnitCnt=minCnt;
@@ -177,12 +182,8 @@ make this a separate class and init the values based on config vals later down t
             this.bonusUnitCnt=bonusCnt;
             this.bonusRollChance=bonusRC;
             this.infusementCost=iCost;
-        }
-        public ProwlerVals(Integer[] vals){
-            reps=vals[0];
-            minUnitVal =vals[1];
-            infusementCost =vals[2];
-            bonusRollChance=vals[3];
+            this.infusementRollChance=iRC;
+            this.infuseLim=iLim;
         }
     }
 
@@ -192,12 +193,13 @@ make this a separate class and init the values based on config vals later down t
     /*
     maps wave to prowlerType
      */
-    private static HashMap<Integer,List<ProwlerType>> prowlerMap=new HashMap<>();
+private static final Map<Byte, List<ProwlerType>> prowlerMap =new HashMap<>();
 
     public static void initProwlerRaidData(){
-        ProwlerRaid.ProwlerType.WHELP.setWaveVals(0,new ProwlerVals(1,5,4,100,5));
-
-        prowlerMap.put(0,List.of(ProwlerType.WHELP));
+        prowlerMap.clear();
+        ProwlerVals p=new ProwlerVals(1,3,3,2,2,20,2,2,15);
+        ProwlerRaid.ProwlerType.WHELP.setWaveVals((byte) 0,p);
+        prowlerMap.put((byte) 0,List.of(ProwlerType.WHELP));
     }
 
 
@@ -275,12 +277,6 @@ Config should have these settings
          */
         return tag;
     }
-    public List<AbstractNightProwler> prowlersToSpawn(){
-        int strength=this.getRaidStrength();
-        List<AbstractNightProwler> prowlers=new ArrayList<>();
-
-        return prowlers;
-    }
     /*
     code used to determine valid spawning blocks for illager raids
      */
@@ -311,6 +307,64 @@ Config should have these settings
         return null;
     }
 
+    private BlockPos findRandomSpawnCenter(RandomSource randomSource, BlockPos center, int range){
+        /*
+                    ArrayList<BlockPos> applicableBlocks=new ArrayList<>();
+            for (int cx=-1;cx<=1;cx++){
+                for (int cz=-1;cz<=1;cz++){
+                    LevelChunk chunk=level.getChunk(chunkPos.x+cx,chunkPos.z+cz);
+                    for (int x=0;x<16;x++){
+                        for (int z=0;z<16;z++){
+                            //for future changes
+                            //instead of the 16 by 16
+                            //check each 4 by 4 square in a chunk
+                            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, chunk.getPos().x*16+x, chunk.getPos().z*16+z);//highest block
+                            if (Math.abs(y-targetCenter.getY())<=15){
+                                BlockPos blockPos=new BlockPos(chunk.getPos().x*16+x,y,chunk.getPos().z*16+z);
+                                applicableBlocks.add(blockPos);
+                            }
+                        }
+                    }
+                }
+            }
+         */
+        //attempts to find a 3 by 3 area to spawn the entities
+        ArrayList<BlockPos> applicableBlocks=new ArrayList<>();
+        for (int x=-range;x<=range;x+=2){
+            for (int z=-range;z<=range;z+=2){
+                int cX=center.getX()+x;
+                int cZ=center.getZ()+z;
+                int y=getServerLevel().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,cX,cZ);
+                boolean valid=true;
+                if (Math.abs(y-center.getY())<=12){
+                  //if it finds a valid blockpos, offset both the x and z by like an addition 1 or 2
+                    for (int xo=-1;xo<=1;xo++){
+                        for (int zo=-1;zo<=1;zo++){
+                            if (!valid){
+                                break;
+                            }
+                            for (int yo=0;yo<=2;yo++){
+                                BlockPos pos=new BlockPos(cX,y+yo,cZ);
+                                if (!getServerLevel().getBlockState(pos).isAir()){
+                                    valid=false;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+                if (valid){
+                    applicableBlocks.add(new BlockPos(cX,y,cZ));
+                }
+            }
+        }
+        if (!applicableBlocks.isEmpty()){
+            return applicableBlocks.get(randomSource.nextInt(applicableBlocks.size()));
+        }
+        return null;
+    }
+
     public void tick() {
         if (isActive()){
             if (this.getServerLevel().getGameTime()<warningTriggerTime+delayTicks){//not ready
@@ -328,6 +382,7 @@ Config should have these settings
              */
                 }
                 if (nextWaveInterval<=0){
+                    System.out.println("Start spawning");
                     /*
                     So given a wave # and strength, do the following
 Loop over the prowlertypes until no more strength
@@ -348,24 +403,72 @@ Check to see if we can create full rep. We cant, but can create 2 prowlers. So w
 
                      */
                     nextWaveInterval=700;
+                    List<AbstractNightProwler> prowlersToSpawn=new ArrayList<>();
                     List<ProwlerType> prowlerTypes=prowlerMap.get(currentWave);
+                    System.out.println("Map identity: " + System.identityHashCode(prowlerMap));
+                    for (Map.Entry<Byte,List<ProwlerType>> entry:prowlerMap.entrySet()) {
+                        //System.out.println("Wave # " + entry.getKey() +"  has # of types " + entry.getValue());
+                        System.out.println("Wave # " + entry.getKey() +
+                                "  has # of types size=" + entry.getValue().size());
+                        System.out.println(prowlerMap.get(currentWave));
+                        System.out.println(prowlerMap.get(entry.getKey()));
+                        System.out.println(entry.getKey()==currentWave);
+                    }
+                    System.out.println("Keys in map: " + prowlerMap.keySet());
+                    System.out.println("Current wave: " + currentWave);
+                    System.out.println("empty2? " + prowlerMap.get(currentWave));
+                    System.out.println("Map identity: " + System.identityHashCode(prowlerMap));
                     if (prowlerTypes!=null){
+                        System.out.println("GETTIJNG P TYPES");
                         int strength=getRaidStrength();
                         while (strength>0){
-                            for(ProwlerType type:prowlerTypes){
-                                ProwlerVals vals=type.waveMap.get(currentWave);
+                            for(ProwlerType pType:prowlerTypes){
+                                ProwlerVals vals=pType.waveMap.get(currentWave);
                                 for (int r=0;r<vals.reps;r++){
-
+                                    int minCnt=Math.min(vals.minUnitCnt,strength/vals.minUnitVal);
+                                    strength-=minCnt*vals.minUnitVal;
+                                    int infuseCnt=0;
+                                    for (int c=0;c<minCnt;c++){
+                                        AbstractNightProwler prowler=pType.createProwler(getServerLevel());
+                                        if (infuseCnt< vals.infuseLim && strength>=vals.infusementCost){
+                                            if (getServerLevel().getRandom().nextInt(100)<vals.infusementRollChance){
+                                                infuseCnt++;
+                                                strength-=vals.infusementCost;
+                                                if (getServerLevel().getRandom().nextBoolean()){
+                                                    prowler.setInfuse(1);
+                                                }
+                                                else{
+                                                    prowler.setInfuse(-1);
+                                                }
+                                            }
+                                        }
+                                        prowlersToSpawn.add(prowler);
+                                    }
+                                    for (int b=0;b<vals.bonusUnitCnt;b++){//TODO
+                                        if (strength<vals.bonusUnitVal){
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (strength<=0){
+                                    break;
                                 }
                             }
                             strength--;//just to prevent it from endlessly looping for now
                         }
                     }
+                    if (!prowlersToSpawn.isEmpty()){
+                        System.out.println("Spawning prowler cnt " + prowlersToSpawn.size());
+                        BlockPos spt=findRandomSpawnCenter(getServerLevel().getRandom(),centerPos,24);
+                        if (spt!=null){
+                            for (AbstractNightProwler prowler:prowlersToSpawn) {
+                                prowler.setPos(spt.getCenter());
+                                getServerLevel().addFreshEntity(prowler);
+                            }
 
+                        }
 
-                    /*
-                    spawn stuff
-                     */
+                    }
                     currentWave++;
 
                     if (currentWave>=maxWave){
@@ -373,8 +476,6 @@ Check to see if we can create full rep. We cant, but can create 2 prowlers. So w
                             cap.raids.removeProwlerRaid(this.getRaidID());
                         });
                     }
-
-
                 }
             }
         }

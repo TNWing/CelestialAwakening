@@ -187,6 +187,9 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     public int getInfuse(){
         return this.entityData.get(INFUSE);
     }
+    public void setInfuse(int i){
+        this.entityData.set(INFUSE,i);
+    }
 
     public int getRaidValue(){
         return this.raidValue;

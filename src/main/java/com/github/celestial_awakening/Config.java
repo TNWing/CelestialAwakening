@@ -107,7 +107,7 @@ maybe use json files instead since it'll look neater?
 
         builder.push("Material_Config");
             SUNSTONE_LEAVES_RATE=builder.comment("Base % drop rate of sunstones from tree leaf blocks.\nDefault: 6.5").defineInRange("sunstone_leaves",6.5d,0,100d);
-            SUNSTONE_GRASS_RATE=builder.comment("Base % drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3").defineInRange("sunstone_leaves",3d,0,100d);
+            SUNSTONE_GRASS_RATE=builder.comment("Base % drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3").defineInRange("sunstone_grass",3d,0,100d);
             LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
             MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 19").defineInRange("moonstone_lim",19,-1,Integer.MAX_VALUE);
             MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);

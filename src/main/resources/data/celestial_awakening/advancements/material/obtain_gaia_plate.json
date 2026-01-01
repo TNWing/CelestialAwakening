@@ -1,0 +1,32 @@
+{
+  "parent": "celestial_awakening:material/materials",
+  "criteria": {
+    "mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "celestial_awakening:gaia_plate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.celestial_awakening.obtain_gaia_plate.description"
+    },
+    "icon": {
+      "item": "celestial_awakening:gaia_plate"
+    },
+    "title": {
+      "translate": "advancement.celestial_awakening.obtain_gaia_plate.title"
+    }
+  },
+  "requirements": [
+    ["mat"]
+  ],
+  "sends_telemetry_event": false
+}

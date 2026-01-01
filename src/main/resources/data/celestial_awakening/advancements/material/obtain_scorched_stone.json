@@ -1,0 +1,32 @@
+{
+  "parent": "celestial_awakening:material/materials",
+  "criteria": {
+    "mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "celestial_awakening:scorched_stone"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.celestial_awakening.obtain_scorched_stone.description"
+    },
+    "icon": {
+      "item": "celestial_awakening:scorched_stone"
+    },
+    "title": {
+      "translate": "advancement.celestial_awakening.obtain_scorched_stone.title"
+    }
+  },
+  "requirements": [
+    ["mat"]
+  ],
+  "sends_telemetry_event": false
+}

@@ -19,7 +19,6 @@ public class CARaids {
     private int nextID=0;
     public void tick() {
         Iterator<ProwlerRaid> prowlerRaidIterator = this.prowlerRaids.values().iterator();
-
         while(prowlerRaidIterator.hasNext()) {
             ProwlerRaid raid=prowlerRaidIterator.next();
             if (raid.isDone()){
@@ -43,13 +42,16 @@ public class CARaids {
         return new ProwlerRaid(++nextID,level,pos,mW,str);//int p_37692_, ServerLevel p_37693_, BlockPos p_37694_, int maxWaves,int str
     }
     public ProwlerRaid getNearbyProwlerRaid(ServerLevel level,LevelCapability cap, BlockPos pos){
+        System.out.println(cap.raids.prowlerRaids.size() + " IS P RAID SIZE");
         ProwlerRaid raid= cap.raids.getNearbyProwlerRaid(pos,6400);
+        System.out.println("Found :  " + raid);
         return raid;
     }
 
     public void addRaidToMap(ProwlerRaid raid){
         prowlerRaids.put(raid.getRaidID(),raid);
         System.out.println("RAID AT " + raid.getCenterPos());
+        System.out.println("new PROWLER RAID SIZE IS " + prowlerRaids.size());
     }
     public static ProwlerRaid loadProwlerRaids(ServerLevel p_150236_, CompoundTag p_150237_) {
         Raids raids = new Raids(p_150236_);

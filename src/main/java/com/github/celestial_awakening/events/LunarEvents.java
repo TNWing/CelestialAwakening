@@ -71,18 +71,19 @@ public class LunarEvents {
                 System.out.println("Effective diff is " + effectiveDifficulty);
                 LazyOptional<PlayerCapability> optional=player.getCapability(PlayerCapabilityProvider.capability);
                 if (effectiveDifficulty>1.5f && level.getHeight(Heightmap.Types.WORLD_SURFACE, player.getBlockX(), player.getBlockZ())-20<player.getBlockY()){
+                    System.out.println("CAN SPAWN");
                     optional.ifPresent(cap->{
                         short counter=cap.incrementAndGetProwlerRaidCounter();
-                        System.out.println("COUNTER IS " + counter);
                         BlockPos pos=player.blockPosition();
-                        boolean create=counter>=10;
+                        boolean create=counter>=Config.prowlerRaidInterval;
                         ProwlerRaid raid=levelCap.raids.getNearbyProwlerRaid(level,levelCap,pos);
-                        if (raid!=null){
+                        if (raid!=null){//hits this?
                             cap.setProwlerRaidCounter((short) 0);
                             int waves=0;
                             int str= (int) (Math.floor(Math.max(counter,10)*1.5f) + Math.floor((counter-10)*2.1));
                             raid.setRaidStrength(raid.getRaidStrength()+str);
                             CA_Triggers.PROWLER_RAID_TRIGGER.trigger(player);
+                            System.out.println("UPGRADED RAID");
                         }
                         else if (create){
                             cap.setProwlerRaidCounter((short) 0);
@@ -91,6 +92,7 @@ public class LunarEvents {
                             raid=levelCap.raids.createProwlerRaid(level,pos,maxWaves,strength);
                             levelCap.raids.addRaidToMap(raid);
                             CA_Triggers.PROWLER_RAID_TRIGGER.trigger(player);
+                            System.out.println("new RAID");
                         }
                     });
                 }

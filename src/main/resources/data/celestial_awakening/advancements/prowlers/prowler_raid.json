@@ -1,13 +1,24 @@
 {
-  "parent": "",
+  "parent": "celestial_awakening:root",
   "criteria": {
-
+    "raid": {
+      "trigger": "celestial_awakening:prowler_raid"
+    }
   },
   "display": {
-
+    "hidden": true,
+    "title": {
+      "translate": "advancement.celestial_awakening.prowler_raid.title"
+    },
+    "description": {
+      "translate": "advancement.celestial_awakening.prowler_raid.description"
+    },
+    "icon": {
+      "item": "minecraft:wolf_spawn_egg"
+    }
   },
   "requirements": [
-
+     ["raid"]
   ],
   "sends_telemetry_event": true
 }

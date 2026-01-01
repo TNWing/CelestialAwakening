@@ -188,6 +188,7 @@ make this a separate class and init the values based on config vals later down t
     }
 
     public boolean isDone(){
+        System.out.println("curr WAVE IS " + currentWave + "  WITH MAX " + maxWave);//not reaching at all
         return currentWave>=maxWave;
     }
     /*
@@ -240,72 +241,9 @@ Config should have these settings
 -raid warnings prevent sleeping
 -raid prowlers despawn during day
  */
-
-    public CompoundTag save(CompoundTag tag) {
-        super.save(tag);
-        tag.putInt("CX",this.getCenterPos().getX());
-        tag.putInt("CY",this.getCenterPos().getY());
-        tag.putInt("CZ",this.getCenterPos().getZ());
-        tag.putInt("MW",this.maxWave);
-        /*
-        Vanilla raid data
-
-
-
-        p_37748_.putInt("Id", this.id);
-        p_37748_.putBoolean("Started", this.started);
-        p_37748_.putBoolean("Active", this.active);
-        p_37748_.putLong("TicksActive", this.ticksActive);
-        p_37748_.putInt("BadOmenLevel", this.badOmenLevel);
-        p_37748_.putInt("GroupsSpawned", this.groupsSpawned);
-        p_37748_.putInt("PreRaidTicks", this.raidCooldownTicks);
-        p_37748_.putInt("PostRaidTicks", this.postRaidTicks);
-        p_37748_.putFloat("TotalHealth", this.totalHealth);
-        p_37748_.putInt("NumGroups", this.numGroups);
-        p_37748_.putString("Status", this.status.getName());
-        p_37748_.putInt("CX", this.center.getX());
-        p_37748_.putInt("CY", this.center.getY());
-        p_37748_.putInt("CZ", this.center.getZ());
-        ListTag listtag = new ListTag();
-
-        for(UUID uuid : this.heroesOfTheVillage) {
-            listtag.add(NbtUtils.createUUID(uuid));
-        }
-
-        p_37748_.put("HeroesOfTheVillage", listtag);
-
-         */
-        return tag;
-    }
     /*
     code used to determine valid spawning blocks for illager raids
      */
-    @Nullable
-    private BlockPos findRandomSpawnPos(int p_37708_, int p_37709_) {
-        int i = p_37708_ == 0 ? 2 : 2 - p_37708_;
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-
-        for(int i1 = 0; i1 < p_37709_; ++i1) {
-            float f = this.getServerLevel().random.nextFloat() * ((float)Math.PI * 2F);
-            int j = this.getCenterPos().getX() + Mth.floor(Mth.cos(f) * 32.0F * (float)i) + this.getServerLevel().random.nextInt(5);
-            int l = this.getCenterPos().getZ() + Mth.floor(Mth.sin(f) * 32.0F * (float)i) + this.getServerLevel().random.nextInt(5);
-            int k = this.getServerLevel().getHeight(Heightmap.Types.WORLD_SURFACE, j, l);
-            blockpos$mutableblockpos.set(j, k, l);
-            if (!this.getServerLevel().isVillage(blockpos$mutableblockpos) || p_37708_ >= 2) {
-                int j1 = 10;
-                if (this.getServerLevel()
-                        .hasChunksAt(blockpos$mutableblockpos.getX() - 10, blockpos$mutableblockpos.getZ() - 10, blockpos$mutableblockpos.getX() + 10, blockpos$mutableblockpos.getZ() + 10)
-                        && this.getServerLevel().isPositionEntityTicking(blockpos$mutableblockpos)
-                        && (
-                                NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, this.getServerLevel(), blockpos$mutableblockpos, EntityType.RAVAGER)
-                                        || this.getServerLevel().getBlockState(blockpos$mutableblockpos.below()).is(Blocks.SNOW) && this.getServerLevel().getBlockState(blockpos$mutableblockpos).isAir())) {
-                    return blockpos$mutableblockpos;
-                }
-            }
-        }
-
-        return null;
-    }
 
     private BlockPos findRandomSpawnCenter(RandomSource randomSource, BlockPos center, int range){
         /*
@@ -382,7 +320,6 @@ Config should have these settings
              */
                 }
                 if (nextWaveInterval<=0){
-                    System.out.println("Start spawning");
                     /*
                     So given a wave # and strength, do the following
 Loop over the prowlertypes until no more strength
@@ -405,21 +342,7 @@ Check to see if we can create full rep. We cant, but can create 2 prowlers. So w
                     nextWaveInterval=700;
                     List<AbstractNightProwler> prowlersToSpawn=new ArrayList<>();
                     List<ProwlerType> prowlerTypes=prowlerMap.get(currentWave);
-                    System.out.println("Map identity: " + System.identityHashCode(prowlerMap));
-                    for (Map.Entry<Byte,List<ProwlerType>> entry:prowlerMap.entrySet()) {
-                        //System.out.println("Wave # " + entry.getKey() +"  has # of types " + entry.getValue());
-                        System.out.println("Wave # " + entry.getKey() +
-                                "  has # of types size=" + entry.getValue().size());
-                        System.out.println(prowlerMap.get(currentWave));
-                        System.out.println(prowlerMap.get(entry.getKey()));
-                        System.out.println(entry.getKey()==currentWave);
-                    }
-                    System.out.println("Keys in map: " + prowlerMap.keySet());
-                    System.out.println("Current wave: " + currentWave);
-                    System.out.println("empty2? " + prowlerMap.get(currentWave));
-                    System.out.println("Map identity: " + System.identityHashCode(prowlerMap));
                     if (prowlerTypes!=null){
-                        System.out.println("GETTIJNG P TYPES");
                         int strength=getRaidStrength();
                         while (strength>0){
                             for(ProwlerType pType:prowlerTypes){
@@ -444,6 +367,7 @@ Check to see if we can create full rep. We cant, but can create 2 prowlers. So w
                                         }
                                         prowlersToSpawn.add(prowler);
                                     }
+                                    //System.out.println("INFUSE IS " + infuseCnt);
                                     for (int b=0;b<vals.bonusUnitCnt;b++){//TODO
                                         if (strength<vals.bonusUnitVal){
                                             break;
@@ -458,12 +382,14 @@ Check to see if we can create full rep. We cant, but can create 2 prowlers. So w
                         }
                     }
                     if (!prowlersToSpawn.isEmpty()){
-                        System.out.println("Spawning prowler cnt " + prowlersToSpawn.size());
                         BlockPos spt=findRandomSpawnCenter(getServerLevel().getRandom(),centerPos,24);
                         if (spt!=null){
                             for (AbstractNightProwler prowler:prowlersToSpawn) {
+
                                 prowler.setPos(spt.getCenter());
                                 getServerLevel().addFreshEntity(prowler);
+                                prowler.setRaid(this);
+                                prowlers.add(prowler);
                             }
 
                         }

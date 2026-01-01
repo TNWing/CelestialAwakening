@@ -2,10 +2,7 @@ package com.github.celestial_awakening.events.triggers;
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -22,6 +19,7 @@ public class ProwlerRaidTrigger extends SimpleCriterionTrigger<ProwlerRaidTrigge
     }
 
     public void trigger(ServerPlayer player){
+        System.out.println("TRIGGERING FOR PLAYer   " + player.getName());
         this.trigger(player,p->{
             return p.matches();
         });
@@ -34,6 +32,10 @@ public class ProwlerRaidTrigger extends SimpleCriterionTrigger<ProwlerRaidTrigge
         }
         public boolean matches(){
             return true;
+        }
+        public JsonObject serializeToJson(SerializationContext p_65486_) {
+            JsonObject jsonobject = super.serializeToJson(p_65486_);
+            return jsonobject;
         }
     }
 }

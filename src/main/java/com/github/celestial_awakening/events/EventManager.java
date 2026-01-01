@@ -844,7 +844,7 @@ public class EventManager {
                             lunarEvents.midnightIronTransformation(serverLevel);
                             lunarEvents.attemptPKSpawn(serverLevel);
                         }
-                        else if (time==15500){
+                        else if (time==15500 && Config.wipEnabled){
                             lunarEvents.attemptProwlerRaid(serverLevel);
                         }
                     }

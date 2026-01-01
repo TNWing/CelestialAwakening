@@ -43,7 +43,7 @@ public class Config
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE;
 
-
+    static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
 
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_LIMIT;
@@ -153,6 +153,12 @@ maybe use json files instead since it'll look neater?
             PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault: true").define("pk_day_despawn",true);
 
         builder.pop();
+
+
+        builder.push("Prowler_Config");
+            PROWLER_RAID_INTERVAL=builder.comment("The number of nights that need to pass before the player experiences a prowler raid.\nDefault: 10").defineInRange("prowler_raid_interval",10,1,Integer.MAX_VALUE);
+        builder.pop();
+
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
                 EXCITED_PARTICLES_INTERVAL=builder.comment("The delay in ticks between each activation of excited particles.\nDefault: 50").defineInRange("excited_particles_interval",50,1,Integer.MAX_VALUE);
@@ -239,6 +245,7 @@ maybe use json files instead since it'll look neater?
     public static int transcendentsDivMaxCD;
     public static Set<EntityType<?>> transcendentsTargets;
 
+    public static int prowlerRaidInterval;
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
@@ -355,6 +362,9 @@ maybe use json files instead since it'll look neater?
         divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
 
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
+
+        prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
+
 
         pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
 

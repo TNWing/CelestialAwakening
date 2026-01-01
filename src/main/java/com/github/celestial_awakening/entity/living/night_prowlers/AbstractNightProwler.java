@@ -41,6 +41,16 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     private static final EntityDataAccessor<Integer> INFUSE = SynchedEntityData.defineId(AbstractNightProwler.class, EntityDataSerializers.INT);
     protected HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public AABB standardAABB;
+
+    @Nullable
+    public ProwlerRaid getRaid() {
+        return raid;
+    }
+
+    public void setRaid(@Nullable ProwlerRaid raid) {
+        this.raid = raid;
+    }
+
     @Nullable
     protected ProwlerRaid raid;
     protected int raidValue;
@@ -69,6 +79,7 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
                 /*
                 add to raid
                  */
+
             }
         }
     }

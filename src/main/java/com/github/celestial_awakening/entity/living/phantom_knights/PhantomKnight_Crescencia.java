@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.living.phantom_knights;
 
-import com.github.celestial_awakening.entity.combat.phantom_knights.PK_CrescenciaCombatAIGoal;
+import com.github.celestial_awakening.entity.combat.phantom_knights.crescencia.PK_CrescenciaCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;

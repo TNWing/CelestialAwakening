@@ -14,6 +14,7 @@ import java.util.List;
 public class AsteronPiercingRays extends GenericAbility {
     public AsteronPiercingRays(AbstractCAMonster mob, int castTime, int CD, int rec, int et) {
         super(mob,castTime, CD,et,rec);
+        name="Piercing Rays";
     }
 
     @Override

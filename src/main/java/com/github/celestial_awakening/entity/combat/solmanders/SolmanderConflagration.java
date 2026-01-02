@@ -21,6 +21,7 @@ public class SolmanderConflagration extends GenericAbility {
     boolean diagonal=false;
     public SolmanderConflagration(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
+        name="Conflagration";
     }
 
     @Override

@@ -42,6 +42,7 @@ public class NebureSolarExpansion extends GenericAbility {
 
     public NebureSolarExpansion(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
+        name="Solar Expansion";
     }
 
     @Override

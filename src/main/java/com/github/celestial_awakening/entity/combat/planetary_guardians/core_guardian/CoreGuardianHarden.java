@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class CoreGuardianHarden extends GenericAbility {
     public CoreGuardianHarden(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int basePriority) {
         super(mob, castTime, CD, executeTime, recoveryTime, basePriority);
+        name="Harden";
     }
 
     @Override

@@ -33,6 +33,7 @@ public class NebureScorchingRays extends GenericAbility {
         else{
             dir=1;
         }
+        name="Scorching Rays";
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {

@@ -28,6 +28,7 @@ public class SolmanderRekindle extends GenericAbility {
         extinguishFires=extinguish;
         hBound=hRange;
         vBound=vRange;
+        this.name="Rekindle";
     }
 
     @Override

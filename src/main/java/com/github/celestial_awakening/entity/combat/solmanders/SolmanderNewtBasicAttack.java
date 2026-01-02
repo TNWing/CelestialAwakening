@@ -12,6 +12,7 @@ public class SolmanderNewtBasicAttack extends GenericAbility {
     public SolmanderNewtBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
         source=new DamageSource(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.ON_FIRE),this.mob);
+        name="Newt Basic";
     }
 
     @Override

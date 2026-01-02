@@ -199,12 +199,12 @@ maybe use json files instead since it'll look neater?
             builder.pop();
             builder.push("Moon_Scythe&Midnight_Reaper");
                 MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5").defineInRange("moon_scythe_base_damage",6.5d,0,Double.MAX_VALUE);
-                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nLower values equals faster attack speed.\nDefault: -2.8").defineInRange("moon_scythe_base_spd",-2.8d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nDefault: -2.8").defineInRange("moon_scythe_base_spd",-2.8d,-Double.MAX_VALUE,Double.MAX_VALUE);
                 MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5").defineInRange("moon_scythe_wave_damage",2.5d,0,Double.MAX_VALUE);
                 MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5").defineInRange("moon_scythe_strike_damage",4.5d,0,Double.MAX_VALUE);
 
                 MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8").defineInRange("midnight_reaper_base_damage",7.8d,0,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nLower values equals faster attack speed.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("moon_scythe_wave_damage",3.5d,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("moon_scythe_strike_damage",5.5d,0,Double.MAX_VALUE);
 
@@ -212,8 +212,8 @@ maybe use json files instead since it'll look neater?
             builder.pop();
             builder.push("Arrows");
                 builder.comment("For reference, vanilla arrows have a base damage of 2.");
-                LUNAR_ARROW_BASE_DMG=builder.comment("Base damage of lunar arrows.\nDefault: 1.8f").defineInRange("lunar_arrow_base_dmg",1.8f,0,Double.MAX_VALUE);
-                SOLAR_ARROW_BASE_DMG=builder.comment("Base damage of solar arrows.\nDefault: 1.5f").defineInRange("solar_arrow_base_dmg",1.5f,0,Double.MAX_VALUE);
+                LUNAR_ARROW_BASE_DMG=builder.comment("Base damage of lunar arrows.\nDefault: 1.8").defineInRange("lunar_arrow_base_dmg",1.8d,0,Double.MAX_VALUE);
+                SOLAR_ARROW_BASE_DMG=builder.comment("Base damage of solar arrows.\nDefault: 1.5").defineInRange("solar_arrow_base_dmg",1.5d,0,Double.MAX_VALUE);
             builder.pop();
         builder.pop();
         BUILDER=builder;

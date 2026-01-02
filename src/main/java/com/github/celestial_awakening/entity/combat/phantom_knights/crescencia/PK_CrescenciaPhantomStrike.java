@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.combat.phantom_knights;
+package com.github.celestial_awakening.entity.combat.phantom_knights.crescencia;
 
 import com.github.celestial_awakening.capabilities.MovementModifier;
 import com.github.celestial_awakening.capabilities.ProjCapability;

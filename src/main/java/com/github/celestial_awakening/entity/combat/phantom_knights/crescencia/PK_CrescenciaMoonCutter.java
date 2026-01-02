@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.combat.phantom_knights;
+package com.github.celestial_awakening.entity.combat.phantom_knights.crescencia;
 
 import com.github.celestial_awakening.capabilities.MovementModifier;
 import com.github.celestial_awakening.capabilities.ProjCapability;
@@ -38,6 +38,7 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
 
     public PK_CrescenciaMoonCutter(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
+        name="Moon Cutter";
     }
     Vec3 stepDir;
     @Override

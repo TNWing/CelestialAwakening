@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class NightProwlerBasicAttack extends GenericAbility {
     public NightProwlerBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
+        name="NP Basic";
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {

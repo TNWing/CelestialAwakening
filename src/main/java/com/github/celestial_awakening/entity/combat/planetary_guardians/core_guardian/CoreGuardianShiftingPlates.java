@@ -31,6 +31,7 @@ public class CoreGuardianShiftingPlates extends GenericAbility {
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FLY_INTO_WALL),this.mob);
     public CoreGuardianShiftingPlates(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int basePriority) {
         super(mob, castTime, CD, executeTime, recoveryTime, basePriority);
+        name="Shifting Plates";
     }
 
     //execute just creates the plates, triggerQuake is called in combataigoal to actually use the plates

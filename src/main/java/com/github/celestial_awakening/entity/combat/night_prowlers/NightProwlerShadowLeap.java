@@ -48,7 +48,11 @@ public class NightProwlerShadowLeap extends GenericAbility {
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
     DamageSourceIgnoreIFrames flameLeap=new DamageSourceIgnoreIFrames(mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE),this.mob);
     public NightProwlerShadowLeap(AbstractNightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
-        super(mob, castTime, CD, executeTime, recoveryTime);
+        this(mob, castTime, CD, executeTime, recoveryTime,1);
+    }
+    public NightProwlerShadowLeap(AbstractNightProwler mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
+        super(mob, castTime, CD, executeTime, recoveryTime,p);
+        name="Shadow Leap";
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {
@@ -307,4 +311,5 @@ public class NightProwlerShadowLeap extends GenericAbility {
     protected double getAbilityRange(LivingEntity target) {
         return 4.2D;
     }
+
 }

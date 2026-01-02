@@ -22,6 +22,7 @@ public class SolmanderSolarBeam extends GenericAbility {
     LightRay ray;
     public SolmanderSolarBeam(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
+        name="Solar Beam";
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {

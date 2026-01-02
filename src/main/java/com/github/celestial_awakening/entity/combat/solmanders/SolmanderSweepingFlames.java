@@ -18,6 +18,7 @@ import java.util.List;
 public class SolmanderSweepingFlames extends GenericAbility {
     public SolmanderSweepingFlames(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
+        name="Sweeping Flames";
     }
 
     @Override

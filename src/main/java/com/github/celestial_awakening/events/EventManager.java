@@ -785,15 +785,14 @@ public class EventManager {
                 capOptional.ifPresent(cap->{
                     if (Config.wipEnabled){
                         cap.raids.tick();
-                        if (cap.deepLayerCounter<50 && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
-                            System.out.println("dlc is " + cap.deepLayerCounter);
+                        if (cap.deepLayerCounter<100 && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
                             cap.increaseDeepLayerCounter(Config.coreGuardianCounter*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
                                 @Override
                                 public boolean test(ServerPlayer serverPlayer) {
                                     return serverPlayer.getY()<=0;
                                 }
                             }).size());
-                            if (cap.deepLayerCounter>=50){
+                            if (cap.deepLayerCounter>=100){
                                 String msg="The world quakes beneath you...";
                                 for (ServerPlayer serverPlayer:serverLevel.players()) {
                                     serverPlayer.sendSystemMessage(Component.literal(msg));

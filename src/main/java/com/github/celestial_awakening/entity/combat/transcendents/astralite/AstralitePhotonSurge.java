@@ -24,6 +24,7 @@ public class AstralitePhotonSurge extends GenericAbility {
     private BlockPos targetBlockPos;
     public AstralitePhotonSurge(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime) {
         super(mob, castTime, CD, executeTime, recoveryTime);
+        name="Photon Surge";
     }
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),this.mob);
     ParticleOptions particleType = ParticleTypes.FALLING_LAVA;

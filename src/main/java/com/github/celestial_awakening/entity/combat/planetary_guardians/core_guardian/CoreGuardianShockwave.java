@@ -47,6 +47,7 @@ public class CoreGuardianShockwave extends GenericAbility {
     double angle;
     public CoreGuardianShockwave(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
+        name="Shockwave";
     }
     @Override
     public void startAbility(LivingEntity target,double dist) {

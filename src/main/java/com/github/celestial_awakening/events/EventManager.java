@@ -26,6 +26,10 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.OutgoingChatMessage;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -781,13 +785,20 @@ public class EventManager {
                 capOptional.ifPresent(cap->{
                     if (Config.wipEnabled){
                         cap.raids.tick();
-                        if (event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%2000==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
-                            cap.increaseDeepLayerCounter(5*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
+                        if (cap.deepLayerCounter<50 && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
+                            System.out.println("dlc is " + cap.deepLayerCounter);
+                            cap.increaseDeepLayerCounter(Config.coreGuardianCounter*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
                                 @Override
                                 public boolean test(ServerPlayer serverPlayer) {
                                     return serverPlayer.getY()<=0;
                                 }
                             }).size());
+                            if (cap.deepLayerCounter>=50){
+                                String msg="The world quakes beneath you...";
+                                for (ServerPlayer serverPlayer:serverLevel.players()) {
+                                    serverPlayer.sendSystemMessage(Component.literal(msg));
+                                }
+                            }
                         }
                     }
 

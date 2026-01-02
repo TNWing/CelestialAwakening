@@ -78,7 +78,7 @@ public class CA_SpawnPlacements {
         //copied from strider
         @Override
         public boolean test(EntityType entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-            if (serverLevelAccessor.getLevel().isDay()){
+            if (serverLevelAccessor.getLevel().isDay() && serverLevelAccessor.getLevel().getDayTime()>=Config.solmanderDelay){
                 BlockPos.MutableBlockPos blockpos$mutableblockpos = blockPos.mutable();
 
                 do {

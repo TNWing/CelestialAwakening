@@ -47,6 +47,8 @@ public class Config
 
     static final ForgeConfigSpec.IntValue SOLMANDER_DELAY;
 
+    static final ForgeConfigSpec.IntValue CORE_GUARDIAN_COUNTER;
+
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_LIMIT;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_INTERVAL;
@@ -166,6 +168,12 @@ maybe use json files instead since it'll look neater?
             SOLMANDER_DELAY=builder.comment("The amount of time (in ticks) before solmanders can spawn naturally.\nDefault: 72000").defineInRange("solmander_delay",72000,1,Integer.MAX_VALUE);
         builder.pop();
 
+
+        builder.push("Planetary_Guardian_Config");
+            CORE_GUARDIAN_COUNTER=builder.comment("The game checks every 400 ticks (20 seconds) to see who is below y-level 0, then adds this value to a counter for each player. When this counter hits 50, core guardians will be able to spawn.\nDefault: 1").defineInRange("core_guardian_counter",1,1,50);
+        builder.pop();
+
+
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
                 EXCITED_PARTICLES_INTERVAL=builder.comment("The delay in ticks between each activation of excited particles.\nDefault: 50").defineInRange("excited_particles_interval",50,1,Integer.MAX_VALUE);
@@ -263,6 +271,8 @@ maybe use json files instead since it'll look neater?
     public static int pkCrescenciaMinDay;
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static boolean pkDayDespawn;
+
+    public static int coreGuardianCounter;
 
 
     public static double sunstoneLeavesRate;
@@ -375,6 +385,8 @@ maybe use json files instead since it'll look neater?
         solmanderDelay=SOLMANDER_DELAY.get();
 
         prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
+
+        coreGuardianCounter=CORE_GUARDIAN_COUNTER.get();
 
 
         pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());

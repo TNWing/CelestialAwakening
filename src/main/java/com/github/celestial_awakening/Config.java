@@ -45,6 +45,8 @@ public class Config
 
     static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
 
+    static final ForgeConfigSpec.IntValue SOLMANDER_DELAY;
+
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_LIMIT;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_INTERVAL;
@@ -159,6 +161,11 @@ maybe use json files instead since it'll look neater?
             PROWLER_RAID_INTERVAL=builder.comment("The number of nights that need to pass before the player experiences a prowler raid.\nDefault: 10").defineInRange("prowler_raid_interval",10,1,Integer.MAX_VALUE);
         builder.pop();
 
+
+        builder.push("Solmander_Config");
+            SOLMANDER_DELAY=builder.comment("The amount of time (in ticks) before solmanders can spawn naturally.\nDefault: 72000").defineInRange("solmander_delay",72000,1,Integer.MAX_VALUE);
+        builder.pop();
+
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
                 EXCITED_PARTICLES_INTERVAL=builder.comment("The delay in ticks between each activation of excited particles.\nDefault: 50").defineInRange("excited_particles_interval",50,1,Integer.MAX_VALUE);
@@ -246,6 +253,8 @@ maybe use json files instead since it'll look neater?
     public static Set<EntityType<?>> transcendentsTargets;
 
     public static int prowlerRaidInterval;
+
+    public static int solmanderDelay;
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
@@ -362,6 +371,8 @@ maybe use json files instead since it'll look neater?
         divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
 
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
+
+        solmanderDelay=SOLMANDER_DELAY.get();
 
         prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
 

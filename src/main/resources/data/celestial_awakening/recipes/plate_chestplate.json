@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "celestial_awakening:gaia_plate"
+  },
+  "base": {
+    "item": "minecraft:iron_chestplate"
+  },
+  "result": {
+    "item": "celestial_awakening:plate_chestplate"
+  },
+  "template": {
+    "item": "celestial_awakening:gaia_plate"
+  }
+}

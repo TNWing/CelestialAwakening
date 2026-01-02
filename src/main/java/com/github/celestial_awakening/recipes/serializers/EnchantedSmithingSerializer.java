@@ -3,12 +3,11 @@ package com.github.celestial_awakening.recipes.serializers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
-
-import javax.json.JsonException;
 import java.util.HashMap;
 
 public interface EnchantedSmithingSerializer {
@@ -22,7 +21,7 @@ public interface EnchantedSmithingSerializer {
                 Enchantment enchantment= BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(obj.get("enchantment").getAsString()));
                 Integer lvl=obj.get("level").getAsInt();
                 if (enchantment==null){
-                    throw new JsonException("Invalid enchantment");
+                    throw new JsonSyntaxException("Invalid enchantment");
                 }
                 enchantMap.put(enchantment,lvl);
             }

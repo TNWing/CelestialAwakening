@@ -113,6 +113,7 @@ public class EventManager {
     private static final Map.Entry<ArmorMaterial,ArmorEffect> remnantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.REMNANT,new RemnantArmor());
     private static final Map.Entry<ArmorMaterial,ArmorEffect> umbraArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.UMBRA,new UmbraArmor());
 
+    private static final Map.Entry<ArmorMaterial,ArmorEffect> plateArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.PLATE,new PlateArmor());
 
 
     private static final Map.Entry<ArmorMaterial,ArmorEffect> shadeArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.SHADE,new ShadeRobes());
@@ -135,6 +136,7 @@ public class EventManager {
             .put(everlightArmor)
             .put(knightmareSuit)
             .put(scorchedSuit)
+            .put(plateArmor)
             .build();
 
 
@@ -155,13 +157,13 @@ public class EventManager {
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingHurtSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(umbraArmor).build();
+            .put(umbraArmor).put(plateArmor).build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageOthers=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>()).put(scorchedSuit)
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDamageSelf=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
-            .put(shadeArmor).put(remnantArmor).put(lunarArmor).put(everlightArmor)
+            .put(shadeArmor).put(remnantArmor).put(lunarArmor).put(everlightArmor).put(plateArmor)
             .build();
 
     private static final Map<ArmorMaterial,ArmorEffect> armorEffectLivingDeath=(new ImmutableMap.Builder<ArmorMaterial, ArmorEffect>())
@@ -748,7 +750,6 @@ public class EventManager {
             }
         });
     }
-
 
     @SubscribeEvent
     public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Pre event){

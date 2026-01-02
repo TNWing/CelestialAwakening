@@ -230,6 +230,12 @@
   "tooltip.celestial_awakening.everlight_armor.photon_cycle_name": "Photon Cycle",
   "tooltip.celestial_awakening.everlight_armor.photon_cycle_desc": "While in combat, channel the power of light.\n  If you are above half health, ignite nearby enemies and deal a burst of additional fire damage.\n  If below half health, reduce the duration of burning and glowing effects on nearby entities. You are healed based on the total time removed across all targets.\nCooldown of 12 seconds.",
 
+  "tooltip.celestial_awakening.plate_armor.warding_name": "Warding",
+  "tooltip.celestial_awakening.plate_armor.warding_desc": "While at full HP, gain %s damage reduction.",
+  "tooltip.celestial_awakening.plate_armor.dropshock_name": "Dropshock",
+  "tooltip.celestial_awakening.plate_armor.dropshock_desc": "Taking fall damage will trigger dropshock, causing any damage from that fall to be dealt to nearby enemies instead.\nCooldown of 7.5 seconds.",
+
+
   "tooltip.celestial_awakening.knightmare_suit.infamy_name": "Infamy",
   "tooltip.celestial_awakening.knightmare_suit.infamy_desc": "Upon killing an enemy, gain %s base damage for every 10 HP the enemy had. This effect lasts for 15 seconds.",
   "tooltip.celestial_awakening.knightmare_suit.honor_duel_name": "Honor Duel",

@@ -72,8 +72,18 @@ public class ItemInit {
 
     public static final RegistryObject<Item> GAIA_PLATE=ITEMS.register("gaia_plate",() ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> TERRA_GLAIVE=ITEMS.register("terra_glaive",()->new TerraGlaive(new Item.Properties().stacksTo(1).durability(800),8.5f,-2.9f));
-
-
+    public static final RegistryObject<Item> PLATE_HELMET=ITEMS.register("plate_helmet",()->new CustomArmorItem(
+            CustomArmorMaterial.PLATE, ArmorItem.Type.HELMET,new Item.Properties()
+    ));
+    public static final RegistryObject<Item> PLATE_CHESTPLATE=ITEMS.register("plate_chestplate",()->new CustomArmorItem(
+            CustomArmorMaterial.PLATE, ArmorItem.Type.CHESTPLATE,new Item.Properties()
+    ));
+    public static final RegistryObject<Item> PLATE_LEGGINGS=ITEMS.register("plate_leggings",()->new CustomArmorItem(
+            CustomArmorMaterial.PLATE, ArmorItem.Type.LEGGINGS,new Item.Properties()
+    ));
+    public static final RegistryObject<Item> PLATE_BOOTS=ITEMS.register("plate_boots",()->new CustomArmorItem(
+            CustomArmorMaterial.PLATE, ArmorItem.Type.BOOTS,new Item.Properties()
+    ));
     public static final RegistryObject<Item> SHIMMER_CUBE = ITEMS.register("shimmer_cube", () ->new Item(new Item.Properties()));
     public static final RegistryObject<Item> SUN_STAFF=ITEMS.register("sun_staff",()->new SunStaff(new Item.Properties().stacksTo(1).durability(640)));
 

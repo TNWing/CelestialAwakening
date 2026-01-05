@@ -44,7 +44,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
     float dmg;
     double originalDist;
     ParticleOptions particleType = ParticleTypes.SMOKE;
-    Predicate pred= CA_Predicates.opposingTeams_IgnoreSameClass_Predicate(this.mob);
+    Predicate pred= CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class));
     TargetingConditions conds=TargetingConditions.forCombat().selector(pred).ignoreLineOfSight().ignoreInvisibilityTesting();
     DamageSourceIgnoreIFrames flameLeap=new DamageSourceIgnoreIFrames(mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE),this.mob);
     public NightProwlerShadowLeap(AbstractNightProwler mob, int castTime, int CD, int executeTime, int recoveryTime) {
@@ -88,6 +88,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
                         leapDir=this.mob.getDeltaMovement();
                         if (((AbstractNightProwler)this.mob).getInfuse()==-1){
                             ServerLevel serverLevel= (ServerLevel) this.mob.level();
+                            /*
                             for (int i=-1;i<=1;i+=2){
                                 IceShard iceShard=IceShard.create(this.mob.level(),200,5.4f,51*i+MathFuncs.getAngFrom2DVec(leapDir),42,1.5f,this.mob);
                                 @NotNull LazyOptional<ProjCapability> capOptional=iceShard.getCapability(ProjCapabilityProvider.ProjCap);
@@ -103,6 +104,8 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 serverLevel.addFreshEntity(iceShard);
                                 ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(iceShard.getId()),serverLevel.dimension());
                             }
+
+                             */
                         }
 
                         AABB aabb=new AABB(this.mob.position(),this.mob.position());
@@ -151,6 +154,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 for (int i=-1;i>=-2;i--){
                                     Vec3 tempDir=new Vec3(this.mob.getDeltaMovement().x,0,this.mob.getDeltaMovement().z).normalize();
                                     tempDir=tempDir.scale(i).normalize();
+                                    System.out.println("OG TP POS IS " + teleportPos);
                                     Vec3 teleportPosCheck=teleportPos.add(tempDir);
                                     BlockPos blockPos= new BlockPos((int)teleportPosCheck.x,(int)teleportPosCheck.y+ 1,(int)teleportPosCheck.z);
                                     BlockState blockState=target.level().getBlockState(blockPos);
@@ -158,6 +162,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                         break;
                                     }
                                     teleportPos=teleportPosCheck;
+                                    System.out.println("NEW TP POS IS " + teleportPos);
                                 }
                                 Vec3 newDM=Vec3.ZERO;
                                 Vec3 dir= MathFuncs.getDirVec(teleportPos,targetPos);
@@ -171,8 +176,9 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 for (int i =0;i<1;i++){
                                     serverLevel.sendParticles(particleType, teleportPos.x,teleportPos.y+i*0.1f,teleportPos.z, 2, 0, 0, 0, 0);
                                 }
-
+                                System.out.println("PREV POS BEFORE TP IS " + this.mob.position());
                                 this.mob.teleportTo(teleportPos.x,teleportPos.y,teleportPos.z);
+                                System.out.println("POS after TP IS " + this.mob.position());
 
                                 this.mob.setCollision(true);
                                 this.mob.setBoundingBox(((AbstractNightProwler) mob).standardAABB);
@@ -198,8 +204,8 @@ public class NightProwlerShadowLeap extends GenericAbility {
                                 else if (infuse==1){
                                     aabb=new AABB(this.mob.position(),this.mob.position());
                                     aabb=aabb.inflate(3.5f);
-                                    TargetingConditions conds=null;
-                                    conds.selector(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class)));
+                                    TargetingConditions conds2=TargetingConditions.forCombat().range(2.5f);
+                                    //conds2.selector(CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class)));
                                     List<LivingEntity> entityList=this.mob.level().getNearbyEntities(LivingEntity.class,conds,this.mob,aabb);
                                     entityList.forEach(e->{
 
@@ -284,6 +290,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
                         if (random.nextInt(3)==1){
                             isTeleport=true;
                             teleportPos=targetPos.add(targetDir.scale(-2).normalize());
+                            System.out.println("IS TP");
                         }
                     }
                     break;

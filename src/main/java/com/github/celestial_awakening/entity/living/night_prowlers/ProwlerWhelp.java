@@ -47,6 +47,7 @@ public class ProwlerWhelp extends AbstractNightProwler {
         actionIDToAnimMap.put(4,leapRecoveryAnimationState);
         this.xpReward=15;
     }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, (double)0.35F)

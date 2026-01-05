@@ -2,6 +2,7 @@ package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.CANearestAttackableTargetGoal;
 import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
+import com.github.celestial_awakening.entity.combat.night_prowlers.hunter.NP_HunterCombatAIGoal;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class ProwlerHunter extends AbstractNightProwler{
-    static double baseHP=35.0D;
+    static double baseHP=55.0D;
     static double baseDmg=6.5D;
     static double baseArmor=4D;
     static double baseTough=2D;
@@ -30,14 +31,31 @@ public class ProwlerHunter extends AbstractNightProwler{
     public final AnimationState crouchAnimationState=new AnimationState();
     public final AnimationState leapAnimationState=new AnimationState();
     public final AnimationState leapRecoveryAnimationState=new AnimationState();
-
+    public final AnimationState warpCastAnimationState=new AnimationState();
+    public final AnimationState warpSlamAnimationState=new AnimationState();
+    public final AnimationState warpVortexAnimationState=new AnimationState();
+    public final AnimationState warpSlamRecoveryAnimationState=new AnimationState();
+    public final AnimationState warpVortexRecoveryAnimationState=new AnimationState();
     public ProwlerHunter(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
+        this.standardAABB=this.getBoundingBox();
+        actionIDToAnimMap.put(0,idleAnimationState);
+        actionIDToAnimMap.put(1,attackAnimationState);
+        actionIDToAnimMap.put(2,crouchAnimationState);
+        actionIDToAnimMap.put(3,leapAnimationState);
+        actionIDToAnimMap.put(4,leapRecoveryAnimationState);
+        /*
+        actionIDToAnimMap.put(5,leapRecoveryAnimationState);
+        actionIDToAnimMap.put(6,leapRecoveryAnimationState);
+        actionIDToAnimMap.put(7,leapRecoveryAnimationState);
+
+         */
+        this.xpReward=50;
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, (double)0.35F)
-                .add(Attributes.KNOCKBACK_RESISTANCE,0.1D)
+                .add(Attributes.KNOCKBACK_RESISTANCE,0.2D)
                 .add(Attributes.MAX_HEALTH, baseHP)
                 .add(Attributes.ARMOR, baseArmor)
                 .add(Attributes.ARMOR_TOUGHNESS, baseTough)
@@ -87,7 +105,7 @@ public class ProwlerHunter extends AbstractNightProwler{
     }
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new NightProwlerCombatAIGoal(this));
+        this.goalSelector.addGoal(3, new NP_HunterCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new CANearestAttackableTargetGoal<>(this, Player.class, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));

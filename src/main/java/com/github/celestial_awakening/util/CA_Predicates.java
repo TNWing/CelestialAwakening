@@ -145,8 +145,13 @@ public class CA_Predicates {
     //Uses Vanila teams to determine enemies, but ignores entities that are listed in the provided parameter
     public static <T extends Entity> Predicate opposingTeams_IgnoreProvidedClasses_Predicate(LivingEntity attacker, List<Class<T>> classes){
         Predicate<Entity> predicate= o -> {
-            if (o.equals(attacker)  || classes.contains(o.getClass())){
+            if (o.equals(attacker)){
                 return false;
+            }
+            for (Class<T> c:classes) {
+                if (c.isInstance(o)){
+                    return false;
+                }
             }
             return !o.isAlliedTo(attacker);
         };

@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.BlockEvent;
 
@@ -93,9 +92,9 @@ public class RadiantArmor extends ArmorEffect {
         ToolTipBuilder.addArmorPieceComponent(event,ABS_NAME,boldColor,ABS_DESC,infoColor);
         event.getToolTip().addAll(savedToolTip);
     }
-    public void pieceEffect_Crop(BlockEvent.BreakEvent event, int cnt){
+    public void pieceEffect_Crop(BlockEvent.BreakEvent event, int cnt){//not broken, but maybe too low, also reword the desc of the effect
         if (!event.getLevel().isClientSide() && event.getState().getBlock() instanceof CropBlock && !event.isCanceled()){
-            if (random.nextInt(100)<cnt*2){
+            if (random.nextInt(100)<cnt*3.75f){
                 Player player=event.getPlayer();
                 Level level=player.level();
                 BlockPos blockPos=player.blockPosition();
@@ -115,45 +114,51 @@ public class RadiantArmor extends ArmorEffect {
         }
     }
 
+    int range=9;
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
-        if (player instanceof ServerPlayer && player.tickCount % Config.excitedParticlesTickInterval==0){
-            ServerLevel serverLevel= (ServerLevel) player.level();
-            for (int x=-3;x<=3;x++){
-                for (int z=-3;z<=3;z++){
-                    for (int y=-3;y<=3;y++){
-                        BlockPos blockPos=player.blockPosition();
-                        blockPos=blockPos.offset(x,y,z);
-                        BlockState blockState=serverLevel.getBlockState(blockPos);
-                        Block block=blockState.getBlock();
-                        if (block instanceof CropBlock||
-                        block instanceof SaplingBlock){
-                            blockState.randomTick(serverLevel,blockPos,serverLevel.random);
+        if (player instanceof ServerPlayer){
+            if (player.tickCount % Config.excitedParticlesCropTickInterval ==0){
+                ServerLevel serverLevel= (ServerLevel) player.level();
+                for (int x=-range;x<=range;x++){
+                    for (int z=-range;z<=range;z++){
+                        for (int y=-range;y<=range;y++){
+                            BlockPos blockPos=player.blockPosition();
+                            blockPos=blockPos.offset(x,y,z);
+                            BlockState blockState=serverLevel.getBlockState(blockPos);
+                            Block block=blockState.getBlock();
+                            if (block instanceof CropBlock||
+                                    block instanceof SaplingBlock){
+                                blockState.randomTick(serverLevel,blockPos,serverLevel.random);
+                            }
                         }
                     }
                 }
             }
-            AABB aabb=new AABB(player.getX()-3,player.getY()-3,player.getZ()-3,player.getX()+3,player.getY()+3,player.getZ()+3);
-            List<Animal> animals=serverLevel.getEntitiesOfClass(Animal.class,aabb);
-            for (Animal animal:animals) {
-                if (animal.getAge()<0){
-                    animal.ageUp(1);//adds 1 sec (20 ticks) of age
+            if (player.tickCount % Config.excitedParticlesAnimalTickInterval ==0){
+                ServerLevel serverLevel= (ServerLevel) player.level();
+                AABB aabb=new AABB(player.getX()-range,player.getY()-range,player.getZ()-range,
+                        player.getX()+range,player.getY()+range,player.getZ()+range);
+                List<Animal> animals=serverLevel.getEntitiesOfClass(Animal.class,aabb);
+                for (Animal animal:animals) {
+                    if (animal.getAge()<0){
+                        animal.ageUp(3);//adds 3 sec (60 ticks) of age, by default, animals take 20 min to grow up
+                    }
+                    else if (animal.getAge()>0){
+                        animal.setAge(Math.max(0,animal.getAge()-20));//by default, animals have a breeding period of 5 min
+                    }
                 }
-                else if (animal.getAge()>0){
-                    animal.setAge(Math.max(0,animal.getAge()-20));
-                }
-                //goes from -X to 0, 0 is adult, negative num is child
-                //positive age means animal is on breeding cooldown, cooldown starts at 6k ticks
             }
         }
+
 
     }
 
     public void rejuvenatingWave(TickEvent.PlayerTickEvent event){
         Player player=event.player;
-        if (player instanceof ServerPlayer && player.tickCount % 140==0){
+        if (player instanceof ServerPlayer && player.tickCount % Config.rejWaveInterval==0){
             Level level =player.level();
-            player.heal(2.5f);
+            player.heal((float) Config.rejWaveAmt);
             //level.getEntitiesOfClass()
         }
     }

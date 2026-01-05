@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CA_SpawnPlacements {
+    //maybe move the prowler/solmander spawning to custom spawners instead of vanilla handlers
     ///effect give @e[type=celestial_awakening:night_prowler] minecraft:glowing 1000000 0 true
 ///execute as Dev run tp @s @e[type=celestial_awakening:night_prowler,limit=1]
     static SpawnPlacements.SpawnPredicate dark_NightSurface= (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> {
@@ -52,10 +53,20 @@ public class CA_SpawnPlacements {
 
     static  <T extends Mob> SpawnPlacements.SpawnPredicate wip_enabled(SpawnPlacements.SpawnPredicate<T> pred){
         return (p_217081_, p_217082_, p_217083_, p_217084_, p_217085_) -> {
-            if (Config.wipEnabled){
-                return pred.test(p_217081_, p_217082_, p_217083_, p_217084_, p_217085_);
+            try{
+                System.out.println("WIP ENAB  " + Config.wipEnabled);
+                if (Config.wipEnabled){
+                    System.out.println();
+                    return pred.test(p_217081_, p_217082_, p_217083_, p_217084_, p_217085_);
+                }
+                return Config.wipEnabled;
             }
-            return Config.wipEnabled;
+            catch(Exception e){
+                System.out.println("ERR IN WIP ");
+                e.printStackTrace();
+                return false;
+            }
+
         };
     }
 
@@ -64,19 +75,29 @@ public class CA_SpawnPlacements {
     static SpawnPlacements.SpawnPredicate lava_daySurface = (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> {
         if (serverLevelAccessor.getLevel().isDay() && serverLevelAccessor.getLevel().getDayTime()>=Config.solmanderDelay){
             BlockPos.MutableBlockPos blockpos$mutableblockpos = blockPos.mutable();
-
-            do {
+            System.out.println("sol check pos " + blockpos$mutableblockpos);
+            int max=serverLevelAccessor.getMaxBuildHeight()-blockPos.getY();
+            for (int i=1;i<max;i++){
+                if (!serverLevelAccessor.getFluidState(blockpos$mutableblockpos).is(FluidTags.LAVA)){
+                    break;
+                }
                 blockpos$mutableblockpos.move(Direction.UP);
-            } while(serverLevelAccessor.getFluidState(blockpos$mutableblockpos).is(FluidTags.LAVA));
-
-            return serverLevelAccessor.getBlockState(blockpos$mutableblockpos).isAir() && serverLevelAccessor.canSeeSky(blockpos$mutableblockpos);
-        }
+            }
+            return serverLevelAccessor.canSeeSky(blockpos$mutableblockpos);
+            }
         return false;
+    //do {
+    //                blockpos$mutableblockpos.move(Direction.UP);
+    //            } while(serverLevelAccessor.getFluidState(blockpos$mutableblockpos).is(FluidTags.LAVA));
+    //            System.out.println("VALID? " + (serverLevelAccessor.getBlockState(blockpos$mutableblockpos).isAir() && serverLevelAccessor.canSeeSky(blockpos$mutableblockpos)));
+    //            return serverLevelAccessor.getBlockState(blockpos$mutableblockpos).isAir() && serverLevelAccessor.canSeeSky(blockpos$mutableblockpos);
+    //
+
     };
     //copied from strider
     static SpawnPlacements.SpawnPredicate deepLayerSpawn = (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> {
         LazyOptional<LevelCapability> optional= serverLevelAccessor.getLevel().getCapability(LevelCapabilityProvider.LevelCap);
-
+        System.out.println("Checking  deeplayerspawn at " + blockPos);
         boolean result=false;
         if (optional.isPresent()){
             if (blockPos.getY()<=serverLevelAccessor.getLevel().getMinBuildHeight()+20){

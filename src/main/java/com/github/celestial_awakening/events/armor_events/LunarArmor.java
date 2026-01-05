@@ -40,6 +40,8 @@ public class LunarArmor extends ArmorEffect {
 
     String moonlightPath="4c80d010-d025-40de-80ad-6b262763cc30";
 
+    //resonance isn't showing?
+
     public static final String RESONANCE_NAME = "tooltip.celestial_awakening.lunar_armor.resonance_name";
     public static final String RESONANCE_DESC = "tooltip.celestial_awakening.lunar_armor.resonance_desc";
     public static final String ORBITER_NAME = "tooltip.celestial_awakening.lunar_armor.orbiter_name";

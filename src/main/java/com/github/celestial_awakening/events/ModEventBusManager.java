@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEventBusManager {
     @SubscribeEvent
     public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event){
+
         event.register(EntityInit.NIGHT_PROWLER_WHELP.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.dark_NightSurface, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(EntityInit.SOLMANDER_NEWT.get(), SpawnPlacements.Type.IN_LAVA,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.wip_enabled(CA_SpawnPlacements.lava_daySurface),SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(EntityInit.CORE_GUARDIAN.get(), SpawnPlacements.Type.ON_GROUND,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,CA_SpawnPlacements.wip_enabled(CA_SpawnPlacements.deepLayerSpawn),SpawnPlacementRegisterEvent.Operation.REPLACE);

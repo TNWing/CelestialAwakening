@@ -6,6 +6,7 @@ import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.commands.ProwlerRaidCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
+import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.events.armor_events.*;
@@ -26,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.OutgoingChatMessage;
@@ -76,10 +78,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -364,6 +363,12 @@ public class EventManager {
                     armorMaterials.get(material).onItemTooltipEvent(event, cnt);
                 }
             }
+            if (itemStack.hasTag()  && itemStack.getTag().contains(lifeFrag)) {
+                assert itemStack.getTag() != null;
+                double heal = Math.round(itemStack.getTag().getFloat(lifeFrag)*10)/10.0d;
+                Component component=Component.translatable("tooltip.celestial_awakening.life_frag_food",heal);
+                event.getToolTip().add(component);
+            }
         }
     }
 
@@ -373,7 +378,7 @@ public class EventManager {
     public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event){
         ItemStack itemStack=event.getItem();
         LivingEntity player=event.getEntity();
-        if (player instanceof Player && itemStack.getFoodProperties(null) != null && itemStack.hasTag()) {
+        if (player instanceof Player && itemStack.hasTag()) {
             assert itemStack.getTag() != null;
             if (itemStack.getTag().contains(lifeFrag)) {
                 float heal = itemStack.getTag().getFloat(lifeFrag);
@@ -772,7 +777,30 @@ public class EventManager {
         }
     }
 
+    @SubscribeEvent
+    public static void onSleep(PlayerSleepInBedEvent event){
+        if (event.getEntity().level() instanceof ServerLevel serverLevel){
+            BlockPos pos=event.getPos();
+            LazyOptional<LevelCapability> optional= serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+            optional.ifPresent(cap->{
+                if (cap.raids.getNearbyProwlerRaid(pos,36)!=null){
+                    event.setResult(Player.BedSleepingProblem.NOT_SAFE);
+                }
+            });
+        }
+    }
+    /*
+    @SubscribeEvent
+    public static void onCheckSpawn(MobSpawnEvent.CheckSpawn event) {
+        if (!(event.getEntity() instanceof SolmanderNewt)) return;
+        if (!(event.getLevel() instanceof ServerLevel level)) return;
 
+        if (!level.isDay()) {
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+     */
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase== TickEvent.Phase.START){
@@ -780,19 +808,21 @@ public class EventManager {
 
                 ServerLevel serverLevel = (ServerLevel) event.level;
                 @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+
                 int time= (int) (serverLevel.getDayTime()%24000L);
+
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
                     if (Config.wipEnabled){
                         cap.raids.tick();
-                        if (cap.deepLayerCounter<100 && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
+                        if (cap.deepLayerCounter<cap.deepLayerCounterLim && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
                             cap.increaseDeepLayerCounter(Config.coreGuardianCounter*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
                                 @Override
                                 public boolean test(ServerPlayer serverPlayer) {
                                     return serverPlayer.getY()<=0;
                                 }
                             }).size());
-                            if (cap.deepLayerCounter>=100){
+                            if (cap.deepLayerCounter>=cap.deepLayerCounterLim){
                                 String msg="The world quakes beneath you...";
                                 for (ServerPlayer serverPlayer:serverLevel.players()) {
                                     serverPlayer.sendSystemMessage(Component.literal(msg));
@@ -836,6 +866,9 @@ public class EventManager {
 
                 });
                 lunarEvents.detectIfLookingAtMoon(serverLevel,time>13000);
+                 if (time==12500 && Config.wipEnabled){//TODO: players can sleep by 12542 and 23459
+                    lunarEvents.attemptProwlerRaid(serverLevel);
+                }
                 if (time>13000){
                     int phase=serverLevel.getMoonPhase();
                     lunarEvents.createMoonstone(serverLevel);
@@ -855,9 +888,7 @@ public class EventManager {
                             lunarEvents.midnightIronTransformation(serverLevel);
                             lunarEvents.attemptPKSpawn(serverLevel);
                         }
-                        else if (time==15500 && Config.wipEnabled){
-                            lunarEvents.attemptProwlerRaid(serverLevel);
-                        }
+
                     }
 
 

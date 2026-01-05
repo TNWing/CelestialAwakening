@@ -50,10 +50,11 @@ public class LevelCapability{
     public int prowlerSpawnCD;
 
     public void increaseDeepLayerCounter(int amt) {
-        this.deepLayerCounter = Math.max(100,deepLayerCounter+amt);
+        this.deepLayerCounter = Math.max(deepLayerCounterLim,deepLayerCounter+amt);
     }
 
     public int deepLayerCounter;//used to enable core guardian spawns
+    public int deepLayerCounterLim=1000;//used to enable core guardian spawns
     /*
     -2: not active
     -1: eye closed

@@ -18,7 +18,8 @@ public class NP_HunterCombatAIGoal extends GenericCombatAIGoal {
     NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,15,0,0);
     NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((ProwlerWhelp) this.mob,15,70,12,5,10);
     NP_HunterPhantomRush phantomRush=new NP_HunterPhantomRush(this.mob,10,90,15,10,7);
-    List<GenericAbility> abilities=List.of(basicAttack,phantomRush,shadowLeap);
+    NP_HunterUmbraWarp umbraWarp=new NP_HunterUmbraWarp(this.mob,20,100,15,25,5,30);
+    List<GenericAbility> abilities=List.of(basicAttack,phantomRush,shadowLeap,umbraWarp);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         abilities.forEach(a-> a.decreaseCD(1));

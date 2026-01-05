@@ -326,9 +326,12 @@ public class LunarEvents {
                             }
                         }
                         if (applicableBlocks.size()>0){
-                            BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));//err, bound must be pos
-                            //System.out.println("PLACING MOONSTONE at " + chosenSpot);
-                            cap.currentMoonstonePos.put(chosenSpot, (short) 1800);
+                            for (int i=0;i<Config.moonstoneCnt;i++){
+                                BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));
+                                applicableBlocks.remove(chosenSpot);
+                                cap.currentMoonstonePos.put(chosenSpot, (short) 2400);
+                            }
+
                         }
 
                     }

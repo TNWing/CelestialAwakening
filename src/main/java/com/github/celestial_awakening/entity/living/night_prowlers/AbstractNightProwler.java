@@ -7,6 +7,8 @@ import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import com.github.celestial_awakening.events.raids.ProwlerRaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -100,6 +102,31 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     }
     public void tick() {
         super.tick();
+
+        if (!this.level().isClientSide){
+
+            ServerLevel serverLevel= (ServerLevel) this.level();
+            if (this.tickCount%30==0){
+                System.out.println("INFUSE IS " + this.getInfuse());
+                switch(this.getInfuse()){
+                    case 1:{
+                        ParticleOptions particleType = ParticleTypes.FLAME;
+                        serverLevel.sendParticles(particleType, this.position().x, this.position().y, this.position().z, 7, 0, 0, 0,  0.08f);
+                        break;
+                    }
+                    case -1:{
+                        ParticleOptions particleType = ParticleTypes.SNOWFLAKE;
+                        serverLevel.sendParticles(particleType, this.position().x, this.position().y, this.position().z, 7, 0, 0, 0,  0.08f);
+
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+
+            }
+        }
     }
 
     @Override

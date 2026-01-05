@@ -1,13 +1,11 @@
 package com.github.celestial_awakening;
 
-import com.github.celestial_awakening.events.raids.ProwlerRaid;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -44,7 +42,7 @@ public class Config
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE;
 
     static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
-
+    static final ForgeConfigSpec.ConfigValue<String> PROWLER_DESTRUCTION;
     static final ForgeConfigSpec.IntValue SOLMANDER_DELAY;
 
     static final ForgeConfigSpec.IntValue CORE_GUARDIAN_COUNTER;
@@ -52,6 +50,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> LUNAR_MATERIAL_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_LIMIT;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_INTERVAL;
+    private static final ForgeConfigSpec.ConfigValue<Integer> MOONSTONE_CNT;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP;
@@ -63,7 +62,10 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<String> INSANITY_VISUALS;
     private static final ForgeConfigSpec.ConfigValue<Integer> MOON_INSANITY;
     private static final ForgeConfigSpec.ConfigValue<Integer> INSANITY_PASSIVE_REC;
-    private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_INTERVAL;
+    private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_ANIMAL_INTERVAL;
+    private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_CROP_INTERVAL;
+
+
 
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_FIRE_MULT;
@@ -111,10 +113,11 @@ maybe use json files instead since it'll look neater?
 
         builder.push("Material_Config");
             SUNSTONE_LEAVES_RATE=builder.comment("Base % drop rate of sunstones from tree leaf blocks.\nDefault: 6.5").defineInRange("sunstone_leaves",6.5d,0,100d);
-            SUNSTONE_GRASS_RATE=builder.comment("Base % drop rate of sunstones from bushes and tall grass blocks.\nDefault: 3").defineInRange("sunstone_grass",3d,0,100d);
+            SUNSTONE_GRASS_RATE=builder.comment("Base % drop rate of sunstones from bushes and tall grass blocks.\nDefault: 4.5").defineInRange("sunstone_grass",4.5d,0,100d);
             LUNAR_MATERIAL_DIMENSIONS=builder.comment("Dimensions that moonstones can spawn in.\nDefault: [minecraft:overworld]").defineListAllowEmpty("lunar_mat_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")), obj->obj instanceof String);
-            MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit (not recommended).\nDefault: 19").defineInRange("moonstone_lim",19,-1,Integer.MAX_VALUE);
+            MOONSTONE_LIMIT=builder.comment("Max number of moonstones that can exist in a dimension simultaneously. Set to -1 to have no limit.\nDefault: 24").defineInRange("moonstone_lim",24,-1,Integer.MAX_VALUE);
             MOONSTONE_INTERVAL=builder.comment("Interval in ticks for each instance of moonstone spawning.\nDefault:1500").defineInRange("moonstone_interval",1500,100,Integer.MAX_VALUE);
+            MOONSTONE_CNT=builder.comment("Amount of moonstones spawned per interval for each player.\nDefault: 2").defineInRange("moonstone_cnt",2,1,Integer.MAX_VALUE);
         builder.pop();
 
         builder.push("Sanity_Config");
@@ -161,6 +164,7 @@ maybe use json files instead since it'll look neater?
 
         builder.push("Prowler_Config");
             PROWLER_RAID_INTERVAL=builder.comment("The number of nights that need to pass before the player experiences a prowler raid.\nDefault: 10").defineInRange("prowler_raid_interval",10,1,Integer.MAX_VALUE);
+            PROWLER_DESTRUCTION=builder.comment("Determines what prowlers can destroy blocks.\nOptions: ALL, RAID, NONE.\nDefault: RAID").define("prowler_destruction","RAID");
         builder.pop();
 
 
@@ -170,14 +174,16 @@ maybe use json files instead since it'll look neater?
 
 
         builder.push("Planetary_Guardian_Config");
-            CORE_GUARDIAN_COUNTER=builder.comment("The game checks every 400 ticks (20 seconds) to see who is below y-level 0, then adds this value to a counter for each player. When this counter hits 50, core guardians will be able to spawn.\nDefault: 1").defineInRange("core_guardian_counter",1,1,50);
+            CORE_GUARDIAN_COUNTER=builder.comment("The game checks every 400 ticks (20 seconds) to see who is below y-level 0, then adds this value to a counter for each player. When this counter hits 1000, core guardians will be able to spawn.\nDefault: 15").defineInRange("core_guardian_counter",15,1,50);
         builder.pop();
 
 
         builder.push("Armor_Config");
             builder.push("Radiant_Armor");
-                EXCITED_PARTICLES_INTERVAL=builder.comment("The delay in ticks between each activation of excited particles.\nDefault: 50").defineInRange("excited_particles_interval",50,1,Integer.MAX_VALUE);
-            builder.pop();
+                EXCITED_PARTICLES_ANIMAL_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' animal effect.\nDefault: 30").defineInRange("excited_particles_animal_interval",30,1,Integer.MAX_VALUE);
+                EXCITED_PARTICLES_CROP_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' crop effect.\nDefault: 400").defineInRange("excited_particles_crop_interval",400,1,Integer.MAX_VALUE);
+
+        builder.pop();
             builder.push("Knightmare_Suit");
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
             builder.pop();
@@ -272,7 +278,7 @@ maybe use json files instead since it'll look neater?
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
     public static boolean pkDayDespawn;
 
-    public static int coreGuardianCounter;
+    public static int coreGuardianCounter=2;
 
 
     public static double sunstoneLeavesRate;
@@ -281,6 +287,7 @@ maybe use json files instead since it'll look neater?
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
     public static int moonstoneDimLim=15;
     public static int moonstoneInterval;
+    public static int moonstoneCnt=2;
 
 
 
@@ -295,8 +302,10 @@ maybe use json files instead since it'll look neater?
     public static int insRec;
     public static int insMoH;
 
-    public static int excitedParticlesTickInterval=50;
-
+    public static int rejWaveInterval =300;
+    public static double rejWaveAmt =0.5d;
+    public static int excitedParticlesAnimalTickInterval =30;
+    public static int excitedParticlesCropTickInterval=400;
 
     public static double honorDuelDist;
 
@@ -359,6 +368,9 @@ maybe use json files instead since it'll look neater?
 
         moonstoneInterval=MOONSTONE_INTERVAL.get();
 
+
+        moonstoneCnt=MOONSTONE_CNT.get();
+
         sunstoneGrassRate=SUNSTONE_GRASS_RATE.get();
         sunstoneLeavesRate=SUNSTONE_LEAVES_RATE.get();
 
@@ -385,6 +397,7 @@ maybe use json files instead since it'll look neater?
         solmanderDelay=SOLMANDER_DELAY.get();
 
         prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
+        prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
 
         coreGuardianCounter=CORE_GUARDIAN_COUNTER.get();
 
@@ -413,7 +426,9 @@ maybe use json files instead since it'll look neater?
 
         insMoH=INS_MOH.get();
 
-        excitedParticlesTickInterval=EXCITED_PARTICLES_INTERVAL.get();
+        excitedParticlesAnimalTickInterval = EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
+        excitedParticlesCropTickInterval= EXCITED_PARTICLES_CROP_INTERVAL.get();
+
 
         honorDuelDist= HONOR_DUEL_DIST.get();
 

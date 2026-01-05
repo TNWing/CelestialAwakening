@@ -84,6 +84,7 @@ public abstract class GenericAbility {
         this.mob.fixedHeadRot=false;
         mob.isActing=false;
         this.mob.setActionId(0);
+        this.mob.setNoGravity(false);
         this.mob.spdMod=1f;
         this.isInUse=false;
     }

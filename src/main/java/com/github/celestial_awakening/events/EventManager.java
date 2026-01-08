@@ -5,6 +5,7 @@ import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.*;
 import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.commands.ProwlerRaidCommand;
+import com.github.celestial_awakening.commands.SanityCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.projectile.LightRay;
@@ -184,6 +185,7 @@ public class EventManager {
     public static void onRegisterCommands(RegisterCommandsEvent event){
         new DivinerDataCommand(event.getDispatcher(),2);
         new ProwlerRaidCommand(event.getDispatcher(),2);
+        new SanityCommand(event.getDispatcher(),2);
         ConfigCommand.register(event.getDispatcher());
     }
 

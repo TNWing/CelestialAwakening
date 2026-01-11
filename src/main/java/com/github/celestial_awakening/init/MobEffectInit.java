@@ -15,7 +15,7 @@ public class MobEffectInit {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS=DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, CelestialAwakening.MODID);
 
     public static final RegistryObject<MobEffect> PURGING_LIGHT =MOB_EFFECTS.register("purging_light",()->new PurgingLight(MobEffectCategory.HARMFUL, 16750848));
-    public static final RegistryObject<MobEffect> EXPOSING_LIGHT=MOB_EFFECTS.register("exposing_light",()->new ExposingLight(MobEffectCategory.HARMFUL, 16750848));
+    //public static final RegistryObject<MobEffect> EXPOSING_LIGHT=MOB_EFFECTS.register("exposing_light",()->new ExposingLight(MobEffectCategory.HARMFUL, 16750848));
 
     public static final RegistryObject<MobEffect> CELESTIAL_BEACON=MOB_EFFECTS.register("celestial_beacon",()
     ->new CelestialBeacon(MobEffectCategory.NEUTRAL,16750848));

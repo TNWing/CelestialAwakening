@@ -803,12 +803,29 @@ public class EventManager {
     }
 
      */
+    //custom spawner because vanilla is restrictive
+    public static void attemptSpawns(ServerLevel serverLevel){
+        @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
+        //serverLevel.
+        int time= (int) (serverLevel.getDayTime()%24000L);
+        if (serverLevel.isDay()){
+            //solmanders
+        }
+        capOptional.ifPresent(cap->{
+            if (cap.deepLayerCounter>=cap.deepLayerCounterLim){
+                //core guardian
+
+            }
+        });
+    }
+
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase== TickEvent.Phase.START){
             if (event.side.isServer()){
 
                 ServerLevel serverLevel = (ServerLevel) event.level;
+                attemptSpawns(serverLevel);
                 @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
 
                 int time= (int) (serverLevel.getDayTime()%24000L);

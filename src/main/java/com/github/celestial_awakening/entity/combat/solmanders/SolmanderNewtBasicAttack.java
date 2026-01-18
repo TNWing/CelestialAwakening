@@ -57,6 +57,6 @@ public class SolmanderNewtBasicAttack extends GenericAbility {
 
     @Override
     protected double getAbilityRange(LivingEntity target) {
-        return (double)(this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth());
+        return 2f + target.getBbWidth();
     }
 }

@@ -13,14 +13,16 @@ import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SolmanderConflagration extends GenericAbility {
-    int hBound=17;
+    int hBound=9;
     int vBound=2;
     boolean diagonal=false;
     public SolmanderConflagration(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime, int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
+
         name="Conflagration";
     }
 
@@ -54,81 +56,94 @@ public class SolmanderConflagration extends GenericAbility {
 
     void conflagration(){
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
+        int xCenter=this.mob.blockPosition().getX();
+        int yCenter=this.mob.blockPosition().getY();
+        int zCenter=this.mob.blockPosition().getZ();
+        ArrayList<BlockPos> blocksToSpreadFrom=new ArrayList<>();
         for (int x=-hBound;x<=hBound;x++){
             for (int z=-hBound;z<=hBound;z++){
                 for (int y=-vBound;y<=vBound;y++){
-                    BlockPos pos=new BlockPos(x,y,z);
+
+                    BlockPos pos=new BlockPos(xCenter+x,yCenter+y,zCenter+z);
                     BlockState blockState= serverLevel.getBlockState(pos);
                     Block block=blockState.getBlock();
                     if (blockState.is(BlockTags.FIRE)){
-                        if (diagonal){
-                            for (int fx=-1;fx<=1;fx+=2){
-                                BlockPos nearbyPos=pos.offset(fx,1,0);
-                                if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
-                                    BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
-                                    BlockState newFire=block.defaultBlockState()
-                                            .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
-                                            .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
-                                            .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
-                                            .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
-                                            .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
-                                    serverLevel.setBlockAndUpdate(nearbyPos, newFire);
-                                }
-                            }
-                            for (int fz=-1;fz<=1;fz+=2){
-                                BlockPos nearbyPos=pos.offset(0,1,fz);
-                                if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
-                                    BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
-                                    BlockState newFire=block.defaultBlockState()
-                                            .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
-                                            .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
-                                            .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
-                                            .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
-                                            .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
-                                    serverLevel.setBlockAndUpdate(nearbyPos, newFire);
-                                }
-                            }
-                        }
-                        else{
-                            for (int fx=-1;fx<=1;fx+=2){
-                                BlockPos nearbyPos=pos.offset(fx,1,0);
-                                if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
-                                    BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
-                                    BlockState newFire=block.defaultBlockState()
-                                            .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
-                                            .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
-                                            .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
-                                            .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
-                                            .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
-                                    serverLevel.setBlockAndUpdate(nearbyPos, newFire);
-                                }
-                            }
-                            for (int fz=-1;fz<=1;fz+=2){
-                                BlockPos nearbyPos=pos.offset(0,1,fz);
-                                if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
-                                    BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
-                                    BlockState newFire=block.defaultBlockState()
-                                            .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
-                                            .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
-                                            .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
-                                            .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
-                                            .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
-                                    serverLevel.setBlockAndUpdate(nearbyPos, newFire);
-                                }
-                            }
-                        }
-
+                        blocksToSpreadFrom.add(pos);
                     }
                 }
             }
+        }
+        if (!blocksToSpreadFrom.isEmpty()){//TODO: to make a cleaner conflag, also current conflag doesnt spread to above or below y level blocks
+            if (diagonal){
+                for (BlockPos pos:blocksToSpreadFrom) {
+                    BlockState blockState = serverLevel.getBlockState(pos);
+                    Block block = blockState.getBlock();
+                    for (int y=-1;y<=1;y++){
+                        for (int fx=-1;fx<=1;fx++){
+                            for (int fz=-1;fz<=1;fz+=1){
+                                BlockPos nearbyPos=pos.offset(fx,y,fz);
+                                if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
+                                    BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
+                                    BlockState newFire=block.defaultBlockState()
+                                            .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
+                                            .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
+                                            .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
+                                            .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
+                                            .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
+                                    serverLevel.setBlockAndUpdate(nearbyPos, newFire);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                for (BlockPos pos:blocksToSpreadFrom) {
+                    BlockState blockState= serverLevel.getBlockState(pos);
+                    Block block=blockState.getBlock();
+                    for (int y=-1;y<=1;y++){
+                        for (int fx=-1;fx<=1;fx+=2){
+                            BlockPos nearbyPos=pos.offset(fx,y,0);
+                            if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
+                                BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
+                                BlockState newFire=block.defaultBlockState()
+                                        .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
+                                        .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
+                                        .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
+                                        .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
+                                        .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
+                                serverLevel.setBlockAndUpdate(nearbyPos, newFire);
+                            }
+                        }
+                        for (int fz=-1;fz<=1;fz+=2){
+                            BlockPos nearbyPos=pos.offset(0,y,fz);
+                            if (BaseFireBlock.canBePlacedAt(serverLevel,nearbyPos,Direction.UP)){
+                                BlockState stateVals= BaseFireBlock.getState(serverLevel,nearbyPos);
+                                BlockState newFire=block.defaultBlockState()
+                                        .setValue(FireBlock.NORTH,stateVals.getValue(FireBlock.NORTH))
+                                        .setValue(FireBlock.SOUTH,stateVals.getValue(FireBlock.SOUTH))
+                                        .setValue(FireBlock.EAST,stateVals.getValue(FireBlock.EAST))
+                                        .setValue(FireBlock.WEST,stateVals.getValue(FireBlock.WEST))
+                                        .setValue(FireBlock.UP,stateVals.getValue(FireBlock.UP));
+                                serverLevel.setBlockAndUpdate(nearbyPos, newFire);
+                            }
+                        }
+                    }
+
+                }
+            }
+
         }
         AABB aabb=new AABB(this.mob.blockPosition());
         aabb=aabb.inflate(9,2.5f,9);
         List<LivingEntity> entityList=serverLevel.getEntitiesOfClass(LivingEntity.class,aabb);
         for (LivingEntity entity:entityList) {
-            System.out.printf("Entity before fticks %s\n",entity.getRemainingFireTicks());
-            entity.setRemainingFireTicks(entity.getRemainingFireTicks()+80);
-            System.out.printf("Entity after fticks %s\n",entity.getRemainingFireTicks());
+            if (entity.isOnFire()){
+                System.out.printf("Entity before fticks %s\n",entity.getRemainingFireTicks());
+                entity.setRemainingFireTicks(entity.getRemainingFireTicks()+80);
+                System.out.printf("Entity after fticks %s\n",entity.getRemainingFireTicks());
+            }
+
 
         }
     }

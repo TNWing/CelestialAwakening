@@ -48,6 +48,7 @@ public class LunarArmor extends ArmorEffect {
     public static final String ORBITER_DESC = "tooltip.celestial_awakening.lunar_armor.orbiter_desc";
     public static final String BLESSED_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_name";
     public static final String BLESSED_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_desc";
+    public static final String NO_BLESSING_DESC = "tooltip.celestial_awakening.lunar_armor.no_blessed_desc";
     public static final String PATH_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_path_name";
     public static final String PATH_DESC = "tooltip.celestial_awakening.lunar_armor.blessed_path_desc";
     public static final String DEAL_NAME = "tooltip.celestial_awakening.lunar_armor.blessed_deal_name";
@@ -82,24 +83,6 @@ public class LunarArmor extends ArmorEffect {
         if (cnt==4){
             orbiter(event,player);
         }
-    }
-
-    public void onFishEvent(ItemFishedEvent event,int cnt){//TODO: move this to loot modifier instead
-        /*
-        if (random.nextInt(0,100)<cnt*12){
-            Player player=event.getEntity();
-            int roll=random.nextInt(0,10);
-            ItemEntity itemEntity;
-            if (roll<5){
-                 itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.MOONSTONE.get()));
-            }
-            else{
-                itemEntity =new ItemEntity(player.level(),player.getX(),player.getY(),player.getZ(),new ItemStack(ItemInit.LUNAR_SCALE.get()));
-            }
-            player.level().addFreshEntity(itemEntity);
-        }
-
-         */
     }
 
     public void onFishHookCreationEvent(ServerLevel serverLevel, FishingHook hook){
@@ -159,27 +142,25 @@ public class LunarArmor extends ArmorEffect {
         Level level = player.level();
         int time = (int) level.dayTime();//ranges from 0-24k
         ToolTipBuilder.addShiftInfo(event);
-        if (time % 120 != 0) {//update the desc every 6 sec
-            if (time < nightStart) {//daytime
-                ToolTipBuilder.addFullSetName(event,BLESSED_NAME,boldColor);
-            } else {
-                switch (level.getMoonPhase()) {
-                    case 0: {//full
-                        ToolTipBuilder.addFullSetName(event,PATH_NAME,boldColor);
-                        break;
-                    }
-                    case 2://half
-                    case 6: {
-                        ToolTipBuilder.addFullSetName(event,DEAL_NAME,boldColor);
-                        break;
-                    }
-                    case 4: {//new
-                        ToolTipBuilder.addFullSetName(event,FISH_NAME,boldColor);
-                        break;
-                    }
-                    default:{
-                        break;
-                    }
+        if (time < nightStart) {//daytime
+            ToolTipBuilder.addFullSetName(event,BLESSED_NAME,boldColor);
+        } else {
+            switch (level.getMoonPhase()) {
+                case 0: {//full
+                    ToolTipBuilder.addFullSetName(event,PATH_NAME,boldColor);
+                    break;
+                }
+                case 2://half
+                case 6: {
+                    ToolTipBuilder.addFullSetName(event,DEAL_NAME,boldColor);
+                    break;
+                }
+                case 4: {//new
+                    ToolTipBuilder.addFullSetName(event,FISH_NAME,boldColor);
+                    break;
+                }
+                default:{
+                    ToolTipBuilder.addFullSetName(event,BLESSED_NAME,boldColor);
                 }
             }
         }
@@ -204,24 +185,25 @@ public class LunarArmor extends ArmorEffect {
         Player player = event.getEntity();
         Level level = player.level();
         int time = (int) level.dayTime();//ranges from 0-24k
-        if (time % 120 != 0) {//update the desc every 6 sec
-            if (time < nightStart) {//daytime
-                ToolTipBuilder.addFullArmorSetComponent(event,BLESSED_NAME,boldColor,BLESSED_DESC,infoColor);
-            } else {
-                switch (level.getMoonPhase()) {
-                    case 0: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,PATH_NAME,boldColor,PATH_DESC,infoColor);
-                        break;
-                    }
-                    case 2:
-                    case 6: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,DEAL_NAME,boldColor,DEAL_DESC,infoColor);
-                        break;
-                    }
-                    case 4: {
-                        ToolTipBuilder.addFullArmorSetComponent(event,FISH_NAME,boldColor,FISH_DESC,infoColor);
-                        break;
-                    }
+        if (time < nightStart) {//daytime
+            ToolTipBuilder.addFullArmorSetComponent(event,BLESSED_NAME,boldColor,BLESSED_DESC,infoColor);
+        } else {
+            switch (level.getMoonPhase()) {
+                case 0: {
+                    ToolTipBuilder.addFullArmorSetComponent(event,PATH_NAME,boldColor,PATH_DESC,infoColor);
+                    break;
+                }
+                case 2:
+                case 6: {
+                    ToolTipBuilder.addFullArmorSetComponent(event,DEAL_NAME,boldColor,DEAL_DESC,infoColor);
+                    break;
+                }
+                case 4: {
+                    ToolTipBuilder.addFullArmorSetComponent(event,FISH_NAME,boldColor,FISH_DESC,infoColor);
+                    break;
+                }
+                default:{
+                    ToolTipBuilder.addFullArmorSetComponent(event,BLESSED_NAME,boldColor,NO_BLESSING_DESC,infoColor);
                 }
             }
         }

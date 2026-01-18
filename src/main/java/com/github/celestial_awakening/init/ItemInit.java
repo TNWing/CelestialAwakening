@@ -71,7 +71,7 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> GAIA_PLATE=ITEMS.register("gaia_plate",() ->new Item(new Item.Properties()));
-    public static final RegistryObject<Item> TERRA_GLAIVE=ITEMS.register("terra_glaive",()->new TerraGlaive(new Item.Properties().stacksTo(1).durability(800),8.5f,-2.9f));
+    //public static final RegistryObject<Item> TERRA_GLAIVE=ITEMS.register("terra_glaive",()->new TerraGlaive(new Item.Properties().stacksTo(1).durability(800),8.5f,-2.9f));
     public static final RegistryObject<Item> PLATE_HELMET=ITEMS.register("plate_helmet",()->new CustomArmorItem(
             CustomArmorMaterial.PLATE, ArmorItem.Type.HELMET,new Item.Properties()
     ));

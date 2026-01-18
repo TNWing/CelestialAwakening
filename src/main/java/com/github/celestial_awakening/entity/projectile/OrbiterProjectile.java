@@ -94,7 +94,6 @@ public class OrbiterProjectile extends CA_Projectile {
                 this.entityData.set(RELEASETIMER,this.entityData.get(RELEASETIMER)-1);
             }
             else if (this.entityData.get(RELEASETIMER)==0 && this.getOwner()!=null){
-                //this.discard();//replace w/ release in future
                 release();
                 this.entityData.set(RELEASETIMER,this.entityData.get(RELEASETIMER)-1);
             }

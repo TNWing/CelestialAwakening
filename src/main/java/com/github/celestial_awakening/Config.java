@@ -44,6 +44,8 @@ public class Config
     static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
     static final ForgeConfigSpec.ConfigValue<String> PROWLER_DESTRUCTION;
     static final ForgeConfigSpec.IntValue SOLMANDER_DELAY;
+    static final ForgeConfigSpec.IntValue SOLMANDER_INTERVAL;
+    static final ForgeConfigSpec.IntValue SOLMANDER_CHANCE;
 
     static final ForgeConfigSpec.IntValue CORE_GUARDIAN_COUNTER;
 
@@ -170,6 +172,9 @@ maybe use json files instead since it'll look neater?
 
         builder.push("Solmander_Config");
             SOLMANDER_DELAY=builder.comment("The amount of time (in ticks) before solmanders can spawn naturally.\nDefault: 72000").defineInRange("solmander_delay",72000,1,Integer.MAX_VALUE);
+            SOLMANDER_INTERVAL=builder.comment("The amount of time (in ticks) between solmander spawn attempts.\nDefault: 1200").defineInRange("solmander_interval",1200,1,Integer.MAX_VALUE);
+            SOLMANDER_CHANCE=builder.comment("Solmander spawning works by attempting to spawn near each player. This value represents The chance (out of a 100) for an attempt to succeed prior to any other checks.\nDefault: 15").defineInRange("solmander_chance",15,0,100);
+
         builder.pop();
 
 
@@ -269,6 +274,9 @@ maybe use json files instead since it'll look neater?
     public static int prowlerRaidInterval;
 
     public static int solmanderDelay;
+    public static int solmanderInterval=1200;
+    public static int solmanderChance=15;
+
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;
@@ -395,6 +403,8 @@ maybe use json files instead since it'll look neater?
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
 
         solmanderDelay=SOLMANDER_DELAY.get();
+        solmanderInterval=SOLMANDER_INTERVAL.get();
+        solmanderChance=SOLMANDER_CHANCE.get();
 
         prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
         prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());

@@ -75,6 +75,13 @@ public class EntityInit {
                     .updateInterval(20).build("ca_arrow"));
 
 
+    public static final RegistryObject<EntityType<GenericShard>> GENERIC_SHARD=ENTITY_TYPES.register("generic_shard",
+            ()->EntityType.Builder.<GenericShard>of(GenericShard::new,MobCategory.MISC)
+                    .sized(0.4f,0.8f)
+                    .clientTrackingRange(4)
+                    .updateInterval(20).build("generic_shard")
+    );
+
     public static final RegistryObject<EntityType<MoonlightOrb>> MOONLIGHT_ORB=ENTITY_TYPES.register("moonlight_orb",
             ()->EntityType.Builder.<MoonlightOrb>of(MoonlightOrb::new,MobCategory.MISC).sized(0.5f,0.5f).build("moonlight_orb"));
 

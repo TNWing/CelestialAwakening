@@ -251,11 +251,12 @@
   "tooltip.celestial_awakening.knightmare_suit.ss_desc": "TBD",
 
   "tooltip.celestial_awakening.lunar_armor.resonance_name": "Lunar Resonance",
-  "tooltip.celestial_awakening.lunar_armor.resonance_desc": "Chance to gain special items upon breaking surface blocks or fishing up items.",
+  "tooltip.celestial_awakening.lunar_armor.resonance_desc": "Chance to gain additional items upon breaking surface blocks or fishing up items.",
   "tooltip.celestial_awakening.lunar_armor.orbiter_name": "Orbiter",
   "tooltip.celestial_awakening.lunar_armor.orbiter_desc": "When attacked, creates a comet that follows the wearer.\nAfter a short delay, the comet will launch towards the nearest enemy.\nIf no enemy present, the comet is consumed to heal the user slightly.",
   "tooltip.celestial_awakening.lunar_armor.blessed_name": "Blessed Night",
   "tooltip.celestial_awakening.lunar_armor.blessed_desc": "Receive a buff at night depending on the moon phase.",
+  "tooltip.celestial_awakening.lunar_armor.no_blessed_desc": "The current moon phase has no blessing for you.",
   "tooltip.celestial_awakening.lunar_armor.blessed_path_name": "Moonlit Path",
   "tooltip.celestial_awakening.lunar_armor.blessed_path_desc": "Drastically increased movement speed.",
   "tooltip.celestial_awakening.lunar_armor.blessed_deal_name": "Shady Deal",
@@ -264,7 +265,7 @@
   "tooltip.celestial_awakening.lunar_armor.blessed_fish_desc": "Increased luck while fishing.",
 
   "tooltip.celestial_awakening.radiant_armor.abs_name": "Life Absorption",
-  "tooltip.celestial_awakening.radiant_armor.abs_desc": "Obtain special materials upon gathering crops or killing animals.",
+  "tooltip.celestial_awakening.radiant_armor.abs_desc": "Chance to obtain additional materials upon gathering crops or killing animals.",
   "tooltip.celestial_awakening.radiant_armor.particle_name": "Excited Particles",
   "tooltip.celestial_awakening.radiant_armor.particle_desc":"Speeds up the growth of nearby plants.\nSpeeds up the growth and breeding recovery period of animals.",
   "tooltip.celestial_awakening.radiant_armor.wave_name": "Rejuvinating Wave",

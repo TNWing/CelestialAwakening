@@ -256,7 +256,6 @@ public class LightRay extends CA_Projectile {
                     Vec3 rayOffset=rayOffsets[i];
                     Optional<Vec3> edgeRay= aabb.clip(this.position().add(rayOffset), end.add(rayOffset));//does the entity intersect with the ray;
                     if (edgeRay.isPresent()){
-                        System.out.printf("ADDING ENT %s\n",entity);
                         entitiesToHit.add(entity);
                         if (!hitMultiple){
                             break;

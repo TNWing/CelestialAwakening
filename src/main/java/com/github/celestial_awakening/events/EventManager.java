@@ -7,6 +7,7 @@ import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.commands.ProwlerRaidCommand;
 import com.github.celestial_awakening.commands.SanityCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
+import com.github.celestial_awakening.entity.living.solmanders.AbstractSolmander;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
@@ -15,6 +16,7 @@ import com.github.celestial_awakening.events.custom_events.DivinerEyeSoundEvent;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
 import com.github.celestial_awakening.events.custom_events.TranscendentSpawnEvent;
 import com.github.celestial_awakening.events.raids.ProwlerRaid;
+import com.github.celestial_awakening.events.spawners.SolmanderSpawner;
 import com.github.celestial_awakening.init.*;
 import com.github.celestial_awakening.items.CustomArmorItem;
 import com.github.celestial_awakening.items.CustomArmorMaterial;
@@ -38,16 +40,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -55,10 +55,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.AnvilBlock;
@@ -66,7 +63,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -297,26 +297,7 @@ public class EventManager {
 
         }
     }
-    //TODO: replace with loot table later
-    @SubscribeEvent
-    public static void onItemFished(ItemFishedEvent event){
-        int cnt=0;
-        Player player=event.getEntity();
-        if (player!=null){
 
-            for (ItemStack armorStack : player.getInventory().armor) {
-                if(!armorStack.isEmpty() && (armorStack.getItem() instanceof ArmorItem armorItem)) {
-                    if (armorItem.getMaterial()==CustomArmorMaterial.LUNAR){
-                        cnt++;
-                    }
-                }
-            }
-            if (cnt>0){
-                ((LunarArmor)lunarArmor.getValue()).onFishEvent(event,cnt);
-            }
-        }
-
-    }
     @SubscribeEvent
     public static void onTrade(TradeWithVillagerEvent event){
         Player player =event.getEntity();
@@ -804,20 +785,39 @@ public class EventManager {
 
      */
     //custom spawner because vanilla is restrictive
+
+    @SubscribeEvent
+    public static void onCheckSpawnPos(MobSpawnEvent.PositionCheck event){
+        if (event.getEntity() instanceof AbstractSolmander){
+            System.out.println("SOL SPAWN event result is " + event.getResult() + "  at pos " + event.getEntity().position());
+        }
+    }
+
     public static void attemptSpawns(ServerLevel serverLevel){
         @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
         //serverLevel.
         int time= (int) (serverLevel.getDayTime()%24000L);
         if (serverLevel.isDay()){
             //solmanders
+            //serverLevel.getBlockStates()
+            if (time%Config.solmanderInterval==0 && serverLevel.getDayTime()>=Config.solmanderDelay){//maybe use levelchunk cap
+                SolmanderSpawner.attemptSpawn(serverLevel);
+
+            }
         }
         capOptional.ifPresent(cap->{
             if (cap.deepLayerCounter>=cap.deepLayerCounterLim){
-                //core guardian
+                //core guardian, vanilla might be sufficient enough
 
             }
         });
     }
+    /*
+    BlockEvent.NeighborNotifyEvent
+BlockEvent.EntityPlaceEvent
+BlockEvent.BlockToolModificationEvent
+FluidPlaceBlockEvent
+    */
 
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {

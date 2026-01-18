@@ -150,8 +150,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:jeed-532286:6172935") // <-- example file ID
     implementation 'org.apache.commons:commons-numbers-quaternion:1.2'
     implementation 'org.apache.commons:commons-math3:3.4.1'
-    runtimeOnly  fg.deobf("curse.maven:enchantment-descriptions-250419:7336071")
-    runtimeOnly  fg.deobf("curse.maven:bookshelf-228525:5423987")
+    runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:7336071")
+    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:5423987")
+    runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
 
 }
 mixin {

@@ -57,7 +57,7 @@ public abstract class GenericAbility {
         this.abilityExecuteTime=executeTime;
         this.abilityCastTime=castTime;
         this.abilityCD=CD;
-        this.currentCD=0;
+        this.currentCD=mob.getRandom().nextInt(CD);
         this.abilityRecoveryTime=recoveryTime;
         this.basePriority=basePriority;
     }

@@ -2,6 +2,8 @@ package com.github.celestial_awakening.entity.living.planetary_guardians;
 
 import com.github.celestial_awakening.entity.combat.CoreGuardianDeepYTargetGoal;
 import com.github.celestial_awakening.entity.combat.planetary_guardians.core_guardian.CoreGuardianCombatAIGoal;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -53,7 +55,7 @@ public class CoreGuardian extends AbstractGuardian{
         this.hardenStacks--;
         System.out.println("HARD STACKS " + this.hardenStacks);
         if (hardenStacks==0){
-
+            this.playSound(SoundEvents.ITEM_BREAK,1,1f);
             hardenShieldBrokenCnt++;
             System.out.println("HARD SHIELD BROKE AT " + hardenShieldBrokenCnt);
         }
@@ -74,5 +76,16 @@ public class CoreGuardian extends AbstractGuardian{
         }
 
         return super.hurt(source,amt);
+    }
+    protected SoundEvent getHurtSound(DamageSource p_30424_) {
+        return SoundEvents.BLAZE_HURT;
+    }
+
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.4F;
+    }
+
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.GENERIC_DEATH;
     }
 }

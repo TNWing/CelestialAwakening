@@ -1,6 +1,9 @@
 package com.github.celestial_awakening.entity.living.transcendents;
 
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -30,6 +33,15 @@ presumably, each goal is check sequentially bbased on priority, so a goal will f
         LivingEntity target=this.getTarget();
         return target.isCurrentlyGlowing() || super.canStillSenseTarget();
     }
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.6F;
+    }
+    protected SoundEvent getHurtSound(DamageSource p_30424_) {
+        return SoundEvents.HOSTILE_HURT;
+    }
 
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.BLAZE_DEATH;
+    }
 
 }

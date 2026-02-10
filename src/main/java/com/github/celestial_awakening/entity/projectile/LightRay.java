@@ -89,22 +89,17 @@ public class LightRay extends CA_Projectile {
         LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
         entity.setLifetime(tickLiveTime);
         entity.setDmg(dmg);
+        entity.setNoGravity(true);
         return entity;
     }
     public static LightRay create(Level level, int tickLiveTime,float dmg,boolean hitMultiple,boolean destroyIfHitLiving) {
-        LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
-        entity.setLifetime(tickLiveTime);
-        entity.setDmg(dmg);
+        LightRay entity = LightRay.create(level,tickLiveTime,dmg);
         entity.hitMultiple=hitMultiple;
         entity.destroyIfHitLiving=destroyIfHitLiving;
         return entity;
     }
     public static LightRay create(Level level, int tickLiveTime,float dmg,boolean hitMultiple,boolean destroyIfHitLiving,boolean ignoreDefaultHitIfAlert) {
-        LightRay entity = new LightRay(EntityInit.LIGHT_RAY.get(), level);
-        entity.setLifetime(tickLiveTime);
-        entity.setDmg(dmg);
-        entity.hitMultiple=hitMultiple;
-        entity.destroyIfHitLiving=destroyIfHitLiving;
+        LightRay entity = LightRay.create(level,tickLiveTime,dmg,hitMultiple,destroyIfHitLiving);
         entity.ignoreDefaultHitIfAlert=ignoreDefaultHitIfAlert;
         return entity;
     }
@@ -131,8 +126,9 @@ public class LightRay extends CA_Projectile {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
+
         this.entityData.set(STOP_ON_CONTACT,tag.getBoolean(ray_ContactStop));
+        super.readAdditionalSaveData(tag);
     }
 
     @Override

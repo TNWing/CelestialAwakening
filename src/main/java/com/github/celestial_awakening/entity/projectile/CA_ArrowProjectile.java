@@ -51,8 +51,9 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
         this.entityData.define(ARROW_TYPE,0);
     }
     public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
+
         this.entityData.set(ARROW_TYPE,tag.getInt("AType"));
+        super.readAdditionalSaveData(tag);
 
     }
     public void addAdditionalSaveData(CompoundTag tag) {

@@ -54,7 +54,7 @@
   "item.celestial_awakening.plate_chestplate": "Plate Chestplate",
   "item.celestial_awakening.plate_leggings": "Plate Leggings",
   "item.celestial_awakening.plate_boots": "Plate Boots",
-
+  "item.celestial_awakening.terra_glaive": "Terra Glaive",
 
 
   "item.celestial_awakening.everlight_helmet": "Everlight Helmet",
@@ -208,6 +208,9 @@
   "tooltip.celestial_awakening.fluorescent_bow.revealing_shot_desc": "When the arrow hits a target, reveal and damage all entities near the target.",
   "tooltip.celestial_awakening.star_gazer.burning_light_name": "Burning Light",
   "tooltip.celestial_awakening.star_gazer.burning_light_desc": "When the arrow hits a target, deal bonus damage if the target is glowing and heal slightly if the target is on fire.\nThis effect is applied before Revealing Shot.",
+
+  "tooltip.celestial_awakening.terra_glaive.spear_name": "Earth Spear",
+  "tooltip.celestial_awakening.terra_glaive.spear_desc": "Summons a shard of rock in the direction you are looking at, dealing damage to the first entity it collides with.",
 
   "tooltip.celestial_awakening.seared_stone_tools.tier": "Tier:%s",
   "tooltip.celestial_awakening.seared_stone_tools.hint_pre": "Hint: ",

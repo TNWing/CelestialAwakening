@@ -3,6 +3,7 @@ package com.github.celestial_awakening.nbt_strings;
 public class LevelCapNBTNames {
     public static String lvlCap_divSunControlVal ="sCtrlVal";
     public static String lvlCap_divSunControlTime ="sCtrlTime";
+    public static String lvlCap_divSunControlType ="sCtrlType";
     public static String lvlCap_transcendentHolder="tH";
     public static String lvlCap_transcendentLevelRK="rk";
     public static String lvlCap_transcendentPower="pow";

@@ -44,6 +44,16 @@ public class LevelCapability{
     public float divinerEyeFrameProgress;//0-100, updated client side except when server changes frame, in which case it is set to 0
     public int divinerEyePower;//0-100, determines what abilities can be used, maybe make new cap in the thousands or 1 mil?
     public byte divinerSunControlVal;//-10 to 10
+
+    public byte getDivinerSunControlType() {
+        return divinerSunControlType;
+    }
+
+    public void setDivinerSunControlType(byte divinerSunControlType) {
+        this.divinerSunControlType = divinerSunControlType;
+    }
+
+    public byte divinerSunControlType;//-3 to 3, used to determine which kind of sun control is executed
     public int divinerSunControlTimer;
 
     public int pkRemainingSpawnAttempts;
@@ -81,6 +91,7 @@ public class LevelCapability{
         this.levelResourceKey=data.levelResourceKey;
         this.prowlerSpawnCD=data.prowlerSpawnCD;
         this.divinerEyePower=data.divinerEyePower;
+        this.divinerSunControlType=data.divinerSunControlType;
         this.deepLayerCounter=data.deepLayerCounter;
     }
 
@@ -108,6 +119,7 @@ public class LevelCapability{
         divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
         divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
+        divEyeTag.putByte(lvlCap_divSunControlType,this.divinerSunControlType);
         if (this.levelResourceKey!=null){
             DataResult<Tag> result= levelCodec.encodeStart(NbtOps.INSTANCE,this.levelResourceKey);
             result.resultOrPartial(err->System.out.println(err)).ifPresent(encodedObj->{
@@ -162,6 +174,7 @@ public class LevelCapability{
             this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
             this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
             this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
+            this.divinerSunControlType=divEye.getByte(lvlCap_divSunControlType);
             levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().ifPresent(data->{
                 if (data!=null){
                     this.levelResourceKey=data;
@@ -209,6 +222,7 @@ public class LevelCapability{
                 this.divinerEyePower=divEye.getInt(lvlCap_transcendentPower);
                 this.divinerSunControlVal =divEye.getByte(lvlCap_divSunControlVal);
                 this.divinerSunControlTimer =divEye.getInt(lvlCap_divSunControlTime);
+                this.divinerSunControlType=divEye.getByte(lvlCap_divSunControlType);
                 levelCodec.parse(NbtOps.INSTANCE,divEye.get(lvlCap_transcendentLevelRK)).result().ifPresent(data->{
                     if (data!=null){
                         this.levelResourceKey=data;
@@ -253,6 +267,7 @@ public class LevelCapability{
         divEyeTag.putInt(lvlCap_transcendentPower,this.divinerEyePower);
         divEyeTag.putByte(lvlCap_divSunControlVal,this.divinerSunControlVal);
         divEyeTag.putInt(lvlCap_divSunControlTime,this.divinerSunControlTimer);
+        divEyeTag.putByte(lvlCap_divSunControlType,this.divinerSunControlType);
         nbt.put(lvlCap_transcendentHolder,divEyeTag);
         nbt.putInt(lvlCap_deepCnt,deepLayerCounter);
         nbt.put("Raids",raids.saveRaids());

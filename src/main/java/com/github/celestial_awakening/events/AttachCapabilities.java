@@ -7,6 +7,7 @@ import com.github.celestial_awakening.entity.projectile.LightRay;
 import com.github.celestial_awakening.items.MoonScythe;
 import com.github.celestial_awakening.items.SearedStoneTool;
 import com.github.celestial_awakening.items.SunStaff;
+import com.github.celestial_awakening.items.TerraGlaive;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LivingEntityCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,6 +43,7 @@ public class AttachCapabilities {
     @SubscribeEvent
     public void onAttachItemStackCap(AttachCapabilitiesEvent<ItemStack> event){
         ItemStack itemStack =event.getObject();
+        Item item=itemStack.getItem();
         if (itemStack.getItem() instanceof MoonScythe){
             if (!event.getCapabilities().containsValue(MoonScytheCapabilityProvider.ScytheCap)){
                 event.addCapability(CelestialAwakening.createResourceLocation("scythe_data"),new MoonScytheCapabilityProvider());
@@ -54,6 +57,11 @@ public class AttachCapabilities {
         else if (itemStack.getItem() instanceof SearedStoneTool){
             if (!event.getCapabilities().containsValue(SearedStoneToolCapabilityProvider.capability)){
                 event.addCapability(CelestialAwakening.createResourceLocation("ss_tool_data"),new SearedStoneToolCapabilityProvider());
+            }
+        }
+        else if (item instanceof TerraGlaive){
+            if (!event.getCapabilities().containsValue(TerraGlaiveCapabilityProvider.cap)){
+                event.addCapability(CelestialAwakening.createResourceLocation("terra_glaive_data"), new TerraGlaiveCapabilityProvider());
             }
         }
     }

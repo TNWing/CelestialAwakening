@@ -43,6 +43,7 @@ public class OrbiterProjectile extends CA_Projectile {
         entity.setPos(newPos);
         entity.entityData.set(OWNER_PREV_POS,owner.position().toVector3f());
         entity.entityData.set(RELEASETIMER,timer);
+        entity.setNoGravity(true);
         return entity;
     }
     @Override
@@ -79,10 +80,6 @@ public class OrbiterProjectile extends CA_Projectile {
         this.entityData.define(OWNER_PREV_POS,new Vector3f());
     }
 
-    @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> accesor){
-        super.onSyncedDataUpdated(accesor);
-    }
 
     public void tick() {
         Entity entity = this.getOwner();

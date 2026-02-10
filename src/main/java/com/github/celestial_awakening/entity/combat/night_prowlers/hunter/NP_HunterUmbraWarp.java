@@ -10,6 +10,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -42,7 +44,7 @@ public class NP_HunterUmbraWarp extends GenericAbility {
     @Override
     public void executeAbility(LivingEntity target) {
         if (state==1){
-            if (doVortex){
+            if (doVortex && currentStateTimer%5==0){
                 Vec3 pos=this.mob.position();
                 AABB aabb=new AABB(pos.x-horiDiff,1f + pos.y-vertDiff,pos.z-horiDiff,pos.x+horiDiff,1f + pos.y+vertDiff,pos.z+horiDiff);
                 List<LivingEntity> entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class)));
@@ -55,6 +57,11 @@ public class NP_HunterUmbraWarp extends GenericAbility {
                         amt=0.17f;
                     }
                     entity.hurt(vortexSource,amt);
+                    if (((AbstractNightProwler)this.mob).getInfuse()==-1){
+                        int i = entity.getTicksFrozen();
+                        entity.setTicksFrozen(Math.min(entity.getTicksRequiredToFreeze(), i + entity.getTicksRequiredToFreeze()/10));
+                        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,10,1));
+                    }
                 }
             }
             else if (currentStateTimer<abilityExecuteTime*2/3){
@@ -63,13 +70,18 @@ public class NP_HunterUmbraWarp extends GenericAbility {
                 for (LivingEntity entity:entities) {
                     entitiesHitBySlam.add(entity);
                     entity.hurt(slamSource,4.5f);
+
                 }
                 if (this.mob.onGround()){
                     Vec3 pos=this.mob.position();
                     AABB aabb=new AABB(pos.x-waveHoriDiff,1f + pos.y-waveVertDiff,pos.z-waveHoriDiff,pos.x+waveHoriDiff,1f + pos.y+waveVertDiff,pos.z+waveHoriDiff);
                     entities= this.mob.level().getEntitiesOfClass(LivingEntity.class,aabb, CA_Predicates.opposingTeams_IgnoreProvidedClasses_Predicate(this.mob,List.of(AbstractNightProwler.class)));
+                    boolean isFire=(((AbstractNightProwler)this.mob).getInfuse()==1);
                     for (LivingEntity entity:entities) {
                         entity.hurt(slamWaveSource,2.5f);
+                        if (isFire){
+                            entity.setSecondsOnFire(5);
+                        }
                     }
                     this.currentStateTimer=0;
                 }
@@ -85,7 +97,18 @@ public class NP_HunterUmbraWarp extends GenericAbility {
                         currentStateTimer=abilityExecuteTime;
                         this.mob.setNoGravity(true);
                         //tp on top of target
-
+                        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(target.getBlockX(),target.getBlockY()+7,target.getBlockZ());
+                        boolean valid=false;
+                        Vec3 vec3 = this.mob.position();
+                        while (!valid && blockPos.getY()>target.getY()){
+                            boolean flag2 = this.mob.randomTeleport(blockPos.getX(), blockPos.getY(), blockPos.getZ(), true);
+                            if (flag2){
+                                valid=true;
+                            }
+                            else{
+                                blockPos.setY(blockPos.getY()-1);
+                            }
+                        }
                     }
                     break;
                 }
@@ -108,7 +131,4 @@ public class NP_HunterUmbraWarp extends GenericAbility {
     protected double getAbilityRange(LivingEntity target) {
         return 9;
     }
-    /*
-    basically, deal damage during execution, then another instance at the end of recovery time
-     */
 }

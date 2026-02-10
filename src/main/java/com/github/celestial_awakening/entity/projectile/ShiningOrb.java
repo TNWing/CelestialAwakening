@@ -28,7 +28,6 @@ public class ShiningOrb extends CA_Projectile {
         super(shiningOrbEntityType,level,80);
         damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
         this.setNoGravity(true);
-        life=0;
     }
 
 
@@ -38,6 +37,7 @@ public class ShiningOrb extends CA_Projectile {
         entity.setLifetime(lt);
         entity.setMoveValues(spd,hA,vA);
         entity.setDmg(dmg);
+        entity.setNoGravity(true);
         return entity;
     }
     @Override
@@ -56,9 +56,10 @@ public class ShiningOrb extends CA_Projectile {
     }
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
+
         CompoundTag data=tag.getCompound(pd_HolderName);
         this.entityData.set(SHOULD_EXPLODE,data.getBoolean("Explode"));
+        super.readAdditionalSaveData(tag);
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {//TODO: check to make sure this is fine
@@ -95,7 +96,8 @@ public class ShiningOrb extends CA_Projectile {
             super.tick();
             this.setCurrentLifetime(this.getCurrentLifeTime()+1);
             if (this.getCurrentLifeTime()>=this.getLifeTime()){
-                this.discard();
+
+                //this.discard();
             }
         } else {
             this.discard();
@@ -119,7 +121,14 @@ public class ShiningOrb extends CA_Projectile {
             aabb=this.getBoundingBox();
             kb=0.1f;
         }
-        List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class,aabb,pred);
+        List<LivingEntity> list;
+        if (pred!=null){
+            list = this.level().getEntitiesOfClass(LivingEntity.class,aabb,pred);
+        }
+        else{
+            list= this.level().getEntitiesOfClass(LivingEntity.class,aabb);
+        }
+
         for(int ind = 0; ind < list.size(); ind++) {
             LivingEntity entity = list.get(ind);
             if (entity.hurt(damagesource,this.getDmg())){

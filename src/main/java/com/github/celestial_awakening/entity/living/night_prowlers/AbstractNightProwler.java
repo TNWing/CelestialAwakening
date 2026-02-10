@@ -43,6 +43,8 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
     private static final EntityDataAccessor<Integer> INFUSE = SynchedEntityData.defineId(AbstractNightProwler.class, EntityDataSerializers.INT);
     protected HashMap<Integer,AnimationState> actionIDToAnimMap=new HashMap();
     public AABB standardAABB;
+    int deathBombHBound=2;
+    int deathBombVBound=1;
 
     @Nullable
     public ProwlerRaid getRaid() {
@@ -107,7 +109,6 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
 
             ServerLevel serverLevel= (ServerLevel) this.level();
             if (this.tickCount%30==0){
-                System.out.println("INFUSE IS " + this.getInfuse());
                 switch(this.getInfuse()){
                     case 1:{
                         ParticleOptions particleType = ParticleTypes.FLAME;
@@ -161,9 +162,9 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
                 if (Config.prowlerDestruction== Config.ProwlerDestruction.ALL || (Config.prowlerDestruction== Config.ProwlerDestruction.RAID && this.raid!=null)){
                     BlockPos centerPos=this.blockPosition();
                     if (getInfuse()==1){//fire
-                        for (int x=-3;x<=3;x++){
-                            for (int z=-3;z<=3;z++){
-                                for (int y=-1;y<=1;y++){
+                        for (int x=-deathBombHBound;x<=deathBombHBound;x++) {
+                            for (int z = -deathBombHBound; z <= deathBombHBound; z++) {
+                                for (int y = -deathBombVBound; y <= deathBombVBound; y++) {
                                     BlockPos pos=centerPos.offset(x,y,z);
                                     BlockState blockState=this.level().getBlockState(pos);
                                     for(Direction direction : Direction.values()) {
@@ -185,17 +186,18 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
                         });
                     }
                     else{//ice
-                        for (int x=-3;x<=3;x++) {
-                            for (int z = -3; z <= 3; z++) {
-                                for (int y = -1; y <= 1; y++) {
+                        for (int x=-deathBombHBound;x<=deathBombHBound;x++) {
+                            for (int z = -deathBombHBound; z <= deathBombHBound; z++) {
+                                for (int y = -deathBombVBound; y <= deathBombVBound; y++) {
                                     /*
                                     the issue is there is no generic tag for stuff that have cobbled variants, stuff that are made of brick ingots, etc
                                     destroys cobblestone, converts stone to cobblestone, converts sandstone to sand, destroys bricks/nether bricks and drops 2 brick ingots
+                                    rework: fire just ignites the area, frost creates a slowing zone, and an overlapping slow zones will detonate
                                      */
                                     BlockPos pos=centerPos.offset(x,y,z);
                                     BlockState blockState=this.level().getBlockState(pos);
                                     if (blockState.is(Tags.Blocks.STONE) ){
-                                        //this.level().setBlockAndUpdate(pos,);
+                                        this.level().setBlockAndUpdate(pos,Blocks.COBBLESTONE.defaultBlockState());
                                     }
                                     else if (blockState.is(Tags.Blocks.SANDSTONE)){
                                         this.level().setBlockAndUpdate(pos,Blocks.SAND.defaultBlockState());

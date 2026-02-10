@@ -86,7 +86,7 @@ public class ClientModEventBusManager {
         event.registerEntityRenderer(EntityInit.NIGHT_PROWLER_WHELP.get(), NightProwlerRenderer::new);
         event.registerEntityRenderer(EntityInit.CUSTOM_ARROW.get(), CArrowRenderer::new);
         event.registerEntityRenderer(EntityInit.COSMIC_PEARL.get(), ThrownItemRenderer::new);
-
+        event.registerEntityRenderer(EntityInit.GENERIC_SHARD.get(), GenericShardRenderer::new);
         event.registerEntityRenderer(EntityInit.PK_CRESCENCIA.get(), PKCrescenciaRenderer::new);
 
 

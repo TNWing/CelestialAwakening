@@ -36,7 +36,6 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     int rmdTicks;
     MovementModifier currentMovementModifier;
     AlertInterface alertInterface;
-    int life;
     private static final EntityDataAccessor<Boolean> DELETE_ON_OWNER_DEATH = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> REAL = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> RENDERER_XSCALING = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
@@ -114,6 +113,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         this.entityData.define(DISABLE_SHIELDS,false);
         this.entityData.define(DISABLE_TICKS,0);
         this.entityData.define(HAS_COLLISION,true);
+
     }
     public void setRScales(float r){
         this.entityData.set(RENDERER_XSCALING,r);
@@ -134,7 +134,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         CompoundTag data=tag.getCompound(pd_HolderName);
-        this.setDims(data.getFloat(pd_width),data.getFloat(pd_height));
+        this.setDims(data.contains(pd_width)? data.getFloat(pd_width): this.getDimensions(null).width,data.contains(pd_height)? data.getFloat(pd_height):this.getDimensions(null).height);
         this.setSpd(data.getFloat(pd_spd));
         this.setHAng(data.getFloat(pd_hAng));
         this.setVAng(data.getFloat(pd_vAng));
@@ -142,12 +142,16 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         this.setCurrentLifetime(0);
         this.setDmg(data.getFloat(pd_dmg));
         this.setZRot(data.getFloat(pd_zRot));
-        this.setOpacity(data.getFloat(pd_opacity));
-        this.setRScales(data.getFloat(pd_xrScale),data.getFloat(pd_yrScale),data.getFloat(pd_zrScale));
+        this.setOpacity(data.contains(pd_opacity)? data.getFloat(pd_opacity):1);
+        this.setRScales(
+                data.contains(pd_xrScale)?data.getFloat(pd_xrScale):1,
+                data.contains(pd_yrScale)?data.getFloat(pd_yrScale):1,
+                data.contains(pd_zrScale)?data.getFloat(pd_zrScale):1);
         this.setDisableShields(data.getBoolean(pd_disableShields));
         this.setDisableTicks(data.getShort(pd_disableTicks));
         this.setCollision(data.getBoolean(pd_hasCollision));
         this.setReal(data.getBoolean(pd_real));
+        this.refreshDimensions();
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
@@ -323,9 +327,12 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         //this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
         Vec3 dir=calculateMoveVec();
+        if (!this.isNoGravity()){
+            dir=new Vec3(dir.x,dir.y-0.05D,dir.z);
+        }
+
         this.setDeltaMovement(dir);
         Vec3 dm=this.getDeltaMovement();
-
 
 
         double d0 = this.getX() + dm.x;

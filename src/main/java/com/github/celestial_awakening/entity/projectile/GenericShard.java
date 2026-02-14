@@ -36,20 +36,18 @@ public class GenericShard extends CA_Projectile{
         MOON
     }
 
-    public Type getShardType() {
-        return shardType;
-    }
 
     public void setShardType(Type shardType) {
-        this.shardType = shardType;
+        this.entityData.set(SHARD_TYPE,shardType.ordinal());
     }
-
-    Type shardType;
+    public Type getShardType(){
+        return Type.values()[this.entityData.get(SHARD_TYPE)];
+    }
 
     public static GenericShard create(Level level,  Type shardType,int lt, float spd, float hA, float vA, float dmg, DamageSource source, @Nullable Entity owner){
         GenericShard entity = new GenericShard(EntityInit.GENERIC_SHARD.get(), level,lt);
         entity.setNoGravity(true);
-        entity.shardType=shardType;
+        entity.setShardType(shardType);
         entity.setMoveValues(spd,hA,vA);
         entity.setDmg(dmg);
         entity.damagesource=source;
@@ -60,12 +58,13 @@ public class GenericShard extends CA_Projectile{
     public static GenericShard create(Level level,  Type shardType,int lt, float spd, float hA, float vA, float dmg, DamageSource source, @Nullable Entity owner,boolean grav){
         GenericShard entity = new GenericShard(EntityInit.GENERIC_SHARD.get(), level,lt);
         entity.setNoGravity(true);
-        entity.shardType=shardType;
+        entity.setShardType(shardType);
         entity.setMoveValues(spd,hA,vA);
         entity.setDmg(dmg);
         entity.damagesource=source;
         entity.setOwner(owner);
         entity.setNoGravity(grav);
+        System.out.println("ENTITY NO GRAV? " + entity.isNoGravity());
         return entity;
     }
     @Override
@@ -98,10 +97,13 @@ public class GenericShard extends CA_Projectile{
         if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             this.calcAndMove();
             super.tick();
-
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, (this::canHitEntity));
             if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
                 this.onHit(hitresult);
+            }
+            this.setCurrentLifetime(this.getCurrentLifeTime()+1);
+            if (this.getCurrentLifeTime()>=this.getLifeTime()){
+                this.discard();
             }
         } else {
             this.discard();
@@ -116,24 +118,27 @@ public class GenericShard extends CA_Projectile{
     @Override
     protected void onHitEntity(EntityHitResult result) {
         Entity entity=result.getEntity();
-        System.out.println("ENTITY  " +entity.getName());
-        if (entity.hurt(damagesource,getDmg())){
-            System.out.println("HELO HIT " + entity.getName());
-            if (entity instanceof LivingEntity livingEntity){
-                onHitEffects(livingEntity);
+        System.out.println("HELLLO ENT " + entity);
+        if (damagesource!=null){
+            if (entity.hurt(damagesource,getDmg())){
+                if (entity instanceof LivingEntity livingEntity){
+                    onHitEffects(livingEntity);
+                }
             }
         }
+
         this.discard();
     }
 
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
+        System.out.println("HIT BLOCK");
         this.discard();
     }
 
     void onHitEffects(LivingEntity entity) {
-        switch(shardType){
+        switch(getShardType()){
             case ICE :{
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,100));
                 break;

@@ -112,7 +112,7 @@ public class LunarCrescent extends CA_Projectile {
             super.tick();
             this.setCurrentLifetime(this.getCurrentLifeTime()+1);
             if (this.getCurrentLifeTime()>=this.getLifeTime()){
-                //this.discard();
+                this.discard();
             }
         } else {
             this.discard();

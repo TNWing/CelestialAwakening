@@ -7,7 +7,6 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.entity.projectile.GenericShard;
-import com.github.celestial_awakening.entity.projectile.IceShard;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
@@ -105,6 +104,7 @@ public class NightProwlerShadowLeap extends GenericAbility {
 
                                  */
                                 serverLevel.addFreshEntity(iceShard);
+                                System.out.println(iceShard.getDamagesource() + " Is shard source");
                                 ModNetwork.sendToClientsInDim(new RefreshEntityDimsS2CPacket(iceShard.getId()),serverLevel.dimension());
                             }
                         }

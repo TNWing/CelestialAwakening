@@ -78,6 +78,7 @@ public class MoonScythe extends Item implements IForgeItem {
     public boolean isValidRepairItem(ItemStack p_41402_, ItemStack p_41403_) {
         return ingredient.test(p_41403_) || super.isValidRepairItem(p_41402_, p_41403_);
     }
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);

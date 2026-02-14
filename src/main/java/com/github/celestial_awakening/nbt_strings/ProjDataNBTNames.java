@@ -1,7 +1,7 @@
 package com.github.celestial_awakening.nbt_strings;
 
 public class ProjDataNBTNames {
-
+    public static String pd_grav="grav";
     public static String pd_real="real";
 
     public static String pd_xrScale="xr";

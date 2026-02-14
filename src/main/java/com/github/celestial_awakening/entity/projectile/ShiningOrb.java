@@ -97,7 +97,7 @@ public class ShiningOrb extends CA_Projectile {
             this.setCurrentLifetime(this.getCurrentLifeTime()+1);
             if (this.getCurrentLifeTime()>=this.getLifeTime()){
 
-                //this.discard();
+                this.discard();
             }
         } else {
             this.discard();

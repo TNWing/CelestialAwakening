@@ -12,6 +12,14 @@ public class CoreGuardianHarden extends GenericAbility {
     }
 
     @Override
+    public void decreaseCD(int i){
+        if (!isInUse && ((CoreGuardian)mob).getHardenStacks()<=0){
+            currentCD=Math.max(currentCD-i,0);
+        }
+
+    }
+
+    @Override
     public void executeAbility(LivingEntity target) {
         ((CoreGuardian)this.mob).setHardenStacks(5);
         this.currentStateTimer--;

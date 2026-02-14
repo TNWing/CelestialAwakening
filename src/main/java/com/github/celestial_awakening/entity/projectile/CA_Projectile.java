@@ -51,7 +51,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     private static final EntityDataAccessor<Float> DMG = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CURRENT_LIFE = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
-
+    private static final EntityDataAccessor<Float> GRAVITY=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> HAS_COLLISION=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
 
 
@@ -59,6 +59,15 @@ public class CA_Projectile extends Projectile implements CA_Entity {
     //move the data below to a non-entitydataaccessor? same w/ stuff like real and dmg, those are only calced once
     private static final EntityDataAccessor<Boolean> DISABLE_SHIELDS=SynchedEntityData.defineId(CA_Projectile.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DISABLE_TICKS = SynchedEntityData.defineId(CA_Projectile.class, EntityDataSerializers.INT);
+
+    public DamageSource getDamagesource() {
+        return damagesource;
+    }
+
+    public void setDamagesource(DamageSource damagesource) {
+        this.damagesource = damagesource;
+    }
+
     DamageSource damagesource;
     protected ArrayList<String> entityIDs=new ArrayList<>();
     public Predicate getPred() {
@@ -113,6 +122,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         this.entityData.define(DISABLE_SHIELDS,false);
         this.entityData.define(DISABLE_TICKS,0);
         this.entityData.define(HAS_COLLISION,true);
+        this.entityData.define(GRAVITY,0f);
 
     }
     public void setRScales(float r){
@@ -151,6 +161,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         this.setDisableTicks(data.getShort(pd_disableTicks));
         this.setCollision(data.getBoolean(pd_hasCollision));
         this.setReal(data.getBoolean(pd_real));
+        this.setGravity(data.getFloat(pd_grav));
         this.refreshDimensions();
     }
     @Override
@@ -173,8 +184,10 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         data.putShort(pd_disableTicks, (short) this.getDisableTicks());
         data.putBoolean(pd_hasCollision,this.hasCollision());
         data.putBoolean(pd_real,this.isReal());
+        data.putFloat(pd_grav,this.getGravity());
         tag.put(pd_HolderName,data);
     }
+    public float getGravity(){return this.entityData.get(GRAVITY);}
     public float getWidth(){
         return this.entityData.get(WIDTH);
     }
@@ -215,6 +228,7 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         return this.entityData.get(REAL);
     }
 
+    public void setGravity(float g){this.entityData.set(GRAVITY,g);}
     public void setWidth(float w){this.entityData.set(WIDTH,w);}
     public void setHeight(float h){this.entityData.set(HEIGHT,h);}
     public void setDmg(float f){
@@ -323,14 +337,14 @@ public class CA_Projectile extends Projectile implements CA_Entity {
             }
             updateMovementFactors();
         });
-
-        //this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
-
         Vec3 dir=calculateMoveVec();
         if (!this.isNoGravity()){
-            dir=new Vec3(dir.x,dir.y-0.05D,dir.z);
-        }
+            float g=this.getGravity();
+            g-=0.025f;
+            this.setGravity(g);
+            dir=dir.add(0,g,0);
 
+        }
         this.setDeltaMovement(dir);
         Vec3 dm=this.getDeltaMovement();
 
@@ -346,13 +360,6 @@ public class CA_Projectile extends Projectile implements CA_Entity {
         if (prevY!=null){
             //this.setPos(this.position().x,prevY,this.position().z);
         }
-        //something outside this code is changing the position, before and after match values
-        /*
-        It does have something to do withh zrot, not sure what but if its not 0 it changes
-        NOTE:
-        zrot value impacts the pos for some odd reason
-        eg: when zrot=440, its at a diff y pos than if it was kept at zrot=0
-         */
 
 
         super.tick();

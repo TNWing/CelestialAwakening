@@ -8,6 +8,7 @@ import com.github.celestial_awakening.capabilities.TerraGlaiveCapabilityProvider
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.projectile.GenericShard;
 import com.github.celestial_awakening.events.custom_events.MoonScytheAttackEvent;
+import com.github.celestial_awakening.init.ItemInit;
 import com.github.celestial_awakening.util.MathFuncs;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
@@ -48,6 +50,7 @@ public class TerraGlaive extends CustomItem{
     protected int abilityNameColor=0x754417;
     protected int abilityDescColor=0xB86A25;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    Ingredient ingredient= Ingredient.of(ItemInit.GAIA_PLATE.get());
     public TerraGlaive(Properties p_41383_,float dmg,float atkSpd) {
         super(p_41383_);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
@@ -59,22 +62,6 @@ public class TerraGlaive extends CustomItem{
         this.defaultModifiers = builder.build();
 
     }
-    /*
-
-    Left Click: Rock Smash
-Fully charged attacks will
-
-
-Right Click: Earth Spear
-Fires off a rock spear, piercing and dealing damage
-Shift + Right Click: Infused Earth
-Spear can consume stones to empower itself
-Switches between what stones to consume
-Scorched Stone: Ignites entities that are hit
-Deepslate: Increased damage
-Cobblestone
-
-     */
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         AtomicInteger abilityCastType= new AtomicInteger();
@@ -147,6 +134,10 @@ Cobblestone
     {
         return enchantment.category== EnchantmentCategory.WEAPON;
 
+    }
+    @Override
+    public boolean isValidRepairItem(ItemStack p_41402_, ItemStack p_41403_) {
+        return ingredient.test(p_41403_) || super.isValidRepairItem(p_41402_, p_41403_);
     }
     @Override
     public int getEnchantmentValue() {

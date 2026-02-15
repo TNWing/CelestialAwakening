@@ -196,11 +196,9 @@
 
 
   "tooltip.celestial_awakening.sun_staff.flash_name": "Searing Flash",
-  "tooltip.celestial_awakening.sun_staff.flash_control": "Left Click",
   "tooltip.celestial_awakening.sun_staff.flash_desc": "Deals a burst of fire damage to nearby enemies.\nCooldown of 5.5 seconds",
 
   "tooltip.celestial_awakening.sun_staff.ray_name": "Shining Ray",
-  "tooltip.celestial_awakening.sun_staff.ray_control": "Right Click",
   "tooltip.celestial_awakening.sun_staff.ray_desc": "Summons a ray in the direction you are looking at.\nUpon colliding with an entity or block, the ray detonates, dealing damage to enemies and healing allies within a 2 block range of the entire ray.\nCooldown of 11 seconds",
 
 

@@ -64,12 +64,12 @@ CD of 4-10 seconds, depending on how long the storm lasted.
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         Component flashName=Component.translatable("tooltip.celestial_awakening.sun_staff.flash_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(flashName);
-        Component flashButton=Component.translatable("tooltip.celestial_awakening.sun_staff.flash_control").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
+        Component flashButton=Component.translatable("tooltip.celestial_awakening.item.left_click").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(flashButton);
         components.add(Component.translatable("tooltip.celestial_awakening.sun_staff.flash_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
         Component rayName=Component.translatable("tooltip.celestial_awakening.sun_staff.ray_name").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(rayName);
-        Component rayButton=Component.translatable("tooltip.celestial_awakening.sun_staff.ray_control").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
+        Component rayButton=Component.translatable("tooltip.celestial_awakening.item.right_click").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityNameColor)));
         components.add(rayButton);
         components.add(Component.translatable("tooltip.celestial_awakening.sun_staff.ray_desc").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(abilityDescColor))));
         super.appendHoverText(itemStack, level, components, tooltipFlag);

@@ -45,7 +45,7 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
         if (randomSource.nextBoolean()){
             randAng=-randAng;
         }
-        MoonlightOrb orb=MoonlightOrb.create(this.mob.level(),0,300,7,(float)MathFuncs.angBtwnVec(this.mob.position(),target.position())+ randAng,0,0);
+        MoonlightOrb orb=MoonlightOrb.create(this.mob.level(),0,300,7,(float)MathFuncs.getAngFrom2DVec(MathFuncs.getDirVec(this.mob.position(),target.position()))+ randAng,0,0);
         int id=orb.getId();
         ServerLevel serverLevel= (ServerLevel) this.mob.level();
         orb.setOwner(this.mob);

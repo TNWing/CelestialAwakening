@@ -19,7 +19,7 @@ public class MathFuncs {
         return i>=midVal-offset && i<=midVal+offset;
     }
 
-    public static double angBtwnVec(Vec3 v1, Vec3 v2){
+    public static double angBtwnVec(Vec3 v1, Vec3 v2){//used for direcction vectors
         double angle=v1.dot(v2);
         angle/=v1.length();
         angle/=v2.length();

@@ -7,6 +7,7 @@ import com.github.celestial_awakening.commands.DivinerDataCommand;
 import com.github.celestial_awakening.commands.ProwlerRaidCommand;
 import com.github.celestial_awakening.commands.SanityCommand;
 import com.github.celestial_awakening.damage.DamageSourceNoIFrames;
+import com.github.celestial_awakening.enchantments.DevastateEnchantment;
 import com.github.celestial_awakening.entity.living.solmanders.AbstractSolmander;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.projectile.LightRay;
@@ -26,6 +27,7 @@ import com.github.celestial_awakening.networking.packets.PlayerCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.rendering.client.renderers.san_renderers.InsManager;
 import com.github.celestial_awakening.util.CA_Predicates;
+import com.github.celestial_awakening.util.MathFuncs;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -548,6 +550,21 @@ public class EventManager {
                     if (cnt>0) {
                         entry.getValue().onLivingHurtOthers(event, player, cnt);
                     }
+                }
+                if (player.getItemInHand(InteractionHand.MAIN_HAND)!=null){
+                    ItemStack stack=player.getMainHandItem();
+                    int lvl=stack.getEnchantmentLevel(EnchantmentInit.DEVASTATE.get());
+                    @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+                    capOptional.ifPresent(cap->{
+                        if (lvl>0 && cap.getAbilityCD(DevastateEnchantment.name)==null){
+                            Vec3 dir=player.getLookAngle();
+                            float hAng= MathFuncs.getAngFrom2DVec(dir);
+                            System.out.println("HANG FOR DEV IS " + hAng);
+                            cap.insertIntoAbilityMap(DevastateEnchantment.name,100);
+                            DevastateEnchantment.trigger(player,level,player.position(),2, hAng);
+
+                        }
+                    });
                 }
             }
             if (directEntity instanceof AbstractArrow){

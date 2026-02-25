@@ -122,7 +122,7 @@ public class TerraGlaive extends CustomItem{
         components.add(spearCtrl);
         Component spearDesc=Component.translatable("tooltip.celestial_awakening.terra_glaive.spear_desc").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(abilityDescColor)));
         components.add(spearDesc);
-     super.appendHoverText(itemStack, level, components, tooltipFlag);
+        super.appendHoverText(itemStack, level, components, tooltipFlag);
 
     }
 

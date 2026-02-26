@@ -560,7 +560,7 @@ public class EventManager {
                             Vec3 dir=player.getLookAngle();
                             float hAng= MathFuncs.getAngFrom2DVec(dir);
                             System.out.println("HANG FOR DEV IS " + hAng);
-                            cap.insertIntoAbilityMap(DevastateEnchantment.name,100);
+                            cap.insertIntoAbilityMap(DevastateEnchantment.name,Math.min(100,400-lvl*40));
                             DevastateEnchantment.trigger(player,level,player.position(),2, hAng);
 
                         }

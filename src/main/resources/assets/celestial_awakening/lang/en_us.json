@@ -175,6 +175,12 @@
 
   "enchantment.celestial_awakening.gaia_remnants" : "Gaia Remnants",
   "enchantment.celestial_awakening.gaia_remnants.desc" : "While holding a shield that is on cooldown, reduce incoming damage by 3% per level.",
+
+
+  "enchantment.celestial_awakening.devastate" : "Devastate",
+  "enchantment.celestial_awakening.devastate.desc" : "On hit, unleash a semi-circular shockwave, dealing damage and slowing all entities hit.\nBase cooldown of 20 seconds, reduced by 2 seconds per level above 1.",
+
+
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",
   "tooltip.celestial_awakening.life_frag_food": "Infused with life, heals the user for %s HP upon consumption.",
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",

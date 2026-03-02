@@ -11,13 +11,18 @@ public class GaiaRemnantsEnchantment extends Enchantment implements IForgeEnchan
     public GaiaRemnantsEnchantment(Rarity p_44676_, EquipmentSlot... p_44678_) {
         super(p_44676_, EnchantmentCategory.BREAKABLE, p_44678_);
     }
+    @Override
     public boolean canEnchant(ItemStack p_44642_) {
-        return p_44642_.getItem() instanceof ShieldItem ? true : super.canEnchant(p_44642_);
+        return p_44642_.getItem() instanceof ShieldItem;
     }
     public int getMaxLevel() {
         return 3;
     }
     public boolean checkCompatibility(Enchantment p_44590_) {
         return p_44590_ instanceof GaiaLinkEnchantment ? false : super.checkCompatibility(p_44590_);
+    }
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        return stack.getItem() instanceof ShieldItem;
     }
 }

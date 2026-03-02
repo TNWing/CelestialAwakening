@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import static com.github.celestial_awakening.util.MathFuncs.angBtwnVec;
+import static com.github.celestial_awakening.util.MathFuncs.angBtwnDirVec;
 
 public class LevelFuncs {
     public static boolean detectIfLookingAtCelestialBody(Level level, Player player,int isSun){
@@ -14,7 +14,7 @@ public class LevelFuncs {
 
         Vec3 sun = new Vec3(Math.cos(sunAngle), Math.sin(sunAngle), 0f);
         Vec3 view = player.getViewVector(1.0f);
-        if (angBtwnVec(view,sun)<7D){
+        if (angBtwnDirVec(view,sun)<7D){
             //System.out.println("LOOKING AT CELESTIAL BODY  " + isSun);
             return true;
         }

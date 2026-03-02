@@ -17,6 +17,6 @@ public class EnchantmentInit {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, CelestialAwakening.MODID);
     public static final RegistryObject<Enchantment> GAIA_LINK=ENCHANTMENTS.register("gaia_link",()->new GaiaLinkEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.MAINHAND));
     public static final RegistryObject<Enchantment> GAIA_REMNANTS=ENCHANTMENTS.register("gaia_remnants",()->new GaiaRemnantsEnchantment(Enchantment.Rarity.RARE,  EquipmentSlot.MAINHAND));
-    public static final RegistryObject<Enchantment> DEVASTATE=ENCHANTMENTS.register("devastate",()->new DevastateEnchantment(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON,EquipmentSlot.MAINHAND));
+    public static final RegistryObject<Enchantment> DEVASTATE=ENCHANTMENTS.register("devastate",()->new DevastateEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.WEAPON,EquipmentSlot.MAINHAND));
 
 }

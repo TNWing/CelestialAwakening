@@ -13,6 +13,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Blocks;
@@ -59,4 +61,36 @@ public class DevastateEnchantment extends Enchantment implements IForgeEnchantme
             livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,50,0));
         }
     }
+    @Override
+    public boolean isDiscoverable() {
+        return true;
+    }
+    public boolean canEnchant(ItemStack p_44642_) {
+        return p_44642_.getItem() instanceof AxeItem ? true : super.canEnchant(p_44642_);
+    }
+    public int getMaxLevel() {
+        return 3;
+    }
+    /*
+       public int getMinCost(int p_45190_) {
+      return 5 + (p_45190_ - 1) * 9;
+   }
+
+   public int getMaxCost(int p_45192_) {
+      return this.getMinCost(p_45192_) + 15;
+   }
+     */
+    /*
+    @Override
+    public int getMinCost(int level) {
+        return 5 + (level - 1) * 10;
+    }
+
+    @Override
+    public int getMaxCost(int level) {
+        return getMinCost(level) + 15;
+    }
+
+     */
+
 }

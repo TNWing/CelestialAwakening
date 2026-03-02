@@ -178,7 +178,7 @@
 
 
   "enchantment.celestial_awakening.devastate" : "Devastate",
-  "enchantment.celestial_awakening.devastate.desc" : "On hit, unleash a semi-circular shockwave, dealing damage and slowing all entities hit.\nBase cooldown of 20 seconds, reduced by 2 seconds per level above 1.",
+  "enchantment.celestial_awakening.devastate.desc" : "On hit, unleash a semi-circular shockwave, dealing damage and slowing all entities hit.\nBase cooldown of 20 seconds, reduced by 2 seconds for each level over 1.",
 
 
   "tooltip.celestial_awakening.life_frag": "Surround food with 4 fragments to give the food a minor healing effect.",

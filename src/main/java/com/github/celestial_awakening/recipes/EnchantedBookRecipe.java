@@ -5,11 +5,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.BookItem;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
 
 public class EnchantedBookRecipe extends ShapedRecipe {
@@ -44,7 +47,14 @@ public class EnchantedBookRecipe extends ShapedRecipe {
     @Override
     public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess registryAccess) {
         ItemStack itemStack=super.assemble(craftingContainer, registryAccess);
-        itemStack.enchant(getEnchantment(), getEnchantLvl());
+        if (itemStack.getItem() instanceof EnchantedBookItem){
+            EnchantedBookItem.addEnchantment(itemStack,new EnchantmentInstance(getEnchantment(), getEnchantLvl()));
+
+        }
+        else{
+            itemStack.enchant(getEnchantment(), getEnchantLvl());
+        }
+
         return itemStack;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.celestial_awakening.entity.projectile;
 
 import com.github.celestial_awakening.init.EntityInit;
+import com.github.celestial_awakening.init.ItemInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -29,12 +30,14 @@ public class CosmicPearlProjectile extends ThrownEnderpearl {
     public CosmicPearlProjectile(EntityType<CosmicPearlProjectile> p_37442_, Level p_37443_) {
         super(p_37442_, p_37443_);
     }
-    public CosmicPearlProjectile(Level p_37499_, LivingEntity p_37500_) {
-        super(EntityInit.COSMIC_PEARL.get(),  p_37499_);
-        setOwner(p_37500_);
+    public CosmicPearlProjectile(Level level, LivingEntity owner) {
+        super(EntityInit.COSMIC_PEARL.get(),   level);
+        setOwner(owner);
+        this.setPos(owner.getX(), owner.getEyeY() - (double)0.1F, owner.getZ());
     }
     protected Item getDefaultItem() {
-        return null;//TODO
+        return ItemInit.COSMIC_PEARL.get();
+
         //return Items.ENDER_PEARL;
     }
 
@@ -64,7 +67,7 @@ public class CosmicPearlProjectile extends ThrownEnderpearl {
                 ServerPlayer serverplayer = (ServerPlayer)entity;
                 if (serverplayer.connection.isAcceptingMessages() && serverplayer.level() == this.level() && !serverplayer.isSleeping()) {
                     net.minecraftforge.event.entity.EntityTeleportEvent.EnderPearl event = net.minecraftforge.event.ForgeEventFactory.onEnderPearlLand(serverplayer, this.getX(), this.getY(), this.getZ(), this, 5.0F, hitResult);
-                    if (!event.isCanceled()) { // Don't indent to lower patch size
+                    if (!event.isCanceled()) {
                         if (entity.isPassenger()) {
                             serverplayer.dismountTo(this.getX(), this.getY(), this.getZ());
                         } else {
@@ -89,13 +92,7 @@ public class CosmicPearlProjectile extends ThrownEnderpearl {
     }
 
     public void tick() {
-        Entity entity = this.getOwner();
-        if (entity instanceof Player && !entity.isAlive()) {
-            this.discard();
-        } else {
-            super.tick();
-        }
-
+        super.tick();
     }
 
     @Nullable

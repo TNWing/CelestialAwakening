@@ -34,6 +34,7 @@ public class LivingEntityCapability {
 
      */
     short navigauge;//used for diviner
+    short beaconLvl;//used for cel beacon
 
     public float getMoonCurseVal() {
         return moonCurseVal;
@@ -56,6 +57,12 @@ public class LivingEntityCapability {
     }
     public short getNavigauge(){
         return navigauge;
+    }
+    public short getBeaconLvl(){
+        return beaconLvl;
+    }
+    public void setBeaconLvl(short s){
+        beaconLvl=s;
     }
     public void setUUID(UUID id){
         this.uuid =id;

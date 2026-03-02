@@ -154,7 +154,7 @@
   "advancement.celestial_awakening.obtain_scorched_stone.title": "Magmatic Transmutation",
   "advancement.celestial_awakening.obtain_scorched_stone.description": "What doesn't destroy you makes you stronger.",
   "advancement.celestial_awakening.obtain_gaia_plate.title": "Pressure Sandwich",
-  "advancement.celestial_awakening.obtain_gaia_plate.description": "Steps to make an iron-rich plate.\n1. Take your filling (ideally at least 1 cubic meter) and put it between 2 rock-hard shells. Make sure that these shells are seared for extra crunch.\n2. Add one non-scorched shell to each end of the sandwich.\n3. Smash all of them together, ideally with a metal tool to really hammer it all in.",
+  "advancement.celestial_awakening.obtain_gaia_plate.description": "Steps to make an iron-rich plate.\n1. Take your filling (ideally at least 1 cubic meter) and put it between 2 burning, rock-hard shells. Make sure that these shells are seared for extra crunch.\n2. Add one non-scorched shell to each end of the sandwich.\n3. Smash all of them together, ideally with a heavy metal object to really hammer it all in.",
   "advancement.celestial_awakening.prowler_raid.title":"Constant Threat",
   "advancement.celestial_awakening.prowler_raid.description":"The hounds are getting restless",
 
@@ -170,12 +170,12 @@
   "advancement.celestial_awakening.kill_pk.title":"Test of Skill",
   "advancement.celestial_awakening.kill_pk.description":"Emerge victorious from a duel with a phantom knight",
 
+
   "enchantment.celestial_awakening.gaia_link" : "Gaia Link",
   "enchantment.celestial_awakening.gaia_link.desc" : "While holding a shield which is not being used nor is on cooldown, reduce incoming damage by 5% per level.",
 
   "enchantment.celestial_awakening.gaia_remnants" : "Gaia Remnants",
   "enchantment.celestial_awakening.gaia_remnants.desc" : "While holding a shield that is on cooldown, reduce incoming damage by 3% per level.",
-
 
   "enchantment.celestial_awakening.devastate" : "Devastate",
   "enchantment.celestial_awakening.devastate.desc" : "On hit, unleash a semi-circular shockwave, dealing damage and slowing all entities hit.\nBase cooldown of 20 seconds, reduced by 2 seconds for each level over 1.",
@@ -186,7 +186,7 @@
   "tooltip.celestial_awakening.lunar_scale": "Can be combined with gear in a crafting table to restore a small amount of durability.",
   "tooltip.celestial_awakening.lunula_rock": "An upgrade component for certain gear.",
   "tooltip.celestial_awakening.luna_tome": "A book with significantly increased enchantability.",
-  "tooltip_celestial_awakening_cosmic_pearl":"(DO NOT USE, NOT FULLY WORKING)Like an enderpearl, but consumes 10 hunger points and all of your saturation instead of health.",
+  "tooltip_celestial_awakening_cosmic_pearl":"Like an enderpearl, but consumes 10 hunger points and all of your saturation instead of health.",
 
 
   "tooltip.celestial_awakening.midnight_iron_gear.midnight_oil_name": "Burn the Midnight Oil",
@@ -226,7 +226,7 @@
   "tooltip.celestial_awakening.seared_stone_pickaxe.earthlink_desc": "Breaks non-ores much faster.",
   "tooltip.celestial_awakening.seared_stone_axe.earthlink_desc": "Breaks logs much faster.",
   "tooltip.celestial_awakening.seared_stone_tools.sturdy_name": "Sturdy",
-  "tooltip.celestial_awakening.seared_stone_tools.sturdy_hint": "Restorative material.",
+  "tooltip.celestial_awakening.seared_stone_tools.sturdy_hint": "Restorative aquatic material.",
   "tooltip.celestial_awakening.seared_stone_tools.sturdy_desc": "Does not lose durability if below 10% durability, but reduced bonus mining speed from Earthlink.",
 
 

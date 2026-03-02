@@ -158,13 +158,15 @@ dependencies {
 mixin {
     add sourceSets.main, 'mixins.celestial_awakening.refmap.json'
 
+    config 'ca_mixins.json'
+
     debug.verbose = true
     debug.export = true
     dumpTargetOnFailure = true
 }
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// When "copyIdeResources" is enabled, thise will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [

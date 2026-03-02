@@ -6,7 +6,8 @@
     "LevelLightEngineMixin",
     "LevelMixin",
     "LavaBurnItemMixin",
-    "FallingAnvilMixin"
+    "FallingAnvilMixin",
+    "LunaTomeMixin"
   ],
   "client": [
     "ClientLevelMixin"

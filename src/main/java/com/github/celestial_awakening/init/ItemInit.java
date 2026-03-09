@@ -3,6 +3,9 @@ package com.github.celestial_awakening.init;
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.projectile.ArrowType;
 import com.github.celestial_awakening.items.*;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.DeferredRegister;
@@ -55,6 +58,7 @@ public class ItemInit {
             () -> new CustomArmorItem(CustomArmorMaterial.RADIANT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
     public static final RegistryObject<Item> COSMIC_PEARL=ITEMS.register("cosmic_pearl",()->new CosmicPearl(new Item.Properties().stacksTo(16),"tooltip_celestial_awakening_cosmic_pearl"));
+    public static final RegistryObject<Item> MUSHY_ROT=ITEMS.register("mushy_rot",()->new MushyRot((new Item.Properties()).food((new FoodProperties.Builder()).nutrition(1).saturationMod(1F).effect(new MobEffectInstance(MobEffects.HUNGER, 1000, 1),1).build())));
 
     public static final RegistryObject<Item> SCORCHED_STONE=ITEMS.register ("scorched_stone",()->new BlockItem(BlockInit.SCORCHED_STONE.get(),new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> VOLCANIC_CLAYMORE=ITEMS.register("volcanic_claymore",()->new CA_UntieredSword(new Item.Properties().fireResistant().stacksTo(1).durability(300),10.5f,-3.2f));

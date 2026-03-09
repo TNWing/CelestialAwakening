@@ -40,6 +40,7 @@ public class Config
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_ENABLED;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE;
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE;
 
     static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
     static final ForgeConfigSpec.ConfigValue<String> PROWLER_DESTRUCTION;
@@ -151,6 +152,7 @@ maybe use json files instead since it'll look neater?
             TRANSCENDENTS_DIVINER_AOD_ENABLED =builder.comment("Determines whether or not the diviner can use the Age of Darkness ability.\nAge of Darkness causes the world's sky to darken.\nDefault - true").define("transcendents_diviner_aod_active",true);
             TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY=builder.comment("If Age of Darkness is enabled, sets whether or not the effects are cosmetic only.\nIf false, the changes in light levels can allow hostile mobs to spawn whenever and prevent undead mobs from burning during the day.\nDefault: false").define("transcendents_diviner_aod_cosmetic",false);
             TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
+            TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE=builder.comment("Base chance (out of 100) for food to rot,\nDefault: 10").defineInRange("transcendents_div_sf_rot_base",10,0,100);
         builder.pop();
 
         builder.push("Phantom_Knight_Config");
@@ -263,6 +265,7 @@ maybe use json files instead since it'll look neater?
     public static boolean divinerAoDEnabled;
     public static boolean divinerHeatWaveBlockMod;
     public static boolean divinerAoDCosmetic;
+    public static int divinerSHRotBase;
 
     public static int divinerScanPower;
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
@@ -401,6 +404,8 @@ maybe use json files instead since it'll look neater?
         divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
 
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
+
+        divinerSHRotBase=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE.get();
 
         solmanderDelay=SOLMANDER_DELAY.get();
         solmanderInterval=SOLMANDER_INTERVAL.get();

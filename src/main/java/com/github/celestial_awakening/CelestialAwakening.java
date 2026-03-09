@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 
 import java.util.Arrays;
 
+import static net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CelestialAwakening.MODID)
 public class CelestialAwakening
@@ -105,7 +107,7 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         RecipeInit.registerBrewingRecipes();
         event.enqueueWork(() -> {
             CriteriaTriggers.register(CA_Triggers.PROWLER_RAID_TRIGGER);
-
+            COMPOSTABLES.put(ItemInit.MUSHY_ROT.get(),1f);
         });
     }
 

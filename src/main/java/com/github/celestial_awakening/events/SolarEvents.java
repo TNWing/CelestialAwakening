@@ -204,14 +204,22 @@ public class SolarEvents {
                             }
 
                             if (startingDivPower>=25){
-                                if(Config.divinerAoDEnabled) {
-                                    int pts = (int) (2500 * startingDivPower / (startingDivPower + 25));
-                                    if (level.random.nextInt(0, 2) == 0) {
-                                        levelCap.setSunControlVal((byte) (-startingDivPower / 8));
-                                        levelCap.divinerSunControlTimer = (pts * 35);
-                                    } else {
-                                        levelCap.setSunControlVal((byte) (-startingDivPower / 8));
-                                        levelCap.divinerSunControlTimer = (pts * 35);
+                                int typeCnt=levelCap.getDivinerSunControlType();
+                                boolean isSH=levelCap.determineSunControlType(level.random);
+                                if (isSH){
+                                    if (Config.divinerSHEnabled){
+                                        shActivation(level,levelCap,startingDivPower);
+                                    }
+                                    else if (Config.divinerAoDEnabled){
+                                        aodActivation(level,levelCap,startingDivPower);
+                                    }
+                                }
+                                else{
+                                    if (Config.divinerAoDEnabled){
+                                        aodActivation(level,levelCap,startingDivPower);
+                                    }
+                                    else if (Config.divinerSHEnabled){
+                                        shActivation(level,levelCap,startingDivPower);
                                     }
                                 }
                                 //System.out.println("OUr level has sunctrl " + levelCap.divinerSunControlVal + "  and timer " + levelCap.divinerSunControlTimer);
@@ -228,6 +236,21 @@ public class SolarEvents {
                 ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(levelCap),level.dimension());
             }
         }
+    }
+
+    public void aodActivation(Level level, LevelCapability levelCap, float startingDivPower){
+        int pts = (int) (2500 * startingDivPower / (startingDivPower + 25));
+        levelCap.setSunControlVal((byte) (-startingDivPower / 8));
+        levelCap.divinerSunControlTimer = (pts * 35);
+        levelCap.offsetSunControlType(-1);
+
+    }
+
+    public void shActivation(Level level, LevelCapability levelCap, float startingDivPower){
+        int pts = (int) (2500 * startingDivPower / (startingDivPower + 25));
+        levelCap.setSunControlVal((byte) (startingDivPower / 8));
+        levelCap.divinerSunControlTimer = (pts * 35);
+        levelCap.offsetSunControlType(1);
     }
 
 

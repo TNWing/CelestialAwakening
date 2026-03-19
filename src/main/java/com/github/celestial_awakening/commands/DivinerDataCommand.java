@@ -35,20 +35,6 @@ public class DivinerDataCommand{
       }))));
          */
 
-        //so have constructor pass argument builders to parent?
-        //example commands
-        /*
-        literal literal literal literal
-        /celawake solcult diviner query
-
-        literal literal literal literal argument
-        /celawake solcult diviner setCD
-        /celawake solcult diviner setChance
-         */
-        //think of the .then() as an else if
-        /*
-        ,,,then if...them else if
-         */
         dispatcher.register(Commands.literal("celawake").requires(user->user.hasPermission(permLvl))
                 .then(Commands.literal("transcendents")
                         .then(Commands.literal("diviner")
@@ -65,10 +51,19 @@ public class DivinerDataCommand{
                                 )
                                 .then(Commands.literal("setPower")
                                         .then(Commands.argument("power", IntegerArgumentType.integer(0,100))
-                                                .executes(context -> setPower(context.getSource(),IntegerArgumentType.getInteger(context, "power")) ))
+                                                .executes(context -> setPower(context.getSource(), IntegerArgumentType.getInteger(context, "power")) ))
+                                )
+                                .then(Commands.literal("setSunControl")
+                                        //.then(Commands.argument("power"),Integ)
+                                        .then(Commands.argument("power",IntegerArgumentType.integer(-10,10)).executes(
+                                                context->setSunControl(context.getSource(),IntegerArgumentType.getInteger(context,"power"),600)
+                                        ).then(Commands.argument("seconds",IntegerArgumentType.integer(0, 1000000)).executes(context->
+                                            setSunControl(context.getSource(),IntegerArgumentType.getInteger(context,"power"),IntegerArgumentType.getInteger(context,"seconds"))
+                                        ))
                                 )
                         )
                 )
+            )
         );
     }
 
@@ -93,7 +88,7 @@ public class DivinerDataCommand{
                 msg+="The world is in a age of darkness for " + sunControlDays + " days\n";
             }
             else if (sunControl>0){
-
+                msg+="The world is suffering from intense heat for " + sunControlDays + " days\n";
             }
             stack.sendSystemMessage(Component.literal(msg));
 
@@ -169,5 +164,26 @@ public class DivinerDataCommand{
         stack.sendSystemMessage(Component.literal("Failed to update diviner eye power!"));
         return -1;
     }
-
+    private int setSunControl(CommandSourceStack stack, int power, int seconds) throws CommandSyntaxException {
+        int p=power;
+        int s=seconds*20;
+        ServerPlayer player=stack.getPlayerOrException();
+        @NotNull LazyOptional<LevelCapability> capOptional;
+        if (Config.divinerShared){
+            capOptional=player.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
+        }
+        else{
+            capOptional=player.serverLevel().getCapability(LevelCapabilityProvider.LevelCap);
+        }
+        capOptional.ifPresent(cap->{
+            cap.setSunControlVal((byte) p);
+            cap.divinerSunControlTimer=s;
+            stack.sendSystemMessage(Component.literal("Set diviner sun control to " + p + " power and " + s + " seconds"));
+        });
+        if (capOptional.isPresent()){
+            return 1;
+        }
+        stack.sendSystemMessage(Component.literal("Failed to update diviner eye sun control values!"));
+        return -1;
+    }
 }

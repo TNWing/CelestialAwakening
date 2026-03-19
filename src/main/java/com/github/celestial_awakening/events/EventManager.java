@@ -114,6 +114,7 @@ public class EventManager {
 
     public static LunarEvents lunarEvents=new LunarEvents();
     public static SolarEvents solarEvents=new SolarEvents();
+    public static SuffocatingHeatEvents shEvents=new SuffocatingHeatEvents();
 
     private static final Map.Entry<ArmorMaterial,ArmorEffect> lunarArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.LUNAR,new LunarArmor());
     private static final Map.Entry<ArmorMaterial,ArmorEffect> radiantArmor=new AbstractMap.SimpleEntry<>(CustomArmorMaterial.RADIANT,new RadiantArmor());
@@ -845,9 +846,9 @@ FluidPlaceBlockEvent
             if (event.side.isServer()){
 
                 ServerLevel serverLevel = (ServerLevel) event.level;
+                List<ServerPlayer> players=serverLevel.players();
                 attemptSpawns(serverLevel);
                 @NotNull LazyOptional<LevelCapability> capOptional=serverLevel.getCapability(LevelCapabilityProvider.LevelCap);
-
                 int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
@@ -890,7 +891,8 @@ FluidPlaceBlockEvent
                         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
                     }
                     if (time % 100==0 && time<12000 && cap.divinerSunControlVal>0){
-                        List<ServerPlayer> players=serverLevel.players();
+                        System.out.println("DIV CTRL VAL IS " + cap.divinerSunControlVal);
+                        System.out.println("time " + time);
                         for (ServerPlayer player:players) {
                             if (!player.isInWaterRainOrBubble()){
                                 float temp=serverLevel.getBiome(player.blockPosition()).get().getBaseTemperature();
@@ -898,6 +900,16 @@ FluidPlaceBlockEvent
                                 int localLight=Math.max(serverLevel.getBrightness(LightLayer.BLOCK,player.blockPosition()),5)-5;
                                 player.causeFoodExhaustion(0.25f + localLight*0.075f + tempMod);
                                 //
+                            }
+                        }
+                        if (time%Config.divinerSHRotInterval==0){
+                            for (ServerPlayer player:players){
+                                shEvents.onInventoryTick(serverLevel,player);
+                                /*
+                                TODO:
+                                the downside of this is the lagspike thhat could occur due to iterating over the entire inventory.
+                                though player inv is already ticked constantly
+                                 */
                             }
                         }
                     }

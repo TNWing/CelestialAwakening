@@ -15,6 +15,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -52,10 +53,17 @@ public class LevelCapability{
     public void setDivinerSunControlType(byte divinerSunControlType) {
         this.divinerSunControlType = divinerSunControlType;
     }
+    public void offsetSunControlType(int sign) {
+        this.divinerSunControlType = (byte) Math.min(-3,Math.max(divinerSunControlType+sign,3));
+    }
 
-    public byte divinerSunControlType;//-3 to 3, used to determine which kind of sun control is executed
+    public boolean determineSunControlType(RandomSource randomSource){//true for SH, false for AoD
+        float chance=0.5f+this.divinerSunControlType*0.5f/3f;
+        return randomSource.nextFloat()<chance;
+    }
+
+    public byte divinerSunControlType;//-3 to 3, used to determine which kind of sun control is executed. SH increments, AoD decrements. chance of a given type is rolled depending on this value
     public int divinerSunControlTimer;
-
     public int pkRemainingSpawnAttempts;
     public int prowlerSpawnCD;
 

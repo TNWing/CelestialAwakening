@@ -40,7 +40,12 @@ public class Config
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_ENABLED;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE;
-    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE;
+    static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_SH_ENABLED;
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE;
+    static final ForgeConfigSpec.ConfigValue<List<? extends Double>> TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD;//arr
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL;
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT;
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT;
 
     static final ForgeConfigSpec.IntValue PROWLER_RAID_INTERVAL;
     static final ForgeConfigSpec.ConfigValue<String> PROWLER_DESTRUCTION;
@@ -147,12 +152,21 @@ maybe use json files instead since it'll look neater?
             TRANSCENDENTS_MIN_CD =builder.comment("Minimum cooldown for the diviner's scrying. Does not restrict other factors from hastening the next scry.\nDefault: 36000 ticks (1.5 in game days)").defineInRange("transcendents_div_min_cd",36000,0,Integer.MAX_VALUE);
             TRANSCENDENTS_MAX_CD =builder.comment("Maximum cooldown for the diviner's scrying. Does not restrict other factors from impeding the next scry.\nDefault: 72000 ticks (3 in game days)").defineInRange("transcendents_div_max_cd",72000,0,Integer.MAX_VALUE);
             TRANSCENDENTS_ENEMIES =builder.comment("List of living entities that the Transcendents will intentionally target.\nDefault: [minecraft:player].\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(Arrays.asList("minecraft:player")), obj->obj instanceof String);
+            TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
+
             TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED=builder.comment("Determines whether or not the diviner can use the heatwave ability.\nThis ability strikes exposed targets with fire, igniting them and damaging nearby terrain.\nDefault: true").define("transcendents_diviner_heatwave_active",true);
             TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =builder.comment("Allows the heatwave ability to modify terrain.\nDefault: true").define("transcendents_diviner_heatwave",true);
-            TRANSCENDENTS_DIVINER_AOD_ENABLED =builder.comment("Determines whether or not the diviner can use the Age of Darkness ability.\nAge of Darkness causes the world's sky to darken.\nDefault - true").define("transcendents_diviner_aod_active",true);
-            TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY=builder.comment("If Age of Darkness is enabled, sets whether or not the effects are cosmetic only.\nIf false, the changes in light levels can allow hostile mobs to spawn whenever and prevent undead mobs from burning during the day.\nDefault: false").define("transcendents_diviner_aod_cosmetic",false);
-            TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
-            TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE=builder.comment("Base chance (out of 100) for food to rot,\nDefault: 10").defineInRange("transcendents_div_sf_rot_base",10,0,100);
+            TRANSCENDENTS_DIVINER_AOD_ENABLED =builder.comment("Determines whether or not the diviner can use the Age of Darkness ability.\nDefault - true").define("transcendents_diviner_aod_active",true);
+            TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY=builder.comment("If Age of Darkness is enabled, sets whether or not the skylight effects are cosmetic only.\nIf false, the changes in light levels can allow hostile mobs to spawn whenever as well as prevent undead mobs from burning during the day.\nDefault: false").define("transcendents_diviner_aod_cosmetic",false);
+
+
+            TRANSCENDENTS_DIVINER_SH_ENABLED=builder.comment("Determines whether or not the diviner can use the Suffocating Heat ability.\nDefault - true").define("transcendents_diviner_sh_active",true);
+            TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE =builder.comment("Base chance (out of 100) for a item slot with food to rot.\nDefault:10").defineInRange("transcendents_div_sh_rot_base",10,0,100);
+            TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD =builder.comment("Multipliers based on game difficulty for chance for food to rot.\nDefault:[0.8,1,1.2]").defineList("transcendents_div_sh_rot_diff_mod",List.of(0.8d,1d,1.2d), obj->obj instanceof Float);
+            TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL=builder.comment("The delay between rot checks(in ticks).\nDefault:600").defineInRange("transcendents_div_sh_rot_interval",600,1,Integer.MAX_VALUE);
+            TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT=builder.comment("Minimum amount of food that is taken away on a successful rot roll.\nDefault:1").defineInRange("transcendents_div_sh_rot_min",1,0,Integer.MAX_VALUE);
+            TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT=builder.comment("Maximum amount of food that is taken away on a successful rot roll.\nDefault:2").defineInRange("transcendents_div_sh_rot_max",2,0,Integer.MAX_VALUE);
+
         builder.pop();
 
         builder.push("Phantom_Knight_Config");
@@ -175,7 +189,7 @@ maybe use json files instead since it'll look neater?
         builder.push("Solmander_Config");
             SOLMANDER_DELAY=builder.comment("The amount of time (in ticks) before solmanders can spawn naturally.\nDefault: 72000").defineInRange("solmander_delay",72000,1,Integer.MAX_VALUE);
             SOLMANDER_INTERVAL=builder.comment("The amount of time (in ticks) between solmander spawn attempts.\nDefault: 1200").defineInRange("solmander_interval",1200,1,Integer.MAX_VALUE);
-            SOLMANDER_CHANCE=builder.comment("Solmander spawning works by attempting to spawn near each player. This value represents The chance (out of a 100) for an attempt to succeed prior to any other checks.\nDefault: 15").defineInRange("solmander_chance",15,0,100);
+            SOLMANDER_CHANCE=builder.comment("Solmander spawning works by attempting to spawn near each player. This value represents the chance (out of a 100) for an attempt to succeed prior to any other checks.\nDefault: 15").defineInRange("solmander_chance",15,0,100);
 
         builder.pop();
 
@@ -265,7 +279,13 @@ maybe use json files instead since it'll look neater?
     public static boolean divinerAoDEnabled;
     public static boolean divinerHeatWaveBlockMod;
     public static boolean divinerAoDCosmetic;
-    public static int divinerSHRotBase;
+
+    public static boolean divinerSHEnabled;
+    public static int divinerSHRotInterval;
+    public static int divinerSHRotBaseChance;
+    public static List<Double> divinerSHRotDiffMod;
+    public static int divinerSHItemRotMinAmt;
+    public static int divinerSHItemRotMaxAmt;
 
     public static int divinerScanPower;
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
@@ -405,7 +425,39 @@ maybe use json files instead since it'll look neater?
 
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
 
-        divinerSHRotBase=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_BASE_CHANCE.get();
+
+        //ngl i can probs simplify things and remove the inventory config values
+        /*
+        So the vals i will have are
+        shEnabled
+        rotbasechance
+        rotdiffmod
+        rotmin
+        rotmax
+        rotinterval
+         */
+        divinerSHEnabled=TRANSCENDENTS_DIVINER_SH_ENABLED.get();
+
+        divinerSHRotInterval =TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL.get();
+
+        divinerSHRotDiffMod = (List<Double>) TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD.get();
+
+
+        divinerSHRotBaseChance =TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE.get();
+
+        divinerSHItemRotMinAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT.get();
+        divinerSHItemRotMaxAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT.get();
+
+        /*
+            public static boolean divinerSHEnabled;
+    public static int divinerSHInvRotBaseChance;//used to determine the chance to iterate thr an inventory to rot food
+    public static int divinerSHInvRotInterval;
+    public static int[] divinerSHInvRotDiffBaseChance;
+    public static int divinerSHItemRotBaseChance;
+    public static int[] divinerSHItemRotDiffChance;
+    public static int divinerSHItemRotMinAmt;
+    public static int divinerSHItemRotMaxAmt;
+         */
 
         solmanderDelay=SOLMANDER_DELAY.get();
         solmanderInterval=SOLMANDER_INTERVAL.get();

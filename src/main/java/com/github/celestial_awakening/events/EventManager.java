@@ -902,15 +902,16 @@ FluidPlaceBlockEvent
                                 //
                             }
                         }
-                        if (time%Config.divinerSHRotInterval==0){
-                            for (ServerPlayer player:players){
-                                shEvents.onInventoryTick(serverLevel,player);
+
+                    }
+                    if (time%Config.divinerSHRotInterval==0 && cap.divinerSunControlVal>0 && serverLevel.getDifficulty().getId() != 0){
+                        for (ServerPlayer player:players){
+                            shEvents.onInventoryTick(serverLevel,player);
                                 /*
                                 TODO:
                                 the downside of this is the lagspike thhat could occur due to iterating over the entire inventory.
                                 though player inv is already ticked constantly
                                  */
-                            }
                         }
                     }
 

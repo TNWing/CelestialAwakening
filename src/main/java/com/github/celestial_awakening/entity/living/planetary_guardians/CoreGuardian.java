@@ -2,10 +2,13 @@ package com.github.celestial_awakening.entity.living.planetary_guardians;
 
 import com.github.celestial_awakening.entity.combat.CoreGuardianDeepYTargetGoal;
 import com.github.celestial_awakening.entity.combat.planetary_guardians.core_guardian.CoreGuardianCombatAIGoal;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -13,6 +16,9 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeMod;
+
+import java.util.UUID;
 
 public class CoreGuardian extends AbstractGuardian{
     int hardenStacks=0;
@@ -22,6 +28,9 @@ public class CoreGuardian extends AbstractGuardian{
     static double baseDmg=5.0D;
     static double baseArmor=8D;
     static double baseTough=6.5D;
+
+    String bedrockFoundationUUID="431e0947-4b5a-4c14-8234-fc57326bb3f9";
+    public AttributeModifier bedrockToughBoost=new AttributeModifier(UUID.fromString(bedrockFoundationUUID),"Bedrock Foundation",1d,AttributeModifier.Operation.ADDITION);
 
     public CoreGuardian(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -60,10 +69,15 @@ public class CoreGuardian extends AbstractGuardian{
             System.out.println("HARD SHIELD BROKE AT " + hardenShieldBrokenCnt);
         }
     }
-
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (this.getHealth()<=0.6f*this.getMaxHealth() && this.level().getDifficulty().getId()>1){
+            this.getAttribute(Attributes.ARMOR_TOUGHNESS).addTransientModifier(bedrockToughBoost);
+        }
+    }
     protected void registerGoals() {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(1, new CoreGuardianDeepYTargetGoal(this, Player.class, true));
+        this.targetSelector.addGoal(2, new CoreGuardianDeepYTargetGoal(this, Player.class, true));
         this.goalSelector.addGoal(5,new CoreGuardianCombatAIGoal(this));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D, 60));
     }
@@ -76,6 +90,19 @@ public class CoreGuardian extends AbstractGuardian{
         }
 
         return super.hurt(source,amt);
+    }
+
+    //
+
+    @Override
+    public void setHealth(float p_21154_) {
+        super.setHealth(p_21154_);
+        if (this.getHealth()<=0.6f*this.getMaxHealth() && this.level().getDifficulty().getId()>1){
+            this.getAttribute(Attributes.ARMOR_TOUGHNESS).addTransientModifier(bedrockToughBoost);
+        }
+        else{
+            this.getAttribute(Attributes.ARMOR_TOUGHNESS).removeModifier(bedrockToughBoost);
+        }
     }
     protected SoundEvent getHurtSound(DamageSource p_30424_) {
         return SoundEvents.BLAZE_HURT;

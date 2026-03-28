@@ -300,6 +300,10 @@ maybe use json files instead since it'll look neater?
     public static int solmanderInterval=1200;
     public static int solmanderChance=15;
 
+    public static int undergroundGuardianChance=15;
+    public static int moltenGuardianWeight;
+    public static int coreGuardianWeight=5;
+
 
     public static int pkSpawnCap;
     public static int pkSpawnDayCD;

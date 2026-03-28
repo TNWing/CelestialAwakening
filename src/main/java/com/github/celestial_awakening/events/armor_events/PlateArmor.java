@@ -77,14 +77,12 @@ public class PlateArmor extends ArmorEffect{
     public void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
         if (cnt==4 && event.getSource().is(DamageTypeTags.IS_FALL)){
             dropShock(event);
-            System.out.println("TRIGGER DS");
         }
     }
 
     @Override
     public void onLivingDamageSelf(LivingDamageEvent event,Player player,int cnt){
         warding(event,cnt);
-        System.out.println("TRIGGER WARD");
     }
     void warding(LivingDamageEvent event, int amt){
         LivingEntity livingEntity=event.getEntity();

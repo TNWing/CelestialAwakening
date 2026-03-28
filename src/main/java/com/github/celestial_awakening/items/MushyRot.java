@@ -5,7 +5,12 @@ public class MushyRot extends CustomItem{
         super(p_41383_, text, c);
     }
 
+    
     public MushyRot(Properties properties) {
         super(properties);
+    }
+
+    public MushyRot(Properties p, String text) {
+        super(p,text);
     }
 }

@@ -146,8 +146,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:6600311") // <-- example file ID
-    runtimeOnly fg.deobf("curse.maven:jeed-532286:6172935") // <-- example file ID
+    runtimeOnly fg.deobf("curse.maven:jei-238222:6600311")
+    runtimeOnly fg.deobf("curse.maven:jeed-532286:6172935")
     implementation 'org.apache.commons:commons-numbers-quaternion:1.2'
     implementation 'org.apache.commons:commons-math3:3.4.1'
     runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:7336071")

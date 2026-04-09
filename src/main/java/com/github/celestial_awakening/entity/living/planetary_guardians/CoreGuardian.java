@@ -48,7 +48,7 @@ public class CoreGuardian extends AbstractGuardian{
                 .add(Attributes.FOLLOW_RANGE,40D)
                 .add(Attributes.ATTACK_DAMAGE, baseDmg);
 
-    }
+    } 
     public int getHardenStacks() {
         return hardenStacks;
     }

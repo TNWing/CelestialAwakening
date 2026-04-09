@@ -1,5 +1,6 @@
 package com.github.celestial_awakening.events.command_patterns;
 
+import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.capabilities.LevelCapability;
 import com.github.celestial_awakening.networking.ModNetwork;
 import com.github.celestial_awakening.networking.packets.LevelCapS2CPacket;
@@ -100,6 +101,7 @@ public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
         }
         cap.divinerEyeToState=-2;
         cap.divinerEyeFromState=-2;
+        cap.changeDivPower(Config.divinerScanPowerBase);
         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),dimID);
 
         return true;//stop recursion

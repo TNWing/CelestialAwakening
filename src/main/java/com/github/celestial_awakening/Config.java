@@ -40,6 +40,7 @@ public class Config
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_ENABLED;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE;
+    static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SCAN_POWER_BASE;
     static final ForgeConfigSpec.ConfigValue<Boolean> TRANSCENDENTS_DIVINER_SH_ENABLED;
     static final ForgeConfigSpec.ConfigValue<Integer> TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE;
     static final ForgeConfigSpec.ConfigValue<List<? extends Double>> TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD;//arr
@@ -153,6 +154,8 @@ maybe use json files instead since it'll look neater?
             TRANSCENDENTS_MAX_CD =builder.comment("Maximum cooldown for the diviner's scrying. Does not restrict other factors from impeding the next scry.\nDefault: 72000 ticks (3 in game days)").defineInRange("transcendents_div_max_cd",72000,0,Integer.MAX_VALUE);
             TRANSCENDENTS_ENEMIES =builder.comment("List of living entities that the Transcendents will intentionally target.\nDefault: [minecraft:player].\nFormat:minecraft:zombie").defineListAllowEmpty("transcendents_targets",new ArrayList<>(Arrays.asList("minecraft:player")), obj->obj instanceof String);
             TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE =builder.comment("The amount of power the diviner gets for each entity scanned.\nDefault: 10").defineInRange("transcendents_div_scan_power",10,0,100);
+            TRANSCENDENTS_DIVINER_SCAN_POWER_BASE =builder.comment("The amount of power the diviner gets upon finishing a scrying.\nDefault: 0").defineInRange("transcendents_div_scan_power_base",0,0,100);
+
 
             TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED=builder.comment("Determines whether or not the diviner can use the heatwave ability.\nThis ability strikes exposed targets with fire, igniting them and damaging nearby terrain.\nDefault: true").define("transcendents_diviner_heatwave_active",true);
             TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS =builder.comment("Allows the heatwave ability to modify terrain.\nDefault: true").define("transcendents_diviner_heatwave",true);
@@ -288,6 +291,7 @@ maybe use json files instead since it'll look neater?
     public static int divinerSHItemRotMaxAmt;
 
     public static int divinerScanPower;
+    public static int divinerScanPowerBase;
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
     public static int transcendentsInitDelay;
     public static int transcendentsDivMinCD;
@@ -429,17 +433,8 @@ maybe use json files instead since it'll look neater?
 
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
 
+        divinerScanPowerBase=TRANSCENDENTS_DIVINER_SCAN_POWER_BASE.get();
 
-        //ngl i can probs simplify things and remove the inventory config values
-        /*
-        So the vals i will have are
-        shEnabled
-        rotbasechance
-        rotdiffmod
-        rotmin
-        rotmax
-        rotinterval
-         */
         divinerSHEnabled=TRANSCENDENTS_DIVINER_SH_ENABLED.get();
 
         divinerSHRotInterval =TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL.get();

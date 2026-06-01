@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -94,6 +95,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
                 .add(Attributes.ARMOR, baseArmor)
                 .add(Attributes.ARMOR_TOUGHNESS, baseTough)
                 .add(Attributes.FOLLOW_RANGE,32D)
+                .add(Attributes.ATTACK_SPEED,1.0d)
                 .add(Attributes.ATTACK_DAMAGE, baseDmg);
     }
 
@@ -109,6 +111,17 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
     public void tick() {
         super.tick();
+        if (this.tickCount%60==0){
+            System.out.println("MY base ATK SPD IS " + this.getAttribute(Attributes.ATTACK_SPEED).getBaseValue());//null, so must define
+            System.out.println("MY final ATK SPD IS " + this.getAttribute(Attributes.ATTACK_SPEED).getValue());//null, so must define
+
+            System.out.println("ATK SPD MODS ARE");
+            for (AttributeModifier modifier:this.getAttribute(Attributes.ATTACK_SPEED).getModifiers()){
+                System.out.println(modifier.getOperation() + "   " +   modifier.getAmount());
+            }
+
+        }
+
     }
 
 

@@ -9,17 +9,19 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CoreGuardianCombatAIGoal extends GenericCombatAIGoal {
-    CoreGuardianShockwave shockwave=new CoreGuardianShockwave(this.mob,30,20,30,10,20);
-    CoreGuardianShiftingPlates shiftingPlates=new CoreGuardianShiftingPlates(this.mob,0,140,0,0,20);
-    CoreGuardianHarden harden=new CoreGuardianHarden(this.mob,0,200,0,0,10);
+    CoreGuardianShockwave shockwave=new CoreGuardianShockwave(this.mob,30,5000,30,10,20);
+    CoreGuardianRockSmash rockSmash=new CoreGuardianRockSmash(this.mob,20,3000,10,15);
+    CoreGuardianShiftingPlates shiftingPlates=new CoreGuardianShiftingPlates(this.mob,0,14000,0,0,20);
+    CoreGuardianHarden harden=new CoreGuardianHarden(this.mob,0,20000,0,0,10);
     List<GenericAbility> abilities=List.of(shockwave,shiftingPlates, harden);
     public CoreGuardianCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     public void tick(){
         LivingEntity target=this.mob.getTarget();
+        double cdMult=getCDDecMult();
         abilities.forEach(ability->{
-            ability.decreaseCD(1);
+            ability.decreaseCD((int) (100*cdMult));
         });
         shiftingPlates.updatePlates();
         if (this.mob.isActing){

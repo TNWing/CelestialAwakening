@@ -2,6 +2,7 @@ package com.github.celestial_awakening.entity.combat;
 
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -94,5 +95,14 @@ public abstract class GenericCombatAIGoal extends Goal {
 
         this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
+    }
+
+    public double getCDDecMult(){//how atk spd impacts cd red
+        double mult=1d;
+        if (this.mob.getAttribute(Attributes.ATTACK_SPEED)!=null){
+            mult=this.mob.getAttribute(Attributes.ATTACK_SPEED).getValue();
+        }
+
+        return mult;
     }
 }

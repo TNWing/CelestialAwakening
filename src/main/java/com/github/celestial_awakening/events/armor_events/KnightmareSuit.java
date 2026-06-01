@@ -2,16 +2,22 @@ package com.github.celestial_awakening.events.armor_events;
 
 import com.github.celestial_awakening.capabilities.LivingEntityCapability;
 import com.github.celestial_awakening.capabilities.LivingEntityCapabilityProvider;
+import com.github.celestial_awakening.util.MathFuncs;
 import com.github.celestial_awakening.util.ToolTipBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +28,8 @@ public class KnightmareSuit extends ArmorEffect{
     int infoColor=0xC3c3c3;
     public static String honorDuel="Knightmare_Honor_Duel";
     public static String infamy="Knightmare_Infamy";
+    public static String swordShieldDmg="Knightmare_S&S_Dmg";
+    public static String swordShieldRes="Knightmare_S&S_Res";
 
 
     public static final String INFAMY_NAME = "tooltip.celestial_awakening.knightmare_suit.infamy_name";
@@ -40,6 +48,12 @@ public class KnightmareSuit extends ArmorEffect{
 
         V2
             Landing a hit will reduce the damage taken from the next attack. Blocking an attack will increase the damage of your next attack.
+
+        V3
+            Upon landing a hit, reduce the damage of the next hit scaling with your weapon dps
+            Blocking an attack will increase the damage of your next hit scaling with your armor pts & toughness
+            Each individual cd of 5 seconds.
+
     Honor
         Hitting an enemy applies Honor Duel to the user
         Decreases damage taken from other enemies.
@@ -100,20 +114,84 @@ public class KnightmareSuit extends ArmorEffect{
 
     }
 
+    @Override
+    public void onLivingHurtSelf(LivingHurtEvent event,Player player,int cnt){
+        ssRes(event,player);
+    }
+
+    public void onShieldBlock(ShieldBlockEvent event,Player player,int cnt){
+        ssBlock(event,player,cnt);
+    }
 
 
     @Override
     public void onLivingDeath(LivingDeathEvent event,Player player,int cnt){
-        infamy(event,player,cnt);
+        if (cnt==4){
+            infamy(event,player,cnt);
+        }
+
     }
 
     @Override
     public void onLivingHurtOthers(LivingHurtEvent event,Player player,int cnt){
         infamyBoost(event,player);
+        ssDmg(event,player,cnt);
         if (cnt==4){
             applyHonorDuel(event,player);
         }
     }
+
+    private void ssDmg(LivingHurtEvent event,Player player,int cnt){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+        capOptional.ifPresent(cap->{
+            Object[] dmgData= cap.getAbilityData(swordShieldDmg);
+            if (dmgData!=null){
+                double val= (double) dmgData[0];
+                int cd=cap.getAbilityCD(swordShieldDmg);
+                if (val>0){
+                    cap.removeFromAbilityMap(swordShieldDmg);
+                    cap.insertIntoAbilityMap(swordShieldDmg,cd,new Double[]{0d});
+                    event.setAmount((float) (event.getAmount()*val));
+                }
+            }
+            if (cap.hasAbility(swordShieldRes)){
+                double dps=event.getAmount()/player.getAttributeValue(Attributes.ATTACK_SPEED);
+                cap.insertIntoAbilityMap(swordShieldRes,5*20,new Double[]{dps*(0.5f+0.5f*cnt/4f)});
+            }
+        });
+    }
+
+    private void ssRes(LivingHurtEvent event,Player player){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+        capOptional.ifPresent(cap->{
+            Object[] resData=cap.getAbilityData(swordShieldRes);
+            int cd=cap.getAbilityCD(swordShieldRes);
+            if (resData!=null){
+                double dps= (double) resData[0];
+                if (dps>0){
+                    cap.removeFromAbilityMap(swordShieldRes);
+                    cap.insertIntoAbilityMap(swordShieldRes,cd,new Double[]{0d});
+                    float mult=0.8f;
+                    mult= (float) (dps/(dps+50));
+                    event.setAmount(event.getAmount()*(mult));
+                }
+            }
+
+        });
+    }
+
+    private void ssBlock(ShieldBlockEvent event, Player player, int cnt){
+        @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
+        capOptional.ifPresent(cap->{
+            if (!cap.hasAbility(swordShieldDmg)){
+                double mult= MathFuncs.clamp((float) (1f + (player.getAttributeValue(Attributes.ARMOR) * 0.01d  + player.getAttributeValue(Attributes.ARMOR_TOUGHNESS)* 0.015d )* cnt/4f),1f,1.5f);
+                cap.insertIntoAbilityMap(swordShieldDmg,5*20,new Double[]{mult});
+            }
+        });
+
+    }
+
+
 
     private void infamy(LivingDeathEvent event,Player player,int cnt){
         if(event.getSource().getEntity()==player){

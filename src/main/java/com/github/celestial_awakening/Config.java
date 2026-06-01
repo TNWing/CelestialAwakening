@@ -395,88 +395,66 @@ maybe use json files instead since it'll look neater?
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        //event.getConfig().get
         wipEnabled=ENABLE_WIP_CONTENT.get();
         mobCombatRegen= OUTOFCOMBAT_HEAL.get();
 
+
         transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
 
+
         lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
-
         moonstoneDimLim=MOONSTONE_LIMIT.get();
-
         moonstoneInterval=MOONSTONE_INTERVAL.get();
-
-
         moonstoneCnt=MOONSTONE_CNT.get();
+
 
         sunstoneGrassRate=SUNSTONE_GRASS_RATE.get();
         sunstoneLeavesRate=SUNSTONE_LEAVES_RATE.get();
 
+
         divinerShared= TRANSCENDENTS_MULTIPLE_DIVINER.get();
 
         transcendentsInitDelay = TRANSCENDENTS_DELAY.get();
-
         transcendentsDivMinCD = TRANSCENDENTS_MIN_CD.get();
-
         transcendentsDivMaxCD = TRANSCENDENTS_MAX_CD.get();
 
         transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
 
-        divinerHeatwaveEnabled=TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED.get();
-
-        divinerAoDEnabled= TRANSCENDENTS_DIVINER_AOD_ENABLED.get();
-
-        divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
-
-        divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
-
         divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
-
         divinerScanPowerBase=TRANSCENDENTS_DIVINER_SCAN_POWER_BASE.get();
 
+        divinerHeatwaveEnabled=TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED.get();
+        divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
+
+        divinerAoDEnabled= TRANSCENDENTS_DIVINER_AOD_ENABLED.get();
+        divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
+
         divinerSHEnabled=TRANSCENDENTS_DIVINER_SH_ENABLED.get();
-
         divinerSHRotInterval =TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL.get();
-
         divinerSHRotDiffMod = (List<Double>) TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD.get();
-
-
         divinerSHRotBaseChance =TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE.get();
-
         divinerSHItemRotMinAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT.get();
         divinerSHItemRotMaxAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT.get();
 
-        /*
-            public static boolean divinerSHEnabled;
-    public static int divinerSHInvRotBaseChance;//used to determine the chance to iterate thr an inventory to rot food
-    public static int divinerSHInvRotInterval;
-    public static int[] divinerSHInvRotDiffBaseChance;
-    public static int divinerSHItemRotBaseChance;
-    public static int[] divinerSHItemRotDiffChance;
-    public static int divinerSHItemRotMinAmt;
-    public static int divinerSHItemRotMaxAmt;
-         */
 
         solmanderDelay=SOLMANDER_DELAY.get();
         solmanderInterval=SOLMANDER_INTERVAL.get();
         solmanderChance=SOLMANDER_CHANCE.get();
 
+
         prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
         prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
+
 
         coreGuardianCounter=CORE_GUARDIAN_COUNTER.get();
 
 
         pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
-
         pkCrescenciaMinDay=PK_CRESCENCIA_MIN_DAY.get()-1;
-
         pkSpawnCap=PK_SPAWN_CAP.get();
-
         pkDmgResDist=PK_RMG_RES_DIST.get();
-
         pkDayDespawn=PK_DAY_DESPAWN.get();
+
 
         insSound=INSANITY_SOUNDS.get();
         try{
@@ -492,29 +470,35 @@ maybe use json files instead since it'll look neater?
 
         insMoH=INS_MOH.get();
 
+
         excitedParticlesAnimalTickInterval = EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
         excitedParticlesCropTickInterval= EXCITED_PARTICLES_CROP_INTERVAL.get();
 
 
         honorDuelDist= HONOR_DUEL_DIST.get();
 
+
         photonCycleFireMult=PHOTON_CYCLE_FIRE_MULT.get();
         photonCycleGlowMult=PHOTON_CYCLE_GLOW_MULT.get();
         photonCycleFinalMult=PHOTON_CYCLE_FINAL_MULT.get();
 
+
         midnightIronDmgMult=MIDNIGHT_IRON_DMG_MULT.get();
         midnightIronAtkSpdMult =MIDNIGHT_IRON_ATK_SPD_MULT.get();
         midnightIronMiningSpdMult=MIDNIGHT_IRON_MINING_SPD_MULT.get();
+
 
         moonScytheBaseDmg=MOON_SCYTHE_BASE_DMG.get();
         moonScytheBaseSpd=MOON_SCYTHE_BASE_SPD.get();
         moonScytheStrikeDmg=MOON_SCYTHE_STRIKE_DMG.get();
         moonScytheWaveDmg=MOON_SCYTHE_WAVE_DMG.get();
 
+
         midnightReaperBaseDmg=MIDNIGHT_REAPER_BASE_DMG.get();
         midnightReaperBaseSpd=MIDNIGHT_REAPER_BASE_SPD.get();
         midnightReaperStrikeDmg=MIDNIGHT_REAPER_STRIKE_DMG.get();
         midnightReaperWaveDmg=MIDNIGHT_REAPER_WAVE_DMG.get();
+
 
         arrowLunarDmg=LUNAR_ARROW_BASE_DMG.get();
         arrowSolarDmg=SOLAR_ARROW_BASE_DMG.get();

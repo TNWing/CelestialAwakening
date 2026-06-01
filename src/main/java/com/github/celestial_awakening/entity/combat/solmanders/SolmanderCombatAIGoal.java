@@ -12,14 +12,15 @@ public class SolmanderCombatAIGoal extends GenericCombatAIGoal {
     public SolmanderCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
-    SolmanderNewtBasicAttack basicAttack=new SolmanderNewtBasicAttack(this.mob,5,15,5,10,99);
-    SolmanderConflagration conflagration =new SolmanderConflagration(this.mob,25,80,1,0,20);
-    SolmanderSolarBeam solarBeam = new SolmanderSolarBeam(this.mob,15,100,40,10,10);
+    SolmanderNewtBasicAttack basicAttack=new SolmanderNewtBasicAttack(this.mob,5,1500,5,10,99);
+    SolmanderConflagration conflagration =new SolmanderConflagration(this.mob,25,8000,1,0,20);
+    SolmanderSolarBeam solarBeam = new SolmanderSolarBeam(this.mob,15,10000,40,10,10);
     List<GenericAbility> abilities=List.of(basicAttack,solarBeam, conflagration);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
+        double cdMult=getCDDecMult();
         abilities.forEach(ability->{
-            ability.decreaseCD(1);
+            ability.decreaseCD((int) (100*cdMult));
         });
         if (this.mob.isActing){
             currentAbility.executeAbility(this.mob.getTarget());

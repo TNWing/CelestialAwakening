@@ -15,14 +15,17 @@ public class NP_HunterCombatAIGoal extends GenericCombatAIGoal {
     public NP_HunterCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
-    NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,15,0,0);
-    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((ProwlerWhelp) this.mob,15,70,12,5,10);
-    NP_HunterPhantomRush phantomRush=new NP_HunterPhantomRush(this.mob,10,90,15,10,7);
-    NP_HunterUmbraWarp umbraWarp=new NP_HunterUmbraWarp(this.mob,20,100,15,25,5,30);
+    NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,1500,0,0);
+    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((ProwlerWhelp) this.mob,15,7000,12,5,10);
+    NP_HunterPhantomRush phantomRush=new NP_HunterPhantomRush(this.mob,10,9000,15,10,7);
+    NP_HunterUmbraWarp umbraWarp=new NP_HunterUmbraWarp(this.mob,20,10000,15,25,5,30);
     List<GenericAbility> abilities=List.of(basicAttack,phantomRush,shadowLeap,umbraWarp);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
-        abilities.forEach(a-> a.decreaseCD(1));
+        double cdMult=getCDDecMult();
+        abilities.forEach(ability->{
+            ability.decreaseCD((int) (100*cdMult));
+        });
         if (this.mob.isActing){
             currentAbility.executeAbility(this.mob.getTarget());
         }

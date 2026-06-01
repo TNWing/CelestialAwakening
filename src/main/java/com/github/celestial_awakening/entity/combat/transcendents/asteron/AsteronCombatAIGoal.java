@@ -1,20 +1,25 @@
 package com.github.celestial_awakening.entity.combat.transcendents.asteron;
 
+import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;
 import net.minecraft.world.entity.LivingEntity;
+
+import java.util.List;
 
 public class AsteronCombatAIGoal extends GenericCombatAIGoal {
     public AsteronCombatAIGoal(Asteron mob) {
         super(mob);
     }
-    AsteronPiercingRays piercingRays=new AsteronPiercingRays(this.mob,20,40,15,30);
-    AsteronBasicAttack basicAttack=new AsteronBasicAttack(this.mob,0,15,0,0);//(this.mob,10,30,1,10,15);
+    AsteronPiercingRays piercingRays=new AsteronPiercingRays(this.mob,2000,40,15,30);
+    AsteronBasicAttack basicAttack=new AsteronBasicAttack(this.mob,0,1500,0,0);//(this.mob,10,30,1,10,15);
+    List<GenericAbility> abilities=List.of(basicAttack,piercingRays);
     public void tick(){
+        double cdMult=getCDDecMult();
         LivingEntity target=this.mob.getTarget();
-
-        piercingRays.decreaseCD(1);
-        basicAttack.decreaseCD(1);
+        abilities.forEach(ability->{
+            ability.decreaseCD((int) (100*cdMult));
+        });
         if (this.mob.isActing){
             currentAbility.executeAbility(this.mob.getTarget());
         }

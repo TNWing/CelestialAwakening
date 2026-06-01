@@ -124,13 +124,9 @@ public class SolarEvents {
         Object[] params=new Object[]{cap,dimID};
         DelayedFunctionManager.delayedFunctionManager.insertIntoLevelMap(ServerLifecycleHooks.getCurrentServer().getLevel(dimID), new UpdateDivinerEyeCommandPattern(params,0),120,true);//6 seconds before it opens
     }
-    /*
-    i can use this server side or client side. server side is probably easier, as if client side, the client will need to perform detections AND send messages to server, which server must verify.
-     */
+
     public void detectTargets(Level level, LevelCapability levelCap){
-        //also, when the player logs, does not save the diviner?
         ServerChunkCache chunkCache = (ServerChunkCache) level.getChunkSource();
-        //	visibleChunkMap f_140130_
 
         Map<Long, ChunkHolder> visibleChunkMap = ObfuscationReflectionHelper.getPrivateValue(ChunkMap.class,chunkCache.chunkMap ,"f_140130_");
         float startingDivPower=levelCap.divinerEyePower;
@@ -139,12 +135,17 @@ public class SolarEvents {
             if (chunk==null){
                 continue;
             }
+
+            //todo: run test to see if this causes the game to die if theres a bunch of entities
+            //with 100 villagers in 1 chunk, it doesnt seem to lag, might stress test w/ a lot more entities
             ChunkPos chunkPos=chunk.getPos();
             AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(),  level.getMinBuildHeight(), chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
             Predicate<LivingEntity> pred=o ->ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets);
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, chunkBoundingBox,pred);
+            //System.out.println("CHECKING CHUNK has " + entities.size());
             boolean capDirty=false;
             for (LivingEntity entity:entities){
+                //System.out.println("ent " + entity.getUUID());
                 if (entity.hasEffect(MobEffectInit.CELESTIAL_BEACON.get())){
                     continue;
                 }
@@ -152,7 +153,7 @@ public class SolarEvents {
                 capDirty=true;
                 BlockPos entityBlockPos=entity.blockPosition();
                 if(level.canSeeSky(entityBlockPos)){//glass is see-thr so being under glass doesnt protect, i can just leave it like this tho
-                    //m,aybe have amplifier is determined by how long the player has stood in the open consecutively?
+                    //maybe have amplifier is determined by how long the player has stood in the open consecutively?
                     LazyOptional<LivingEntityCapability> optional=entity.getCapability(LivingEntityCapabilityProvider.capability);
                     //TODO: test this
                     optional.ifPresent(cap->{
@@ -203,7 +204,8 @@ public class SolarEvents {
                                 }
                             }
 
-                            if (startingDivPower>=25){
+                            //also, maybe have this trigger at the end of the scan instead
+                            if (startingDivPower>=25){//move it outside the entity loop, since its dependent on the level rather than individual chunks/entities, would boost performance slightly
                                 int typeCnt=levelCap.getDivinerSunControlType();
                                 boolean isSH=levelCap.determineSunControlType(level.random);
                                 if (isSH){

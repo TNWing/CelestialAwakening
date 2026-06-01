@@ -50,6 +50,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -493,6 +494,18 @@ public class EventManager {
                 });
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onShieldBlock(ShieldBlockEvent event){
+        LivingEntity blocker=event.getEntity();
+        if (blocker instanceof Player player){
+            int cnt=countPieces(player,CustomArmorMaterial.KNIGHTMARE);
+            if (cnt>0){
+                ((KnightmareSuit)knightmareSuit.getValue()).onShieldBlock(event,player,cnt);
+            }
+        }
+
     }
 
 

@@ -54,15 +54,6 @@ public record SolmanderSpawner() {
                 }
             }
             ArrayList<BlockPos> blockPosList=new ArrayList<>();
-            /*
-            Alternative method:
-            have the array of valid chunks
-            for each chunk, check for conditional
-            then check for player distance
-
-            the way lycanites does it is that it takes each player's position, and adds it to a list if that position is not close to any other positions currently in the list.
-            then, it performs an iteration through a large area, centered on each position in the list
-             */
 
             /*
             How vanilla handles it
@@ -192,7 +183,7 @@ public record SolmanderSpawner() {
                 }
             }
             else{
-                System.out.println("FAILED TO FIND VALID BLOCKS");
+                //System.out.println("FAILED TO FIND VALID BLOCKS");
             }
 
         }

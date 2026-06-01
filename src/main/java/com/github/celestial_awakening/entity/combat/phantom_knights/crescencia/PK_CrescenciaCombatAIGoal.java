@@ -9,26 +9,27 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
-    PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,10,20,15,0,99);
+    PK_CrescenciaBasicAttack basicAttack=new PK_CrescenciaBasicAttack(this.mob,10,2000,15,0,99);
     //PhantomKnightChargeAttack chargeAttack=new PhantomKnightChargeAttack(this.mob,50,200,50,30);
-    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,15,200,125,30,15);
-    PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,150,40,36,9);
-    PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,160,0,10,8);
-    PK_CrescenciaPhantomStrike phantomStrike=new PK_CrescenciaPhantomStrike(this.mob,0,25,0,0);
+    PK_CrescenciaCrescentWhirlwind crescentWhirlwind=new PK_CrescenciaCrescentWhirlwind(this.mob,15,20000,125,30,15);
+    PK_CrescenciaStrikethrough strikethrough=new PK_CrescenciaStrikethrough(this.mob,12,15000,40,36,9);
+    PK_CrescenciaMoonCutter moonCutter=new PK_CrescenciaMoonCutter(this.mob,8,16000,0,10,8);
+    PK_CrescenciaPhantomStrike phantomStrike=new PK_CrescenciaPhantomStrike(this.mob,0,2500,0,0);
     List<GenericAbility> abilities=List.of(basicAttack,crescentWhirlwind,moonCutter,strikethrough);
     public PK_CrescenciaCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     public void tick(){//this tick occurs ever 2 standard ticks
         LivingEntity target=this.mob.getTarget();
+        double cdMult=getCDDecMult();
         if (this.mob.getBossBarWindup()>=100){
-            abilities.forEach(a-> a.decreaseCD(1));
+            abilities.forEach(a-> a.decreaseCD((int) (100*cdMult)));
 
             if (this.mob.level().getDifficulty().getId()>1 &&  this.mob.getHealth()/this.mob.getMaxHealth()<=0.4f){
-                phantomStrike.decreaseCD(1);
+                phantomStrike.decreaseCD((int) (100*cdMult));
                 if (phantomStrike.getCurrentCD()==0){
                     phantomStrike.executeAbility(this.mob.getTarget());
-                    phantomStrike.setCD(25);
+                    phantomStrike.setCD(2500);
                 }
             }
 

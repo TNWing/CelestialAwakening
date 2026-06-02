@@ -6,8 +6,7 @@ import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.AlertInterface;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
-import com.github.celestial_awakening.entity.living.phantom_knights.AbstractPhantomKnight;
-import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights.AbstractPhantomKnight;
 import com.github.celestial_awakening.entity.projectile.LunarCrescent;
 import com.github.celestial_awakening.entity.projectile.MoonlightOrb;
 import com.github.celestial_awakening.networking.ModNetwork;
@@ -19,7 +18,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.phys.Vec3;
@@ -27,7 +25,6 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class PK_CrescenciaPhantomStrike extends GenericAbility {
 
@@ -62,6 +59,7 @@ public class PK_CrescenciaPhantomStrike extends GenericAbility {
                 if (nearestEntity!=null){
                     nearestEntity.hurt(strikeSource,2f);
                     if (orb.level().getDifficulty().getId()>2){
+                        System.out.println("ORB CNT " + orbs.size());
                         for (MoonlightOrb o:orbs) {
                             if (!o.isRemoved() && !o.equals(orb)){
                                 //todo: check to see if this would access the orbs present at the time of creation of the orbs stored currently

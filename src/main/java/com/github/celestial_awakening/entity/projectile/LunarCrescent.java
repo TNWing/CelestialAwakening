@@ -49,6 +49,7 @@ public class LunarCrescent extends CA_Projectile {
         crescent.setRScales(rs);
         crescent.setDims(width,height);
         crescent.setDeltaMovement(crescent.calculateMoveVec());
+        crescent.setNoGravity(true);
         return crescent;
     }
     @Override

@@ -5,7 +5,7 @@ package com.github.celestial_awakening.rendering.client.models;// Made with Bloc
 
 import com.github.celestial_awakening.CelestialAwakening;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
-import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.rendering.client.animations.PK_CrescenciaAnimations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

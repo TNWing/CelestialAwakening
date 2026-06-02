@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.living.phantom_knights;
+package com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights;
 
 import com.github.celestial_awakening.entity.combat.phantom_knights.crescencia.PK_CrescenciaCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
@@ -88,7 +88,7 @@ public class PhantomKnight_Crescencia extends AbstractPhantomKnight{
 
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMobAttributes()
+        return createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.28D)
                 .add(Attributes.KNOCKBACK_RESISTANCE,0.4D)
                 .add(Attributes.MAX_HEALTH, baseHP)

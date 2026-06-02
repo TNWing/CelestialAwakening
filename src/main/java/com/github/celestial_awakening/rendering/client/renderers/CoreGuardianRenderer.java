@@ -1,7 +1,6 @@
 package com.github.celestial_awakening.rendering.client.renderers;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
 import com.github.celestial_awakening.init.ModelLayerInit;
 import com.github.celestial_awakening.rendering.client.models.PKCrescenciaModel;

@@ -1,9 +1,8 @@
 package com.github.celestial_awakening.events;
 
 import com.github.celestial_awakening.CelestialAwakening;
-import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
-import com.github.celestial_awakening.entity.living.phantom_knights.PhantomKnight_Crescencia;
+import com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights.PhantomKnight_Crescencia;
 import com.github.celestial_awakening.entity.living.planetary_guardians.CoreGuardian;
 import com.github.celestial_awakening.entity.living.solmanders.SolmanderNewt;
 import com.github.celestial_awakening.entity.living.transcendents.Asteron;

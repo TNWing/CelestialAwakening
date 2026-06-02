@@ -21,10 +21,12 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
     }
     public void tick(){//this tick occurs ever 2 standard ticks
         LivingEntity target=this.mob.getTarget();
-        double cdMult=getCDDecMult();
         if (this.mob.getBossBarWindup()>=100){
-            abilities.forEach(a-> a.decreaseCD((int) (100*cdMult)));
-
+            double cdMult=getCDDecMult();
+            double cdDec=cdMult*100;
+            abilities.forEach(ability->{
+                ability.decreaseCD((int) (cdDec));
+            });
             if (this.mob.level().getDifficulty().getId()>1 &&  this.mob.getHealth()/this.mob.getMaxHealth()<=0.4f){
                 phantomStrike.decreaseCD((int) (100*cdMult));
                 if (phantomStrike.getCurrentCD()==0){

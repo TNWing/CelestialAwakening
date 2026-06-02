@@ -15,10 +15,11 @@ public class AsteronCombatAIGoal extends GenericCombatAIGoal {
     AsteronBasicAttack basicAttack=new AsteronBasicAttack(this.mob,0,1500,0,0);//(this.mob,10,30,1,10,15);
     List<GenericAbility> abilities=List.of(basicAttack,piercingRays);
     public void tick(){
-        double cdMult=getCDDecMult();
         LivingEntity target=this.mob.getTarget();
+        double cdMult=getCDDecMult();
+        double cdDec=cdMult*100;
         abilities.forEach(ability->{
-            ability.decreaseCD((int) (100*cdMult));
+            ability.decreaseCD((int) (cdDec));
         });
         if (this.mob.isActing){
             currentAbility.executeAbility(this.mob.getTarget());

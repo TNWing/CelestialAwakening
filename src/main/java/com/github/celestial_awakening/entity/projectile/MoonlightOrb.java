@@ -29,6 +29,7 @@ public class MoonlightOrb extends CA_Projectile{
         orb.setHAng(hAng);
         orb.setVAng(vAng);
         orb.setZRot(zR);
+        orb.setNoGravity(true);
         return orb;
     }
     public void tick(){

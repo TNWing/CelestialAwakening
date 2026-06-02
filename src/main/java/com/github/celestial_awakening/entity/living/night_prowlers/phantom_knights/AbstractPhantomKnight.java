@@ -1,4 +1,4 @@
-package com.github.celestial_awakening.entity.living.phantom_knights;
+package com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights;
 
 import com.github.celestial_awakening.Config;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;

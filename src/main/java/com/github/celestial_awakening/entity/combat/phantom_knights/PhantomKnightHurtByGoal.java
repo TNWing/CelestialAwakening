@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.combat.phantom_knights;
 
-import com.github.celestial_awakening.entity.living.phantom_knights.AbstractPhantomKnight;
+import com.github.celestial_awakening.entity.living.night_prowlers.phantom_knights.AbstractPhantomKnight;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 
 public class PhantomKnightHurtByGoal extends HurtByTargetGoal {

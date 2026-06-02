@@ -19,8 +19,9 @@ public class SolmanderCombatAIGoal extends GenericCombatAIGoal {
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         double cdMult=getCDDecMult();
+        double cdDec=cdMult*100;
         abilities.forEach(ability->{
-            ability.decreaseCD((int) (100*cdMult));
+            ability.decreaseCD((int) (cdDec));
         });
         if (this.mob.isActing){
             currentAbility.executeAbility(this.mob.getTarget());

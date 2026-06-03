@@ -13,12 +13,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -113,7 +113,46 @@ public class RadiantArmor extends ArmorEffect {
 
         }
     }
+    protected static float getGrowthSpeed(Block p_52273_, BlockGetter p_52274_, BlockPos p_52275_) {
+        float f = 1.0F;
+        BlockPos blockpos = p_52275_.below();
 
+        for(int i = -1; i <= 1; ++i) {
+            for(int j = -1; j <= 1; ++j) {
+                float f1 = 0.0F;
+                BlockState blockstate = p_52274_.getBlockState(blockpos.offset(i, 0, j));
+                if (blockstate.canSustainPlant(p_52274_, blockpos.offset(i, 0, j), net.minecraft.core.Direction.UP, (net.minecraftforge.common.IPlantable) p_52273_)) {
+                    f1 = 1.0F;
+                    if (blockstate.isFertile(p_52274_, p_52275_.offset(i, 0, j))) {
+                        f1 = 3.0F;
+                    }
+                }
+
+                if (i != 0 || j != 0) {
+                    f1 /= 4.0F;
+                }
+
+                f += f1;
+            }
+        }
+
+        BlockPos blockpos1 = p_52275_.north();
+        BlockPos blockpos2 = p_52275_.south();
+        BlockPos blockpos3 = p_52275_.west();
+        BlockPos blockpos4 = p_52275_.east();
+        boolean flag = p_52274_.getBlockState(blockpos3).is(p_52273_) || p_52274_.getBlockState(blockpos4).is(p_52273_);
+        boolean flag1 = p_52274_.getBlockState(blockpos1).is(p_52273_) || p_52274_.getBlockState(blockpos2).is(p_52273_);
+        if (flag && flag1) {
+            f /= 2.0F;
+        } else {
+            boolean flag2 = p_52274_.getBlockState(blockpos3.north()).is(p_52273_) || p_52274_.getBlockState(blockpos4.north()).is(p_52273_) || p_52274_.getBlockState(blockpos4.south()).is(p_52273_) || p_52274_.getBlockState(blockpos3.south()).is(p_52273_);
+            if (flag2) {
+                f /= 2.0F;
+            }
+        }
+
+        return f;
+    }
     int range=9;
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
@@ -127,10 +166,22 @@ public class RadiantArmor extends ArmorEffect {
                             blockPos=blockPos.offset(x,y,z);
                             BlockState blockState=serverLevel.getBlockState(blockPos);
                             Block block=blockState.getBlock();
-                            if (block instanceof CropBlock||
-                                    block instanceof SaplingBlock){
-                                blockState.randomTick(serverLevel,blockPos,serverLevel.random);
+                            if ( (block instanceof CropBlock|| block instanceof BushBlock ||
+                                    block instanceof SaplingBlock || block instanceof GrowingPlantBlock)){
+                                if (blockState.isRandomlyTicking()){
+                                    System.out.println("RANDOM TICK BLOCK at "+ blockPos +"   ON BLOCK   " + block.getName());
+                                    if (block instanceof IPlantable){
+                                        System.out.println(" growth spd " + getGrowthSpeed(block,serverLevel,blockPos));
+                                    }
+                                    blockState.randomTick(serverLevel,blockPos,serverLevel.random);
+                                }
+                                else{//todo: account for non-random tick blocks (such as glow berries)
+                                    if (random.nextInt(10)==0 && block instanceof BonemealableBlock){
+                                        ((BonemealableBlock) block).performBonemeal(serverLevel,serverLevel.random,blockPos,blockState);
+                                    }
+                                }
                             }
+
                         }
                     }
                 }

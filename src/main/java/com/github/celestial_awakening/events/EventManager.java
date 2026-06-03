@@ -792,6 +792,14 @@ public class EventManager {
                 }
             });
         }
+        //System.out.println("result of crop pre " + event.getResult() + " at pos " + event.getPos());
+    }
+    @SubscribeEvent
+    public static void onCropGrowEventPre(BlockEvent.CropGrowEvent.Post event){
+        LevelAccessor levelAccessor=event.getLevel();
+        if (levelAccessor instanceof Level level){
+        }
+        //System.out.println("result of crop post " + event.getResult() + " at pos " + event.getPos());
     }
 
     @SubscribeEvent

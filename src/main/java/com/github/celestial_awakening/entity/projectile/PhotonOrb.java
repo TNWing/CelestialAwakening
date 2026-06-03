@@ -29,12 +29,6 @@ public class PhotonOrb extends Projectile {
 
     @Override
     protected void defineSynchedData() {
-//need to use synceddata to save the following
-        /*
-        what to spawn
-        owner
-        i could also just not worry and have projectiles despawn upon logging
-         */
     }
 
     public void setDest(Vec3 dest) {

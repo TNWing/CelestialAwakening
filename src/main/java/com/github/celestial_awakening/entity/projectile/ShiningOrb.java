@@ -26,7 +26,7 @@ public class ShiningOrb extends CA_Projectile {
     private static final EntityDataAccessor<Boolean> SHOULD_EXPLODE= SynchedEntityData.defineId(ShiningOrb.class, EntityDataSerializers.BOOLEAN);
     public ShiningOrb(EntityType<ShiningOrb> shiningOrbEntityType, Level level) {
         super(shiningOrbEntityType,level,80);
-        damagesource=this.level().damageSources().indirectMagic(this,null);//new DamageSource(,null);
+        damagesource=this.level().damageSources().indirectMagic(this,null);
         this.setNoGravity(true);
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -154,8 +155,36 @@ public class RadiantArmor extends ArmorEffect {
         return f;
     }
     int range=9;
+    //List<Block> blocksToGrow=List.of()
+/*
+tags i can use to check
+      this.tag(BlockTags.CROPS).add(Blocks.BEETROOTS, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT, Blocks.MELON_STEM, Blocks.PUMPKIN_STEM, Blocks.TORCHFLOWER_CROP, Blocks.PITCHER_CROP);
+      this.tag(BlockTags.BEE_GROWABLES).addTag(BlockTags.CROPS).add(Blocks.SWEET_BERRY_BUSH).add(Blocks.CAVE_VINES).add(Blocks.CAVE_VINES_PLANT);
+       this.tag(BlockTags.SAPLINGS).add(Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING, Blocks.AZALE
+
+       okay, so lets do this:
+       //check if instance of IPlantable
+       this covers crops, mushrooms, saplings as well as nether fungi (since they grouped under bush block)
+       Iplantable also covers sugar cane
+       also see if is Bonemealable, this will cover growingplantblocks and cocoa, but it will also end up covering spreadingdirtblocks (grass, nylium, etc)
+
+      generally, should first attempt random tick, if the block doesnt tick randomly, then roll a chance for bonemeal effect
+
+ */
+
+    public boolean blockAllowed(Block block){
+        if (block instanceof NyliumBlock && !Config.epCropNylium){
+            return false;
+        }
+        if (block instanceof SpreadingSnowyDirtBlock && !Config.epCropSpreading){
+            return false;
+        }
+        return true;
+    }
+
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
+
         if (player instanceof ServerPlayer){
             if (player.tickCount % Config.excitedParticlesCropTickInterval ==0){
                 ServerLevel serverLevel= (ServerLevel) player.level();
@@ -166,8 +195,22 @@ public class RadiantArmor extends ArmorEffect {
                             blockPos=blockPos.offset(x,y,z);
                             BlockState blockState=serverLevel.getBlockState(blockPos);
                             Block block=blockState.getBlock();
-                            if ( (block instanceof CropBlock|| block instanceof BushBlock ||
-                                    block instanceof SaplingBlock || block instanceof GrowingPlantBlock)){
+                            //so best method is to:
+                            //check if iPlantable or Bonemealable
+                            //the only issue is that this may impact things like grass blocks
+                            //the issue is sugar cane only falls under iplantable, cocoa falls only under bonemealable
+                            //honestly, better to just use cropblock, sapling block, bushblock, growingplant block, then add explicit includes for cocoa, sugarcane, chorus fruit
+                            if (block instanceof IPlantable || block instanceof BonemealableBlock && blockAllowed(block)){
+                                if (blockState.isRandomlyTicking()){
+                                    blockState.randomTick(serverLevel,blockPos,serverLevel.random);
+                                }
+                                else if (random.nextInt(10)==0 && block instanceof BonemealableBlock){
+                                    ((BonemealableBlock) block).performBonemeal(serverLevel,serverLevel.random,blockPos,blockState);
+                                }
+                            }
+                            /*
+                            if ( (block instanceof BushBlock ||
+                                    block instanceof GrowingPlantBlock)){
                                 if (blockState.isRandomlyTicking()){
                                     System.out.println("RANDOM TICK BLOCK at "+ blockPos +"   ON BLOCK   " + block.getName());
                                     if (block instanceof IPlantable){
@@ -181,6 +224,8 @@ public class RadiantArmor extends ArmorEffect {
                                     }
                                 }
                             }
+
+                             */
 
                         }
                     }

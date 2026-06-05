@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -73,8 +74,11 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<Integer> INSANITY_PASSIVE_REC;
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_ANIMAL_INTERVAL;
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_CROP_INTERVAL;
-
-
+    //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> EXCITED_PARTICLES_EXPLICITEDLY_INCLUDED_CROPS;
+    //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> EXCITED_PARTICLES_BLOCK_BLACKLIST;
+    private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS;
+    private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS;
+    //private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_DEFAULT_VALS_ENABLED;
 
     private static final ForgeConfigSpec.IntValue HONOR_DUEL_DIST;
     private static final ForgeConfigSpec.DoubleValue PHOTON_CYCLE_FIRE_MULT;
@@ -206,7 +210,11 @@ maybe use json files instead since it'll look neater?
             builder.push("Radiant_Armor");
                 EXCITED_PARTICLES_ANIMAL_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' animal effect.\nDefault: 30").defineInRange("excited_particles_animal_interval",30,1,Integer.MAX_VALUE);
                 EXCITED_PARTICLES_CROP_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' crop effect.\nDefault: 400").defineInRange("excited_particles_crop_interval",400,1,Integer.MAX_VALUE);
-
+                //EXCITED_PARTICLES_DEFAULT_VALS_ENABLED=builder.comment("Excited particles triggers on blocks classified as 'Bush Blocks', 'Crop Blocks', 'Sapling Blocks', and")
+                //EXCITED_PARTICLES_EXPLICITEDLY_INCLUDED_CROPS=builder.comment("Some plants that may be considered crops are not classified under a unifying class in vanilla's code. This list allows excited particles to affect specific blocks that don't match any of the requirements.\nDefault: [minecraft:cocoa,minecraft:sugar_cane]").defineListAllowEmpty("excited_particles_explicit_crops",new ArrayList<>(Arrays.asList("minecraft:cocoa","minecraft:sugar_cane")), obj->obj instanceof String);
+                //EXCITED_PARTICLES_BLOCK_BLACKLIST=builder.comment("Due to the way vanilla code is structured, current implementation of excited particles would include 'spreading' blocks such as grass and nylium.\nThis list blacklists those blocks (as well as any user-defined blocks) from being affected by the armor effect.\nDefault:[minecraft:grass_block,minecraft:mycelium]")
+                EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS=builder.comment("Determines if spreading blocks (grass and mycelium) are be affected by the armor set bonus.\nDefault:false").define("excited_particles_spreading",false);
+                EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS=builder.comment("Determines if nylium can be affected by the armor set bonus.\nDefault:false").define("excited_particles_nylium",false);
         builder.pop();
             builder.push("Knightmare_Suit");
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
@@ -345,7 +353,10 @@ maybe use json files instead since it'll look neater?
     public static double rejWaveAmt =0.5d;
     public static int excitedParticlesAnimalTickInterval =30;
     public static int excitedParticlesCropTickInterval=400;
-
+    public static Set<Block> epIncludedCrops;
+    public static boolean epCropDefaultEnabled=true;
+    public static boolean epCropSpreading=false;
+    public static boolean epCropNylium=false;
     public static double honorDuelDist;
 
     public static double photonCycleFireMult;
@@ -392,6 +403,11 @@ maybe use json files instead since it'll look neater?
         return list.stream().map(
           obj-> ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(obj))).collect(Collectors.toSet());
     }
+    static Set<Block> strToBlocks(List<? extends String> list){
+        return list.stream().map(
+                obj-> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(obj))).collect(Collectors.toSet());
+    }
+
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
@@ -473,7 +489,8 @@ maybe use json files instead since it'll look neater?
 
         excitedParticlesAnimalTickInterval = EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
         excitedParticlesCropTickInterval= EXCITED_PARTICLES_CROP_INTERVAL.get();
-
+        epCropSpreading= EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS.get();
+        epCropNylium=EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS.get();
 
         honorDuelDist= HONOR_DUEL_DIST.get();
 

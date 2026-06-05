@@ -182,6 +182,11 @@ tags i can use to check
         return true;
     }
 
+    public boolean blockWhitelisted(Block block){
+
+        return Config.epIncludedCrops.contains(block);
+    }
+
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
 
@@ -195,12 +200,8 @@ tags i can use to check
                             blockPos=blockPos.offset(x,y,z);
                             BlockState blockState=serverLevel.getBlockState(blockPos);
                             Block block=blockState.getBlock();
-                            //so best method is to:
-                            //check if iPlantable or Bonemealable
-                            //the only issue is that this may impact things like grass blocks
-                            //the issue is sugar cane only falls under iplantable, cocoa falls only under bonemealable
-                            //honestly, better to just use cropblock, sapling block, bushblock, growingplant block, then add explicit includes for cocoa, sugarcane, chorus fruit
-                            if (block instanceof IPlantable || block instanceof BonemealableBlock && blockAllowed(block)){
+                            //TODO: chorus fruit, need explicit inclusion
+                            if ((block instanceof IPlantable || block instanceof BonemealableBlock || blockWhitelisted(block)) && blockAllowed(block)){
                                 if (blockState.isRandomlyTicking()){
                                     blockState.randomTick(serverLevel,blockPos,serverLevel.random);
                                 }
@@ -208,25 +209,6 @@ tags i can use to check
                                     ((BonemealableBlock) block).performBonemeal(serverLevel,serverLevel.random,blockPos,blockState);
                                 }
                             }
-                            /*
-                            if ( (block instanceof BushBlock ||
-                                    block instanceof GrowingPlantBlock)){
-                                if (blockState.isRandomlyTicking()){
-                                    System.out.println("RANDOM TICK BLOCK at "+ blockPos +"   ON BLOCK   " + block.getName());
-                                    if (block instanceof IPlantable){
-                                        System.out.println(" growth spd " + getGrowthSpeed(block,serverLevel,blockPos));
-                                    }
-                                    blockState.randomTick(serverLevel,blockPos,serverLevel.random);
-                                }
-                                else{//todo: account for non-random tick blocks (such as glow berries)
-                                    if (random.nextInt(10)==0 && block instanceof BonemealableBlock){
-                                        ((BonemealableBlock) block).performBonemeal(serverLevel,serverLevel.random,blockPos,blockState);
-                                    }
-                                }
-                            }
-
-                             */
-
                         }
                     }
                 }
@@ -241,7 +223,7 @@ tags i can use to check
                         animal.ageUp(3);//adds 3 sec (60 ticks) of age, by default, animals take 20 min to grow up
                     }
                     else if (animal.getAge()>0){
-                        animal.setAge(Math.max(0,animal.getAge()-20));//by default, animals have a breeding period of 5 min
+                        animal.setAge(Math.max(0,animal.getAge()-20));//by default, animals have a breeding cooldown of 5 min
                     }
                 }
             }

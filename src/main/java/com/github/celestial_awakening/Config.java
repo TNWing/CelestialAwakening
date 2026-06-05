@@ -75,7 +75,7 @@ public class Config
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_ANIMAL_INTERVAL;
     private static final ForgeConfigSpec.IntValue EXCITED_PARTICLES_CROP_INTERVAL;
     //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> EXCITED_PARTICLES_EXPLICITEDLY_INCLUDED_CROPS;
-    //private static final ForgeConfigSpec.ConfigValue<List<? extends String>> EXCITED_PARTICLES_BLOCK_BLACKLIST;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> EXCITED_PARTICLES_BLOCK_WHITELIST;
     private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS;
     private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS;
     //private static final ForgeConfigSpec.BooleanValue EXCITED_PARTICLES_DEFAULT_VALS_ENABLED;
@@ -215,6 +215,7 @@ maybe use json files instead since it'll look neater?
                 //EXCITED_PARTICLES_BLOCK_BLACKLIST=builder.comment("Due to the way vanilla code is structured, current implementation of excited particles would include 'spreading' blocks such as grass and nylium.\nThis list blacklists those blocks (as well as any user-defined blocks) from being affected by the armor effect.\nDefault:[minecraft:grass_block,minecraft:mycelium]")
                 EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS=builder.comment("Determines if spreading blocks (grass and mycelium) are be affected by the armor set bonus.\nDefault:false").define("excited_particles_spreading",false);
                 EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS=builder.comment("Determines if nylium can be affected by the armor set bonus.\nDefault:false").define("excited_particles_nylium",false);
+                EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_fruit")), obj->obj instanceof String);
         builder.pop();
             builder.push("Knightmare_Suit");
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
@@ -489,6 +490,7 @@ maybe use json files instead since it'll look neater?
 
         excitedParticlesAnimalTickInterval = EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
         excitedParticlesCropTickInterval= EXCITED_PARTICLES_CROP_INTERVAL.get();
+        epIncludedCrops=strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
         epCropSpreading= EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS.get();
         epCropNylium=EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS.get();
 

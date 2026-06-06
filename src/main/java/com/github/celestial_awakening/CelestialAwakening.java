@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -87,10 +88,14 @@ optimize eventmanager later, theres probably  some stuff eating up performance
         modEventBus.addListener(this::addCreative);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,Config.SPEC);
-        //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
-
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(CelestialAwakening::onConfigLoad);
     }
+    private static void onConfigLoad(final ModConfigEvent.Loading event) {
+        if (event.getConfig().getSpec() == Config.SPEC) {
+            Config.bakeConfig();
+        }
+    }
+
     public static ResourceLocation createResourceLocation(String str){
         return new ResourceLocation(MODID,str);
     }
@@ -110,7 +115,6 @@ optimize eventmanager later, theres probably  some stuff eating up performance
             COMPOSTABLES.put(ItemInit.MUSHY_ROT.get(),1f);
         });
     }
-
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {

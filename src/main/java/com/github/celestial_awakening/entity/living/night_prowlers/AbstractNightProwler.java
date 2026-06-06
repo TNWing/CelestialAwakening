@@ -159,7 +159,7 @@ public abstract class AbstractNightProwler extends AbstractCAMonster {
         Level level = this.level();
         if (level instanceof ServerLevel) {
             if (getInfuse()!=0){
-                if (Config.prowlerDestruction== Config.ProwlerDestruction.ALL || (Config.prowlerDestruction== Config.ProwlerDestruction.RAID && this.raid!=null)){
+                if (Config.prowlerDestruction()== Config.ProwlerDestruction.ALL || (Config.prowlerDestruction()== Config.ProwlerDestruction.RAID && this.raid!=null)){
                     BlockPos centerPos=this.blockPosition();
                     if (getInfuse()==1){//fire
                         for (int x=-deathBombHBound;x<=deathBombHBound;x++) {

@@ -173,10 +173,10 @@ tags i can use to check
  */
 
     public boolean blockAllowed(Block block){
-        if (block instanceof NyliumBlock && !Config.epCropNylium){
+        if (block instanceof NyliumBlock && !Config.epCropNylium()){
             return false;
         }
-        if (block instanceof SpreadingSnowyDirtBlock && !Config.epCropSpreading){
+        if (block instanceof SpreadingSnowyDirtBlock && !Config.epCropSpreading()){
             return false;
         }
         return true;
@@ -184,14 +184,14 @@ tags i can use to check
 
     public boolean blockWhitelisted(Block block){
 
-        return Config.epIncludedCrops.contains(block);
+        return Config.epIncludedCrops().contains(block);
     }
 
     public void excitedParticles(TickEvent.PlayerTickEvent event){
         Player player=event.player;
 
         if (player instanceof ServerPlayer){
-            if (player.tickCount % Config.excitedParticlesCropTickInterval ==0){
+            if (player.tickCount % Config.excitedParticlesCropTickInterval() ==0){
                 ServerLevel serverLevel= (ServerLevel) player.level();
                 for (int x=-range;x<=range;x++){
                     for (int z=-range;z<=range;z++){
@@ -213,7 +213,7 @@ tags i can use to check
                     }
                 }
             }
-            if (player.tickCount % Config.excitedParticlesAnimalTickInterval ==0){
+            if (player.tickCount % Config.excitedParticlesAnimalTickInterval() ==0){
                 ServerLevel serverLevel= (ServerLevel) player.level();
                 AABB aabb=new AABB(player.getX()-range,player.getY()-range,player.getZ()-range,
                         player.getX()+range,player.getY()+range,player.getZ()+range);

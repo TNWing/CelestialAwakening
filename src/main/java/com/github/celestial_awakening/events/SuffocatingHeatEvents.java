@@ -24,15 +24,15 @@ public class SuffocatingHeatEvents {
         LazyOptional<LevelCapability> optional=level.getCapability(LevelCapabilityProvider.LevelCap);
         optional.ifPresent(cap-> {
             int sunVal = cap.divinerSunControlVal;
-            float baseChance = Config.divinerSHRotBaseChance;
-            double difficultyChanceMod = Config.divinerSHRotDiffMod.get(level.getDifficulty().getId() - 1);
+            float baseChance = Config.divinerSHRotBaseChance();
+            double difficultyChanceMod = Config.divinerSHRotDiffMod().get(level.getDifficulty().getId() - 1);
             float sunMod=sunVal*1.5f;
             double chance = baseChance * difficultyChanceMod+sunMod+100;
             int rotCnt= 0;
             for(int i = 0; i < inventory.items.size(); ++i) {
                 ItemStack itemStack=inventory.items.get(i);
                 if (itemStack.getFoodProperties(null)!=null && itemStack.getItem() != ItemInit.MUSHY_ROT.get() && level.getRandom().nextDouble() * 100d < chance-rotCnt){
-                    int amt=level.getRandom().nextInt(Config.divinerSHItemRotMinAmt,Config.divinerSHItemRotMaxAmt+1);
+                    int amt=level.getRandom().nextInt(Config.divinerSHItemRotMinAmt(),Config.divinerSHItemRotMaxAmt()+1);
                     itemStack.shrink(amt);
 
                     rotCnt+=amt;

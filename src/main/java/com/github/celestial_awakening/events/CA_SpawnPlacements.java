@@ -54,12 +54,10 @@ public class CA_SpawnPlacements {
     static  <T extends Mob> SpawnPlacements.SpawnPredicate wip_enabled(SpawnPlacements.SpawnPredicate<T> pred){
         return (p_217081_, p_217082_, p_217083_, p_217084_, p_217085_) -> {
             try{
-                System.out.println("WIP ENAB  " + Config.wipEnabled);
-                if (Config.wipEnabled){
-                    System.out.println();
+                if (Config.wipEnabled()){
                     return pred.test(p_217081_, p_217082_, p_217083_, p_217084_, p_217085_);
                 }
-                return Config.wipEnabled;
+                return Config.wipEnabled();
             }
             catch(Exception e){
                 System.out.println("ERR IN WIP ");
@@ -73,7 +71,7 @@ public class CA_SpawnPlacements {
 //copied from strider
     //SpawnPlacements.Type.IN_LAVA
     static SpawnPlacements.SpawnPredicate lava_daySurface = (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> {
-        if (serverLevelAccessor.getLevel().isDay() && serverLevelAccessor.getLevel().getDayTime()>=Config.solmanderDelay){
+        if (serverLevelAccessor.getLevel().isDay() && serverLevelAccessor.getLevel().getDayTime()>=Config.solmanderDelay()){
             BlockPos.MutableBlockPos blockpos$mutableblockpos = blockPos.mutable();
             System.out.println("sol check pos " + blockpos$mutableblockpos);
             int max=serverLevelAccessor.getMaxBuildHeight()-blockPos.getY();

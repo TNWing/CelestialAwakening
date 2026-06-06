@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -17,12 +16,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-@Mod.EventBusSubscriber(modid = CelestialAwakening.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+//TODO: probably update to a server config instead of common
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER;
-
+    public static boolean ready=false;
+    static final ForgeConfigSpec SPEC;
     static final ForgeConfigSpec.BooleanValue OUTOFCOMBAT_HEAL;
 
     static final ForgeConfigSpec.BooleanValue ENABLE_WIP_CONTENT;
@@ -64,7 +63,7 @@ public class Config
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> PK_DIMENSIONS;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_CRESCENCIA_MIN_DAY;
     private static final ForgeConfigSpec.ConfigValue<Integer> PK_SPAWN_CAP;
-    private static final ForgeConfigSpec.ConfigValue<Integer> PK_RMG_RES_DIST;
+    private static final ForgeConfigSpec.ConfigValue<Integer> PK_DMG_RES_DIST;
     private static final ForgeConfigSpec.ConfigValue<Boolean> PK_DAY_DESPAWN;
 
     private static final ForgeConfigSpec.ConfigValue<Integer> INS_MOH;
@@ -169,7 +168,7 @@ maybe use json files instead since it'll look neater?
 
             TRANSCENDENTS_DIVINER_SH_ENABLED=builder.comment("Determines whether or not the diviner can use the Suffocating Heat ability.\nDefault - true").define("transcendents_diviner_sh_active",true);
             TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE =builder.comment("Base chance (out of 100) for a item slot with food to rot.\nDefault:10").defineInRange("transcendents_div_sh_rot_base",10,0,100);
-            TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD =builder.comment("Multipliers based on game difficulty for chance for food to rot.\nDefault:[0.8,1,1.2]").defineList("transcendents_div_sh_rot_diff_mod",List.of(0.8d,1d,1.2d), obj->obj instanceof Float);
+            TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD =builder.comment("Multipliers based on game difficulty for chance for food to rot.\nDefault:[0.8,1,1.2]").defineList("transcendents_div_sh_rot_diff_mod",List.of(0.8d,1d,1.2d), obj->obj instanceof Double);
             TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL=builder.comment("The delay between rot checks(in ticks).\nDefault:600").defineInRange("transcendents_div_sh_rot_interval",600,1,Integer.MAX_VALUE);
             TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT=builder.comment("Minimum amount of food that is taken away on a successful rot roll.\nDefault:1").defineInRange("transcendents_div_sh_rot_min",1,0,Integer.MAX_VALUE);
             TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT=builder.comment("Maximum amount of food that is taken away on a successful rot roll.\nDefault:2").defineInRange("transcendents_div_sh_rot_max",2,0,Integer.MAX_VALUE);
@@ -181,7 +180,7 @@ maybe use json files instead since it'll look neater?
             PK_DIMENSIONS=builder.comment("Dimensions that Phantom Knights are allowed to spawn in. Default: [minecraft:overworld]").defineListAllowEmpty("pk_dims",new ArrayList<>(Arrays.asList("minecraft:overworld")),obj->obj instanceof String);
             PK_CRESCENCIA_MIN_DAY=builder.comment("Earliest day Phantom Knight Crescencia can spawn.\nDefault: 6").defineInRange("pk_crescencia_min_day",6,0,Integer.MAX_VALUE);
             PK_SPAWN_CAP=builder.comment("Maximum number of Phantom Knights that can spawn naturally each night.\nDefault: 1").defineInRange("pk_spawn_cap",1,1,100);
-            PK_RMG_RES_DIST=builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
+            PK_DMG_RES_DIST =builder.comment("The max distance between a Phantom Knight and an attacker before the attack's damage output gets reduced\nDefault: 15").defineInRange("pk_dmg_res_dist",15,1,100);
             PK_DAY_DESPAWN=builder.comment("Determines if phantom knights despawn during the day (this also prevents them from spawning during the day.\nDefault: true").define("pk_day_despawn",true);
 
         builder.pop();
@@ -215,7 +214,7 @@ maybe use json files instead since it'll look neater?
                 //EXCITED_PARTICLES_BLOCK_BLACKLIST=builder.comment("Due to the way vanilla code is structured, current implementation of excited particles would include 'spreading' blocks such as grass and nylium.\nThis list blacklists those blocks (as well as any user-defined blocks) from being affected by the armor effect.\nDefault:[minecraft:grass_block,minecraft:mycelium]")
                 EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS=builder.comment("Determines if spreading blocks (grass and mycelium) are be affected by the armor set bonus.\nDefault:false").define("excited_particles_spreading",false);
                 EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS=builder.comment("Determines if nylium can be affected by the armor set bonus.\nDefault:false").define("excited_particles_nylium",false);
-                EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_fruit")), obj->obj instanceof String);
+                EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_flower")), obj->obj instanceof String);
         builder.pop();
             builder.push("Knightmare_Suit");
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
@@ -244,8 +243,8 @@ maybe use json files instead since it'll look neater?
 
                 MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8").defineInRange("midnight_reaper_base_damage",7.8d,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("moon_scythe_wave_damage",3.5d,0,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("moon_scythe_strike_damage",5.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("midnight_reaper_wave_damage",3.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("midnight_reaper_strike_damage",5.5d,0,Double.MAX_VALUE);
 
 
             builder.pop();
@@ -256,6 +255,7 @@ maybe use json files instead since it'll look neater?
             builder.pop();
         builder.pop();
         BUILDER=builder;
+        SPEC=BUILDER.build();
     }
 /*
     private static final ForgeConfigSpec.ConfigValue<Double> MOB_HP_SCALE=builder.comment("Multiplies each mob's base HP by this value. Default: 1").defineInRange("mob_hp_mult",1D,1D,Double.MAX_VALUE);
@@ -271,11 +271,14 @@ maybe use json files instead since it'll look neater?
 
     //private static final ForgeConfigSpec.ConfigValue<Integer> UPDATE_TICK_DELAY=builder.comment("Represents how many ticks the Server waits for before performing a manual update on various mod components.\nWould recommend not touching this unless game\nDefault 2400 ticks(2 realtime minutes)").defineInRange("sol_cult_init_delay",2400,600,24000);
 
-    static final ForgeConfigSpec SPEC =  BUILDER.build();
+//TODO: change all of these from being static vars to being static methods that return the getter
 
-    public static boolean mobCombatRegen=true;
-    public static boolean wipEnabled=false;
-
+    public static boolean mobCombatRegen(){
+        return OUTOFCOMBAT_HEAL.get();
+    }
+    public static boolean wipEnabled(){
+        return ENABLE_WIP_CONTENT.get();
+    }
 
     public static double mobHPScale=1;
     public static double mobDmgScale=1;
@@ -286,101 +289,291 @@ maybe use json files instead since it'll look neater?
     public static double armorPtScale=1;
     public static double armorToughnessScale=1;
 
-    public static boolean divinerShared;
-    public static boolean divinerHeatwaveEnabled;
-    public static boolean divinerAoDEnabled;
-    public static boolean divinerHeatWaveBlockMod;
-    public static boolean divinerAoDCosmetic;
+    public static boolean divinerShared(){
+        return TRANSCENDENTS_MULTIPLE_DIVINER.get();
+    }
 
-    public static boolean divinerSHEnabled;
-    public static int divinerSHRotInterval;
-    public static int divinerSHRotBaseChance;
-    public static List<Double> divinerSHRotDiffMod;
-    public static int divinerSHItemRotMinAmt;
-    public static int divinerSHItemRotMaxAmt;
+    public static boolean divinerHeatwaveEnabled(){
+        return TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED.get();
+    }
+    public static boolean divinerAoDEnabled(){
+        return  TRANSCENDENTS_DIVINER_AOD_ENABLED.get();
+    }
+    public static boolean divinerHeatWaveBlockMod(){
+        return TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
+    }
 
-    public static int divinerScanPower;
-    public static int divinerScanPowerBase;
+    public static boolean divinerAoDCosmetic(){
+        return TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
+
+    }
+    public static boolean divinerSHEnabled(){
+        return TRANSCENDENTS_DIVINER_SH_ENABLED.get();
+    }
+    public static int divinerSHRotInterval(){
+        return TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL.get();
+    }
+    public static int divinerSHRotBaseChance(){
+        return TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE.get();
+    }
+    public static List<Double> divinerSHRotDiffMod(){
+        return (List<Double>) TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD.get();
+    }
+    public static int divinerSHItemRotMinAmt(){
+        return TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT.get();
+    }
+    public static int divinerSHItemRotMaxAmt(){
+        return TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT.get();
+    }
+
+    public static int divinerScanPower(){
+        return TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
+    }
+    public static int divinerScanPowerBase(){
+        return TRANSCENDENTS_DIVINER_SCAN_POWER_BASE.get();
+    }
     public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes;
-    public static int transcendentsInitDelay;
-    public static int transcendentsDivMinCD;
-    public static int transcendentsDivMaxCD;
+    public static Set<ResourceKey<DimensionType>> transcendentsDimensionTypes(){
+        if (!ready){
+            return strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
+        }
+        return transcendentsDimensionTypes;
+    }
+    public static int transcendentsInitDelay(){
+        return TRANSCENDENTS_DELAY.get();
+    }
+    public static int transcendentsDivMinCD(){
+        return TRANSCENDENTS_MIN_CD.get();
+    }
+    public static int transcendentsDivMaxCD(){
+        return TRANSCENDENTS_MAX_CD.get();
+    }
     public static Set<EntityType<?>> transcendentsTargets;
+    public static Set<EntityType<?>> transcendentsTargets(){
+        if (!ready){
+            return strToEntities(TRANSCENDENTS_ENEMIES.get());
+        }
+        return transcendentsTargets;
+    }
 
-    public static int prowlerRaidInterval;
+    public static int prowlerRaidInterval(){
+        return PROWLER_RAID_INTERVAL.get();
+    }
 
-    public static int solmanderDelay;
-    public static int solmanderInterval=1200;
-    public static int solmanderChance=15;
+    public static int solmanderDelay(){
+        return SOLMANDER_DELAY.get();
+    }
+    public static int solmanderInterval(){
+        return SOLMANDER_INTERVAL.get();
+    }
+    public static int solmanderChance(){
+        return SOLMANDER_CHANCE.get();
+    }
 
     public static int undergroundGuardianChance=15;
     public static int moltenGuardianWeight;
     public static int coreGuardianWeight=5;
 
 
-    public static int pkSpawnCap;
+    public static int pkSpawnCap(){
+        return PK_SPAWN_CAP.get();
+    }
     public static int pkSpawnDayCD;
-    public static int pkDmgResDist=15;
+    public static int pkDmgResDist(){
+        return PK_DMG_RES_DIST.get();
+    }
     public static float pkDmgResDistVal=0.2f;
-    public static int pkCrescenciaMinDay;
+
+    public static int pkCrescenciaMinDay(){
+        return PK_CRESCENCIA_MIN_DAY.get()-1;
+    }
     public static Set<ResourceKey<DimensionType>> pkDimensionTypes;
-    public static boolean pkDayDespawn;
+    public static Set<ResourceKey<DimensionType>> pkDimensionTypes(){
+        if (!ready){
+            return strToDimTypeKey(PK_DIMENSIONS.get());
+        }
+        return pkDimensionTypes;
+    }
+    public static boolean pkDayDespawn(){
+        return PK_DAY_DESPAWN.get();
+    }
 
     public static int coreGuardianCounter=2;
 
 
-    public static double sunstoneLeavesRate;
-    public static double sunstoneGrassRate;
+    public static double sunstoneLeavesRate(){
+        return SUNSTONE_LEAVES_RATE.get();
+    }
+    public static double sunstoneGrassRate(){
+        return SUNSTONE_GRASS_RATE.get();
+    }
 
     public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes;
-    public static int moonstoneDimLim=15;
-    public static int moonstoneInterval;
-    public static int moonstoneCnt=2;
+    public static Set<ResourceKey<DimensionType>> lunarMatDimensionTypes(){
+        if (!ready){
+            return strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
+        }
+        return lunarMatDimensionTypes;
+    }
+    public static int moonstoneDimLim(){
+        return MOONSTONE_LIMIT.get();
+    }
+    public static int moonstoneInterval(){
+        return MOONSTONE_INTERVAL.get();
+    }
+    public static int moonstoneCnt(){
+        return MOONSTONE_CNT.get();
+    }
 
 
-
-    public static boolean insSound=true;
-    public static int moonInsVal;
+    public static boolean insSound(){
+        return INSANITY_SOUNDS.get();
+    }
+    public static int moonInsVal(){
+        return MOON_INSANITY.get();
+    }
     public enum INS_VISUALS{
         NONE,
         SIMPLE,
         COMPLEX
     }
     public static INS_VISUALS insVisuals=INS_VISUALS.SIMPLE;
-    public static int insRec;
-    public static int insMoH;
+    public static INS_VISUALS insVisuals(){
+        if (!ready){
+            try{
+                return insVisuals=INS_VISUALS.valueOf(INSANITY_VISUALS.get().toUpperCase());
+            }
+            catch(Exception e){
+                return insVisuals=INS_VISUALS.SIMPLE;
+            }
 
+        }
+        return insVisuals;
+    }
+    public static int insRec(){
+        return INSANITY_PASSIVE_REC.get();
+    }
+
+    public static int insMoH(){
+        return INS_MOH.get();
+    }
     public static int rejWaveInterval =300;
     public static double rejWaveAmt =0.5d;
-    public static int excitedParticlesAnimalTickInterval =30;
-    public static int excitedParticlesCropTickInterval=400;
+
+    public static int excitedParticlesAnimalTickInterval(){
+        return EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
+    }
+    public static int excitedParticlesCropTickInterval(){
+        return EXCITED_PARTICLES_CROP_INTERVAL.get();
+    }
     public static Set<Block> epIncludedCrops;
-    public static boolean epCropDefaultEnabled=true;
-    public static boolean epCropSpreading=false;
-    public static boolean epCropNylium=false;
-    public static double honorDuelDist;
+    public static Set<Block> epIncludedCrops(){
+        if (!ready){
+            return strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
+        }
+        return epIncludedCrops;
+    }
+    public static boolean epCropSpreading(){
+        return EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS.get();
+    }
+    public static boolean epCropNylium(){
+        return EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS.get();
+    }
 
-    public static double photonCycleFireMult;
-    public static double photonCycleGlowMult;
-    public static double photonCycleFinalMult;
 
-    public static double midnightIronDmgMult;
-    public static double midnightIronAtkSpdMult;
-    public static double midnightIronMiningSpdMult;
+    public static double honorDuelDist(){
+        return HONOR_DUEL_DIST.get();
+    }
 
-    public static double moonScytheBaseDmg=6.5f;
-    public static double moonScytheBaseSpd=-2.8f;
-    public static double moonScytheWaveDmg;
-    public static double moonScytheStrikeDmg;
+    public static double photonCycleFireMult(){
+        return PHOTON_CYCLE_FIRE_MULT.get();
+    }
+    public static double photonCycleGlowMult(){
+        return PHOTON_CYCLE_GLOW_MULT.get();
+    }
+    public static double photonCycleFinalMult(){
+        return PHOTON_CYCLE_FINAL_MULT.get();
+    }
 
-    public static double midnightReaperBaseDmg=7.8f;
-    public static double midnightReaperBaseSpd=-2.7f;;
-    public static double midnightReaperWaveDmg;
-    public static double midnightReaperStrikeDmg;
 
-    public static double arrowSolarDmg;
-    public static double arrowLunarDmg;
+    public static double midnightIronDmgMult(){
+        return MIDNIGHT_IRON_DMG_MULT.get();
+    }
 
+    public static double midnightIronAtkSpdMult(){
+        return MIDNIGHT_IRON_ATK_SPD_MULT.get();
+    }
+
+    public static double midnightIronMiningSpdMult(){
+        return MIDNIGHT_IRON_MINING_SPD_MULT.get();
+    }
+/*
+                MOON_SCYTHE_BASE_DMG=builder.comment("Base damage of the moon scythe weapon.\nDefault: 6.5").defineInRange("moon_scythe_base_damage",6.5d,0,Double.MAX_VALUE);
+                MOON_SCYTHE_BASE_SPD=builder.comment("Base spd of the moon scythe weapon.\nDefault: -2.8").defineInRange("moon_scythe_base_spd",-2.8d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MOON_SCYTHE_WAVE_DMG=builder.comment("Base damage of the moon scythe's crescent wave.\nDefault: 2.5").defineInRange("moon_scythe_wave_damage",2.5d,0,Double.MAX_VALUE);
+                MOON_SCYTHE_STRIKE_DMG=builder.comment("Base damage of the moon scythe's crescent strike.\nDefault: 4.5").defineInRange("moon_scythe_strike_damage",4.5d,0,Double.MAX_VALUE);
+
+                MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8").defineInRange("midnight_reaper_base_damage",7.8d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("moon_scythe_wave_damage",3.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("moon_scythe_strike_damage",5.5d,0,Double.MAX_VALUE);
+
+
+ */
+    public static double moonScytheBaseDmg(){
+        if (!ready){
+            return 6.5d;
+        }
+        return MOON_SCYTHE_BASE_DMG.get();
+    }
+    public static double moonScytheBaseSpd(){
+        if (!ready){
+            return -2.8d;
+        }
+        return MOON_SCYTHE_BASE_SPD.get();
+    }
+    public static double moonScytheWaveDmg(){
+        if (!ready){
+            return 2.5d;
+        }
+        return MOON_SCYTHE_WAVE_DMG.get();
+    }
+    public static double moonScytheStrikeDmg(){
+        if (!ready){
+            return 4.5d;
+        }
+        return MOON_SCYTHE_STRIKE_DMG.get();
+    }
+    public static double midnightReaperBaseDmg(){
+        if (!ready){
+            return 7.8d;
+        }
+        return MIDNIGHT_REAPER_BASE_DMG.get();
+    }
+    public static double midnightReaperBaseSpd(){
+        if (!ready){
+            return -2.7d;
+        }
+        return MIDNIGHT_REAPER_BASE_SPD.get();
+    }
+    public static double midnightReaperWaveDmg(){
+        if (!ready){
+            return 3.5d;
+        }
+        return MIDNIGHT_REAPER_WAVE_DMG.get();
+    }
+    public static double midnightReaperStrikeDmg(){
+        if (!ready){
+            return 5.5d;
+        }
+        return MIDNIGHT_REAPER_STRIKE_DMG.get();
+    }
+    public static double arrowSolarDmg(){
+        return SOLAR_ARROW_BASE_DMG.get();
+    }
+    public static double arrowLunarDmg(){
+        return LUNAR_ARROW_BASE_DMG.get();
+    }
     public static boolean useVanillaTeams;
 
     public enum ProwlerDestruction{
@@ -389,7 +582,12 @@ maybe use json files instead since it'll look neater?
         NONE
     }
     public static ProwlerDestruction prowlerDestruction=ProwlerDestruction.RAID;
-
+    public static ProwlerDestruction prowlerDestruction(){
+        if (!ready){
+            return ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
+        }
+        return prowlerDestruction;
+    }
     public static List<Integer> whelpWave1Vals;
 
 
@@ -410,70 +608,26 @@ maybe use json files instead since it'll look neater?
     }
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
+    static void onReload(final ModConfigEvent.Reloading event)
     {
-        wipEnabled=ENABLE_WIP_CONTENT.get();
-        mobCombatRegen= OUTOFCOMBAT_HEAL.get();
-
 
         transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
 
 
         lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
-        moonstoneDimLim=MOONSTONE_LIMIT.get();
-        moonstoneInterval=MOONSTONE_INTERVAL.get();
-        moonstoneCnt=MOONSTONE_CNT.get();
 
 
-        sunstoneGrassRate=SUNSTONE_GRASS_RATE.get();
-        sunstoneLeavesRate=SUNSTONE_LEAVES_RATE.get();
-
-
-        divinerShared= TRANSCENDENTS_MULTIPLE_DIVINER.get();
-
-        transcendentsInitDelay = TRANSCENDENTS_DELAY.get();
-        transcendentsDivMinCD = TRANSCENDENTS_MIN_CD.get();
-        transcendentsDivMaxCD = TRANSCENDENTS_MAX_CD.get();
 
         transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
 
-        divinerScanPower=TRANSCENDENTS_DIVINER_SCAN_POWER_INCREASE.get();
-        divinerScanPowerBase=TRANSCENDENTS_DIVINER_SCAN_POWER_BASE.get();
 
-        divinerHeatwaveEnabled=TRANSCENDENTS_DIVINER_HEATWAVE_ENABLED.get();
-        divinerHeatWaveBlockMod=TRANSCENDENTS_DIVINER_HEATWAVE_AFFECTS_BLOCKS.get();
-
-        divinerAoDEnabled= TRANSCENDENTS_DIVINER_AOD_ENABLED.get();
-        divinerAoDCosmetic=TRANSCENDENTS_DIVINER_AOD_COSMETIC_ONLY.get();
-
-        divinerSHEnabled=TRANSCENDENTS_DIVINER_SH_ENABLED.get();
-        divinerSHRotInterval =TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL.get();
-        divinerSHRotDiffMod = (List<Double>) TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD.get();
-        divinerSHRotBaseChance =TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE.get();
-        divinerSHItemRotMinAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT.get();
-        divinerSHItemRotMaxAmt=TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT.get();
-
-
-        solmanderDelay=SOLMANDER_DELAY.get();
-        solmanderInterval=SOLMANDER_INTERVAL.get();
-        solmanderChance=SOLMANDER_CHANCE.get();
-
-
-        prowlerRaidInterval=PROWLER_RAID_INTERVAL.get();
         prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
 
 
-        coreGuardianCounter=CORE_GUARDIAN_COUNTER.get();
 
 
         pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
-        pkCrescenciaMinDay=PK_CRESCENCIA_MIN_DAY.get()-1;
-        pkSpawnCap=PK_SPAWN_CAP.get();
-        pkDmgResDist=PK_RMG_RES_DIST.get();
-        pkDayDespawn=PK_DAY_DESPAWN.get();
 
-
-        insSound=INSANITY_SOUNDS.get();
         try{
             insVisuals=INS_VISUALS.valueOf(INSANITY_VISUALS.get().toUpperCase());
         }
@@ -481,46 +635,42 @@ maybe use json files instead since it'll look neater?
             insVisuals=INS_VISUALS.SIMPLE;
         }
 
-        moonInsVal=MOON_INSANITY.get();
-
-        insRec=INSANITY_PASSIVE_REC.get();
-
-        insMoH=INS_MOH.get();
 
 
-        excitedParticlesAnimalTickInterval = EXCITED_PARTICLES_ANIMAL_INTERVAL.get();
-        excitedParticlesCropTickInterval= EXCITED_PARTICLES_CROP_INTERVAL.get();
         epIncludedCrops=strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
-        epCropSpreading= EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS.get();
-        epCropNylium=EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS.get();
+    }
+    @SubscribeEvent
+    static void onLoad(final ModConfigEvent.Loading event)
+    {
+        System.out.println("FINAL CONFIG LOAD");
 
-        honorDuelDist= HONOR_DUEL_DIST.get();
-
-
-        photonCycleFireMult=PHOTON_CYCLE_FIRE_MULT.get();
-        photonCycleGlowMult=PHOTON_CYCLE_GLOW_MULT.get();
-        photonCycleFinalMult=PHOTON_CYCLE_FINAL_MULT.get();
+        transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
 
 
-        midnightIronDmgMult=MIDNIGHT_IRON_DMG_MULT.get();
-        midnightIronAtkSpdMult =MIDNIGHT_IRON_ATK_SPD_MULT.get();
-        midnightIronMiningSpdMult=MIDNIGHT_IRON_MINING_SPD_MULT.get();
+        lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
 
 
-        moonScytheBaseDmg=MOON_SCYTHE_BASE_DMG.get();
-        moonScytheBaseSpd=MOON_SCYTHE_BASE_SPD.get();
-        moonScytheStrikeDmg=MOON_SCYTHE_STRIKE_DMG.get();
-        moonScytheWaveDmg=MOON_SCYTHE_WAVE_DMG.get();
+
+        transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
 
 
-        midnightReaperBaseDmg=MIDNIGHT_REAPER_BASE_DMG.get();
-        midnightReaperBaseSpd=MIDNIGHT_REAPER_BASE_SPD.get();
-        midnightReaperStrikeDmg=MIDNIGHT_REAPER_STRIKE_DMG.get();
-        midnightReaperWaveDmg=MIDNIGHT_REAPER_WAVE_DMG.get();
+        prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
 
 
-        arrowLunarDmg=LUNAR_ARROW_BASE_DMG.get();
-        arrowSolarDmg=SOLAR_ARROW_BASE_DMG.get();
+
+
+        pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
+
+        try{
+            insVisuals=INS_VISUALS.valueOf(INSANITY_VISUALS.get().toUpperCase());
+        }
+        catch(Exception e){
+            insVisuals=INS_VISUALS.SIMPLE;
+        }
+
+
+
+        epIncludedCrops=strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
         /*
         mobHPScale=MOB_HP_SCALE.get();
         mobDmgScale=MOB_DMG_SCALE.get();
@@ -542,8 +692,64 @@ maybe use json files instead since it'll look neater?
 
          */
         refreshMobAttributes();
+        ready=true;
     }
 
+    public static void bakeConfig(){
+
+            System.out.println("FINAL CONFIG LOAD");
+
+            transcendentsDimensionTypes = strToDimTypeKey(TRANSCENDENTS_DIMENSIONS.get());
+
+
+            lunarMatDimensionTypes=strToDimTypeKey(LUNAR_MATERIAL_DIMENSIONS.get());
+
+
+
+            transcendentsTargets =strToEntities(TRANSCENDENTS_ENEMIES.get());
+
+
+            prowlerDestruction=ProwlerDestruction.valueOf(PROWLER_DESTRUCTION.get());
+
+
+
+
+            pkDimensionTypes=strToDimTypeKey(PK_DIMENSIONS.get());
+
+            try{
+                insVisuals=INS_VISUALS.valueOf(INSANITY_VISUALS.get().toUpperCase());
+            }
+            catch(Exception e){
+                insVisuals=INS_VISUALS.SIMPLE;
+            }
+
+
+
+            epIncludedCrops=strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
+        /*
+        mobHPScale=MOB_HP_SCALE.get();
+        mobDmgScale=MOB_DMG_SCALE.get();
+        mobArmorPtScale=MOB_ARMOR_PT_SCALE.get();
+        mobArmorToughnessScale=MOB_ARMOR_TOUGH_SCALE.get();
+
+        itemDmgScale= ITEM_DMG_SCALE.get();
+        armorPtScale=ARMOR_PT_SCALE.get();
+        armorToughnessScale=ARMOR_T_SCALE.get();
+
+         */
+        /*
+        only update the
+         */
+        /*
+        if (WHELP_WAVE1_VALS.get().size()==5){
+            whelpWave1Vals= WHELP_WAVE1_VALS.get();
+        }
+
+         */
+            refreshMobAttributes();
+            ready=true;
+
+    }
     public static void refreshMobAttributes(){
         //Asteron.updateAttributesFromConfig();
         //System.out.println("new HP SCALE IS " + mobHPScale);

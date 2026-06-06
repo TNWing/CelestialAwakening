@@ -29,7 +29,7 @@ public record SolmanderSpawner() {
     public static void attemptSpawn(ServerLevel serverLevel){
         RandomSource randomSource=serverLevel.getRandom();
         for (ServerPlayer serverPlayer:serverLevel.players()) {
-            if (randomSource.nextInt(100)<Config.solmanderChance){
+            if (randomSource.nextInt(100)<Config.solmanderChance()){
                 continue;
             }
             //should generate a list of what to spawn

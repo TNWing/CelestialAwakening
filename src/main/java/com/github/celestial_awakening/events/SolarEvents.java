@@ -54,16 +54,16 @@ public class SolarEvents {
         if (event.side.isServer()){
             ServerLevel level= (ServerLevel) event.level;
             long time=level.getDayTime();
-            if (time%100==0 && time >Config.transcendentsInitDelay && time%24000L<12000L ){
+            if (time%100==0 && time >Config.transcendentsInitDelay() && time%24000L<12000L ){
                 @NotNull LazyOptional<LevelCapability> capOptional;
-                if (Config.divinerShared){
+                if (Config.divinerShared()){
                     capOptional=level.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap);
                 }
                 else{
                     capOptional= level.getCapability(LevelCapabilityProvider.LevelCap);
                 }
                 capOptional.ifPresent(cap->{
-                    if (validDim(level, Config.transcendentsDimensionTypes)){
+                    if (validDim(level, Config.transcendentsDimensionTypes())){
                         if (cap.divinerEyeCD>0){
                             cap.divinerEyeCD-=100;
                         }
@@ -96,10 +96,10 @@ public class SolarEvents {
             double chance=0;
             Random rand = new Random();
             if (block instanceof LeavesBlock){
-                chance=Config.sunstoneLeavesRate+5f*(1f-Math.abs(6000f-time)/6000f);
+                chance=Config.sunstoneLeavesRate()+5f*(1f-Math.abs(6000f-time)/6000f);
             }
             else if(block instanceof BushBlock){
-                chance=  Config.sunstoneGrassRate+2f*(1f-Math.abs(6000f-time)/6000f);
+                chance=  Config.sunstoneGrassRate()+2f*(1f-Math.abs(6000f-time)/6000f);
             }
             float randNum=rand.nextFloat(100f);
             if (randNum<=chance){
@@ -113,7 +113,7 @@ public class SolarEvents {
 
     public void createDivinerEye(LevelCapability cap, ResourceKey<Level> dimID){
         Random rand=new Random();
-        cap.divinerEyeCD=rand.nextInt(Config.transcendentsDivMinCD,Config.transcendentsDivMaxCD)+1;
+        cap.divinerEyeCD=rand.nextInt(Config.transcendentsDivMinCD(),Config.transcendentsDivMaxCD())+1;
         cap.divinerEyeChance=0;
         cap.divinerEyeFromState=-1;
         cap.divinerEyeToState=-1;
@@ -140,7 +140,7 @@ public class SolarEvents {
             //with 100 villagers in 1 chunk, it doesnt seem to lag, might stress test w/ a lot more entities
             ChunkPos chunkPos=chunk.getPos();
             AABB chunkBoundingBox = new AABB(chunkPos.getMinBlockX(),  level.getMinBuildHeight(), chunkPos.getMinBlockZ(), chunkPos.getMaxBlockX() + 1, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 1);
-            Predicate<LivingEntity> pred=o ->ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets);
+            Predicate<LivingEntity> pred=o ->ResourceCheckerFuncs.validEntityType(o,Config.transcendentsTargets());
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, chunkBoundingBox,pred);
             //System.out.println("CHECKING CHUNK has " + entities.size());
             boolean capDirty=false;
@@ -168,11 +168,11 @@ public class SolarEvents {
                             CelestialBeaconMobEffectInstance mobEffectInstance=new CelestialBeaconMobEffectInstance(1200,amp,1);
 
                             entity.addEffect(mobEffectInstance);
-                            levelCap.changeDivPower(Config.divinerScanPower);
+                            levelCap.changeDivPower(Config.divinerScanPower());
 
-                            if (Config.divinerHeatwaveEnabled && startingDivPower>=10){
+                            if (Config.divinerHeatwaveEnabled() && startingDivPower>=10){
                                 entity.setSecondsOnFire(4);
-                                if(Config.divinerHeatWaveBlockMod){//perform heatwave
+                                if(Config.divinerHeatWaveBlockMod()){//perform heatwave
                                     BlockState bushState= Blocks.DEAD_BUSH.defaultBlockState();
                                     BlockState magmaState= Blocks.MAGMA_BLOCK.defaultBlockState();
                                     BlockState dirtState= Blocks.DIRT.defaultBlockState();
@@ -209,18 +209,18 @@ public class SolarEvents {
                                 int typeCnt=levelCap.getDivinerSunControlType();
                                 boolean isSH=levelCap.determineSunControlType(level.random);
                                 if (isSH){
-                                    if (Config.divinerSHEnabled){
+                                    if (Config.divinerSHEnabled()){
                                         shActivation(level,levelCap,startingDivPower);
                                     }
-                                    else if (Config.divinerAoDEnabled){
+                                    else if (Config.divinerAoDEnabled()){
                                         aodActivation(level,levelCap,startingDivPower);
                                     }
                                 }
                                 else{
-                                    if (Config.divinerAoDEnabled){
+                                    if (Config.divinerAoDEnabled()){
                                         aodActivation(level,levelCap,startingDivPower);
                                     }
-                                    else if (Config.divinerSHEnabled){
+                                    else if (Config.divinerSHEnabled()){
                                         shActivation(level,levelCap,startingDivPower);
                                     }
                                 }

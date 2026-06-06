@@ -53,9 +53,9 @@ public class MoonlightReaper extends MoonScythe {
 
             dir.multiply(1,0,1);//TODO: replace later (maybe)
             float hAng= MathFuncs.getAngFrom2DVec(dir);
-            double dmg=Config.midnightReaperWaveDmg;
+            double dmg=Config.midnightReaperWaveDmg();
             if (isCrit){
-                dmg=Config.midnightReaperStrikeDmg;
+                dmg=Config.midnightReaperStrikeDmg();
             }
             if (isFullyCharged){
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd,true));

@@ -101,7 +101,7 @@ public class UpdateDivinerEyeCommandPattern extends GenericCommandPattern {
         }
         cap.divinerEyeToState=-2;
         cap.divinerEyeFromState=-2;
-        cap.changeDivPower(Config.divinerScanPowerBase);
+        cap.changeDivPower(Config.divinerScanPowerBase());
         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),dimID);
 
         return true;//stop recursion

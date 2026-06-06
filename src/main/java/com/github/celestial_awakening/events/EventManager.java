@@ -640,7 +640,7 @@ public class EventManager {
                         if (!event.isCanceled()){
                             mob.removeEffect(MobEffectInit.MARK_OF_HAUNTING.get());
                             playerCapOptional.ifPresent(cap->{
-                                cap.changeInsanityVal((short) Config.insMoH);
+                                cap.changeInsanityVal((short) Config.insMoH());
                             });
                         }
                     }
@@ -842,7 +842,7 @@ public class EventManager {
         if (serverLevel.isDay()){
             //solmanders
             //serverLevel.getBlockStates()
-            if (time%Config.solmanderInterval==0 && serverLevel.getDayTime()>=Config.solmanderDelay){//maybe use levelchunk cap
+            if (time%Config.solmanderInterval()==0 && serverLevel.getDayTime()>=Config.solmanderDelay()){//maybe use levelchunk cap
                 SolmanderSpawner.attemptSpawn(serverLevel);
 
             }
@@ -873,7 +873,7 @@ FluidPlaceBlockEvent
                 int time= (int) (serverLevel.getDayTime()%24000L);
                 DelayedFunctionManager.delayedFunctionManager.tickLevelMap(serverLevel);
                 capOptional.ifPresent(cap->{
-                    if (Config.wipEnabled){
+                    if (Config.wipEnabled()){
                         cap.raids.tick();
                         if (cap.deepLayerCounter<cap.deepLayerCounterLim && event.level.dimensionTypeId()== BuiltinDimensionTypes.OVERWORLD && time%400==0){//TODO: possibly change it to be more accurate to time spent in deepslate layer
                             cap.increaseDeepLayerCounter(Config.coreGuardianCounter*serverLevel.getPlayers(new Predicate<ServerPlayer>() {
@@ -900,7 +900,7 @@ FluidPlaceBlockEvent
                         solarEvents.canCreateDivinerEye(event);
                     }
                     if (time==12000){
-                        cap.pkRemainingSpawnAttempts=Config.pkSpawnCap;
+                        cap.pkRemainingSpawnAttempts=Config.pkSpawnCap();
                     }
                     if (cap.decrementSunControlTimer()){
                         ModNetwork.sendToClientsInDim(new LevelCapS2CPacket(cap),serverLevel.dimension());
@@ -921,7 +921,7 @@ FluidPlaceBlockEvent
                         }
 
                     }
-                    if (time%Config.divinerSHRotInterval==0 && cap.divinerSunControlVal>0 && serverLevel.getDifficulty().getId() != 0){
+                    if (time%Config.divinerSHRotInterval()==0 && cap.divinerSunControlVal>0 && serverLevel.getDifficulty().getId() != 0){
                         for (ServerPlayer player:players){
                             shEvents.onInventoryTick(serverLevel,player);
                         }
@@ -929,7 +929,7 @@ FluidPlaceBlockEvent
 
                 });
                 lunarEvents.detectIfLookingAtMoon(serverLevel,time>13000);
-                 if (time==12500 && Config.wipEnabled){//TODO: players can sleep by 12542 and 23459
+                 if (time==12500 && Config.wipEnabled()){//TODO: players can sleep by 12542 and 23459
                     lunarEvents.attemptProwlerRaid(serverLevel);
                 }
                 if (time>13000){
@@ -1066,7 +1066,7 @@ FluidPlaceBlockEvent
                     -block sounds
                      */
 
-                    if (Config.insSound && cap.getInsanityPts()<16000 &&  player.tickCount%2800==0){
+                    if (Config.insSound() && cap.getInsanityPts()<16000 &&  player.tickCount%2800==0){
                         BlockPos pos=player.blockPosition();
                         Holder<Biome> biomeHolder=level.getBiome(pos);
 
@@ -1112,7 +1112,7 @@ FluidPlaceBlockEvent
 
                         }
                     }
-                    cap.changeInsanityVal((short) Config.insRec);
+                    cap.changeInsanityVal((short) Config.insRec());
                     //System.out.println("Player " + player.getName() + " has san " + cap.getInsanityPts());
                     if (player.tickCount%400==0){
                         ModNetwork.sendToClient(new PlayerCapS2CPacket(cap),serverPlayer);
@@ -1127,7 +1127,7 @@ FluidPlaceBlockEvent
                     if (cap.hasAbility(KnightmareSuit.honorDuel)){
                         UUID targetID= (UUID) cap.getAbilityData(KnightmareSuit.honorDuel)[0];
                         Entity target=level.getEntity(targetID);
-                        if (target==null || target.distanceTo(player)> Config.honorDuelDist){
+                        if (target==null || target.distanceTo(player)> Config.honorDuelDist()){
                             cap.removeFromAbilityMap(KnightmareSuit.honorDuel);
                             if (target!=null){
                                 @NotNull LazyOptional<LivingEntityCapability> targetCapOptional=target.getCapability(LivingEntityCapabilityProvider.capability);

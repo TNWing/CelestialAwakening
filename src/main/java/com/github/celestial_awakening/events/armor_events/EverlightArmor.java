@@ -172,11 +172,11 @@ public class EverlightArmor extends ArmorEffect{
                                     livingEntity.removeEffect(MobEffects.GLOWING);
                                 }
                             }
-                            totalVal+=fireTimeTaken*Config.photonCycleFireMult+ glowTimeTaken*Config.photonCycleGlowMult;
+                            totalVal+=fireTimeTaken*Config.photonCycleFireMult()+ glowTimeTaken*Config.photonCycleGlowMult();
                         }
 
                         if (totalVal>0){
-                            player.heal((float) (totalVal* Config.photonCycleFinalMult));
+                            player.heal((float) (totalVal* Config.photonCycleFinalMult()));
                             cap.insertIntoAbilityMap(abilityPhotonCycle,240);
                         }
                         //so at most, for each entity, a player can heal 1.5 hp

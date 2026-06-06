@@ -61,7 +61,7 @@ public class ClientModEventBusManager {
     }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        if (Config.insVisuals!= Config.INS_VISUALS.NONE){
+        if (Config.insVisuals()!= Config.INS_VISUALS.NONE){
             event.registerEntityRenderer(EntityType.VILLAGER,ctx->{
                 InsManager.init(ctx);
                 return new InsVillagerRenderer(ctx, (VillagerRenderer) ctx.getEntityRenderDispatcher().renderers.get(EntityType.VILLAGER));

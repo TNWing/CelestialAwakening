@@ -75,7 +75,7 @@ public class LunarEvents {
                     optional.ifPresent(cap->{
                         short counter=cap.incrementAndGetProwlerRaidCounter();
                         BlockPos pos=player.blockPosition();
-                        boolean create=counter>=Config.prowlerRaidInterval;
+                        boolean create=counter>=Config.prowlerRaidInterval();
                         ProwlerRaid raid=levelCap.raids.getNearbyProwlerRaid(level,levelCap,pos);
                         if (raid!=null){//hits this?
                             cap.setProwlerRaidCounter((short) 0);
@@ -104,7 +104,7 @@ public class LunarEvents {
 
     public void attemptPKSpawn(ServerLevel level){
 
-        if (validDim(level, Config.transcendentsDimensionTypes)){
+        if (validDim(level, Config.pkDimensionTypes())){
             LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
             capOptional.ifPresent(cap->{
                 int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
@@ -120,7 +120,7 @@ public class LunarEvents {
                         }
 //crescent
                         case 4, 6 -> {
-                            if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay && cap.pkRemainingSpawnAttempts>0) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
+                            if (level.getDayTime() / 24000L % 2147483647L > Config.pkCrescenciaMinDay() && cap.pkRemainingSpawnAttempts>0) {//(p_288689_.getSource().getLevel().getDayTime() / 24000L % 2147483647L) query for get day command
                                 BlockPos pos =canSpawnPK(level);
                                 if (pos!=null) {//in the future, perform rng roll?
                                     PhantomKnight_Crescencia crescencia = new PhantomKnight_Crescencia(EntityInit.PK_CRESCENCIA.get(), level);
@@ -254,7 +254,7 @@ public class LunarEvents {
             if (isNight && LevelFuncs.detectIfLookingAtCelestialBody(level,player,-1)){
                 LazyOptional<PlayerCapability> optional = player.getCapability(PlayerCapabilityProvider.capability);
                 optional.ifPresent(cap->{
-                    cap.changeInsanityVal(Config.moonInsVal);
+                    cap.changeInsanityVal(Config.moonInsVal());
                 });
             }
         }
@@ -287,7 +287,7 @@ public class LunarEvents {
         Random rand = new Random();
         @NotNull LazyOptional<LevelCapability> capOptional=level.getCapability(LevelCapabilityProvider.LevelCap);
         capOptional.ifPresent(cap-> {
-            if (validDim(level, Config.lunarMatDimensionTypes) && level.isNight()){
+            if (validDim(level, Config.lunarMatDimensionTypes()) && level.isNight()){
 
                 int time=(int)(level.getDayTime() % 24000L);//ranges from 0-24k
                 //time% % 24000L will give the actual daytime
@@ -295,11 +295,11 @@ public class LunarEvents {
             night is 13000-24999
             spawn at 15000,18000,21000
              */
-                if ((time%12000)%Config.moonstoneInterval==0){//valid time
+                if ((time%12000)%Config.moonstoneInterval()==0){//valid time
                     //for each player, attempt to create a moonstone in a nearby chunk
                     List<? extends Player> pList=level.players();
                     for (Player p:pList) {
-                        if (Config.moonstoneDimLim>-1 && cap.currentMoonstonePos.keySet().size()>Config.moonstoneDimLim){
+                        if (Config.moonstoneDimLim()>-1 && cap.currentMoonstonePos.keySet().size()>Config.moonstoneDimLim()){
                             break;
                         }
                         ChunkPos chunkPos=p.chunkPosition();
@@ -326,7 +326,7 @@ public class LunarEvents {
                             }
                         }
                         if (applicableBlocks.size()>0){
-                            for (int i=0;i<Config.moonstoneCnt;i++){
+                            for (int i=0;i<Config.moonstoneCnt();i++){
                                 BlockPos chosenSpot=applicableBlocks.get(rand.nextInt(applicableBlocks.size()));
                                 applicableBlocks.remove(chosenSpot);
                                 cap.currentMoonstonePos.put(chosenSpot, (short) 2400);
@@ -342,7 +342,7 @@ public class LunarEvents {
     }
 
     public void midnightIronTransformation(Level level){
-        if (!level.isClientSide()&& validDim(level,Config.lunarMatDimensionTypes)){
+        if (!level.isClientSide()&& validDim(level,Config.lunarMatDimensionTypes())){
             WorldBorder border=level.getWorldBorder();
             AABB worldBox = new AABB(
                     border.getMinX(), level.getMinBuildHeight(),border.getMinZ(),

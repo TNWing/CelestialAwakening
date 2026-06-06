@@ -52,8 +52,8 @@ public class MoonScythe extends Item implements IForgeItem {
     Ingredient ingredient= Ingredient.of(ItemInit.MOONSTONE.get());
     public MoonScythe(Properties p_41383_) {
         super(p_41383_);
-        this.attackDamage= Config.moonScytheBaseDmg-1;
-        this.attackSpd=Config.moonScytheBaseSpd;
+        this.attackDamage= Config.moonScytheBaseDmg()-1;
+        this.attackSpd=Config.moonScytheBaseSpd();
         this.cd=100;
         this.displayCD=5;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
@@ -65,8 +65,8 @@ public class MoonScythe extends Item implements IForgeItem {
     public MoonScythe(Properties p_41383_,int coolDown) {
         super(p_41383_);
 
-        this.attackDamage=Config.midnightReaperBaseDmg-1;
-        this.attackSpd= Config.midnightReaperBaseSpd;
+        this.attackDamage=Config.midnightReaperBaseDmg()-1;
+        this.attackSpd= Config.midnightReaperBaseSpd();
         this.cd=coolDown;
         displayCD=((int)(cd/2f))/10f;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
@@ -94,11 +94,11 @@ public class MoonScythe extends Item implements IForgeItem {
                 }
                 builder.put(attribute, modifier);
             }
-            double damage = Config.moonScytheBaseDmg;
-            double atkSpd=Config.moonScytheBaseSpd;
+            double damage = Config.moonScytheBaseDmg();
+            double atkSpd=Config.moonScytheBaseSpd();
             if (stack.getItem() instanceof MoonlightReaper){
-                damage=Config.midnightReaperBaseDmg;
-                atkSpd=Config.midnightReaperBaseSpd;
+                damage=Config.midnightReaperBaseDmg();
+                atkSpd=Config.midnightReaperBaseSpd();
             }
             builder.put(Attributes.ATTACK_DAMAGE,
                     new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", damage-1, AttributeModifier.Operation.ADDITION));
@@ -167,9 +167,9 @@ public class MoonScythe extends Item implements IForgeItem {
 
                 dir.multiply(1,0,1);//TODO: replace later (maybe)
                 float hAng= MathFuncs.getAngFrom2DVec(dir);
-                double dmg=Config.moonScytheWaveDmg;
+                double dmg=Config.moonScytheWaveDmg();
                 if (isCrit){
-                    dmg=Config.moonScytheStrikeDmg;
+                    dmg=Config.moonScytheStrikeDmg();
                 }
                 MinecraftForge.EVENT_BUS.post(new MoonScytheAttackEvent(itemStack,isCrit,attacker.level(),dir,targetPos,player,dmg,hAng,cd));
             }

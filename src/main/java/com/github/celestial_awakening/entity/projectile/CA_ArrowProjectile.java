@@ -69,11 +69,11 @@ public class CA_ArrowProjectile extends AbstractArrow implements CA_Entity {
         switch(t){
             case SOLAR -> {
                 entity.particleOptions =ParticleTypes.FLAME;
-                entity.setBaseDamage(Config.arrowSolarDmg);
+                entity.setBaseDamage(Config.arrowSolarDmg());
             }
             case LUNAR -> {
                 entity.particleOptions =ParticleTypes.CRIT;
-                entity.setBaseDamage(Config.arrowLunarDmg);
+                entity.setBaseDamage(Config.arrowLunarDmg());
             }
             case SINGULARITY -> {
                 entity.particleOptions=ParticleTypes.END_ROD;

@@ -69,7 +69,7 @@ public class DivinerDataCommand{
 
     private int queryDiv(CommandSourceStack stack){
         @NotNull LazyOptional<LevelCapability> capOptional;
-        if (Config.divinerShared){
+        if (Config.divinerShared()){
             capOptional=stack.getServer().overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
@@ -104,7 +104,7 @@ public class DivinerDataCommand{
     private int setDivCD(CommandSourceStack stack, int c) throws CommandSyntaxException {
         ServerPlayer p=stack.getPlayerOrException();
         @NotNull LazyOptional<LevelCapability> capOptional;
-        if (Config.divinerShared){
+        if (Config.divinerShared()){
             capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
@@ -126,7 +126,7 @@ public class DivinerDataCommand{
     private int setDivChance(CommandSourceStack stack, float c) throws CommandSyntaxException {
         ServerPlayer p=stack.getPlayerOrException();
         @NotNull LazyOptional<LevelCapability> capOptional;
-        if (Config.divinerShared){
+        if (Config.divinerShared()){
             capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
@@ -147,7 +147,7 @@ public class DivinerDataCommand{
     private int setPower(CommandSourceStack stack, int power) throws CommandSyntaxException {
         ServerPlayer p=stack.getPlayerOrException();
         @NotNull LazyOptional<LevelCapability> capOptional;
-        if (Config.divinerShared){
+        if (Config.divinerShared()){
             capOptional=p.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{
@@ -169,7 +169,7 @@ public class DivinerDataCommand{
         int s=seconds*20;
         ServerPlayer player=stack.getPlayerOrException();
         @NotNull LazyOptional<LevelCapability> capOptional;
-        if (Config.divinerShared){
+        if (Config.divinerShared()){
             capOptional=player.server.overworld().getCapability(LevelCapabilityProvider.LevelCap);
         }
         else{

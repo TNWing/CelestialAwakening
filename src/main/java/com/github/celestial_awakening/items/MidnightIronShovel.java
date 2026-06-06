@@ -35,7 +35,7 @@ public class MidnightIronShovel extends ShovelItem implements MidnightIronTool {
         Multimap<Attribute,AttributeModifier> modifiersToReturn;
         if (isNight){
             newBuilder.put(Attributes.ATTACK_DAMAGE,new AttributeModifier(BASE_ATTACK_DAMAGE_UUID,"Weapon modifier", getAttackDamage(), AttributeModifier.Operation.ADDITION));
-            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd* Config.midnightIronAtkSpdMult, AttributeModifier.Operation.ADDITION));
+            newBuilder.put(Attributes.ATTACK_SPEED,new AttributeModifier(BASE_ATTACK_SPEED_UUID,"Weapon modifier", spd* Config.midnightIronAtkSpdMult(), AttributeModifier.Operation.ADDITION));
             modifiersToReturn=newBuilder.build();
         }
         else{
@@ -51,7 +51,7 @@ public class MidnightIronShovel extends ShovelItem implements MidnightIronTool {
     @Override
     public float getAttackDamage() {
         float dmg=super.getAttackDamage();
-        return isNight ? (float) (dmg * Config.midnightIronDmgMult) : dmg;
+        return isNight ? (float) (dmg * Config.midnightIronDmgMult()) : dmg;
     }
     @Override
     public boolean hurtEnemy(ItemStack p_43278_, LivingEntity p_43279_, LivingEntity p_43280_) {
@@ -82,7 +82,7 @@ public class MidnightIronShovel extends ShovelItem implements MidnightIronTool {
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd=super.getDestroySpeed(itemStack, blockState);
         if (isNight){
-            spd*=Config.midnightIronMiningSpdMult;
+            spd*=Config.midnightIronMiningSpdMult();
         }
         return spd;
     }

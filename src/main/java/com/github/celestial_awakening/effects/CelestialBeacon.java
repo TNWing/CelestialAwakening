@@ -65,7 +65,7 @@ public class CelestialBeacon extends MobEffect {
         Random rand = new Random();
         //find valid spawn points
         Level level=target.level();
-        if (Config.transcendentsDimensionTypes.contains(level.dimensionTypeId())){
+        if (Config.transcendentsDimensionTypes().contains(level.dimensionTypeId())){
             BlockPos targetCenter=target.blockPosition();
             ChunkAccess chunkAccess=level.getChunk(targetCenter);
             ChunkPos chunkPos=chunkAccess.getPos();

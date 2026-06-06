@@ -56,7 +56,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        if (Config.pkDayDespawn && this.level().isDay()){
+        if (Config.pkDayDespawn() && this.level().isDay()){
             this.discard();
         }
         if (isCombatActive){
@@ -84,7 +84,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
                 bossBarWindup++;
             }
         }
-        else if (Config.mobCombatRegen){
+        else if (Config.mobCombatRegen()){
             this.heal(0.1f);
         }
     }
@@ -106,7 +106,7 @@ public abstract class AbstractPhantomKnight extends AbstractCAMonster {
             amt*=0.05f;
         }
         if (source.getEntity()!=null){
-            if (this.distanceTo(source.getEntity())> Config.pkDmgResDist){
+            if (this.distanceTo(source.getEntity())> Config.pkDmgResDist()){
                 amt*=Config.pkDmgResDistVal;
             }
         }

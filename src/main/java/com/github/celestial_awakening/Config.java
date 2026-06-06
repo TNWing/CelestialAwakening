@@ -169,7 +169,7 @@ maybe use json files instead since it'll look neater?
 
             TRANSCENDENTS_DIVINER_SH_ENABLED=builder.comment("Determines whether or not the diviner can use the Suffocating Heat ability.\nDefault - true").define("transcendents_diviner_sh_active",true);
             TRANSCENDENTS_DIVINER_SH_ROT_BASE_CHANCE =builder.comment("Base chance (out of 100) for a item slot with food to rot.\nDefault:10").defineInRange("transcendents_div_sh_rot_base",10,0,100);
-            TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD =builder.comment("Multipliers based on game difficulty for chance for food to rot.\nDefault:[0.8,1,1.2]").defineList("transcendents_div_sh_rot_diff_mod",List.of(0.8d,1d,1.2d), obj->obj instanceof Float);
+            TRANSCENDENTS_DIVINER_SH_ROT_DIFF_MOD =builder.comment("Multipliers based on game difficulty for chance for food to rot.\nDefault:[0.8,1,1.2]").defineList("transcendents_div_sh_rot_diff_mod",List.of(0.8d,1d,1.2d), obj->obj instanceof Double);
             TRANSCENDENTS_DIVINER_SH_INV_ROT_INTERVAL=builder.comment("The delay between rot checks(in ticks).\nDefault:600").defineInRange("transcendents_div_sh_rot_interval",600,1,Integer.MAX_VALUE);
             TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MIN_AMT=builder.comment("Minimum amount of food that is taken away on a successful rot roll.\nDefault:1").defineInRange("transcendents_div_sh_rot_min",1,0,Integer.MAX_VALUE);
             TRANSCENDENTS_DIVINER_SH_FOOD_ROT_MAX_AMT=builder.comment("Maximum amount of food that is taken away on a successful rot roll.\nDefault:2").defineInRange("transcendents_div_sh_rot_max",2,0,Integer.MAX_VALUE);
@@ -215,7 +215,7 @@ maybe use json files instead since it'll look neater?
                 //EXCITED_PARTICLES_BLOCK_BLACKLIST=builder.comment("Due to the way vanilla code is structured, current implementation of excited particles would include 'spreading' blocks such as grass and nylium.\nThis list blacklists those blocks (as well as any user-defined blocks) from being affected by the armor effect.\nDefault:[minecraft:grass_block,minecraft:mycelium]")
                 EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS=builder.comment("Determines if spreading blocks (grass and mycelium) are be affected by the armor set bonus.\nDefault:false").define("excited_particles_spreading",false);
                 EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS=builder.comment("Determines if nylium can be affected by the armor set bonus.\nDefault:false").define("excited_particles_nylium",false);
-                EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_fruit")), obj->obj instanceof String);
+                EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_flower")), obj->obj instanceof String);
         builder.pop();
             builder.push("Knightmare_Suit");
                 HONOR_DUEL_DIST=builder.comment("The maximum number of blocks between two entities linked entities linked by honor duel before the link breaks.\nDefault: 25").defineInRange("honor_duel_dist",25,1,100);
@@ -244,8 +244,8 @@ maybe use json files instead since it'll look neater?
 
                 MIDNIGHT_REAPER_BASE_DMG=builder.comment("Base damage of the midnight reaper weapon.\nDefault: 7.8").defineInRange("midnight_reaper_base_damage",7.8d,0,Double.MAX_VALUE);
                 MIDNIGHT_REAPER_BASE_SPD=builder.comment("Base attack speed of the midnight reaper weapon.\nDefault: -2.7").defineInRange("midnight_reaper_base_spd",-2.7d,-Double.MAX_VALUE,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("moon_scythe_wave_damage",3.5d,0,Double.MAX_VALUE);
-                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("moon_scythe_strike_damage",5.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_WAVE_DMG=builder.comment("Base damage of the midnight reaper's crescent wave.\nDefault: 3.5").defineInRange("midnight_reaper_wave_damage",3.5d,0,Double.MAX_VALUE);
+                MIDNIGHT_REAPER_STRIKE_DMG=builder.comment("Base damage of the midnight reaper's crescent strike.\nDefault: 5.5").defineInRange("midnight_reaper_strike_damage",5.5d,0,Double.MAX_VALUE);
 
 
             builder.pop();

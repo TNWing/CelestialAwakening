@@ -52,14 +52,19 @@ public class CoreGuardianHarden extends GenericAbility {
 
 
     @Override
-    public int calcPriority(){
+    public void calcPriority(){
+
+        this.calcedPriority=this.basePriority;
+    }
+
+    @Override
+    public int getPriority(){
         System.out.println("HARDEN PRIO");
         System.out.println(this.mob.getHealth()/this.mob.getMaxHealth());
         if (this.getCurrentCD()>0 || ((CoreGuardian) this.mob).getHardenStacks()>0 || this.mob.getHealth()/this.mob.getMaxHealth()>0.85f){
             return -1;
         }
-        int p= this.getBasePriority();
-        return p;
+        return this.calcedPriority;
     }
 
     @Override

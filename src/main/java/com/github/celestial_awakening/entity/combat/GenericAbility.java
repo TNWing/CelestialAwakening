@@ -14,6 +14,7 @@ public abstract class GenericAbility {
     protected final int abilityRecoveryTime;//time to recover after using ability
     protected final int abilityCD;
     protected final int basePriority;
+    protected int calcedPriority;
 
     protected int tempPriority=0;
     protected int currentCD;
@@ -114,10 +115,13 @@ public abstract class GenericAbility {
     public int getBasePriority(){
         return this.basePriority;
     }
-    public int calcPriority(){
+    public void calcPriority(){
+        this.calcedPriority=this.basePriority;
+    }
+    public int getPriority(){
         if (this.getCurrentCD()>0){
             return -1;
         }
-        return this.basePriority;
+        return this.calcedPriority;
     }
 }

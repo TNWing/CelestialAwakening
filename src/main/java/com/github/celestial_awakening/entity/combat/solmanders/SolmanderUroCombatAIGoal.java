@@ -1,25 +1,21 @@
-package com.github.celestial_awakening.entity.combat.night_prowlers.hunter;
+package com.github.celestial_awakening.entity.combat.solmanders;
 
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.combat.GenericCombatAIGoal;
-import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerBasicAttack;
-import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerShadowLeap;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
-import com.github.celestial_awakening.entity.living.night_prowlers.ProwlerWhelp;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class NP_HunterCombatAIGoal extends GenericCombatAIGoal {
-    public NP_HunterCombatAIGoal(AbstractCAMonster mob) {
+public class SolmanderUroCombatAIGoal extends GenericCombatAIGoal {
+    SolmanderNewtBasicAttack basicAttack=new SolmanderNewtBasicAttack(this.mob,5,1500,5,10,99);
+    SolmanderConflagration conflagration =new SolmanderConflagration(this.mob,25,8000,1,0,20);
+    SolmanderSolarBeam solarBeam = new SolmanderSolarBeam(this.mob,15,10000,40,10,10);
+    List<GenericAbility> abilities=List.of(basicAttack,solarBeam, conflagration);
+    public SolmanderUroCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
-    NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,1500,0,0);
-    NightProwlerShadowLeap shadowLeap=new NightProwlerShadowLeap((ProwlerWhelp) this.mob,15,7000,12,5,10);
-    NP_HunterPhantomRush phantomRush=new NP_HunterPhantomRush(this.mob,10,9000,15,10,7);
-    NP_HunterUmbraWarp umbraWarp=new NP_HunterUmbraWarp(this.mob,20,10000,15,25,5,30);
-    List<GenericAbility> abilities=List.of(basicAttack,phantomRush,shadowLeap,umbraWarp);
     public void tick(){
         LivingEntity target=this.mob.getTarget();
         double cdMult=getCDDecMult();
@@ -31,8 +27,7 @@ public class NP_HunterCombatAIGoal extends GenericCombatAIGoal {
             currentAbility.executeAbility(this.mob.getTarget());
         }
         else{
-            currentAbility=null;
-            AtomicInteger lowestP= new AtomicInteger(100);
+            AtomicInteger lowestP= new AtomicInteger(Integer.MAX_VALUE);
             if (this.mob.tickCount%20<=1){
                 abilities.forEach(ability->{
                     ability.calcPriority();
@@ -49,6 +44,7 @@ public class NP_HunterCombatAIGoal extends GenericCombatAIGoal {
                 double d0 = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(target);
                 currentAbility.startAbility(target,d0);
             }
+
         }
         movementController(target);
     }

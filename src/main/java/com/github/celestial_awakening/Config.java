@@ -210,9 +210,6 @@ maybe use json files instead since it'll look neater?
             builder.push("Radiant_Armor");
                 EXCITED_PARTICLES_ANIMAL_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' animal effect.\nDefault: 30").defineInRange("excited_particles_animal_interval",30,1,Integer.MAX_VALUE);
                 EXCITED_PARTICLES_CROP_INTERVAL =builder.comment("The delay in ticks between each activation of excited particles' crop effect.\nDefault: 400").defineInRange("excited_particles_crop_interval",400,1,Integer.MAX_VALUE);
-                //EXCITED_PARTICLES_DEFAULT_VALS_ENABLED=builder.comment("Excited particles triggers on blocks classified as 'Bush Blocks', 'Crop Blocks', 'Sapling Blocks', and")
-                //EXCITED_PARTICLES_EXPLICITEDLY_INCLUDED_CROPS=builder.comment("Some plants that may be considered crops are not classified under a unifying class in vanilla's code. This list allows excited particles to affect specific blocks that don't match any of the requirements.\nDefault: [minecraft:cocoa,minecraft:sugar_cane]").defineListAllowEmpty("excited_particles_explicit_crops",new ArrayList<>(Arrays.asList("minecraft:cocoa","minecraft:sugar_cane")), obj->obj instanceof String);
-                //EXCITED_PARTICLES_BLOCK_BLACKLIST=builder.comment("Due to the way vanilla code is structured, current implementation of excited particles would include 'spreading' blocks such as grass and nylium.\nThis list blacklists those blocks (as well as any user-defined blocks) from being affected by the armor effect.\nDefault:[minecraft:grass_block,minecraft:mycelium]")
                 EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS=builder.comment("Determines if spreading blocks (grass and mycelium) are be affected by the armor set bonus.\nDefault:false").define("excited_particles_spreading",false);
                 EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS=builder.comment("Determines if nylium can be affected by the armor set bonus.\nDefault:false").define("excited_particles_nylium",false);
                 EXCITED_PARTICLES_BLOCK_WHITELIST=builder.comment("Whitelist for blocks that don't fall under the standard classifications used in vanilla.\nDefault:[minecraft:chorus_flower]").defineListAllowEmpty("excited_particles_whitelist",new ArrayList<>(Arrays.asList("minecraft:chorus_flower")), obj->obj instanceof String);
@@ -412,6 +409,8 @@ maybe use json files instead since it'll look neater?
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        System.out.println(event.getConfig().getFileName());
+        System.out.println(event);
         wipEnabled=ENABLE_WIP_CONTENT.get();
         mobCombatRegen= OUTOFCOMBAT_HEAL.get();
 
@@ -493,6 +492,10 @@ maybe use json files instead since it'll look neater?
         epIncludedCrops=strToBlocks(EXCITED_PARTICLES_BLOCK_WHITELIST.get());
         epCropSpreading= EXCITED_PARTICLES_WORKS_ON_SPREADING_BLOCKS.get();
         epCropNylium=EXCITED_PARTICLES_WORKS_ON_NYLIUM_BLOCKS.get();
+        System.out.println("INCLUDED CROPS");
+        for (Block b:epIncludedCrops){
+            System.out.println("BLOCK " + b.getName());
+        }
 
         honorDuelDist= HONOR_DUEL_DIST.get();
 

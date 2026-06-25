@@ -40,10 +40,16 @@ public class PK_CrescenciaCombatAIGoal extends GenericCombatAIGoal {
                 currentAbility.executeAbility(this.mob.getTarget());
             }
             else{
+
                 currentAbility=null;
+                if (this.mob.tickCount%20<=1){
+                    abilities.forEach(ability->{
+                        ability.calcPriority();
+                    });
+                }
                 AtomicInteger lowestP= new AtomicInteger(100);
                 abilities.forEach(ability->{
-                    int p=ability.calcPriority();
+                    int p=ability.getPriority();
                     if (p>0 && p< lowestP.get()){
                         currentAbility=ability;
                         lowestP.set(p);

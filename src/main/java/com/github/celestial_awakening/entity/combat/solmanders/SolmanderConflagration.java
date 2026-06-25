@@ -155,11 +155,9 @@ public class SolmanderConflagration extends GenericAbility {
 
 
     @Override
-    public int calcPriority(){
-        if (this.getCurrentCD()>0){
-            return -1;
-        }
-        int p= this.getBasePriority();
-        return p;
+    public void calcPriority(){
+        this.calcedPriority=this.basePriority;
     }
+
+
 }

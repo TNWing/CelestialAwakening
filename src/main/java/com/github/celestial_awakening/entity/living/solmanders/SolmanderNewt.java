@@ -1,6 +1,6 @@
 package com.github.celestial_awakening.entity.living.solmanders;
 import com.github.celestial_awakening.entity.combat.SolmanderTargetGoal;
-import com.github.celestial_awakening.entity.combat.solmanders.SolmanderCombatAIGoal;
+import com.github.celestial_awakening.entity.combat.solmanders.SolmanderNewtCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -11,16 +11,15 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Strider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class SolmanderNewt extends AbstractSolmander{
-    static double baseHP=32.0D;
-    static double baseDmg=3.0D;
-    static double baseArmor=2D;
-    static double baseTough=1.5D;
+    static double baseHP=25.0D;
+    static double baseDmg=2.5D;
+    static double baseArmor=1D;
+    static double baseTough=1D;
 
     public SolmanderNewt(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -57,7 +56,7 @@ public class SolmanderNewt extends AbstractSolmander{
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new SolmanderTargetGoal(this, Player.class, true));
-        this.goalSelector.addGoal(3, new SolmanderCombatAIGoal(this));
+        this.goalSelector.addGoal(3, new SolmanderNewtCombatAIGoal(this));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D, 60));
     }
     public void tick() {

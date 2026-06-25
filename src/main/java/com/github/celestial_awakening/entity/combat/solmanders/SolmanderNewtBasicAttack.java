@@ -6,9 +6,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.SmallFireball;
 
 public class SolmanderNewtBasicAttack extends GenericAbility {
+    //should be a fire charge attack like blazes or even ghasts
     DamageSource source;
+    int spreadCnt;
+    int reps;
+
+
     public SolmanderNewtBasicAttack(AbstractCAMonster mob, int castTime, int CD, int executeTime, int recoveryTime,int p) {
         super(mob, castTime, CD, executeTime, recoveryTime,p);
         source=new DamageSource(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.ON_FIRE),this.mob);
@@ -35,7 +41,7 @@ public class SolmanderNewtBasicAttack extends GenericAbility {
                 case 0:{
                     state++;
                     currentStateTimer=abilityExecuteTime;
-                    target.hurt(source,1.5f);
+                    //target.hurt(source,1.5f);
                     this.mob.doHurtTarget(target);
                     break;
                 }

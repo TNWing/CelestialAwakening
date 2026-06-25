@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public class NightProwlerCombatAIGoal extends GenericCombatAIGoal {
-    public NightProwlerCombatAIGoal(AbstractCAMonster mob) {
+public class NightProwlerWhelpCombatAIGoal extends GenericCombatAIGoal {
+    public NightProwlerWhelpCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     NightProwlerBasicAttack basicAttack=new NightProwlerBasicAttack(this.mob,0,1500,0,0);

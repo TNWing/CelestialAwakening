@@ -1,8 +1,7 @@
 package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.CANearestAttackableTargetGoal;
-import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
-import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
+import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerWhelpCombatAIGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,10 +13,8 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -82,7 +79,7 @@ public class ProwlerWhelp extends AbstractNightProwler {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new NightProwlerCombatAIGoal(this));
+        this.goalSelector.addGoal(3, new NightProwlerWhelpCombatAIGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new CANearestAttackableTargetGoal<>(this, Player.class, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1D));

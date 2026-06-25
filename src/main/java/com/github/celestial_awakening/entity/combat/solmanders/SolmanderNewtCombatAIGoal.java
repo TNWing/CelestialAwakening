@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SolmanderCombatAIGoal extends GenericCombatAIGoal {
-    public SolmanderCombatAIGoal(AbstractCAMonster mob) {
+public class SolmanderNewtCombatAIGoal extends GenericCombatAIGoal {
+    public SolmanderNewtCombatAIGoal(AbstractCAMonster mob) {
         super(mob);
     }
     SolmanderNewtBasicAttack basicAttack=new SolmanderNewtBasicAttack(this.mob,5,1500,5,10,99);
@@ -28,8 +28,13 @@ public class SolmanderCombatAIGoal extends GenericCombatAIGoal {
         }
         else{
             AtomicInteger lowestP= new AtomicInteger(Integer.MAX_VALUE);
+            if (this.mob.tickCount%20<=1){
+                abilities.forEach(ability->{
+                    ability.calcPriority();
+                });
+            }
             abilities.forEach(ability->{
-                int p=ability.calcPriority();
+                int p=ability.getPriority();
                 if (p>0 && p< lowestP.get()){
                     currentAbility=ability;
                     lowestP.set(p);

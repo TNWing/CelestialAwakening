@@ -37,7 +37,7 @@ public class DevastateEnchantment extends Enchantment implements IForgeEnchantme
         for (int reps=0;reps<3;reps++){
             for (float a=-90+ang;a<=90+ang;a+=30/(reps+1)){
                 Vec3 pos=spt.add(MathFuncs.get2DVecFromAngle(a).scale(1+reps*0.75f));
-                serverLevel.sendParticles(particleOption, pos.x(),pos.y()+0.7f,pos.z, 3, 0.3f, 0.1f, 0.3f,0.1f);
+                serverLevel.sendParticles(particleOption, pos.x(),pos.y()+0.7f+reps*0.4f,pos.z, 3, 0.3f, 0.1f, 0.3f,0.1f);
             }
         }
 

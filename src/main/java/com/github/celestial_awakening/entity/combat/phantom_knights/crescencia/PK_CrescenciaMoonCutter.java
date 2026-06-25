@@ -158,15 +158,13 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
     }
 
     @Override
-    public int calcPriority(){
-        if (this.getCurrentCD()>0){
-            return -1;
-        }
+    public void calcPriority(){
         int p=this.getBasePriority();
         if (mob.getPerceivedTargetDistanceSquareForMeleeAttack(mob.getTarget())>36){
             //System.out.println("Player is far, mooncutter is less likely");
             p+=10;
         }
-        return p;
+        this.calcedPriority=p;
     }
+
 }

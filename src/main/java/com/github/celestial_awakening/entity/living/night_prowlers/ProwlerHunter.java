@@ -1,9 +1,7 @@
 package com.github.celestial_awakening.entity.living.night_prowlers;
 
 import com.github.celestial_awakening.entity.combat.CANearestAttackableTargetGoal;
-import com.github.celestial_awakening.entity.combat.night_prowlers.NightProwlerCombatAIGoal;
 import com.github.celestial_awakening.entity.combat.night_prowlers.hunter.NP_HunterCombatAIGoal;
-import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

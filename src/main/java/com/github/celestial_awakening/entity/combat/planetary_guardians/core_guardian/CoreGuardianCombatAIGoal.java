@@ -30,11 +30,14 @@ public class CoreGuardianCombatAIGoal extends GenericCombatAIGoal {
         }
         else{
             AtomicInteger lowestP= new AtomicInteger(Integer.MAX_VALUE);
-            if (this.mob.tickCount%10<=1){
-                System.out.println("selecting ability");
+            if (this.mob.tickCount%20<=1){
+                System.out.println("selecting ability ");
+                abilities.forEach(ability->{
+                    ability.calcPriority();
+                });
             }
             abilities.forEach(ability->{
-                int p=ability.calcPriority();
+                int p=ability.getPriority();
                 if (p>0){
                     System.out.println(ability.getAbilityName() + "   ability priority is  " +  p);
                 }

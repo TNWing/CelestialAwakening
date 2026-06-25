@@ -157,16 +157,21 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
     }
 
     @Override
-    public int calcPriority(){
-        if (this.getCurrentCD()>0){
-            return -1;
-        }
+    public void calcPriority(){
         int p= this.getBasePriority();
-        List<LivingEntity> list=mob.level().getNearbyEntities(LivingEntity.class,null,mob,new AABB(0,0,0,0,0,0));
+        List<LivingEntity> list=mob.level().getNearbyEntities(LivingEntity.class,null,mob,new AABB(0,0,0,0,0,0));//tODO
         if (list.size()<3){
             //System.out.println("Too few targets, whirlwind less likely");
             p+=20;
         }
-        return p;
+        this.calcedPriority=p;
+    }
+
+    @Override
+    public int getPriority(){
+        if (this.getCurrentCD()>0){
+            return -1;
+        }
+        return this.calcedPriority;
     }
 }

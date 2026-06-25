@@ -31,6 +31,8 @@ public class KnightmareSuit extends ArmorEffect{
     public static String swordShieldDmg="Knightmare_S&S_Dmg";
     public static String swordShieldRes="Knightmare_S&S_Res";
 
+    //i could also separate it such that there is a unique id for cd and unique id for value
+
 
     public static final String INFAMY_NAME = "tooltip.celestial_awakening.knightmare_suit.infamy_name";
     public static final String INFAMY_DESC = "tooltip.celestial_awakening.knightmare_suit.infamy_desc";
@@ -151,12 +153,16 @@ public class KnightmareSuit extends ArmorEffect{
                 if (val>0){
                     cap.removeFromAbilityMap(swordShieldDmg);
                     cap.insertIntoAbilityMap(swordShieldDmg,cd,new Double[]{0d});
+                    System.out.println("KNIGHTMARE SS BOOST DMG FROM " + event.getAmount());
                     event.setAmount((float) (event.getAmount()*val));
+                    System.out.println("TO AMT " + event.getAmount());
                 }
             }
-            if (cap.hasAbility(swordShieldRes)){
+            if (!cap.hasAbility(swordShieldRes)){
                 double dps=event.getAmount()/player.getAttributeValue(Attributes.ATTACK_SPEED);
-                cap.insertIntoAbilityMap(swordShieldRes,5*20,new Double[]{dps*(0.5f+0.5f*cnt/4f)});
+                double val=dps*(0.5f+0.5f*cnt/4f);
+                cap.insertIntoAbilityMap(swordShieldRes,5*20,new Double[]{val});
+                System.out.println("Knightmare SS RES " + val);
             }
         });
     }
@@ -165,14 +171,14 @@ public class KnightmareSuit extends ArmorEffect{
         @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
             Object[] resData=cap.getAbilityData(swordShieldRes);
-            int cd=cap.getAbilityCD(swordShieldRes);
+
             if (resData!=null){
+                int cd=cap.getAbilityCD(swordShieldRes);
                 double dps= (double) resData[0];
                 if (dps>0){
                     cap.removeFromAbilityMap(swordShieldRes);
                     cap.insertIntoAbilityMap(swordShieldRes,cd,new Double[]{0d});
-                    float mult=0.8f;
-                    mult= (float) (dps/(dps+50));
+                    float mult= (float) (dps/(dps+50));
                     event.setAmount(event.getAmount()*(mult));
                 }
             }
@@ -183,9 +189,10 @@ public class KnightmareSuit extends ArmorEffect{
     private void ssBlock(ShieldBlockEvent event, Player player, int cnt){
         @NotNull LazyOptional<LivingEntityCapability> capOptional=player.getCapability(LivingEntityCapabilityProvider.capability);
         capOptional.ifPresent(cap->{
-            if (!cap.hasAbility(swordShieldDmg)){
+            if (!cap.hasAbility(swordShieldDmg) && !event.isCanceled()){
                 double mult= MathFuncs.clamp((float) (1f + (player.getAttributeValue(Attributes.ARMOR) * 0.01d  + player.getAttributeValue(Attributes.ARMOR_TOUGHNESS)* 0.015d )* cnt/4f),1f,1.5f);
                 cap.insertIntoAbilityMap(swordShieldDmg,5*20,new Double[]{mult});
+                System.out.println("Knightmare SS DMG " + mult);
             }
         });
 

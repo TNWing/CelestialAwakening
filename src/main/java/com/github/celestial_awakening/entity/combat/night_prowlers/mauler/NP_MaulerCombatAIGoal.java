@@ -35,8 +35,13 @@ public class NP_MaulerCombatAIGoal extends GenericCombatAIGoal {
         else{
             currentAbility=null;
             AtomicInteger lowestP= new AtomicInteger(100);
+            if (this.mob.tickCount%20<=1){
+                abilities.forEach(ability->{
+                    ability.calcPriority();
+                });
+            }
             abilities.forEach(ability->{
-                int p=ability.calcPriority();
+                int p=ability.getPriority();
                 if (p>0 && p< lowestP.get()){
                     currentAbility=ability;
                     lowestP.set(p);

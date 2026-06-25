@@ -61,6 +61,7 @@ public abstract class AbstractCAMonster extends Monster implements CA_Entity {
 
     AlertInterface alertInterface;
 
+
     public int getBossBarWindup(){
         return this.bossBarWindup;
     }

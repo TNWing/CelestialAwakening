@@ -3,11 +3,8 @@ package com.github.celestial_awakening.entity.combat.planetary_guardians.core_gu
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
 import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.AbstractCAMonster;
-import com.github.celestial_awakening.entity.living.planetary_guardians.AbstractGuardian;
-import com.github.celestial_awakening.init.SoundInit;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -16,7 +13,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -50,16 +46,17 @@ public class CoreGuardianShockwave extends GenericAbility {
         name="Shockwave";
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
 
             setMoveVals(0,this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
         }
-
+        return false;
     }
     @Override
     public void executeAbility(LivingEntity target) {

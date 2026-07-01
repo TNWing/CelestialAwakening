@@ -29,14 +29,15 @@ public class AstralitePhotonSurge extends GenericAbility {
     DamageSourceIgnoreIFrames source=new DamageSourceIgnoreIFrames(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC),this.mob);
     ParticleOptions particleType = ParticleTypes.FALLING_LAVA;
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             mob.canMove=false;
-            super.startAbility(target,dist);
-            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
-        }
 
+            setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
+        }
+        return false;
     }
 
     @Override

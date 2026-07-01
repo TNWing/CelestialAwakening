@@ -10,15 +10,16 @@ public class AsteronBasicAttack extends GenericAbility {
     }
 
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist && this.getCurrentCD()==0){
             mob.canMove=false;
-            super.startAbility(target,dist);
+
             setMoveVals(0,this.getAbilityRange(target),false);
             this.mob.setActionId(4);
+            return super.startAbility(target,dist);
         }
-
+        return false;
     }
 
     @Override

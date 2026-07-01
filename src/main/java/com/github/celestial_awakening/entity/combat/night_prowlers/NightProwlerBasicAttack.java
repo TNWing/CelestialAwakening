@@ -10,12 +10,14 @@ public class NightProwlerBasicAttack extends GenericAbility {
         name="NP Basic";
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         if (this.getAbilityRange(target)>=dist){
             this.mob.getDirection();
-            super.startAbility(target,dist);
             setMoveVals(0,this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
+
         }
+        return false;
 
     }
 

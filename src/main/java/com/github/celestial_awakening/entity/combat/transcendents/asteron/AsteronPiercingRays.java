@@ -18,16 +18,17 @@ public class AsteronPiercingRays extends GenericAbility {
     }
 
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
 
             setMoveVals(0,this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
         }
-
+        return false;
     }
 
     @Override

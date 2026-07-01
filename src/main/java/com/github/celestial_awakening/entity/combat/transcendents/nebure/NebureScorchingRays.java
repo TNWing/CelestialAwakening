@@ -36,11 +36,11 @@ public class NebureScorchingRays extends GenericAbility {
         name="Scorching Rays";
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
             int diff=target.level().getDifficulty().getId();
             dir=-dir;
             int v=(diff+1)*4;
@@ -69,7 +69,9 @@ public class NebureScorchingRays extends GenericAbility {
             }
             orbCnt=0;
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
         }
+        return false;
     }
     @Override
     public void executeAbility(LivingEntity target) {

@@ -46,18 +46,19 @@ public class NebureSolarExpansion extends GenericAbility {
     }
 
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.canMove=false;
             innerRad=0.8f;
             outerRad=donutAreaIncrement+innerRad;
             centerPos=this.mob.position();
-            super.startAbility(target,dist);
+
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
             calculateWhereToDraw(outerRad,innerRad);
-
+            return super.startAbility(target,dist);
         }
+        return false;
     }
     @Override
     public void executeAbility(LivingEntity target) {

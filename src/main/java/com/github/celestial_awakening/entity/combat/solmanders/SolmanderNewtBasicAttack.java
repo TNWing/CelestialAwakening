@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.SmallFireball;
 
 public class SolmanderNewtBasicAttack extends GenericAbility {
     //should be a fire charge attack like blazes or even ghasts
@@ -22,14 +21,16 @@ public class SolmanderNewtBasicAttack extends GenericAbility {
     }
 
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist && this.getCurrentCD()==0){
             mob.canMove=false;
-            super.startAbility(target,dist);
+
             setMoveVals(0,this.getAbilityRange(target),false);
             this.mob.setActionId(4);
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
 

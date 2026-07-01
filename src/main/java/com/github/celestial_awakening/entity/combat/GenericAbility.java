@@ -14,6 +14,7 @@ public abstract class GenericAbility {
     protected final int abilityRecoveryTime;//time to recover after using ability
     protected final int abilityCD;
     protected final int basePriority;
+    protected int abiltiesSinceLastCast;//amt of times another non-basic attack has been used since this ability was last used
     protected int calcedPriority;
 
     protected int tempPriority=0;
@@ -26,13 +27,13 @@ public abstract class GenericAbility {
     protected boolean isInUse;
 
     //initiates ability
-    public void startAbility(LivingEntity target,double dist){
+    public boolean startAbility(LivingEntity target, double dist){//change to boolean, so i can notify if the ability is actually starting
         currentCD=abilityCD;
         currentStateTimer=abilityCastTime;
         this.mob.isActing=true;
         this.isInUse=true;
         System.out.println("STARTING ABILITY " + this.getAbilityName());
-
+        return true;
     }
     public void setMoveVals(double min,double max,boolean keepDist){
         this.mob.minRange=min;

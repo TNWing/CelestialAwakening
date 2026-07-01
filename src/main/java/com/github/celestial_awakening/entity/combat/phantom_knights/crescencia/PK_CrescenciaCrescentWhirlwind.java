@@ -43,17 +43,19 @@ public class PK_CrescenciaCrescentWhirlwind extends GenericAbility {
 
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
             repsRemaining=7;
             Vec3 dir=MathFuncs.getDirVec(this.mob.position(),target.position());
             currentStartAngle=MathFuncs.getAngFrom2DVec(dir);
             this.mob.setActionId(6);
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
     @Override

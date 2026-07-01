@@ -11,12 +11,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.Vec3;
 import java.util.List;
-import org.apache.commons.numbers.quaternion.Quaternion;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
 public class SolmanderSolarBeam extends GenericAbility {
     Vec3 targetPos=Vec3.ZERO;
     LightRay ray;
@@ -25,13 +23,14 @@ public class SolmanderSolarBeam extends GenericAbility {
         name="Solar Beam";
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
 

@@ -38,15 +38,17 @@ public class PK_CrescenciaStrikethrough extends GenericAbility {
     float[] crescentDmgVals={7.5f,9,10.5f};
     float[] dashDmgVals={8,10,13};
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
             this.mob.setActionId(10);
             //AttributeModifier attributeModifier=new AttributeModifier(UUID.fromString("KB_Res"),"CA_KB_Res",0.75f,AttributeModifier.Operation.MULTIPLY_BASE);
             //this.mob.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addTransientModifier();
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
 

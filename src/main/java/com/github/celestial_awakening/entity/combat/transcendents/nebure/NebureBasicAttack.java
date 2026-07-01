@@ -16,14 +16,16 @@ public class NebureBasicAttack extends GenericAbility {
         super(mob, castTime, CD, executeTime, recoveryTime);
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
             setMoveVals(this.getAbilityRange(target),this.getAbilityRange(target),false);
+            return super.startAbility(target,dist);
 
         }
+        return false;
     }
     @Override
     public void executeAbility(LivingEntity target) {

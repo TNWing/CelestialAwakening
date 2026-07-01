@@ -42,12 +42,12 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
     }
     Vec3 stepDir;
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
             this.mob.canMove=false;
-            super.startAbility(target,dist);
+
             this.mob.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addTransientModifier(this.mob.kbImmune);
             if (dist<9){
                 stepDir=MathFuncs.getDirVec(target.position(),this.mob.position());
@@ -56,7 +56,9 @@ public class PK_CrescenciaMoonCutter extends GenericAbility {
             else{
                 stepDir=Vec3.ZERO;
             }
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
 

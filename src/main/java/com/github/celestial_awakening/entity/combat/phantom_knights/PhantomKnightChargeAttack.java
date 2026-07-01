@@ -21,13 +21,15 @@ public class PhantomKnightChargeAttack extends GenericAbility {
         maxExecTime=executeTime;
     }
     @Override
-    public void startAbility(LivingEntity target,double dist){
+    public boolean startAbility(LivingEntity target, double dist){
         double abilityRange= Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
-            super.startAbility(target,dist);
+
             this.mob.canMove=false;
             this.targetDir= MathFuncs.getDirVec(this.mob.position(),target.position());
+            return super.startAbility(target,dist);
         }
+        return false;
 
     }
 

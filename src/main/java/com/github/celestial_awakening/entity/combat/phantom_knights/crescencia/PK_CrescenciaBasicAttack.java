@@ -22,21 +22,17 @@ public class PK_CrescenciaBasicAttack extends GenericAbility {
     }
 
     @Override
-    public void startAbility(LivingEntity target, double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (this.getCurrentCD()==0){
-            if (abilityRange>=dist){
-                mob.canMove=false;
-                super.startAbility(target,dist);
-                setMoveVals(0,this.getAbilityRange(target),false);
-            }
-            else if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
-                mob.canMove=false;
-                super.startAbility(target,dist);
-                setMoveVals(0,this.getAbilityRange(target),false);
+            mob.canMove=false;
+            setMoveVals(0,this.getAbilityRange(target),false);
+            if (this.mob.getHealth()<this.mob.getMaxHealth()*0.5f){
                 this.setCD(this.abilityCD/2);
             }
+            return super.startAbility(target,dist);
         }
+        return false;
     }
 
     @Override

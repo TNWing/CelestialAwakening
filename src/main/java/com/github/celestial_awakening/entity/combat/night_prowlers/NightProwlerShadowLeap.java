@@ -1,6 +1,5 @@
 package com.github.celestial_awakening.entity.combat.night_prowlers;
 
-import com.github.celestial_awakening.capabilities.MovementModifier;
 import com.github.celestial_awakening.capabilities.ProjCapability;
 import com.github.celestial_awakening.capabilities.ProjCapabilityProvider;
 import com.github.celestial_awakening.damage.DamageSourceIgnoreIFrames;
@@ -8,7 +7,6 @@ import com.github.celestial_awakening.entity.combat.GenericAbility;
 import com.github.celestial_awakening.entity.living.night_prowlers.AbstractNightProwler;
 import com.github.celestial_awakening.entity.projectile.GenericShard;
 import com.github.celestial_awakening.networking.ModNetwork;
-import com.github.celestial_awakening.networking.packets.ProjCapS2CPacket;
 import com.github.celestial_awakening.networking.packets.RefreshEntityDimsS2CPacket;
 import com.github.celestial_awakening.util.CA_Predicates;
 import com.github.celestial_awakening.util.MathFuncs;
@@ -17,7 +15,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -56,16 +53,18 @@ public class NightProwlerShadowLeap extends GenericAbility {
         name="Shadow Leap";
     }
     @Override
-    public void startAbility(LivingEntity target,double dist) {
+    public boolean startAbility(LivingEntity target, double dist) {
         double abilityRange = Math.pow(this.getAbilityRange(target),2);
         if (abilityRange>=dist){
             this.mob.getDirection();
-            super.startAbility(target,dist);
+
             this.mob.canMove=false;
             setMoveVals(0,this.getAbilityRange(target),false);
             this.mob.setActionId(2);
             dmg= (float) (this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE)*1.2f);
+            return super.startAbility(target,dist);
         }
+        return false;
     }
 
     @Override
